@@ -1,0 +1,1 @@
+order create,invoice,sales module,barcode module,woo commerce,rma module,locations,item reports,shipstation module,search
