@@ -58,14 +58,7 @@
 									</select>
 								</div>
 								</div>
-								<!-- <div class="col-md-2 category_dropdn">
-								<div class="form-group">
-									<label>Sub Category</label><br/>
-									<select name="category3" disabled="true" class="category3 form-control">
-									</select>
-									<input class="form-control other_category" style="display: none;" type="text" name="category3" value="" placeholder="Enter Category">
-								</div>
-								</div> -->
+								
 							<div class="col-md-2">
 								<div class="form-group">
 									<label>Condition</label>

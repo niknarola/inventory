@@ -42,7 +42,7 @@
 							</div>
 							<div class="col-md-4">
 								<div class="form-group">
-									<label>Original Condition:</label>
+									<label>Received Condition:</label>
 									<select name="condition" data-placeholder="Select Original Condition" class="form-control select original_condition">
 										<?php foreach ($original_condition as $key => $value) { ?>
 											<option value="<?= $key; ?>"><?= $value; ?></option>
@@ -172,7 +172,7 @@
 									</div>
 									<div class="col-md-4">
 										<div class="form-group">
-											<label>Addition Info:</label>
+											<label>Addition Info/Accessories:</label>
 											<textarea class="form-control additional_info" rows="10" cols="3" name="additional_info"></textarea>
 										</div>
 									</div>
@@ -234,12 +234,12 @@
 										</div>
 									</div>
 								</div>
-								<div class="row">
+<!--								<div class="row">
 									<div class="form-group">
 										<label>Additional Accessories:</label>
 										<textarea name="additional_accessories" class="form-control additional_accessories"></textarea>
 									</div>
-								</div>
+								</div>-->
 									</div>
 								</div>
 							</div>

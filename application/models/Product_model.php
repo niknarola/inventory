@@ -332,7 +332,7 @@ class Product_model extends CI_Model
         return $data->num_rows();
     }
 
-    function getRows($params = array())
+    function getRows($params = array(), $actArr = array())
     {
         $this->db->select('p.id,p.part,p.name,p.description,p.is_cto,p.category, pl.name as product_line, oc.name as condition');
         $this->db->from('products p');
@@ -353,10 +353,10 @@ class Product_model extends CI_Model
             {
                 $this->db->like('p.description', $params['search']['keywords']);
             }
-            if (!empty($params['search']['category1']) && !empty($params['search']['category2']))
+            if (!empty($catArr['category1']) && !empty($catArr['category2']))
             {
-                $this->db->like($params['search']['category1']);
-                $this->db->like($params['search']['category2']);
+                $this->db->like('category', $catArr['category1']);
+                $this->db->like('category', $catArr['category2']);
             }
         }
         //sort data by ascending or desceding order
@@ -369,12 +369,16 @@ class Product_model extends CI_Model
         $this->db->where('p.status', 1);
         $this->db->where('p.is_delete', 0);
         //set start and limit
-        if(array_key_exists("start",$params) && array_key_exists("limit",$params)){
-            $this->db->limit($params['limit'],$params['start']);
-        }elseif(!array_key_exists("start",$params) && array_key_exists("limit",$params)){
+        if (array_key_exists("start", $params) && array_key_exists("limit", $params))
+        {
+            $this->db->limit($params['limit'], $params['start']);
+        }
+        elseif (!array_key_exists("start", $params) && array_key_exists("limit", $params))
+        {
             $this->db->limit($params['limit']);
         }
         $query = $this->db->get();
+//        echo$this->db->last_query();
         //return fetched data
         return ($query->num_rows() > 0) ? $query->result_array() : FALSE;
     }

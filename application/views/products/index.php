@@ -126,14 +126,16 @@
         var category1 = $('#category1').val();
         var category2 = $('#category2').val();
         var flag = 1;
-        if ((keywords == '' && searchfor != 'none')) {
+        if ((keywords == '' && searchfor != 'part')) {
+            console.log('in if flag0');
             flag = 0;
         }
         if (flag == 1) {
+            console.log('in if flag1');
             $.ajax({
                 type: 'POST',
                 url: '<?php echo base_url() . $url; ?>/' + page_num,
-                data: 'page=' + page_num + '&keywords=' + keywords + '&searchfor=' + searchfor + '&category1=' + category1 + '&category2=' + category2,
+                data: 'page=' + page_num + '&keywords=' + encodeURIComponent(keywords) + '&searchfor=' + searchfor + '&category1=' + category1 + '&category2=' + category2,
                 beforeSend: function () {
                     $('.loading').show();
                 },

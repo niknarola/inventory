@@ -42,7 +42,7 @@
 							</div>
 							<div class="col-md-4">
 								<div class="form-group">
-									<label>Original Condition:</label>
+									<label>Received Condition:</label>
 									<select name="condition" data-placeholder="Select Original Condition" class="form-control select original_condition">
 										<?php foreach ($original_condition as $key => $value) { ?>
 											<option value="<?= $key; ?>"><?= $value; ?></option>

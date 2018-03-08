@@ -77,6 +77,7 @@ class Products extends CI_Controller
         }
         //set conditions for search
         $keywords = $this->input->post('keywords');
+        
         $searchfor = $this->input->post('searchfor');
         $category1 = $this->input->post('category1');
         $category2 = $this->input->post('category2');
@@ -115,8 +116,14 @@ class Products extends CI_Controller
         //set start and limit
         $conditions['start'] = $offset;
         $conditions['limit'] = $this->perPage;
+        $cat = array(
+            'category1' => '"' . $category1 . '"',
+            'category2' => '"' . $category2 . '"'
+        );
         //get posts data
-        $data['products'] = $this->products->getRows($conditions);
+        $data['products'] = $this->products->getRows($conditions,$cat);
+//        echo $this->db->last_query();
+//        pr($data['products'],1);
         //load the view
         $this->load->view('products/ajax-pagination-data', $data, FALSE);
     }
