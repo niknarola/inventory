@@ -130,7 +130,7 @@ class Locations extends CI_Controller {
         $data['print_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/location_print' : 'barcode/location_print';
         if($this->input->post()){
             if($this->input->post('complete')){
-                pr($this->input->post(),1);
+               
                 $pallet_id = $this->input->post('pallet_id');
                 $location = $this->basic->get_single_data_by_criteria('locations', array('name' => trim($this->input->post('location'))));
                 if(!empty($location)){
@@ -145,6 +145,14 @@ class Locations extends CI_Controller {
                     'location_id'=>$location_id
                 ];
             if($this->basic->update('product_serials', $data, ['pallet_id'=>$pallet_id])){
+                $product_serial_data = $this->basic->get_all_data_by_criteria('product_serials', ['pallet_id'=>$pallet_id]);
+                $timestamp = [
+                    'location_assigned_date'=>date('Y-m-d H:i:s'),
+                    'last_scan'=>date('Y-m-d H:i:s')
+                ];
+                foreach ($product_serial_data as $key => $serial_data) {
+                    $this->basic->update('serial_timestamps', $timestamp, ['serial_id'=>$serial_data['id']]);
+                }
                 $this->session->set_flashdata('msg', 'Locations assigned successfully');
             }
             }
@@ -182,7 +190,13 @@ class Locations extends CI_Controller {
             ];
 	        if($this->basic->update('product_serials', $data, ['serial'=>$serial])){
 	        	$response['status'] = 1;
-    			$response['msg'] = 'Location assigned successfully';
+                $response['msg'] = 'Location assigned successfully';
+                $product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['serial'=>$serial]);
+                $timestamp = [
+                    'location_assigned_date'=>date('Y-m-d H:i:s'),
+                    'last_scan'=>date('Y-m-d H:i:s')
+                ];
+                $this->basic->update('serial_timestamps', $timestamp, ['serial_id'=>$product_serial_data['id']]);
 	        }
 	    }else{
 	    	$response['status'] = 0;
@@ -202,7 +216,13 @@ class Locations extends CI_Controller {
             ];
 	        if($this->basic->update('product_serials', $data, ['serial'=>$serial])){
 	        	$response['status'] = 1;
-    			$response['msg'] = 'Location moved successfully';
+                $response['msg'] = 'Location moved successfully';
+                $product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['serial'=>$serial]);
+                $timestamp = [
+                    'location_assigned_date'=>date('Y-m-d H:i:s'),
+                    'last_scan'=>date('Y-m-d H:i:s')
+                ];
+                $this->basic->update('serial_timestamps', $timestamp, ['serial_id'=>$product_serial_data['id']]);
 	        }
 	    }else{
 	    	$response['status'] = 0;

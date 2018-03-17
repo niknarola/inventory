@@ -343,7 +343,9 @@
 					
 					$('.other_category').css('display','none');
 				}else{
+                    if(response.product.location_id!=null){
 				$('input.product_id').val(response.product.pid);
+				$('input.part').val(response.product.part);
 				$('input.serial_id').val(response.product.id);
 				$('input.new_serial').val(response.product.new_serial);
 				$('input.name').val(response.product.product_name);
@@ -420,6 +422,7 @@
 					// $('.category3').multiselect();
 				}
 			}
+            }
 			})
 			.fail(function() {
 				console.log("error");

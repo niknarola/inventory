@@ -88,6 +88,11 @@ class Cleaning extends CI_Controller {
             	$serial_data['files'] = implode(',',$serial_files);
             }
 			if($this->basic->update('product_serials', $serial_data, ['serial'=>$this->input->post('serial')])){
+                $timestamp = [
+					'last_scan' => date('Y-m-d H:i:s'),
+					'packout_date' => date('Y-m-d H:i:s')
+				];
+				$this->basic->update('serial_timestamps', $timestamp, ['serial_id'=>$product_serial['id']]);
 				$this->session->set_flashdata('msg', 'Details Saved');
 			}
 			redirect($this->session->userdata('role_name').'/packout');

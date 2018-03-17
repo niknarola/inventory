@@ -1,6 +1,7 @@
 <div class="row">
 	<div class="col-md-10 col-md-offset-1">
-		<!-- <form method="post" action="receiving/search_results"> -->
+    <!-- action="receiving/search_results" -->
+		<form method="post" >
 			<div class="panel panel-flat">
 				<div class="panel-heading">
 					<div class="row">
@@ -11,15 +12,19 @@
 				</div>
 				<div class="panel-body">
 					<div class="row">
-						<div class="col-md-10 col-md-offset-1">
+						<div class="col-md-12">
+                            <div class="col-md-6">
 							<div class="form-group">
 								<label>Part #:</label>
-								<input type="text" name="part" value="" class="form-control" onchange="get_product_details(this.value);">
+								<input type="text" name="part" value="" class="form-control part" onchange="get_product_details(this.value);">
 							</div> 
-							<!-- <div class="form-group">
+                            </div>
+                            <div class="col-md-6">
+							<div class="form-group">
 								<label>Serial #:</label>
-								<input type="text" value="" name="serial" class="form-control"> 
-							</div> -->
+								<input type="text" value="" name="serial" class="form-control serial" onchange="get_product_details(this.value);"> 
+							</div>
+                            </div>
 							<div class="text-right">
 								<!-- <button type="submit" name="search" class="btn bg-pink-400">Search</button> -->
 							</div>
@@ -27,7 +32,7 @@
 					</div>
 				</div>
 			</div>
-		<!-- </form> -->
+		</form>
 	</div>
 	<!-- <div class=""></div> -->
 </div>
@@ -36,13 +41,15 @@
 	jQuery(document).ready(function($) {
 		$('input[name="part"]').focus();
 	});
-	function get_product_details(part){
-		if(part!=''){
+	function get_product_details(){
+        var part = $('input.part').val();
+    	var serial = $('input.serial').val();
+		if(part!='' || serial!=''){
 			$.ajax({
 				url: '<?php echo $ajax_url ?>find_product',
 				type: 'POST',
 				dataType: 'json',
-				data: {part: part},
+				data: {part: part, serial: serial},
 			})
 			.done(function(response) {
 				if(response.status==1){

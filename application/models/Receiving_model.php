@@ -34,6 +34,7 @@ class Receiving_model extends CI_Model
             $i++;
         }
         $this->db->where('added_as_temp', 1);
+        $this->db->where('status', 0);
         $this->db->where('is_delete', 0);
         if(isset($_POST['order'])) // here order processing
         {

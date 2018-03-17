@@ -1,16 +1,16 @@
 <table class="table" id="product_tbl">
     <thead>
         <tr>
-            <th><input type="checkbox" name="check_all" class="check_all" value=""></th>
+            <!-- <th><input type="checkbox" name="check_all" class="check_all" value=""></th> -->
             <th>#</th>
             <th>Serial #</th>
             <th>Part #</th>
             <th>Name</th>
             <th>Condition</th>
             <th>Grade</th>
-            <!--<th>Notes</th>-->
             <th>Location</th>
             <th>Status</th>
+            <th>Notes</th>
         </tr>
     </thead>
     <tbody id="userData">
@@ -23,16 +23,21 @@
                 }
                 ?>
                 <tr>
-                    <td><input type="checkbox" name="check[]" class="check_row" value="<?= $post['id'] ?>"></td>
+                    <!-- <td><input type="checkbox" name="check[]" class="check_row" value="<?= $post['id'] ?>"></td> -->
                     <td><?php echo '#' . $post['id']; ?></td>
                     <td><?php echo $post['serial']; ?></td>
                     <td><?php echo $post['part']; ?></td>
                     <td><?php echo $post['product_name']; ?></td>
                     <td><?php echo $post['original_condition']; ?></td>
                     <td><?php echo $post['cosmetic_grade']; ?></td>
-                    <!--<td><?php // echo $post['recv_notes'];     ?></td>-->
                     <td><?php echo $post['location_name']; ?></td>
                     <td><?php echo ($status != '') ? $status . '<br/>' . $post['modified'] : ''; ?></td>
+                    <td>
+                        <?php if($post['fail_text'] != '' || $post['recv_notes'] != '' || $post['packaging_notes'] != '' || $post['inspection_notes'] != '' || $post['cpu'] !=''){?>
+                            <a href="javascript:;" data-id="<?= $post['id'];?>" class="btn-xs btn-default product_notes" onClick="view_notes(<?= $post['id'];?>)"><i class="icon-comment"></i></a>
+                            <a href="javascript:;" data-id="<?= $post['id'];?>" class="btn-xs btn-default product_specs" onClick="view_specs(<?= $post['id'];?>)"><i class="icon-info22"></i></a>
+                        <?php } ?>
+                    </td>
                 </tr>
                 <?php
             endforeach;

@@ -11,7 +11,7 @@
                 <div class="col-md-6 col-md-offset-3">
                     <div class="row" style="margin-bottom: 5px;">
                         <div class="col-md-4"><input type="text" name="serial_num" class="form-control serial_num" value="" placeholder="Serial Number"></div>
-                        <div class="col-md-4"><input type="text" name="part_num" class="form-control part_num" value="" placeholder="Part Number"></div>
+                        <!-- <div class="col-md-4"><input type="text" name="part_num" class="form-control part_num" value="" placeholder="Part Number"></div> -->
                         <div class="col-md-4"><input type="text" name="location" class="form-control location" value="" placeholder="Location"></div>
                     </div>
                     <div class="row text-center">

@@ -55,9 +55,9 @@
 							<?php } ?>
 						<?php //} ?>
 						<?php //if(in_array('product_line', $print_labels)){ ?>
-							<?php if($product_line[$i]!= ''){ ?>
-								<div class="row"><span class="product_line">Product Line - <?php echo $product_line_names[$product_line[$i]] ?></span></div>
-							<?php } ?>
+							<!-- <?php //if($product_line[$i]!= ''){ ?> -->
+								<!-- <div class="row"><span class="product_line">Product Line - <?php echo $product_line_names[$product_line[$i]] ?></span></div> -->
+							<!-- <?php //} ?> -->
 						<?php //} ?>
 						<?php //if(in_array('categories', $print_labels)){ ?>
 							<?php if($categories[$i]!=''){ ?>

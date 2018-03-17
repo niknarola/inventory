@@ -64,7 +64,7 @@
 									<label>Category</label>
 									<select name="category1" class="category1 form-control" onchange="get_sub_categories(this.value, 'category2')">
 										<?php foreach ($categories as $key => $value) { ?>
-											<option value="<?= $key ?>"><?= $value ?></option>
+											<option <?php echo ($key == 10) ? 'selected' : ''; ?> value="<?= $key ?>"><?= $value ?></option>
 										<?php } ?>
 									</select>
 								</div>
@@ -433,6 +433,12 @@
 <script type="text/javascript" src="assets/js/picker.date.js"></script>
 <script type="text/javascript">
 	jQuery(document).ready(function($) {
+		$(window).keydown(function(event){
+		    if(event.keyCode == 13) {
+		      event.preventDefault();
+		      return false;
+		    }
+	  	});
 		$('.daterange-single').daterangepicker({ 
 	        singleDatePicker: true,
 	        locale: {
@@ -455,7 +461,7 @@
 	    	}
 	    	
 	    });
-	    get_sub_categories(1, 'category2');
+	    get_sub_categories(10, 'category2');
 	    // $('.category3').multiselect();
 	});
 	function warranty_change(val){
@@ -537,7 +543,8 @@
 					$('textarea').html('');
 					$('input[type="checkbox"]').prop('checked', false);
 					$('input[type="radio"]').prop('checked', false);
-					get_sub_categories(1, 'category2');
+					$('.category1').val(10).trigger('change');
+					get_sub_categories(10, 'category2');
 					$('select.warranty').val('Active').trigger('change');
 					$('select.status').val('').trigger('change');
 					$('.other_category').css('display','none');
@@ -642,6 +649,7 @@
 				var cat_raw = response.product.category;
 			    var category = (cat_raw!='') ? JSON.parse(cat_raw) : '';
 			    cat = (category!='') ? category[0] : 1;
+			    $('.category1').val(cat).trigger('change');
 				get_sub_categories(cat,'category2', category);
 				if(category.length == 1){
 					// $('.category2').multiselect();

@@ -56,7 +56,6 @@ class Master_sheet extends CI_Controller {
     
     function ajaxPaginationData(){
         $conditions = array();
-//        pr($this->input->post(),1);
         //calc offset number
         $page = $this->input->post('page');
         if(!$page){
@@ -74,47 +73,43 @@ class Master_sheet extends CI_Controller {
         $condition = $this->input->post('condition');
         $grade = $this->input->post('grade');
        #nik------------
-        // $sortBy = $this->input->post('sortBy');
-        if(!empty($keywords)){
-            $conditions['search']['keywords'] = $keywords;
-        }
-        if(!empty($searchfor) && $searchfor!='none'){
-            $conditions['search']['searchfor'] = $searchfor;
-        }
-        #nik------------
-        if(!empty($category1) && $category1!='none'){
-            $conditions['search']['category1'] = $category1;
-        }
-        if(!empty($category2) && $category2!='none'){
-            $conditions['search']['category2'] = $category2;
-        }
-        if(!empty($condition) && $condition!='none')
-        {
-            $conditions['search']['condition'] = $condition;
-        }
-        else if(!empty($grade) && $grade!='none')
-        {
-            $conditions['search']['grade'] = $grade;
-        }
-        else if(!empty($condition) && $condition!='none' && !empty($grade) && $grade!='none'){
-            $conditions['search']['condition'] = $condition;
-            $conditions['search']['grade'] = $grade;
-        }
-//        if(){
-//        }
-        else if($this->input->post('ready'))
-        {
-            $conditions['search']['ready'] = "Ready for sale";
-            //$conditions['search']['ready'] = $this->db->like('ps.status',$conditions['search']['ready']);
-        }
-        else if($this->input->post('recent'))
-        {
-            $conditions['search']['recent'] = $this->db->order_by('ps.created','desc');
-        }
-        else if($this->input->post('sold'))
-        {
-            $conditions['search']['sold'] = "Sold";
-        }
+       if(!empty($keywords)){
+        $conditions['search']['keywords'] = $keywords;
+    }
+    if(!empty($searchfor) && $searchfor!='none'){
+        $conditions['search']['searchfor'] = $searchfor;
+    }
+    #nik------------
+    if(!empty($category1) && $category1!='none'){
+        $conditions['search']['category1'] = $category1;
+    }
+    if(!empty($category2) && $category2!='none'){
+        $conditions['search']['category2'] = $category2;
+    }
+    if(!empty($condition) && $condition!='none')
+    {
+        $conditions['search']['condition'] = $condition;
+    }
+    else if(!empty($grade) && $grade!='none')
+    {
+        $conditions['search']['grade'] = $grade;
+    }
+    else if(!empty($condition) && $condition!='none' && !empty($grade) && $grade!='none'){
+        $conditions['search']['condition'] = $condition;
+        $conditions['search']['grade'] = $grade;
+    }
+    if($this->input->post('ready'))
+    {
+        $conditions['search']['ready'] = "Ready for sale";
+    }
+    if($this->input->post('recent'))
+    {
+        $conditions['search']['recent'] = $this->db->order_by('ps.created','desc');
+    }
+    if($this->input->post('sold'))
+    {
+        $conditions['search']['sold'] = "Sold";
+    }
         #nik------------
         
         //total rows count
@@ -166,5 +161,33 @@ class Master_sheet extends CI_Controller {
         //output to json format
         echo json_encode($output);
         exit;
+    }
+
+    public function view_notes($id){
+        $data['notes'] = $this->master->get_notes_by_id($id);
+        if ($data['notes'])
+        {
+            $resp['status'] = 1;
+            $resp['data'] = $this->load->view('master_sheet/notes', $data, TRUE);
+        }
+        else
+        {
+            $resp['status'] = 0;
+        }
+        echo json_encode($resp);
+    }
+
+    public function view_specs($id){
+        $data['specs'] = $this->master->get_specs_by_id($id);
+        if ($data['specs'])
+        {
+            $resp['status'] = 1;
+            $resp['data'] = $this->load->view('master_sheet/specs', $data, TRUE);
+        }
+        else
+        {
+            $resp['status'] = 0;
+        }
+        echo json_encode($resp);
     }
 }

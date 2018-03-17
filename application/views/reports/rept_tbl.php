@@ -26,10 +26,10 @@
                     <tbody id="userData">
                         <?php if (!empty($report_results)): foreach ($report_results as $results): ?>
                                 <?php
-                                $status = $post['status'];
+                                $status = $results['status'];
                                 if ($status == 'Other')
                                 {
-                                    $status = $post['other_status'];
+                                    $status = $results['other_status'];
                                 }
                                 ?>
                                 <tr>

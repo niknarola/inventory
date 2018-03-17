@@ -32,6 +32,10 @@ class Report_model extends CI_Model
                 {
                     $this->db->like('ps.' . $params['search']['searchfor'], $params['search']['keywords']);
                 }
+                if ($params['search']['searchfor'] == 'new_serial')
+                {
+                    $this->db->like('ps.' . $params['search']['searchfor'], $params['search']['keywords']);
+                }
                 else
                 {
                     $this->db->like('p.' . $params['search']['searchfor'], $params['search']['keywords']);
@@ -40,6 +44,7 @@ class Report_model extends CI_Model
             else
             {
                 $this->db->like('ps.serial', $params['search']['keywords']);
+                $this->db->or_like('ps.new_serial', $params['search']['keywords']);
             }
         }
         if (!empty($params['search']['category1']) && !empty($params['search']['category2']))
@@ -140,7 +145,7 @@ class Report_model extends CI_Model
     function get_tech_reports_results($params = array(), $catArr = array())
     {
 
-        $this->db->select('ps.id as count, ps.created as date,ps.serial,ps.cosmetic_grade,ps.pass,ps.fail,ps.fail_reason_notes,ps.status,'
+        $this->db->select('ps.id as count, ps.created as date,ps.serial,ps.cosmetic_grade,ps.pass,ps.fail,ps.fail_reason_notes,ps.status,ps.modified,ps.other_status,'
                 . 'u.id,u.name as tech_name, '
                 . 'p.part as part, '
                 . 'p.category as category, '

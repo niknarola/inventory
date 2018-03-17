@@ -14,3 +14,37 @@
 .field_div label{ margin-top: 10px; }
 .product_action_btn{ padding: 5px 5px; }
 .desktop_opt{ margin-bottom: 12px; }
+.costmatic-fx .input-group-addon:last-child{ border-left:1px solid #ddd;}
+#notebook .form-control, 
+#desktop .form-control,
+#thin-client .form-control, 
+#all-in-one .form-control,
+#tablet .form-control,
+#monitor .form-control,
+#accessory .form-control,
+#printer .form-control,
+#other .form-control{ margin-bottom:8px; }
+#notebook .input-group, 
+#desktop .input-group, 
+#thin-client .input-group, 
+#all-in-one .input-group,
+#tablet .input-group,
+#monitor .input-group, 
+#accessory .input-group,
+#printer .input-group,
+#other .input-group{ margin-bottom:8px; }
+#notebook .input-group .form-control,
+#desktop .input-group .form-control, 
+#thin-client .input-group .form-control, 
+#all-in-one .input-group .form-control,
+#tablet .input-group .form-control,
+#monitor .input-group .form-control,
+#accessory .input-group .form-control,
+#printer .input-group .form-control,
+#other .input-group .form-control{ margin-bottom:0;}
+.scr-wrap .col-md-3{ padding:0 0 0 10px; }
+#notebook .scr-wrap .form-control, 
+#all-in-one .scr-wrap .form-control,
+#tablet .scr-wrap .form-control,
+#monitor .scr-wrap .form-control{padding-left:10px; padding-right:5px;  }
+label.check_label{ border: 1px solid #ddd; padding: 8px 0 6px 15px; margin: 0; width: 100%; }

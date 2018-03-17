@@ -67,10 +67,12 @@ $route['admin/receiving/dockPagination/(:any)'] = 'receiving/dockPagination/$1';
 $route['admin/receiving/add_inspection_notes'] = 'receiving/add_inspection_notes';
 $route['admin/receiving/quick_receive'] = 'receiving/quick_receive';
 $route['admin/receiving/quick_receive_barcodes'] = 'receiving/quick_receive_barcodes';
+$route['admin/receiving/print_labels'] = 'receiving/print_labels';
 
 $route['testing/add_notes'] = 'receiving/add_notes';
 $route['repair/notebook'] = 'testing/notebook';
 $route['cleaning/notebook'] = 'testing/notebook';
+$route['admin/cleaning/packout'] = 'cleaning/packout';
 $route['packing/notebook'] = 'testing/notebook';
 
 $route['admin/temporary_product_review'] = 'receiving/temporary_product_flagged';
@@ -89,6 +91,7 @@ $route['admin/products/ajax_list'] = 'products/ajax_list';
 $route['admin/products/upload_products'] = 'products/upload_products';
 $route['admin/products/find_product'] = 'products/find_product';
 $route['admin/products/ajaxPaginationData/(:any)']='products/ajaxPaginationData/$1';
+$route['admin/receiving/product_actions'] = 'receiving/product_actions';
 
 $route['admin/barcode/generate_barcodes'] = 'barcode/generate_barcodes';
 $route['admin/barcode/generate'] = 'barcode/generate';
@@ -96,6 +99,7 @@ $route['admin/barcode'] = 'barcode';
 $route['admin/barcode/pallet_labels'] = 'barcode/pallet_labels';
 $route['admin/barcode/get_sub_category']='barcode/get_sub_category';
 $route['admin/barcode/location_print/(:any)']='barcode/location_print/$1';
+$route['admin/barcode/print_labels_barcode']='barcode/print_labels_barcode';
 
 $route['admin/roles/edit/(:any)'] = 'admin/roles/add/$1';
 $route['admin/user/edit/(:any)']='admin/user/add/$1';
@@ -121,6 +125,8 @@ $route['admin/testing/other_item']='testing/other_item';
 
 $route['admin/inventory/master_sheet']='master_sheet';
 $route['admin/inventory/master_sheet/ajaxPaginationData/(:any)']='master_sheet/ajaxPaginationData/$1';
+$route['admin/inventory/master_sheet/view_notes/(:any)']='master_sheet/view_notes/$1';
+$route['admin/inventory/master_sheet/view_specs/(:any)']='master_sheet/view_specs/$1';
 $route['admin/inventory/reports']='reports';
 $route['admin/inventory/reports/hp_report']='reports/hp_report';
 $route['admin/inventory/reports/ajaxPaginationData/(:any)']='reports/ajaxPaginationData/$1';

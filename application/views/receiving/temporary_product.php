@@ -28,7 +28,7 @@
 							</div>
 							
 						</div>
-						<div class="col-md-6">
+						<!-- <div class="col-md-6">
 							<div class="row">
 								<div class="form-group">
 								<label>Specifications:</label>
@@ -91,7 +91,7 @@
 									<?php }  ?>
 								</select>
 							</div>
-						</div>
+						</div> -->
 						<div class="col-md-3">
 							<div class="form-group">
 								<label>Original Condition:</label>
@@ -103,41 +103,41 @@
 								</select>
 							</div>
 						</div>
-								<div class="col-md-3">
+								<!-- <div class="col-md-3"> -->
 						
-										<div class="form-group">
-										<label>Other Features:</label>
-										<div class="input-group">
+										<!-- <div class="form-group"> -->
+										<!-- <label>Other Features:</label> -->
+										<!-- <div class="input-group">
 											<span class="input-group-addon">
 												<input type="checkbox" value="1" name="touchscreen" class="checkbx touchscreen">
 											</span>
 											<input type="text" disabled="true" value="Touch Screen" class="form-control"> 
-										</div>
-										</div>
-									</div>
-										<div class="col-md-3">
-											<div class="form-group">
-										<label>&nbsp;</label>
-										<div class="input-group">
+										</div> -->
+										<!-- </div> -->
+									<!-- </div> -->
+										<!-- <div class="col-md-3"> -->
+											<!-- <div class="form-group"> -->
+										<!-- <label>&nbsp;</label> -->
+										<!-- <div class="input-group">
 											<span class="input-group-addon">
 												<input type="checkbox" value="1" name="webcam" class="checkbx webcam">
 											</span>
 											<input type="text" disabled="true" value="Webcam" class="form-control"> 
-										</div>
-									</div>
-									</div>
+										</div> -->
+									<!-- </div> -->
+									<!-- </div> -->
 							</div>
 							<div class="form-group">
 								<label>Description:</label>
 								<textarea name="description" class="form-control"></textarea>
 							</div>
-							<div class="form-group">
+							<!-- <div class="form-group">
 								<label>Release Date:</label>
 								<div class="input-group">
 									<span class="input-group-addon"><i class="icon-calendar22"></i></span>
 									<input type="text" name="release_date" class="form-control daterange-single" value="">
 								</div>
-							</div>
+							</div> -->
 							<div class="row">
 								<div class="col-md-4">
 								<div class="form-group">

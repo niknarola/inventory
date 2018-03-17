@@ -19,6 +19,10 @@
 	<!-- Core JS files -->
 	<script type="text/javascript" src="<?=base_url()?>assets/js/jquery.min.js"></script>
 	<script type="text/javascript" src="<?=base_url()?>assets/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="assets/js/plugins/forms/styling/switchery.min.js"></script>
+	<script type="text/javascript" src="assets/js/plugins/forms/styling/switch.min.js"></script>
+	<script type="text/javascript" src="assets/js/plugins/forms/selects/select2.min.js"></script>
+	
 	<!-- /core JS files -->
 	<!-- Theme JS files -->
 	<script type="text/javascript" src="<?=base_url()?>assets/js/app.js"></script>

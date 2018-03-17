@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="">
-		<form method="post" action="<?= $admin_prefix; ?>testing/other_item" enctype="multipart/form-data">
+		<form method="post" action="<?= $admin_prefix; ?>testing/other_item" id="other" enctype="multipart/form-data">
 			<div class="panel panel-flat">
 				<div class="panel-heading">
 					<div class="row">
@@ -12,6 +12,13 @@
 				<div class="panel-body">
 					<hr>
 						<div class="row">
+						<div class="col-md-4">
+								<div class="form-group">
+									<label>Serial #:</label>
+									<input type="text" name="serial" value="" onchange="get_product_details();" class="form-control serial">
+									<input type="hidden" name="serial_id" class="serial_id" value="">
+								</div>
+							</div>
 							<div class="col-md-4">
 								<div class="form-group">
 									<label>Part #:</label>
@@ -19,13 +26,7 @@
 									<input type="hidden" name="product_id" class="product_id" value="">
 								</div>
 							</div>
-							<div class="col-md-4">
-								<div class="form-group">
-									<label>Serial #:</label>
-									<input type="text" name="serial" value="" onchange="get_product_details();" class="form-control serial">
-									<input type="hidden" name="serial_id" class="serial_id" value="">
-								</div>
-							</div>
+							
 							<div class="col-md-4">
 								<div class="form-group">
 									<label>New Serial #:</label>
@@ -64,7 +65,7 @@
 									<label>Category</label>
 									<select name="category1" class="category1 form-control" onchange="get_sub_categories(this.value, 'category2')">
 										<?php foreach ($categories as $key => $value) { ?>
-											<option value="<?= $key ?>"><?= $value ?></option>
+											<option  value="<?= $key ?>"><?= $value ?></option>
 										<?php } ?>
 									</select>
 								</div>
@@ -100,15 +101,115 @@
 								</div>
 							</div>
 						<hr>
+						<div class="row">
+						<div class="col-md-8">
 							<div class="row">
-								<div class="col-md-2">
-									<div class="row">
-										<div class="form-group">
-											<label>Cosmetic Notes:</label>
-											<input type="text" class="form-control cs1" name="cs1" value="" placeholder="User Input">
-											<input type="text" class="form-control cs2" name="cs2" value=""  placeholder="User Input">
-										</div>
+
+                                    <div class="col-md-6">
+								<div class="form-group">
+									<label>Pass</label>
+									<div class="input-group">
+										<span class="input-group-addon">
+											<input type="checkbox" value="1" name="pass" class="checkbx pass">
+										</span>
+										<input type="text" readonly="true" value="Pass" class="form-control"> 
 									</div>
+								</div>
+							</div>
+                            <div class="col-md-6">
+								<div class="form-group">
+									<label>Fail</label>
+									<div class="input-group">
+										<span class="input-group-addon">
+											<input type="checkbox" value="1" name="fail" class="checkbx fail">
+										</span>
+                                                                              <div class="multi-select-full">  
+                                                                                    <select name="fail_option" class="multiselect form-control fail_option" multiple="multiple">
+											<?php foreach ($fail_options as $key => $value) { ?>
+												<option value="<?= $key; ?>"><?= $value; ?></option>
+											<?php }  ?>
+                                                                                    </select>
+                                                                        </div>
+									</div>
+									<div class="form-group fail_reason_div" style="display: none;">
+										<input type="text" class="form-control fail_reason_notes" name="fail_reason_notes" value="" placeholder="Fail Reason Notes">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+                                <div class="col-md-6 form-group">
+									<div class="" style="margin-bottom: 5px;">
+										<label>Cosmetic Grade:</label>
+										<div class="input-group">
+										<span class="input-group-addon">
+											<label class="radio-inline">
+												<input type="radio" value="A" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx">
+												A
+											</label>
+										</span>
+										<span class="input-group-addon">
+											<label class="radio-inline">
+												<input type="radio" value="B" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx">
+												B
+											</label>
+										</span>
+										<span class="input-group-addon">
+											<label class="radio-inline">
+												<input type="radio" value="C" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx">
+												C
+											</label>
+										</span>
+										<span class="input-group-addon">
+											<label class="radio-inline">
+												<input type="radio" value="D" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx">
+												D
+											</label>
+										</span>
+                                                                                
+									</div>
+									</div>
+									<span><b>A</b> – Like New / <b>B</b> - Light Scratches / <b>C</b> - Deep Scratches / <b>D</b> - Significant Physical Damage </span>
+								</div>
+                                    <div class="col-md-6 form-group ">
+									<div class="costmatic-fx" style="margin-bottom: 5px;">
+										<label>&nbsp;</label>
+										<div class="input-group col-md-6">
+										<span class="input-group-addon">
+											<label class="radio-inline">
+												<input type="radio" value="F" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx">
+												F
+											</label>
+										</span> 
+                                                                                <span class="input-group-addon">
+											<label class="radio-inline">
+												<input type="radio" value="X" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx">
+												X
+											</label>
+										</span> 
+									</div>
+									</div>
+                                                                <span><b>F</b> - Fail / <b>X</b> - Unsellable</span>
+								</div>
+							</div>
+                                 </div>
+                                 <div class="col-md-4">
+                                 	<div class="form-group">
+									<label>Failure Explaination:</label>
+                                                                        <textarea name="fail_text" class="form-control" rows="5" cols="8"></textarea>
+									<!--<input type="text" name="fail_1" value="" class="form-control fail_1">-->
+								</div>
+                                 </div>
+								</div>
+								<div class="row">
+								<div class="col-md-2">
+								<div class="row">
+									<div class="form-group">
+										<label>Cosmetic Notes:</label>
+										<input type="text" class="form-control cs1" name="cs1" value="" placeholder="User Input">
+										<input type="text" class="form-control cs2" name="cs2" value=""  placeholder="User Input">
+									</div>
+								</div>
 									<div class="row">
 									<div class="form-group">
 										<label>Cosmetic Issues:</label>
@@ -122,10 +223,8 @@
 										<?php } ?>
 									</div>
 								</div>
-								
-
-								</div>
-								<div class="col-md-8">
+							</div>
+                            <div class="col-md-6">
 									<div class="col-md-5">
 										<div class="form-group">
 											<label>&nbsp;</label>
@@ -182,74 +281,51 @@
 											<textarea placeholder="Additional Info User Input" class="form-control additional_info" rows="10" cols="3" name="additional_info"></textarea>
 										</div>
 									</div>
-								</div>
-								<div class="col-md-2">
-									<div class="col-md-12">
-										<div class="row">
-										<div class="form-group">
-										<label>Accessories:</label>
-										<div class="input-group">
-											<span class="input-group-addon">
-												<input type="checkbox" value="1" name="cd_software" class="checkbx cd_software">
-											</span>
-											<input type="text" readonly="true" value="CD/Software" class="form-control"> 
-										</div>
-										<div class="input-group">
-											<span class="input-group-addon">
-												<input type="checkbox" value="1" name="power_cord" class="checkbx power_cord">
-											</span>
-											<input type="text" readonly="true" value="Power Cord" class="form-control"> 
-										</div>
-										<div class="input-group">
-											<span class="input-group-addon">
-												<input type="checkbox" value="1" name="manual" class="checkbx manual">
-											</span>
-											<input type="text" readonly="true" value="Manual" class="form-control"> 
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="form-group">
-										<label>Additional Accessories:</label>
-										<textarea name="additional_accessories" class="form-control additional_accessories"></textarea>
-									</div>
-								</div>
-									</div>
-								</div>
 							</div>
+							<div class="col-md-4">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <label>Other Features:</label>
+                                            <div class="input-group">
+											<span class="input-group-addon">
+												<input type="checkbox" value="1" name="tgfg_capable" class="checkbx tgfg_capable">
+											</span>
+											<input type="text" readonly="true" value="Sim Capable" class="form-control"> 
+										</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                <div class="row">
+											<div class="form-group">
+												<label>Accessories:</label>
+												<div class="input-group">
+													<span class="input-group-addon">
+														<input type="checkbox" value="1" name="cd_software" class="checkbx cd_software">
+													</span>
+													<input type="text" readonly="true" value="CD/Software" class="form-control"> 
+												</div>
+												<div class="input-group">
+													<span class="input-group-addon">
+														<input type="checkbox" value="1" name="power_cord" class="checkbx power_cord">
+													</span>
+													<input type="text" readonly="true" value="Power Cord" class="form-control"> 
+												</div>
+												<div class="input-group">
+													<span class="input-group-addon">
+														<input type="checkbox" value="1" name="manual" class="checkbx manual">
+													</span>
+													<input type="text" readonly="true" value="Manual" class="form-control"> 
+												</div>
+											</div>
+										</div>
+                                </div>
+                            </div>	
+							
+							</div>
+
 							<div class="row">
-								<div class="col-md-3">
-									<div class="form-group" style="margin-bottom: 5px;">
-										<label>Cosmetic Grade:</label>
-										<div class="input-group">
-										<span class="input-group-addon">
-										<label class="radio-inline">
-											<input type="radio" value="A" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx">
-											A
-										</label>
-										</span>
-										<span class="input-group-addon">
-											<label class="radio-inline">
-											<input type="radio" value="B" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx">
-											B
-										</label>
-										</span>
-										<span class="input-group-addon">
-											<label class="radio-inline">
-											<input type="radio" value="C" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx">
-											C
-										</label>
-										</span>
-										<span class="input-group-addon">
-											<label class="radio-inline">
-											<input type="radio" value="D" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx">
-											D
-										</label>
-										</span>
-									</div>
-									</div>
-									<span><b>A</b> – Like New / <b>B</b> - Light Scratches / <b>C</b> - Deep Scratches / <b>D</b> - Significant Physical Damage</span>
-								</div>
 								<div class="col-md-3">
 								<div class="form-group">
 									<label>Final Condition: </label>
@@ -283,56 +359,9 @@
 							</div>
 						</div>
 							<hr>
-							<div class="row">
-							<div class="col-md-3">
-								<div class="form-group">
-									<label>Fail</label>
-									<div class="input-group">
-										<span class="input-group-addon">
-											<input type="checkbox" value="1" name="fail" class="checkbx fail">
-										</span>
-										<select name="fail_option" class="form-control fail_option">
-											<?php foreach ($fail_options as $key => $value) { ?>
-												<option value="<?= $key; ?>"><?= $value; ?></option>
-											<?php }  ?>
-										</select>
-									</div>
-									<div class="form-group fail_reason_div" style="display: none;">
-										<input type="text" class="form-control fail_reason_notes" name="fail_reason_notes" value="" placeholder="Fail Reason Notes">
-									</div>
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="form-group">
-									<label>Fail 1:</label>
-									<input type="text" name="fail_1" value="" class="form-control fail_1">
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="form-group">
-									<label>Fail 2:</label>
-									<input type="text" name="fail_2" value="" class="form-control fail_2">
-								</div>
-							</div>
-							<div class="col-md-3">
-								<div class="form-group">
-									<label>Fail 3:</label>
-									<input type="text" name="fail_3" value="" class="form-control fail_3">
-								</div>
-							</div>
-						</div>
+							
 						<div class="row">
-							<div class="col-md-2">
-								<div class="form-group">
-									<label>&nbsp;</label>
-									<div class="input-group">
-										<span class="input-group-addon">
-											<input type="checkbox" value="1" name="pass" class="checkbx pass">
-										</span>
-										<input type="text" readonly="true" value="Pass" class="form-control"> 
-									</div>
-								</div>
-							</div>
+							
 							<div class="col-md-2">
 								<div class="form-group">
 									<label>&nbsp;</label>
@@ -383,17 +412,50 @@
 									<textarea name="tech_notes" class="form-control tech_notes"></textarea>
 								</div>
 							</div>
-							</div>
-							<div class="text-right">
-								<button type="submit" name="save" class="btn bg-pink-400">Save</button>
-							</div>
 						</div>
+                        <div class="col-md-12">
+                            <div class="col-md-2 col-md-offset-9">
+                            <input type="text" name="scan_loc" value="" placeholder="Scan To Location" class="form-control scan_loc">
+									<input type="hidden" name="scan_loc_id" class="scan_loc_id" value="">
+                            </div>
+                            <div class="col-md-1">
+                                <button type="submit" name="save" class="btn bg-pink-400">Save</button>
+                            </div>
+                        </div>
+					</div>
 				</div>
-		</form>
-			</div>
+			</form>
+            <!--Add More-->
+            <div class="row cpu1" style="display:none;">
+                <div class="col-md-offset-2 col-md-5"><input type="text" class="form-control cpu" name="cpu[]" value="" placeholder=""></div>
+            </div>
+            <div class="row storage" style="display:none;">
+                <div class="col-md-offset-2 col-md-5"><input type="text" class="form-control storage" name="storage[]" value="" placeholder=""></div>
+                <div class="col-md-5">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <input type="checkbox" value="1" name="ssd" class="ssd checkbx">
+                        </span>
+                        <input type="text" class="form-control" value="SSD" readonly="true">
+                    </div>
+                </div>
+            </div>
+            <div class="row graphics" style="display:none;">
+                <div class="col-md-offset-2 col-md-5"><input type="text" class="form-control graphics" name="graphics[]" value="" placeholder=""></div>
+                <div class="col-md-5">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <input type="checkbox" value="1" name="dedicated" class="dedicated checkbx">
+                        </span>
+                        <input type="text" class="form-control" value="Dedicated" readonly="true">
+                    </div>
+                </div>
+            </div>
+
+		</div>
 	</div>
 	<!-- <div class=""></div> -->
-</div>
+</div>	
 <script type="text/javascript" src="assets/js/uniform.min.js"></script>
 <script type="text/javascript" src="assets/js/bootstrap_multiselect.js"></script>
 <script type="text/javascript" src="assets/js/fileinput.min.js"></script>
@@ -403,6 +465,12 @@
 <script type="text/javascript" src="assets/js/picker.date.js"></script>
 <script type="text/javascript">
 	jQuery(document).ready(function($) {
+		$(window).keydown(function(event){
+		    if(event.keyCode == 13) {
+		      event.preventDefault();
+		      return false;
+		    }
+	  	});
 		$('.daterange-single').daterangepicker({ 
 	        singleDatePicker: true,
 	        locale: {
@@ -486,11 +554,11 @@
     	$el.val(values);
     }
     function get_product_details(){
-  		var part = $('input.part').val();
+  		//var part = $('input.part').val();
     	var serial = $('input.serial').val();
     	var new_serial = $('input.new_serial').val();
-		if(part!='' && serial!=''){
-			var data = {part: part, serial: serial};
+		if(serial!=''){
+			var data = {serial: serial};
 			if(new_serial!=''){
 				data.new_serial = new_serial;
 			}
@@ -502,7 +570,7 @@
 			})
 			.done(function(response) {
 				if(response.status==0){
-					$( "input" ).not( ".part, .serial, .new_serial" ).val('');
+					$( "input" ).not( ".serial, .new_serial" ).val('');
 					$('textarea').html('');
 					$('input[type="checkbox"]').prop('checked', false);
 					$('input[type="radio"]').prop('checked', false);
@@ -511,7 +579,10 @@
 					$('select.status').val('').trigger('change');
 					$('.other_category').css('display','none');
 				}else{
+					$('input.scan_loc').val(response.product.location_name);
+				$('input.scan_loc_id').val(response.product.location_id);
 				$('input.product_id').val(response.product.pid);
+				$('input.part').val(response.product.part);
 				$('input.serial_id').val(response.product.id);
 				$('input.new_serial').val(response.product.new_serial);
 				$('input.name').val(response.product.product_name);
@@ -580,13 +651,15 @@
 					}
 				});
 				var cs_issue_text = JSON.parse(response.product.cosmetic_issues_text);
+				if(cs_issue_text!=null){
 				$('.cs1').val(cs_issue_text.cs1);
 				$('.cs2').val(cs_issue_text.cs2);
-				var fail_text = JSON.parse(response.product.fail_text);
+				}
+				/*var fail_text = JSON.parse(response.product.fail_text);
 				$('.fail_1').val(fail_text.fail_1);
 				$('.fail_2').val(fail_text.fail_2);
 				$('.fail_3').val(fail_text.fail_3);
-
+*/
 				var specifications_ui = JSON.parse(response.product.specifications_ui);
 				$('.sp_ui1').val(specifications_ui.sp_ui1);
 				$('.sp_ui2').val(specifications_ui.sp_ui2);
@@ -627,4 +700,28 @@
 			});
 		}
 	}
+
+    $( ".cosmetic_grade_boxes" ).change(function() {
+        var grade = $("input[name='cosmetic_grade']:checked").val();
+        if(grade == 'F' || grade == 'X')
+        {
+            $('.based-on-radio').find("input,textarea").prop('disabled',true);
+            $("input[name='pass']").prop('checked',false);
+            $("input[name='fail']").prop('checked',true);
+        }
+        else
+        {
+            $('.based-on-radio').find("input,textarea").prop('disabled',false);
+            $("input[name='pass']").prop('checked',true);
+            $("input[name='fail']").prop('checked',false);
+        }
+    });
+    
+        $('.multiselect').multiselect({
+            onChange: function() {
+                $.uniform.update();
+        }
+        // Styled checkboxes and radios
+    });
+    $(".styled, .multiselect-container input").uniform({ radioClass: 'choice'});
 </script>

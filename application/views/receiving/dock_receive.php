@@ -47,7 +47,7 @@
 					</div>
 					<div class="pallet_div"></div>
 					<div class="pallet_actions" style="display: none;">
-						<button type="submit" name="print_labels" value="print_labels" class="btn btn-sm btn-primary print_labels">Print Labels</button>   
+						<button type="submit" name="print_labels" value="print_labels" class="btn btn-sm btn-primary print_labels">Receive and Print Labels</button>   
 		                <button type="submit" name="next" value="next" class="btn btn-sm btn-primary next">Next</button> 
 		                   
 		                <button type="submit" name="complete" value="complete" class="btn btn-sm btn-primary complete">Complete</button>

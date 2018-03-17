@@ -143,4 +143,27 @@ class Basic_model extends CI_Model
         $this->db->where($cond);
         return $this->db->get($table)->row();
     }
+    public function check_location_exists($loc_name)
+    {
+        // $loc = array(
+            //     'name' => $loc_name
+            // );
+            
+            $this->db->select('locations.id');
+            $this->db->where('locations.name',$loc_name);
+            $this->db->limit(1);
+            $query = $this->db->get('locations')->row_array();
+            // echo"model name";pr($loc_name);die;
+            if(isset($query['id'])){
+                return $query;
+            } else {
+                
+                $loc = array(
+                    'name' => $loc_name
+                );
+                $location_id = $this->db->insert('locations',$loc);
+                $insert_id = $this->db->insert_id();
+                return $insert_id;
+            }
+    }
 }

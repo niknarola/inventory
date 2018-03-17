@@ -7,22 +7,36 @@
     	</div>
 	</div>
 	<div class="panel-body">
-	<?php if($product['status']==1){ ?>
+    <?php //echo'post data';pr($_POST); die;?>
+	<?php if($_POST['part']){
+        $product = reset($product);
+        // pr($product);die;
+        // echo"in serial product";pr($product['status']);die;
+        // if($product['status']==1){
+        if($product){ 
+            // pr($product);die;
+            ?>
 	<div class="table-responsive">
 		<div class="row col-md-6 col-md-offset-3">
 		<table class="table text-left">
 			<tbody>
 				<tr>
-					<td>Units In House</td><td></td>
+					<td>Units In House</td>
+                    <td><?= $units_in_house;?></td>
 				</tr>
 				<tr>
-					<td>Ready For Sale</td><td></td>
+                    <td>Ready For Sale</td>
+                    
+                    <td><?= $ready_for_sale;?></td>
 				</tr>
 				<tr>
-					<td>Units In Production</td><td></td>
+                
+					<td>Units In Production</td>
+                    <td><?= $units_in_production;?></td>
 				</tr>
 				<tr>
-					<td>Units Sold</td><td></td>
+					<td>Units Sold</td>
+                    <td><?= $sold;?></td>
 				</tr>
 			</tbody>
 		</table>
@@ -38,6 +52,7 @@
 					<th>Part</th>
 					<th>Name</th>
 					<th>Description</th>
+					<th>Status</th>
 					<th>Sales Order</th>
 					<th>Tracking Number</th>
 				</tr>
@@ -51,11 +66,12 @@
 						<td><?= $product['part'] ?></td>
 						<td><?= $product['name'] ?></td>
 						<td><?= $product['description'] ?></td>
+						<td><?= $serial_product['status'] ?></td>
 						<td></td>
 						<td></td>
 					</tr>
 					<?php $i++; ?>
-				<?php } ?>
+				<?php }  ?>
 			</tbody>
 		</table>
 	</div>
@@ -92,7 +108,74 @@
 				  </div>
 				</div>
 			</div>	
-	<?php } ?>
+	<?php } } elseif($_POST['serial']) {?>
+        <div class="row">
+    	<table class="table" id="product_tbl">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Serial Number</th>
+					<th>Part</th>
+					<th>Name</th>
+					<th>Description</th>
+					<th>Status</th>
+					<!-- <th>Sales Order</th> -->
+					<!-- <th>Tracking Number</th> -->
+				</tr>
+			</thead>
+			<tbody>
+				<?php $i=1; ?>
+
+			<?php foreach ($product as $serial_product) { ?> 
+					<tr>
+						<td><?= $i; ?></td>
+						<td><?= $serial_product['serial'] ?></td>
+						<td><?= $serial_product['part'] ?></td>
+						<td><?= $serial_product['name'] ?></td>
+						<td><?= $serial_product['description'] ?></td>
+						<td><?= $serial_product['serial_status'] ?></td>
+						<!-- <td></td>
+						<td></td> -->
+					</tr>
+					<?php $i++; ?>
+				 <?php }  ?> 
+			</tbody>
+		</table>
+	</div>
+    <?php } elseif($_POST['part'] && $_POST['serial']) { ?>
+        <div class="row">
+    	<table class="table" id="product_tbl">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Serial Number</th>
+					<th>Part</th>
+					<th>Name</th>
+					<th>Description</th>
+					<th>Status</th>
+					<th>Sales Order</th>
+					<th>Tracking Number</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php $i=1; ?>
+				<?php foreach ($product['serial_products'] as $serial_product) { ?>
+					<tr>
+						<td><?= $i; ?></td>
+						<td><?= $serial_product['serial'] ?></td>
+						<td><?= $product['part'] ?></td>
+						<td><?= $product['name'] ?></td>
+						<td><?= $product['description'] ?></td>
+						<td><?= $serial_product['status'] ?></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<?php $i++; ?>
+				<?php }  ?>
+			</tbody>
+		</table>
+	</div>
+    <?php } ?>
 </div>
 </div>
 </div>

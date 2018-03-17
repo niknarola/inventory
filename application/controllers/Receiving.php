@@ -14,10 +14,13 @@ class Receiving extends CI_Controller {
 		}else if($this->uri->segment(1)=='receiving' && !$this->session->userdata('user_validated')) {
 			redirect('login');
         }
-        if($this->uri->segment(1)=='admin')
+         if($this->uri->segment(1)=='admin'){
             $this->layout = 'admin/admin_layout';
-        else
+            $this->admin_prefix = 'admin/';
+        }else{
             $this->layout = 'layout'; 
+            $this->admin_prefix = '';
+        } 
 	}
 	public function search(){
 		$data['title'] = 'Receiving - Search';
@@ -29,7 +32,10 @@ class Receiving extends CI_Controller {
 		if($this->input->post()){
 			if($this->input->post('part')!='')
 				$data['part'] = $this->input->post('part');
-			
+            
+                if($this->input->post('serial')!='')
+				$data['serial'] = $this->input->post('serial');
+                
 			if($this->input->post('name')!='')
 				$data['name'] = $this->input->post('name');
 
@@ -37,8 +43,10 @@ class Receiving extends CI_Controller {
 				$data['original_condition_id'] = $this->input->post('original_condition_id');
 			if($this->input->post('description')!='')
 				$data['description'] = $this->input->post('description');		
-			$result = $this->products->product_search($data);
-			$page_data['result'] = $result;
+            $result = $this->products->product_search($data);
+            foreach($result as $key =>$value){
+            $page_data['result'] = $value;
+        }
 			$this->template->load($this->layout, 'receiving/search_results', $page_data);
 		}
 	}
@@ -46,7 +54,7 @@ class Receiving extends CI_Controller {
 		$data['title'] = 'Temporary Product Flagged';
 		// $temp_products = $this->products->get_temp_products();
 		// $data['temp_products'] = $temp_products;
-
+        $data['admin_prefix'] = $this->admin_prefix;
         $data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/receiving/ajax_list' : 'receiving/ajax_list';
 		$this->template->load($this->layout, 'receiving/temporary_product_flagged', $data);
     }
@@ -100,27 +108,43 @@ class Receiving extends CI_Controller {
     }
 
 	public function approve($id){
-		$data = [
-			'status'=>1
-		];
-		if($this->basic->update('products', $data, ['id'=>$id])){
-			$this->session->set_flashdata('msg', 'Product Approved');
-		}
+        $data = [
+            'status'=>1
+        ];
+        if($this->basic->update('products', $data, ['id'=>$id])){
+            $this->session->set_flashdata('msg', 'Product Approved');
+        }
 		redirect('admin/temporary_product_review');
 	}
 	public function find_product(){
-        $part = $this->input->post('part');
-        $product = $this->products->get_product_by_part($part);
+        // $part = $this->input->post('part');
+        // $serial = $this->input->post('serial');
+        $data = [
+            'part' => $this->input->post('part'),
+            'serial' => $this->input->post('serial'),
+            'new_serial' => $this->input->post('serial'),
+        ];
+        $product = $this->products->product_search($data);
+        $data['units_in_house'] = $this->products->get_units_in_house($data['part']);
+        $data['units_in_production'] = $this->products->get_units_in_production($data['part']);
+        $data['ready_for_sale'] = $this->products->get_ready_for_sale($data['part']);
+        $data['sold'] = $this->products->get_sold($data['part']);
+        // pr($product);die;
         $view['status'] = 0;
         if(!empty($product)){
-            $serial_products = $this->products->get_serials_by_product_id($product['id']);
-            $product['serial_products'] = $serial_products;
-            $category = ($product['category']!='') ? get_category_name($product['category']) : '';
-            $product['category_names'] = $category;
-            $data['product'] = $product;
-            $view['product'] = $product;
-            $view['html_data'] = $this->load->view('products/serial_product', $data, true);
-            $view['status'] = 1;
+           foreach($product as $key => $value){
+            // pr($value['id']);
+                // pr($data['units_in_house']);
+                // pr($data['units_in_production']);die;
+                $serial_products = $this->products->get_serials_by_product_id($value['id']);
+                $value['serial_products'] = $serial_products;
+                $category = ($value['category']!='') ? get_category_name($value['category']) : '';
+                $value['category_names'] = $category;
+                $data['product'][] = $value;
+                $view['product'][] = $value;
+                $view['html_data'] = $this->load->view('products/serial_product', $data, true);
+                $view['status'] = 1;
+            }
         }
         echo json_encode($view); 
         exit;
@@ -167,43 +191,49 @@ class Receiving extends CI_Controller {
                 'description'=>$this->input->post('description'),
                 'original_condition_id'=>$this->input->post('original_condition_id'),
                 'product_line_id'=>$this->input->post('product_line_id'),
-                'cpu'=>$this->input->post('cpu'),
-                'memory'=>$this->input->post('memory'),
-                'storage'=>$this->input->post('storage'),
-                'graphics'=>$this->input->post('graphics'),
-                'screen'=>$this->input->post('screen'),
-                'os'=>$this->input->post('os'),
-                'size'=>$this->input->post('size'),
-                'release_date'=>$this->input->post('release_date'),
+                // 'cpu'=>$this->input->post('cpu'),
+                // 'memory'=>$this->input->post('memory'),
+                // 'storage'=>$this->input->post('storage'),
+                // 'graphics'=>$this->input->post('graphics'),
+                // 'screen'=>$this->input->post('screen'),
+                // 'os'=>$this->input->post('os'),
+                // 'size'=>$this->input->post('size'),
+                // 'release_date'=>$this->input->post('release_date'),
                 'category'=>json_encode($category),
                 'status'=>0,
                 'added_as_temp' => 1,
                 'product_added_by'=>$this->session->userdata('id'),
                 'is_cto' => $is_cto
             ];
-            $data['touch_screen'] = ($this->input->post('touchscreen')) ? 1 : 0;
-            $data['webcam'] = ($this->input->post('webcam')) ? 1 : 0;
-            $data['ssd'] = ($this->input->post('ssd')) ? 1 : 0;
-            $data['dedicated'] = ($this->input->post('dedicated')) ? 1 : 0;
+            // $data['touch_screen'] = ($this->input->post('touchscreen')) ? 1 : 0;
+            // $data['webcam'] = ($this->input->post('webcam')) ? 1 : 0;
+            // $data['ssd'] = ($this->input->post('ssd')) ? 1 : 0;
+            // $data['dedicated'] = ($this->input->post('dedicated')) ? 1 : 0;
             if($this->basic->insert('products', $data)){
                 if($this->input->post('serial')!=''){
                 $id = $this->db->insert_id();
                 $serial_data = [
                     'serial' => $this->input->post('serial'),
                     'product_id' => $id,
-                    'cpu'=>$this->input->post('cpu'),
-                    'memory'=>$this->input->post('memory'),
-                    'storage'=>$this->input->post('storage'),
-                    'graphics'=>$this->input->post('graphics'),
-                    'screen'=>$this->input->post('screen'),
-                    'os'=>$this->input->post('os'),
-                    'size'=>$this->input->post('size'),
+                    // 'cpu'=>$this->input->post('cpu'),
+                    // 'memory'=>$this->input->post('memory'),
+                    // 'storage'=>$this->input->post('storage'),
+                    // 'graphics'=>$this->input->post('graphics'),
+                    // 'screen'=>$this->input->post('screen'),
+                    // 'os'=>$this->input->post('os'),
+                    // 'size'=>$this->input->post('size'),
                 ];
-            $serial_data['touch_screen'] = ($this->input->post('touchscreen')) ? 1 : 0;
-            $serial_data['webcam'] = ($this->input->post('webcam')) ? 1 : 0;
-            $serial_data['ssd'] = ($this->input->post('ssd')) ? 1 : 0;
-            $serial_data['dedicated'] = ($this->input->post('dedicated')) ? 1 : 0;
-                $this->basic->insert('product_serials', $serial_data);
+            // $serial_data['touch_screen'] = ($this->input->post('touchscreen')) ? 1 : 0;
+            // $serial_data['webcam'] = ($this->input->post('webcam')) ? 1 : 0;
+            // $serial_data['ssd'] = ($this->input->post('ssd')) ? 1 : 0;
+            // $serial_data['dedicated'] = ($this->input->post('dedicated')) ? 1 : 0;
+            $serial_id = $this->basic->insert('product_serials', $serial_data);
+            $product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['id'=>$serial_id]);
+            $timestamp = [
+                'received_date'=>date('Y-m-d H:i:s'),
+                'last_scan'=>date('Y-m-d H:i:s')
+            ];
+            $this->basic->insert('serial_timestamps', $timestamp);
             }
             $filesCount = count($_FILES['product_images']['name']);
             $root_path = $this->input->server('DOCUMENT_ROOT');
@@ -241,6 +271,10 @@ class Receiving extends CI_Controller {
             }else{
                 $this->session->set_flashdata('msg', 'Something went wrong');
             }
+            if($this->uri->segment(1)=='admin'){
+                redirect('admin/temporary_product_review');
+                exit;
+            }
             redirect('receiving/search');
         }
         $this->template->load($this->layout, 'receiving/temporary_product', $data);
@@ -256,6 +290,7 @@ class Receiving extends CI_Controller {
         $image_count = $this->products->get_product_images_count($id);
         // pr($data['product'],1);
         if($this->input->post()){
+            // pr($this->input->post());die;
             $category = [];
             $category[] = $this->input->post('category1');
             if($this->input->post('category2')){
@@ -270,6 +305,7 @@ class Receiving extends CI_Controller {
             if(strpos($name, 'CTO') !== false){
                 $is_cto = 1;
             }
+            $status = $this->input->post('status');
             $data = [
                 'part'=>$this->input->post('part'),
                 'name'=>$this->input->post('name'),
@@ -277,20 +313,21 @@ class Receiving extends CI_Controller {
                 'category'=>json_encode($category),
                 'original_condition_id'=>$this->input->post('original_condition_id'),
                 'product_line_id'=>$this->input->post('product_line_id'),
-                'release_date'=>$this->input->post('release_date'),
-                'cpu'=>$this->input->post('cpu'),
-                'memory'=>$this->input->post('memory'),
-                'storage'=>$this->input->post('storage'),
-                'graphics'=>$this->input->post('graphics'),
-                'screen'=>$this->input->post('screen'),
-                'os'=>$this->input->post('os'),
-                'size'=>$this->input->post('size'),
-                'is_cto'=>$is_cto
+                // 'release_date'=>$this->input->post('release_date'),
+                // 'cpu'=>$this->input->post('cpu'),
+                // 'memory'=>$this->input->post('memory'),
+                // 'storage'=>$this->input->post('storage'),
+                // 'graphics'=>$this->input->post('graphics'),
+                // 'screen'=>$this->input->post('screen'),
+                // 'os'=>$this->input->post('os'),
+                // 'size'=>$this->input->post('size'),
+                'is_cto'=>$is_cto,
+                'status'=>$status
             ];
-            $data['touch_screen'] = ($this->input->post('touchscreen')) ? 1 : 0;
-            $data['webcam'] = ($this->input->post('webcam')) ? 1 : 0;
-            $data['ssd'] = ($this->input->post('ssd')) ? 1 : 0;
-            $data['dedicated'] = ($this->input->post('dedicated')) ? 1 : 0;
+            // $data['touch_screen'] = ($this->input->post('touchscreen')) ? 1 : 0;
+            // $data['webcam'] = ($this->input->post('webcam')) ? 1 : 0;
+            // $data['ssd'] = ($this->input->post('ssd')) ? 1 : 0;
+            // $data['dedicated'] = ($this->input->post('dedicated')) ? 1 : 0;
             if($this->basic->update('products', $data, ['id'=>$id])){
                 $filesCount = count($_FILES['product_images']['name']);
             $root_path = $this->input->server('DOCUMENT_ROOT');
@@ -451,8 +488,11 @@ class Receiving extends CI_Controller {
         }else{
             $this->session->set_flashdata('msg', 'No products were selected. Please try again');
         }
-        $url = ($this->session->userdata('admin_validated')) ? 'admin/' : '';
-        redirect($url.'receiving/temporary_product_flagged');
+        if($this->session->userdata('admin_validated')){
+           redirect('admin/temporary_product_review');
+        }else{
+           redirect($url.'receiving/temporary_product_flagged');
+        }
     }
 
     public function quick_receive(){
@@ -465,9 +505,10 @@ class Receiving extends CI_Controller {
         $data['categories'] = $category_names;
         $url = ($this->session->userdata('admin_validated')) ? 'admin/' : '';
         if($this->input->post()){
-            
+            // pr($this->input->post(),1);
+            $pallet_data = $this->basic->get_data_by_id('pallets', $this->input->post('pallet_id'));
             $products = ($this->session->userdata('products')) ? $this->session->userdata('products') : [];
-            if ($this->input->post('complete') || $this->input->post('print_labels')) {
+            if ($this->input->post('receive') || $this->input->post('print_labels')) {
 
                 $serials = array_filter($this->input->post('serial'));
                 $parts = array_filter($this->input->post('part'));
@@ -478,21 +519,28 @@ class Receiving extends CI_Controller {
                 $condition = array_filter($this->input->post('condition'));
                 $i=sizeof($products) + 1;
                 foreach ($serials as $key => $serial) {
-                    $condition_name = $this->basic->get_single_data_by_criteria('original_condition', array('id' => $condition[$key]));
+                    $condition_name = [];
+                    if(array_key_exists($key,$condition)){
+                        $condition_name = $this->basic->get_single_data_by_criteria('original_condition', array('id' => $condition[$key]));
+                    }
                     $cat = [];
                     $cat[] = $category1[$key];
-                    if($category2[$key]!=''){
-                        $cat[] = $category2[$key];
+                    if(!empty($category2)){
+                            if(array_key_exists($key,$category2) && $category2[$key]!=''){
+                            $cat[] = $category2[$key];
+                        }
                     }
+                        
                     $arr = [
                         'id'=>$i,
                         'serial'=>$serial,
                         'part'=>$parts[$key],
+                        'location_id'=>$pallet_data['location_id'],
                         // 'inspection_notes'=>$notes[$key],
-                        'description'=>$description[$key],
+                        'description'=>(array_key_exists($key,$description)) ? $description[$key] : '',
                         'category'=>json_encode($cat),
-                        'condition'=>$condition[$key],
-                        'condition_name'=>$condition_name['name'],
+                        'condition'=>(array_key_exists($key,$condition)) ? $condition[$key] : '',
+                        'condition_name'=>(!empty($condition_name)) ? $condition_name['name'] : '',
                         'pallet_id' => $this->input->post('pallet_id'),
                     ];
                     $i++;
@@ -500,10 +548,6 @@ class Receiving extends CI_Controller {
                 }
                
                $this->session->set_userdata( 'products',$products );
-                
-            }
-            if($this->input->post('accept') || $this->input->post('print_labels') ){
-                
                foreach ($products as $key => $product) {
                        $id_exists = $this->products->product_exists($product['part']);
                         if($id_exists==0){
@@ -523,12 +567,19 @@ class Receiving extends CI_Controller {
                 if(empty($serial_exists)){
                     $serial_data = [
                         'serial' => $product['serial'],
+                        'location_id' => $product['location_id'],
                         //'inspection_notes' => $product['inspection_notes'],
                         'product_id' => $id,
                         'pallet_id'=>$product['pallet_id'],
                         'condition'=>$product['condition']
                     ];
-                    $this->basic->insert('product_serials', $serial_data);
+                    $serial_id = $this->basic->insert('product_serials', $serial_data);
+                    $product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['id'=>$serial_id]);
+                    $timestamp = [
+                        'received_date'=>date('Y-m-d H:i:s'),
+                        'last_scan'=>date('Y-m-d H:i:s')
+                    ];
+                    $this->basic->insert('serial_timestamps', $timestamp);
                 }
             }
             if($this->input->post('print_labels')){
@@ -752,5 +803,10 @@ class Receiving extends CI_Controller {
         }
         $url = ($this->session->userdata('admin_validated')) ? 'admin/' : '';
         redirect($url.'receiving/dock_receive');
+    }
+    public function print_labels(){
+        $data['title'] = 'Print Labels';
+         $data['admin_prefix'] = $this->admin_prefix;
+        $this->template->load($this->layout, 'receiving/print_labels', $data);
     }
 }

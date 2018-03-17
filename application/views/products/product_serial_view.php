@@ -22,23 +22,30 @@
 					</tr>
 					<tr>
 									<td><b>CPU :</b></td>
-									<td><?= $product_serial['cpu']; ?></td>
+									<td><?= implode(',',json_decode($product_serial['cpu'], true)); ?></td>
 								</tr>
 								<tr>
 									<td><b>Memory :</b></td>
 									<td><?= $product_serial['memory']; ?></td>
 								</tr>
 								<tr>
-									<td><b>Storage :</b></td>
-									<td><?= $product_serial['storage']; ?><?= ($product_serial['ssd'] == 1) ? ' SSD' : '' ; ?></td>
+                                    <td><b>Storage :</b> <br/><b>SSD:</b>
+                                    </td>
+                                    <!-- <td><?//= $product_serial['storage']; ?><?//= ($product_serial['ssd'] == 1) ? ' SSD' : '' ; ?></td> -->
+                                    <td><?= implode(',',json_decode($product_serial['storage'], true))?> <br/>
+                                    <?= implode(',',json_decode($product_serial['ssd'], true))?></td>
 								</tr>
 								<tr>
-									<td><b>Graphics :</b></td>
-									<td><?= $product_serial['graphics']; ?><?= ($product_serial['dedicated'] == 1) ? ' Dedicated' : '' ; ?></td>
+                                    <td><b>Graphics :</b><br/><b>Dedicated:</b>
+                                    </td>
+                                    <td><?= implode(',',json_decode($product_serial['graphics'], true))?> <br/>
+                                    <?= implode(',',json_decode($product_serial['dedicated'], true))?></td>
+									<!-- <td><?//= $product_serial['graphics']; ?><?//= ($product_serial['dedicated'] == 1) ? ' Dedicated' : '' ; ?></td> -->
 								</tr>
 								<tr>
-									<td><b>Screen :</b></td>
-									<td><?= $product_serial['screen'].' '.$product_serial['size']; ?></td>
+                                    <td><b>Screen :</b> <br/><b>Resolution:</b><br/><b>Size:</b></td>
+                                    <td><?= $product_serial['screen']; ?><br/><?= $product_serial['resolution']; ?><br/><?= $product_serial['size']; ?></td>
+									<!-- <td><?//= $product_serial['screen'].' '.$product_serial['size']; ?></td> -->
 								</tr>
 								<tr>
 									<td><b>OS :</b></td>

@@ -3,11 +3,11 @@
 	<div class="panel-heading">
 		<h5 class="panel-title">Products</h5>
 		<div class="heading-elements">
-			<a href="<?php echo ($this->uri->segment(1)=='admin') ? 'admin/' : ''; ?>receiving/temporary_product" class="btn bg-teal">Add Temporary Product</a>
+			<a href="<?php echo $admin_prefix; ?>receiving/temporary_product" class="btn bg-teal">Add Temporary Product</a>
     	</div> 
 	</div>
 	<div class="table-responsive">
-		<form action="receiving/product_actions" method="post">
+		<form action="<?php echo $admin_prefix; ?>receiving/product_actions" method="post">
 		<div class="col-md-12">
 		<table class="table" id="product_tbl">
 			<thead>

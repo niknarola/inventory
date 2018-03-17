@@ -140,30 +140,90 @@ class Product_model extends CI_Model
         return $data['id'];
     }
 
+    public function get_ready_for_sale($part){
+        $this->db->select('ps.id as sid, ps.status, ps.serial, p.id as pid,p.part');
+        $this->db->join('product_serials ps','p.id = ps.product_id');
+        $this->db->group_start()
+                ->where('ps.status', 'ready for sale')
+                ->group_end();
+        $this->db->where('p.is_delete','0');
+        $this->db->where('p.part',$part);
+        $query = $this->db->get('products p')->num_rows();
+        return $query;
+    }
+    public function get_sold($part){
+        $this->db->select('ps.id as sid, ps.status, ps.serial, p.id as pid,p.part');
+        $this->db->join('product_serials ps','p.id = ps.product_id');
+        $this->db->group_start()
+                ->where('ps.status', 'sold')
+                ->group_end();
+        $this->db->where('p.is_delete','0');
+        $this->db->where('p.part',$part);
+        $query = $this->db->get('products p')->num_rows();
+        return $query;
+    }
+
+    public function get_units_in_house($part){
+        $this->db->select('ps.id as sid, ps.status, ps.serial, p.id as pid,p.part');
+        $this->db->join('product_serials ps','p.id = ps.product_id');
+        $this->db->group_start()
+                ->where('ps.status', 'ready for sale')
+                ->or_where('ps.status', 'received')
+                ->or_where('ps.status', 'testing')
+                ->group_end();
+        $this->db->where('p.is_delete','0');
+        $this->db->where('p.part',$part);
+        $query = $this->db->get('products p')->num_rows();
+        return $query;
+    }
+    public function get_units_in_production($part){
+        $this->db->select('ps.id as sid, ps.status, ps.serial, p.id as pid,p.part');
+        $this->db->join('product_serials ps','p.id = ps.product_id');
+        $this->db->group_start()
+                ->where('ps.status', 'inprogresse')
+                ->or_where('ps.status', 'received')
+                ->or_where('ps.status', 'testing')
+                ->or_where('ps.status', 'packout')
+                ->or_where('ps.status', 'FGI HOLD')
+                ->or_where('ps.status', 'Awaiting Repair')
+                ->or_where('ps.status', 'Shipped')
+                ->group_end();
+        $this->db->where('p.is_delete','0');
+        $this->db->where('p.part',$part);
+        $query = $this->db->get('products p')->num_rows();
+        return $query;
+    }
+
     public function product_search($data)
     {
+        $this->db->select('products.*,ps.id as sid, ps.status as serial_status, ps.serial');
         $i = 0;
+        $this->db->group_start();
         foreach ($data as $key => $value) // loop column 
         {
             if ($value) // if datatable send POST for search
             {
                 if ($i === 0) // first loop
-                {
-                    $this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
+                { 
+                     // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
                     $this->db->like($key, $value);
+                    $this->db->where($key, $value);
                 }
                 else
                 {
                     $this->db->or_like($key, $value);
+                    $this->db->or_where($key, $value);
                 }
-                if (count($data) - 1 == $i) //last loop
-                    $this->db->group_end(); //close bracket
             }
             $i++;
         }
-        $this->db->where('status', 1);
-        $this->db->where('is_delete', 0);
+        $this->db->group_end();
+        // $this->db->where('products.status', 1);
+        $this->db->where('products.is_delete', 0);
+        $this->db->join('product_serials ps','ps.product_id = products.id');
+        // $this->db->group_by('serial_status');
         $query = $this->db->get('products');
+        // echo"in model". $this->db->last_query();
         return $query->result_array();
     }
 
@@ -282,13 +342,14 @@ class Product_model extends CI_Model
 
     function get_product_serial_details($conditions)
     {
-        $this->db->select('ps.*, p.id as pid, p.part as part, p.name as product_name, p.description as product_desc, p.release_date as release_date, p.category as category, pl.name as product_line,p.original_condition_id, oc.name as original_condition, p.status as product_status, p.added_as_temp, ci.id as cosmetic_issue_id, ci.name as cosmetic_issue_name,fo.id as fail_option_id, fo.name as fail_option_name');
+        $this->db->select('ps.*, p.id as pid, p.part as part, p.name as product_name, p.description as product_desc, p.release_date as release_date, p.category as category, pl.name as product_line,p.original_condition_id, oc.name as original_condition, p.status as product_status, p.added_as_temp, ci.id as cosmetic_issue_id, ci.name as cosmetic_issue_name,fo.id as fail_option_id, fo.name as fail_option_name, loc.name as location_name');
         $this->db->from('products p');
         $this->db->join('product_serials ps', 'ps.product_id = p.id', 'left');
         $this->db->join('cosmetic_issues ci', 'ci.id = ps.cosmetic_issue', 'left');
         $this->db->join('fail_options fo', 'fo.id = ps.fail_option', 'left');
         $this->db->join('product_line pl', 'pl.id = p.product_line_id', 'left');
         $this->db->join('original_condition oc', 'oc.id = ps.condition', 'left');
+        $this->db->join('locations loc', 'loc.id = ps.location_id', 'left');
         foreach ($conditions as $key => $value)
         {
             $this->db->where($key, $value);
@@ -334,10 +395,11 @@ class Product_model extends CI_Model
 
     function getRows($params = array(), $actArr = array())
     {
-        $this->db->select('p.id,p.part,p.name,p.description,p.is_cto,p.category, pl.name as product_line, oc.name as condition');
+        $this->db->select('p.id as pid,p.part,p.name,p.description,p.is_cto,p.category, pl.name as product_line, oc.name as condition');
         $this->db->from('products p');
         $this->db->join('product_line pl', 'pl.id = p.product_line_id', 'left');
         $this->db->join('original_condition oc', 'oc.id = p.original_condition_id', 'left');
+        // $this->db->join('product_serials ps', 'p.id = ps.product_id', 'left');
         //filter data by searched keywords
         if (!empty($params['search']['keywords']))
         {

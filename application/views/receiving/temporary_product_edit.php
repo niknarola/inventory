@@ -1,12 +1,18 @@
 <div class="row">
 	<div class="col-md-10 col-md-offset-1">
-		<form method="post" action="<?php echo ($this->uri->segment(1)=='admin') ? 'admin/' : ''; ?>temporary_products/edit/<?php echo $product['id']; ?>" enctype="multipart/form-data">
+		<form method="post" name="temp_prod_edit" action="<?php echo ($this->uri->segment(1)=='admin') ? 'admin/' : ''; ?>temporary_products/edit/<?php echo $product['id']; ?>" enctype="multipart/form-data">
 			<div class="panel panel-flat">
 				<div class="panel-heading">
 					<div class="row">
-						<div class="col-md-10 col-md-offset-1">
+						<div class="col-md-8">
 							<h5 class="panel-title"><?= $title; ?></h5>
 						</div>
+                        <div class="col-md-4">
+                        <input type="hidden" name="status" value="<?= $product['status'];?>">
+                        <?php if($this->uri->segment(1)=='admin' && $product['status']==0){ ?>
+								<a href="javascript:;" class="col-md-5 btn btn-primary approve_btn">Approve</a>
+						<?php } ?>
+                        </div>
 					</div>
 				</div>
 				<div class="panel-body">
@@ -23,15 +29,15 @@
 								<label>Name:</label>
 								<input type="text" value="<?= $product['name']; ?>" name="name" class="form-control" required> 
 							</div>
-							<div class="form-group">
+							<!-- <div class="form-group">
 								<label>Release Date:</label>
 								<div class="input-group">
 									<span class="input-group-addon"><i class="icon-calendar22"></i></span>
 									<input type="text" name="release_date" class="form-control daterange-single" value="<?= $product['release_date']; ?>">
 								</div>
-							</div>
+							</div> -->
 						</div>
-						<div class="col-md-6">
+						<!-- <div class="col-md-6">
 									<div class="row">
 										<div class="form-group">
 										<label>Specifications:</label>
@@ -94,7 +100,7 @@
 									<?php }  ?>
 								</select>
 							</div>
-						</div>
+						</div> -->
 						<div class="col-md-3">
 							<div class="form-group">
 								<label>Original Condition:</label>
@@ -106,29 +112,29 @@
 								</select>
 							</div>
 						</div>
-								<div class="col-md-3">
+								<!-- <div class="col-md-3"> -->
 						
-										<div class="form-group">
-										<label>Other Features:</label>
-										<div class="input-group">
+										<!-- <div class="form-group"> -->
+										<!-- <label>Other Features:</label> -->
+										<!-- <div class="input-group">
 											<span class="input-group-addon">
 												<input <?php echo ($product['touch_screen']==1) ? 'checked' : ''; ?> type="checkbox" value="1" name="touchscreen" class="checkbx touchscreen">
 											</span>
 											<input type="text" disabled="true" value="Touch Screen" class="form-control"> 
-										</div>
-										</div>
-									</div>
-										<div class="col-md-3">
-											<div class="form-group">
-										<label>&nbsp;</label>
-										<div class="input-group">
+										</div> -->
+										<!-- </div> -->
+									<!-- </div> -->
+										<!-- <div class="col-md-3"> -->
+											<!-- <div class="form-group"> -->
+										<!-- <label>&nbsp;</label> -->
+										<!-- <div class="input-group">
 											<span class="input-group-addon">
 												<input <?php echo ($product['webcam']==1) ? 'checked' : ''; ?> type="checkbox" value="1" name="webcam" class="checkbx webcam">
 											</span>
 											<input type="text" disabled="true" value="Webcam" class="form-control"> 
-										</div>
-									</div>
-									</div>
+										</div> -->
+									<!-- </div> -->
+									<!-- </div> -->
 							</div>
 							<div class="form-group">
 								<label>Description:</label>
@@ -193,6 +199,15 @@
 	            format: 'YYYY-MM-DD'
 	        }
 	    });
+        $('.file-input').fileinput({
+	        browseLabel: 'Browse',
+	        browseIcon: '<i class="icon-file-plus"></i>',
+	        removeIcon: '<i class="icon-cross3"></i>',
+	        layoutTemplates: {
+	            icon: '<i class="icon-file-check"></i>'
+	        },
+	        initialCaption: "No file selected"
+	    });
 	    var cat_raw = '<?php echo $product['category']; ?>';
 	    var category = (cat_raw!='') ? JSON.parse(cat_raw) : '';
 	    cat = (category!='') ? category[0] : 1;
@@ -253,4 +268,8 @@
     function multiselect_selected($el, values) {
     	$el.val(values);
     }
+    $('.approve_btn').on('click',function() {
+        $("input[name='status']").val('1');
+        $("[name='temp_prod_edit']").submit();
+    });
 </script>

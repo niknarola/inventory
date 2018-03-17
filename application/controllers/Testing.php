@@ -21,6 +21,7 @@ class Testing extends CI_Controller {
 	}
 	public function notebook(){
 		if($this->input->post()){
+        //    pr($this->input->post());die;
 			$product_data = [
 				'name' => $this->input->post('name'),
 				'description' => $this->input->post('description'),
@@ -44,19 +45,49 @@ class Testing extends CI_Controller {
 				'cs1' => $this->input->post('cs1'),
 				'cs2' => $this->input->post('cs2')
 			]);
-			$fail_text = json_encode([
-				'fail_1' => $this->input->post('fail_1'),
-				'fail_2' => $this->input->post('fail_2'),
-				'fail_3' => $this->input->post('fail_3')
-			]);
+//			$fail_text = json_encode([
+//				'fail_1' => $this->input->post('fail_1'),
+//				'fail_2' => $this->input->post('fail_2'),
+//				'fail_3' => $this->input->post('fail_3')
+//			]);
+            $fail_text = $this->input->post('fail_text');
+            $cpu = json_encode($this->input->post('cpu'));
+            
+            $storage_array = $this->input->post('storage');
+            $storage = json_encode($storage_array);
+            $storage_cnt = sizeof($storage_array);
+            $ssd_array = [];
+            for($i=0;$i<$storage_cnt;$i++){
+                $s = ($this->input->post('ssd'.$i)) ? 1 : 0;
+                $ssd_array[] = $s;
+            }
+            $graphics_array = $this->input->post('graphics');
+            $graphics = json_encode($graphics_array);
+            $graphics_cnt = sizeof($graphics_array);
+            $dedicated_array = [];
+            for($i=0;$i<$graphics_cnt;$i++){
+                $s = ($this->input->post('dedicated'.$i)) ? 1 : 0;
+                $dedicated_array[] = $s;
+            }
+            
+
+            $product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['serial'=>$this->input->post('serial')]);
+            $timestamp = [
+            	'testing_date'=>date('Y-m-d H:i:s'),
+            	'last_scan'=>date('Y-m-d H:i:s')
+            ];
+
+            $loc_name = $this->input->post('scan_loc');
+            $location = $this->basic->check_location_exists($loc_name);
 			$serial_data = [
 				'new_serial' => $this->input->post('new_serial'),
 				'recv_notes' => $this->input->post('recv_notes'),
-				'cpu' => $this->input->post('cpu'),
+				'cpu' => $cpu,
 				'memory' => $this->input->post('memory'),
-				'storage' => $this->input->post('storage'),
-				'graphics' => $this->input->post('graphics'),
+				'storage' => $storage,
+				'graphics' => $graphics,
 				'screen' => $this->input->post('screen'),
+				'resolution' => $this->input->post('resolution'),
 				'size' => $this->input->post('size'),
 				'os' => $this->input->post('os'),
 				'additional_info' => $this->input->post('additional_info'),
@@ -71,11 +102,20 @@ class Testing extends CI_Controller {
 				'cosmetic_issue' => $cosmetic_issue,
 				'fail_text' => $fail_text,
 				'cosmetic_grade' => $this->input->post('cosmetic_grade'),
-				'status' => $this->input->post('status'),
+                'status' => $this->input->post('status'),
+                'location_id' => $location['id'],
 				'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : null
-			];
-			$serial_data['ssd'] = ($this->input->post('ssd')) ? 1 : 0;
-			$serial_data['dedicated'] = ($this->input->post('dedicated')) ? 1 : 0;
+            ];
+            if($product_serial_data['location_id'] != $serial_data['location_id']){
+				$timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
+			}
+            if($product_serial_data['status'] != $serial_data['status']){
+				$timestamp['status_change_date'] = date('Y-m-d H:i:s');
+			}
+			// $serial_data['ssd'] = ($this->input->post('ssd')) ? 1 : 0;
+			$serial_data['ssd'] = json_encode($ssd_array);
+			// $serial_data['dedicated'] = ($this->input->post('dedicated')) ? 1 : 0;
+			$serial_data['dedicated'] = json_encode($dedicated_array);
 			$serial_data['touch_screen'] = ($this->input->post('touch_screen')) ? 1 : 0;
 			$serial_data['optical_drive'] = ($this->input->post('optical_drive')) ? 1 : 0;
 			$serial_data['webcam'] = ($this->input->post('webcam')) ? 1 : 0;
@@ -84,8 +124,14 @@ class Testing extends CI_Controller {
 			$serial_data['manual'] = ($this->input->post('manual')) ? 1 : 0;
 			$serial_data['fail'] = ($this->input->post('fail')) ? 1 : 0;
 			$serial_data['pass'] = ($this->input->post('pass')) ? 1 : 0;
-			$serial_data['factory_reset'] = ($this->input->post('factory_reset')) ? 1 : 0;
-			$serial_data['hard_drive_wiped'] = ($this->input->post('hard_drive_wiped')) ? 1 : 0;
+            $serial_data['factory_reset'] = ($this->input->post('factory_reset')) ? 1 : 0;
+            if($product_serial_data['factory_reset'] != $serial_data['factory_reset']){
+				$timestamp['factory_reset_date'] = date('Y-m-d H:i:s');
+			}
+            $serial_data['hard_drive_wiped'] = ($this->input->post('hard_drive_wiped')) ? 1 : 0;
+            if($product_serial_data['hard_drive_wiped'] != $serial_data['hard_drive_wiped']){
+				$timestamp['hard_drive_wiped_date'] = date('Y-m-d H:i:s');
+			}
 			$serial_data['tested_by'] = $this->session->userdata('id');
 			$filesCount = count($_FILES['product_files']['name']);
 			$product_id = $this->input->post('product_id');
@@ -127,7 +173,8 @@ class Testing extends CI_Controller {
             	$serial_data['files'] = implode(',',$serial_files);
             }
 			if($this->basic->update('product_serials', $serial_data, ['serial'=>$this->input->post('serial')])){
-				$this->session->set_flashdata('msg', 'Details Saved');
+                $this->basic->update('serial_timestamps', $timestamp, ['serial_id'=>$product_serial_data['id']]);
+                $this->session->set_flashdata('msg', 'Details Saved');
 			}
 			$role_name = ($this->session->userdata('role_name') == 'Admin') ? 'testing' : $this->session->userdata('role_name');
 			$tester = $this->basic->get_single_data_by_criteria('users',['id' => $this->session->userdata('id')]);
@@ -174,18 +221,32 @@ class Testing extends CI_Controller {
 				'cs1' => $this->input->post('cs1'),
 				'cs2' => $this->input->post('cs2')
 			]);
-			$fail_text = json_encode([
-				'fail_1' => $this->input->post('fail_1'),
-				'fail_2' => $this->input->post('fail_2'),
-				'fail_3' => $this->input->post('fail_3')
-			]);
+			$fail_text = $this->input->post('fail_text');
+            $cpu = json_encode($this->input->post('cpu'));
+            
+            $storage_array = $this->input->post('storage');
+            $storage = json_encode($storage_array);
+            $storage_cnt = sizeof($storage_array);
+            $ssd_array = [];
+            for($i=0;$i<$storage_cnt;$i++){
+                $s = ($this->input->post('ssd'.$i)) ? 1 : 0;
+                $ssd_array[] = $s;
+            }
+            $graphics_array = $this->input->post('graphics');
+            $graphics = json_encode($graphics_array);
+            $graphics_cnt = sizeof($graphics_array);
+            $dedicated_array = [];
+            for($i=0;$i<$graphics_cnt;$i++){
+                $s = ($this->input->post('dedicated'.$i)) ? 1 : 0;
+                $dedicated_array[] = $s;
+            }
 			$serial_data = [
 				'new_serial' => $this->input->post('new_serial'),
 				'recv_notes' => $this->input->post('recv_notes'),
-				'cpu' => $this->input->post('cpu'),
+				'cpu' => $cpu,
 				'memory' => $this->input->post('memory'),
-				'storage' => $this->input->post('storage'),
-				'graphics' => $this->input->post('graphics'),
+				'storage' => $storage,
+				'graphics' => $graphics,
 				'form_factor' => $this->input->post('form_factor'),
 				'os' => $this->input->post('os'),
 				'additional_info' => $this->input->post('additional_info'),
@@ -201,10 +262,19 @@ class Testing extends CI_Controller {
 				'fail_text' => $fail_text,
 				'cosmetic_grade' => $this->input->post('cosmetic_grade'),
 				'status' => $this->input->post('status'),
+				'location_id' => $location['id'],
 				'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : null
-			];
-			$serial_data['ssd'] = ($this->input->post('ssd')) ? 1 : 0;
-			$serial_data['dedicated'] = ($this->input->post('dedicated')) ? 1 : 0;
+            ];
+            if($product_serial_data['location_id'] != $serial_data['location_id']){
+				$timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
+			}
+            if($product_serial_data['status'] != $serial_data['status']){
+				$timestamp['status_change_date'] = date('Y-m-d H:i:s');
+			}
+			// $serial_data['ssd'] = ($this->input->post('ssd')) ? 1 : 0;
+			$serial_data['ssd'] = json_encode($ssd_array);
+			// $serial_data['dedicated'] = ($this->input->post('dedicated')) ? 1 : 0;
+			$serial_data['dedicated'] = json_encode($dedicated_array);
 			$serial_data['desktop_other'] = ($this->input->post('desktop_other')) ? 1 : 0;
 			$serial_data['optical_drive'] = ($this->input->post('optical_drive')) ? 1 : 0;
 			$serial_data['mouse_keyboard'] = ($this->input->post('mouse_keyboard')) ? 1 : 0;
@@ -214,7 +284,13 @@ class Testing extends CI_Controller {
 			$serial_data['fail'] = ($this->input->post('fail')) ? 1 : 0;
 			$serial_data['pass'] = ($this->input->post('pass')) ? 1 : 0;
 			$serial_data['factory_reset'] = ($this->input->post('factory_reset')) ? 1 : 0;
-			$serial_data['hard_drive_wiped'] = ($this->input->post('hard_drive_wiped')) ? 1 : 0;
+			 if($product_serial_data['factory_reset'] != $serial_data['factory_reset']){
+				$timestamp['factory_reset_date'] = date('Y-m-d H:i:s');
+			}
+            $serial_data['hard_drive_wiped'] = ($this->input->post('hard_drive_wiped')) ? 1 : 0;
+            if($product_serial_data['hard_drive_wiped'] != $serial_data['hard_drive_wiped']){
+				$timestamp['hard_drive_wiped_date'] = date('Y-m-d H:i:s');
+			}
 			$serial_data['tested_by'] = $this->session->userdata('id');
 			$filesCount = count($_FILES['product_files']['name']);
 			$product_id = $this->input->post('product_id');
@@ -254,6 +330,7 @@ class Testing extends CI_Controller {
             	$serial_data['files'] = implode(',',$serial_files);
             }
 			if($this->basic->update('product_serials', $serial_data, ['serial'=>$this->input->post('serial')])){
+				$this->basic->update('serial_timestamps', $timestamp, ['serial_id'=>$product_serial_data['id']]);
 				$this->session->set_flashdata('msg', 'Details Saved');
 			}
 			$role_name = ($this->session->userdata('role_name') == 'Admin') ? 'testing' : $this->session->userdata('role_name');
@@ -301,18 +378,39 @@ class Testing extends CI_Controller {
 				'cs1' => $this->input->post('cs1'),
 				'cs2' => $this->input->post('cs2')
 			]);
-			$fail_text = json_encode([
-				'fail_1' => $this->input->post('fail_1'),
-				'fail_2' => $this->input->post('fail_2'),
-				'fail_3' => $this->input->post('fail_3')
-			]);
+			$fail_text = $this->input->post('fail_text');
+			$cpu = json_encode($this->input->post('cpu'));
+            
+            $storage_array = $this->input->post('storage');
+            $storage = json_encode($storage_array);
+            $storage_cnt = sizeof($storage_array);
+            $ssd_array = [];
+            for($i=0;$i<$storage_cnt;$i++){
+                $s = ($this->input->post('ssd'.$i)) ? 1 : 0;
+                $ssd_array[] = $s;
+            }
+            $graphics_array = $this->input->post('graphics');
+            $graphics = json_encode($graphics_array);
+            $graphics_cnt = sizeof($graphics_array);
+            $dedicated_array = [];
+            for($i=0;$i<$graphics_cnt;$i++){
+                $s = ($this->input->post('dedicated'.$i)) ? 1 : 0;
+                $dedicated_array[] = $s;
+            }
+            
+
+            $product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['serial'=>$this->input->post('serial')]);
+            $timestamp = [
+            	'testing_date'=>date('Y-m-d H:i:s'),
+            	'last_scan'=>date('Y-m-d H:i:s')
+            ];
 			$serial_data = [
 				'new_serial' => $this->input->post('new_serial'),
 				'recv_notes' => $this->input->post('recv_notes'),
-				'cpu' => $this->input->post('cpu'),
+				'cpu' => $cpu,
 				'memory' => $this->input->post('memory'),
-				'storage' => $this->input->post('storage'),
-				'graphics' => $this->input->post('graphics'),
+				'storage' => $storage,
+				'graphics' => $graphics,
 				'form_factor' => $this->input->post('form_factor'),
 				'os' => $this->input->post('os'),
 				'additional_info' => $this->input->post('additional_info'),
@@ -328,10 +426,19 @@ class Testing extends CI_Controller {
 				'fail_text' => $fail_text,
 				'cosmetic_grade' => $this->input->post('cosmetic_grade'),
 				'status' => $this->input->post('status'),
+				'location_id' => $location['id'],
 				'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : null
 			];
-			$serial_data['ssd'] = ($this->input->post('ssd')) ? 1 : 0;
-			$serial_data['dedicated'] = ($this->input->post('dedicated')) ? 1 : 0;
+			if($product_serial_data['location_id'] != $serial_data['location_id']){
+				$timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
+			}
+            if($product_serial_data['status'] != $serial_data['status']){
+				$timestamp['status_change_date'] = date('Y-m-d H:i:s');
+			}
+			// $serial_data['ssd'] = ($this->input->post('ssd')) ? 1 : 0;
+			$serial_data['ssd'] = json_encode($ssd_array);
+			// $serial_data['dedicated'] = ($this->input->post('dedicated')) ? 1 : 0;
+			$serial_data['dedicated'] = json_encode($dedicated_array);
 			$serial_data['desktop_other'] = ($this->input->post('desktop_other')) ? 1 : 0;
 			$serial_data['optical_drive'] = ($this->input->post('optical_drive')) ? 1 : 0;
 			$serial_data['mouse_keyboard'] = ($this->input->post('mouse_keyboard')) ? 1 : 0;
@@ -341,7 +448,13 @@ class Testing extends CI_Controller {
 			$serial_data['fail'] = ($this->input->post('fail')) ? 1 : 0;
 			$serial_data['pass'] = ($this->input->post('pass')) ? 1 : 0;
 			$serial_data['factory_reset'] = ($this->input->post('factory_reset')) ? 1 : 0;
-			$serial_data['hard_drive_wiped'] = ($this->input->post('hard_drive_wiped')) ? 1 : 0;
+			 if($product_serial_data['factory_reset'] != $serial_data['factory_reset']){
+				$timestamp['factory_reset_date'] = date('Y-m-d H:i:s');
+			}
+            $serial_data['hard_drive_wiped'] = ($this->input->post('hard_drive_wiped')) ? 1 : 0;
+            if($product_serial_data['hard_drive_wiped'] != $serial_data['hard_drive_wiped']){
+				$timestamp['hard_drive_wiped_date'] = date('Y-m-d H:i:s');
+			}
 			$serial_data['tested_by'] = $this->session->userdata('id');
 			$filesCount = count($_FILES['product_files']['name']);
 			$product_id = $this->input->post('product_id');
@@ -381,6 +494,7 @@ class Testing extends CI_Controller {
             	$serial_data['files'] = implode(',',$serial_files);
             }
 			if($this->basic->update('product_serials', $serial_data, ['serial'=>$this->input->post('serial')])){
+				$this->basic->update('serial_timestamps', $timestamp, ['serial_id'=>$product_serial_data['id']]);
 				$this->session->set_flashdata('msg', 'Details Saved');
 			}
 			$role_name = ($this->session->userdata('role_name') == 'Admin') ? 'testing' : $this->session->userdata('role_name');
@@ -559,18 +673,32 @@ class Testing extends CI_Controller {
 				'cs1' => $this->input->post('cs1'),
 				'cs2' => $this->input->post('cs2')
 			]);
-			$fail_text = json_encode([
-				'fail_1' => $this->input->post('fail_1'),
-				'fail_2' => $this->input->post('fail_2'),
-				'fail_3' => $this->input->post('fail_3')
-			]);
+			$fail_text = $this->input->post('fail_text');
+			$cpu = json_encode($this->input->post('cpu'));
+            
+            $storage_array = $this->input->post('storage');
+            $storage = json_encode($storage_array);
+            $storage_cnt = sizeof($storage_array);
+            $ssd_array = [];
+            for($i=0;$i<$storage_cnt;$i++){
+                $s = ($this->input->post('ssd'.$i)) ? 1 : 0;
+                $ssd_array[] = $s;
+            }
+            $graphics_array = $this->input->post('graphics');
+            $graphics = json_encode($graphics_array);
+            $graphics_cnt = sizeof($graphics_array);
+            $dedicated_array = [];
+            for($i=0;$i<$graphics_cnt;$i++){
+                $s = ($this->input->post('dedicated'.$i)) ? 1 : 0;
+                $dedicated_array[] = $s;
+            }
 			$serial_data = [
 				'new_serial' => $this->input->post('new_serial'),
 				'recv_notes' => $this->input->post('recv_notes'),
-				'cpu' => $this->input->post('cpu'),
+				'cpu' => $cpu,
 				'memory' => $this->input->post('memory'),
-				'storage' => $this->input->post('storage'),
-				'graphics' => $this->input->post('graphics'),
+				'storage' => $storage,
+				'graphics' => $graphics,
 				'screen' => $this->input->post('screen'),
 				'size' => $this->input->post('size'),
 				'os' => $this->input->post('os'),
@@ -587,10 +715,19 @@ class Testing extends CI_Controller {
 				'fail_text' => $fail_text,
 				'cosmetic_grade' => $this->input->post('cosmetic_grade'),
 				'status' => $this->input->post('status'),
+				'location_id' => $location['id'],
 				'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : null
 			];
-			$serial_data['ssd'] = ($this->input->post('ssd')) ? 1 : 0;
-			$serial_data['dedicated'] = ($this->input->post('dedicated')) ? 1 : 0;
+			if($product_serial_data['location_id'] != $serial_data['location_id']){
+				$timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
+			}
+            if($product_serial_data['status'] != $serial_data['status']){
+				$timestamp['status_change_date'] = date('Y-m-d H:i:s');
+			}
+			// $serial_data['ssd'] = ($this->input->post('ssd')) ? 1 : 0;
+			$serial_data['ssd'] = json_encode($ssd_array);
+			// $serial_data['dedicated'] = ($this->input->post('dedicated')) ? 1 : 0;
+			$serial_data['dedicated'] = json_encode($dedicated_array);
 			$serial_data['desktop_other'] = ($this->input->post('desktop_other')) ? 1 : 0;
 			$serial_data['optical_drive'] = ($this->input->post('optical_drive')) ? 1 : 0;
 			$serial_data['mouse_keyboard'] = ($this->input->post('mouse_keyboard')) ? 1 : 0;
@@ -600,7 +737,13 @@ class Testing extends CI_Controller {
 			$serial_data['fail'] = ($this->input->post('fail')) ? 1 : 0;
 			$serial_data['pass'] = ($this->input->post('pass')) ? 1 : 0;
 			$serial_data['factory_reset'] = ($this->input->post('factory_reset')) ? 1 : 0;
-			$serial_data['hard_drive_wiped'] = ($this->input->post('hard_drive_wiped')) ? 1 : 0;
+            if($product_serial_data['factory_reset'] != $serial_data['factory_reset']){
+				$timestamp['factory_reset_date'] = date('Y-m-d H:i:s');
+			}
+            $serial_data['hard_drive_wiped'] = ($this->input->post('hard_drive_wiped')) ? 1 : 0;
+            if($product_serial_data['hard_drive_wiped'] != $serial_data['hard_drive_wiped']){
+				$timestamp['hard_drive_wiped_date'] = date('Y-m-d H:i:s');
+			}
 			$serial_data['tested_by'] = $this->session->userdata('id');
 			$filesCount = count($_FILES['product_files']['name']);
 			$product_id = $this->input->post('product_id');
@@ -640,6 +783,7 @@ class Testing extends CI_Controller {
             	$serial_data['files'] = implode(',',$serial_files);
             }
 			if($this->basic->update('product_serials', $serial_data, ['serial'=>$this->input->post('serial')])){
+				$this->basic->update('serial_timestamps', $timestamp, ['serial_id'=>$product_serial_data['id']]);
 				$this->session->set_flashdata('msg', 'Details Saved');
 			}
 			$role_name = ($this->session->userdata('role_name') == 'Admin') ? 'testing' : $this->session->userdata('role_name');
@@ -687,11 +831,33 @@ class Testing extends CI_Controller {
 				'cs1' => $this->input->post('cs1'),
 				'cs2' => $this->input->post('cs2')
 			]);
-			$fail_text = json_encode([
-				'fail_1' => $this->input->post('fail_1'),
-				'fail_2' => $this->input->post('fail_2'),
-				'fail_3' => $this->input->post('fail_3')
-			]);
+			$fail_text = $this->input->post('fail_text');
+			$cpu = json_encode($this->input->post('cpu'));
+            
+            $storage_array = $this->input->post('storage');
+            $storage = json_encode($storage_array);
+            $storage_cnt = sizeof($storage_array);
+            $ssd_array = [];
+            for($i=0;$i<$storage_cnt;$i++){
+                $s = ($this->input->post('ssd'.$i)) ? 1 : 0;
+                $ssd_array[] = $s;
+            }
+            $graphics_array = $this->input->post('graphics');
+            $graphics = json_encode($graphics_array);
+            $graphics_cnt = sizeof($graphics_array);
+            $dedicated_array = [];
+            for($i=0;$i<$graphics_cnt;$i++){
+                $s = ($this->input->post('dedicated'.$i)) ? 1 : 0;
+                $dedicated_array[] = $s;
+            }
+			$product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['serial'=>$this->input->post('serial')]);
+            $timestamp = [
+            	'testing_date'=>date('Y-m-d H:i:s'),
+            	'last_scan'=>date('Y-m-d H:i:s')
+            ];
+
+            $loc_name = $this->input->post('scan_loc');
+            $location = $this->basic->check_location_exists($loc_name);
 			$serial_data = [
 				'new_serial' => $this->input->post('new_serial'),
 				'recv_notes' => $this->input->post('recv_notes'),
@@ -715,10 +881,19 @@ class Testing extends CI_Controller {
 				'fail_text' => $fail_text,
 				'cosmetic_grade' => $this->input->post('cosmetic_grade'),
 				'status' => $this->input->post('status'),
+				'location_id' => $location['id'],
 				'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : null
 			];
-			$serial_data['ssd'] = ($this->input->post('ssd')) ? 1 : 0;
-			$serial_data['desktop_other'] = ($this->input->post('desktop_other')) ? 1 : 0;
+			if($product_serial_data['location_id'] != $serial_data['location_id']){
+				$timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
+			}
+            if($product_serial_data['status'] != $serial_data['status']){
+				$timestamp['status_change_date'] = date('Y-m-d H:i:s');
+			}
+			// $serial_data['ssd'] = ($this->input->post('ssd')) ? 1 : 0;
+			$serial_data['ssd'] = json_encode($ssd_array);
+			// $serial_data['dedicated'] = ($this->input->post('dedicated')) ? 1 : 0;
+			$serial_data['dedicated'] = json_encode($dedicated_array);
 			$serial_data['stylus'] = ($this->input->post('cd_software')) ? 1 : 0;
 			$serial_data['power_cord'] = ($this->input->post('power_cord')) ? 1 : 0;
 			$serial_data['power_keyboard'] = ($this->input->post('power_keyboard')) ? 1 : 0;
@@ -726,7 +901,13 @@ class Testing extends CI_Controller {
 			$serial_data['fail'] = ($this->input->post('fail')) ? 1 : 0;
 			$serial_data['pass'] = ($this->input->post('pass')) ? 1 : 0;
 			$serial_data['factory_reset'] = ($this->input->post('factory_reset')) ? 1 : 0;
-			$serial_data['hard_drive_wiped'] = ($this->input->post('hard_drive_wiped')) ? 1 : 0;
+            if($product_serial_data['factory_reset'] != $serial_data['factory_reset']){
+				$timestamp['factory_reset_date'] = date('Y-m-d H:i:s');
+			}
+            $serial_data['hard_drive_wiped'] = ($this->input->post('hard_drive_wiped')) ? 1 : 0;
+            if($product_serial_data['hard_drive_wiped'] != $serial_data['hard_drive_wiped']){
+				$timestamp['hard_drive_wiped_date'] = date('Y-m-d H:i:s');
+			}
 			$serial_data['tested_by'] = $this->session->userdata('id');
 			$serial_data['tgfg_capable'] = ($this->input->post('tgfg_capable')) ? 1 : 0;
 			$filesCount = count($_FILES['product_files']['name']);
@@ -767,6 +948,7 @@ class Testing extends CI_Controller {
             	$serial_data['files'] = implode(',',$serial_files);
             }
 			if($this->basic->update('product_serials', $serial_data, ['serial'=>$this->input->post('serial')])){
+				$this->basic->update('serial_timestamps', $timestamp, ['serial_id'=>$product_serial_data['id']]);
 				$this->session->set_flashdata('msg', 'Details Saved');
 			}
 			$role_name = ($this->session->userdata('role_name') == 'Admin') ? 'testing' : $this->session->userdata('role_name');
@@ -814,11 +996,16 @@ class Testing extends CI_Controller {
 				'cs1' => $this->input->post('cs1'),
 				'cs2' => $this->input->post('cs2')
 			]);
-			$fail_text = json_encode([
-				'fail_1' => $this->input->post('fail_1'),
-				'fail_2' => $this->input->post('fail_2'),
-				'fail_3' => $this->input->post('fail_3')
-			]);
+
+			$fail_text = $this->input->post('fail_text');
+			
+            $loc_name = $this->input->post('scan_loc');
+            $location = $this->basic->check_location_exists($loc_name);
+			$product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['serial'=>$this->input->post('serial')]);
+            $timestamp = [
+            	'testing_date'=>date('Y-m-d H:i:s'),
+            	'last_scan'=>date('Y-m-d H:i:s')
+            ];
 			$serial_data = [
 				'new_serial' => $this->input->post('new_serial'),
 				'recv_notes' => $this->input->post('recv_notes'),
@@ -838,10 +1025,19 @@ class Testing extends CI_Controller {
 				'fail_text' => $fail_text,
 				'cosmetic_grade' => $this->input->post('cosmetic_grade'),
 				'status' => $this->input->post('status'),
+				'location_id'=>$location['id'],
 				'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : null
 			];
-			$serial_data['ssd'] = ($this->input->post('ssd')) ? 1 : 0;
-			$serial_data['dedicated'] = ($this->input->post('dedicated')) ? 1 : 0;
+			if($product_serial_data['location_id'] != $serial_data['location_id']){
+				$timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
+			}
+            if($product_serial_data['status'] != $serial_data['status']){
+				$timestamp['status_change_date'] = date('Y-m-d H:i:s');
+			}
+			// $serial_data['ssd'] = ($this->input->post('ssd')) ? 1 : 0;
+			$serial_data['ssd'] = json_encode($ssd_array);
+			// $serial_data['dedicated'] = ($this->input->post('dedicated')) ? 1 : 0;
+			$serial_data['dedicated'] = json_encode($dedicated_array);
 			$serial_data['desktop_other'] = ($this->input->post('desktop_other')) ? 1 : 0;
 			$serial_data['stand'] = ($this->input->post('stand')) ? 1 : 0;
 			$serial_data['cd_software'] = ($this->input->post('cd_software')) ? 1 : 0;
@@ -890,6 +1086,7 @@ class Testing extends CI_Controller {
             	$serial_data['files'] = implode(',',$serial_files);
             }
 			if($this->basic->update('product_serials', $serial_data, ['serial'=>$this->input->post('serial')])){
+				$this->basic->update('serial_timestamps', $timestamp, ['serial_id'=>$product_serial_data['id']]);
 				$this->session->set_flashdata('msg', 'Details Saved');
 			}
 			$role_name = ($this->session->userdata('role_name') == 'Admin') ? 'testing' : $this->session->userdata('role_name');
@@ -940,11 +1137,7 @@ class Testing extends CI_Controller {
 				'cs1' => $this->input->post('cs1'),
 				'cs2' => $this->input->post('cs2')
 			]);
-			$fail_text = json_encode([
-				'fail_1' => $this->input->post('fail_1'),
-				'fail_2' => $this->input->post('fail_2'),
-				'fail_3' => $this->input->post('fail_3')
-			]);
+			$fail_text = $this->input->post('fail_text');
 			$accessory_fields = [
 				'cable' => ($this->input->post('cable')) ? 1 : 0,
 				'docking_station' => ($this->input->post('docking_station')) ? 1 : 0,
@@ -965,6 +1158,15 @@ class Testing extends CI_Controller {
 				'sp_ui5' => $this->input->post('sp_ui5'),
 				'sp_ui6' => $this->input->post('sp_ui6')
 			];
+			$loc_name = $this->input->post('scan_loc');
+            $location = $this->basic->check_location_exists($loc_name);
+			$product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['serial'=>$this->input->post('serial')]);
+            $timestamp = [
+            	'testing_date'=>date('Y-m-d H:i:s'),
+            	'last_scan'=>date('Y-m-d H:i:s')
+            ];
+			$loc_name = $this->input->post('scan_loc');
+            $location = $this->basic->check_location_exists($loc_name);
 			$serial_data = [
 				'new_serial' => $this->input->post('new_serial'),
 				'recv_notes' => $this->input->post('recv_notes'),
@@ -981,17 +1183,30 @@ class Testing extends CI_Controller {
 				'fail_text' => $fail_text,
 				'cosmetic_grade' => $this->input->post('cosmetic_grade'),
 				'status' => $this->input->post('status'),
+				'location_id'=>$location['id'],
 				'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : null,
 				'accessory_fields'=>json_encode($accessory_fields),
 				'specifications_ui'=>json_encode($specifications_ui)
 			];
+			if($product_serial_data['location_id'] != $serial_data['location_id']){
+				$timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
+			}
+            if($product_serial_data['status'] != $serial_data['status']){
+				$timestamp['status_change_date'] = date('Y-m-d H:i:s');
+			}
 			$serial_data['cd_software'] = ($this->input->post('cd_software')) ? 1 : 0;
 			$serial_data['power_cord'] = ($this->input->post('power_cord')) ? 1 : 0;
 			$serial_data['manual'] = ($this->input->post('manual')) ? 1 : 0;
 			$serial_data['fail'] = ($this->input->post('fail')) ? 1 : 0;
 			$serial_data['pass'] = ($this->input->post('pass')) ? 1 : 0;
 			$serial_data['factory_reset'] = ($this->input->post('factory_reset')) ? 1 : 0;
-			$serial_data['hard_drive_wiped'] = ($this->input->post('hard_drive_wiped')) ? 1 : 0;
+            if($product_serial_data['factory_reset'] != $serial_data['factory_reset']){
+				$timestamp['factory_reset_date'] = date('Y-m-d H:i:s');
+			}
+            $serial_data['hard_drive_wiped'] = ($this->input->post('hard_drive_wiped')) ? 1 : 0;
+            if($product_serial_data['hard_drive_wiped'] != $serial_data['hard_drive_wiped']){
+				$timestamp['hard_drive_wiped_date'] = date('Y-m-d H:i:s');
+			}
 			$serial_data['tested_by'] = $this->session->userdata('id');
 			$filesCount = count($_FILES['product_files']['name']);
 			$product_id = $this->input->post('product_id');
@@ -1030,6 +1245,7 @@ class Testing extends CI_Controller {
             	$serial_data['files'] = implode(',',$serial_files);
             }
 			if($this->basic->update('product_serials', $serial_data, ['serial'=>$this->input->post('serial')])){
+				$this->basic->update('serial_timestamps', $timestamp, ['serial_id'=>$product_serial_data['id']]);
 				$this->session->set_flashdata('msg', 'Details Saved');
 			}
 			$role_name = ($this->session->userdata('role_name') == 'Admin') ? 'testing' : $this->session->userdata('role_name');
@@ -1078,11 +1294,7 @@ class Testing extends CI_Controller {
 				'cs1' => $this->input->post('cs1'),
 				'cs2' => $this->input->post('cs2')
 			]);
-			$fail_text = json_encode([
-				'fail_1' => $this->input->post('fail_1'),
-				'fail_2' => $this->input->post('fail_2'),
-				'fail_3' => $this->input->post('fail_3')
-			]);
+			$fail_text = $this->input->post('fail_text');
 			$physical_inspection = [
 				'missing_tray' => ($this->input->post('missing_tray')) ? 1 : 0,
 				'missing_tray_ui' => $this->input->post('missing_tray_ui'),
@@ -1106,6 +1318,14 @@ class Testing extends CI_Controller {
 				'ink_system' => ($this->input->post('ink_system')) ? 1 : 0,
 				'ink_system_ui' => $this->input->post('ink_system_ui'),
 			];
+			$product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['serial'=>$this->input->post('serial')]);
+            $timestamp = [
+            	'testing_date'=>date('Y-m-d H:i:s'),
+            	'last_scan'=>date('Y-m-d H:i:s')
+            ];
+
+            $loc_name = $this->input->post('scan_loc');
+            $location = $this->basic->check_location_exists($loc_name);
 			$serial_data = [
 				'new_serial' => $this->input->post('new_serial'),
 				'recv_notes' => $this->input->post('recv_notes'),
@@ -1120,6 +1340,7 @@ class Testing extends CI_Controller {
 				'fail_text' => $fail_text,
 				'cosmetic_grade' => $this->input->post('cosmetic_grade'),
 				'status' => $this->input->post('status'),
+				'location_id' => $location['id'],
 				'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : null,
 				'physical_inspection_fields'=> json_encode($physical_inspection),
 				'printer_testing_fields'=> json_encode($printer_testing_fields),
@@ -1132,7 +1353,13 @@ class Testing extends CI_Controller {
 			$serial_data['fail'] = ($this->input->post('fail')) ? 1 : 0;
 			$serial_data['pass'] = ($this->input->post('pass')) ? 1 : 0;
 			$serial_data['factory_reset'] = ($this->input->post('factory_reset')) ? 1 : 0;
-			$serial_data['hard_drive_wiped'] = ($this->input->post('hard_drive_wiped')) ? 1 : 0;
+            if($product_serial_data['factory_reset'] != $serial_data['factory_reset']){
+				$timestamp['factory_reset_date'] = date('Y-m-d H:i:s');
+			}
+            $serial_data['hard_drive_wiped'] = ($this->input->post('hard_drive_wiped')) ? 1 : 0;
+            if($product_serial_data['hard_drive_wiped'] != $serial_data['hard_drive_wiped']){
+				$timestamp['hard_drive_wiped_date'] = date('Y-m-d H:i:s');
+			}
 			$serial_data['tested_by'] = $this->session->userdata('id');
 			$filesCount = count($_FILES['product_files']['name']);
 			$product_id = $this->input->post('product_id');
@@ -1170,6 +1397,7 @@ class Testing extends CI_Controller {
             	$serial_data['files'] = implode(',',$serial_files);
             }
 			if($this->basic->update('product_serials', $serial_data, ['serial'=>$this->input->post('serial')])){
+				$this->basic->update('serial_timestamps', $timestamp, ['serial_id'=>$product_serial_data['id']]);
 				$this->session->set_flashdata('msg', 'Details Saved');
 			}
 			$role_name = ($this->session->userdata('role_name') == 'Admin') ? 'testing' : $this->session->userdata('role_name');
@@ -1220,11 +1448,7 @@ class Testing extends CI_Controller {
 				'cs1' => $this->input->post('cs1'),
 				'cs2' => $this->input->post('cs2')
 			]);
-			$fail_text = json_encode([
-				'fail_1' => $this->input->post('fail_1'),
-				'fail_2' => $this->input->post('fail_2'),
-				'fail_3' => $this->input->post('fail_3')
-			]);
+			$fail_text = $this->input->post('fail_text');
 			$specifications_ui = [
 				'sp_ui1' => $this->input->post('sp_ui1'),
 				'sp_ui2' => $this->input->post('sp_ui2'),
@@ -1244,6 +1468,14 @@ class Testing extends CI_Controller {
 				'ot_ui8' => $this->input->post('ot_ui8'),
 				'ot_ui9' => $this->input->post('ot_ui9')
 			];
+			$product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['serial'=>$this->input->post('serial')]);
+            $timestamp = [
+            	'testing_date'=>date('Y-m-d H:i:s'),
+            	'last_scan'=>date('Y-m-d H:i:s')
+            ];
+
+            $loc_name = $this->input->post('scan_loc');
+            $location = $this->basic->check_location_exists($loc_name);
 			$serial_data = [
 				'new_serial' => $this->input->post('new_serial'),
 				'recv_notes' => $this->input->post('recv_notes'),
@@ -1259,18 +1491,30 @@ class Testing extends CI_Controller {
 				'fail_text' => $fail_text,
 				'cosmetic_grade' => $this->input->post('cosmetic_grade'),
 				'status' => $this->input->post('status'),
+				'location_id'=> $location['id'],
 				'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : null,
 				'specifications_ui' => json_encode($specifications_ui),
 				'other_item_inputs' => json_encode($other_item_inputs),
 			];
-			
+			 if($product_serial_data['location_id'] != $serial_data['location_id']){
+				$timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
+			}
+            if($product_serial_data['status'] != $serial_data['status']){
+				$timestamp['status_change_date'] = date('Y-m-d H:i:s');
+			}
 			$serial_data['cd_software'] = ($this->input->post('cd_software')) ? 1 : 0;
 			$serial_data['power_cord'] = ($this->input->post('power_cord')) ? 1 : 0;
 			$serial_data['manual'] = ($this->input->post('manual')) ? 1 : 0;
 			$serial_data['fail'] = ($this->input->post('fail')) ? 1 : 0;
 			$serial_data['pass'] = ($this->input->post('pass')) ? 1 : 0;
 			$serial_data['factory_reset'] = ($this->input->post('factory_reset')) ? 1 : 0;
-			$serial_data['hard_drive_wiped'] = ($this->input->post('hard_drive_wiped')) ? 1 : 0;
+            if($product_serial_data['factory_reset'] != $serial_data['factory_reset']){
+				$timestamp['factory_reset_date'] = date('Y-m-d H:i:s');
+			}
+            $serial_data['hard_drive_wiped'] = ($this->input->post('hard_drive_wiped')) ? 1 : 0;
+            if($product_serial_data['hard_drive_wiped'] != $serial_data['hard_drive_wiped']){
+				$timestamp['hard_drive_wiped_date'] = date('Y-m-d H:i:s');
+			}
 			$serial_data['tested_by'] = $this->session->userdata('id');
 			$filesCount = count($_FILES['product_files']['name']);
 			$product_id = $this->input->post('product_id');
@@ -1310,6 +1554,7 @@ class Testing extends CI_Controller {
             	$serial_data['files'] = implode(',',$serial_files);
             }
 			if($this->basic->update('product_serials', $serial_data, ['serial'=>$this->input->post('serial')])){
+				$this->basic->update('serial_timestamps', $timestamp, ['serial_id'=>$product_serial_data['id']]);
 				$this->session->set_flashdata('msg', 'Details Saved');
 			}
 			$role_name = ($this->session->userdata('role_name') == 'Admin') ? 'testing' : $this->session->userdata('role_name');

@@ -125,7 +125,7 @@ if ($get_date != '')
                                 <table class="table" id="product_tbl" style="display:none;">
                                     <thead>
                                         <tr>
-                                            <th><input type="checkbox" name="check_all" class="check_all" value=""></th>
+                                            <!-- <th><input type="checkbox" name="check_all" class="check_all" value=""></th> -->
                                             <th>#</th>
                                             <th>Serial #</th>
                                             <th>Part #</th>
@@ -134,6 +134,7 @@ if ($get_date != '')
                                             <th>Grade</th>
                                             <th>Location</th>
                                             <th>Status</th>                
+                                            <th>Notes/Specs</th>                
                                         </tr>
                                     </thead>
                                     <tbody id="userData">
@@ -146,7 +147,7 @@ if ($get_date != '')
                                                 }
                                                 ?>
                                                 <tr>
-                                                    <td><input type="checkbox" name="check[]" class="check_row" value="<?= $post['id'] ?>"></td>
+                                                    <!-- <td><input type="checkbox" name="check[]" class="check_row" value="<?= $post['id'] ?>"></td> -->
                                                     <td><?php echo $post['id']; ?></td>
                                                     <td><?php echo $post['serial']; ?></td>
                                                     <td><?php echo $post['part']; ?></td>
@@ -155,6 +156,12 @@ if ($get_date != '')
                                                     <td><?php echo $post['cosmetic_grade']; ?></td>
                                                     <td><?php echo $post['location_name']; ?></td>
                                                     <td><?php echo ($status != '') ? $status . '<br/>' . $post['modified'] : ''; ?></td>
+                                                    <td>
+                                                    <?php if($post['fail_text'] != '' || $post['recv_notes'] != '' || $post['packaging_notes'] != '' || $post['inspection_notes'] != '' || $post['cpu'] !=''){?>
+                                                        <a href="javascript:;" data-id="<?= $post['id'];?>" class="btn-xs btn-default product_notes" onClick="view_notes(<?= $post['id'];?>)"><i class="icon-comment"></i></a>
+                                                        <a href="javascript:;" data-id="<?= $post['id'];?>" class="btn-xs btn-default product_specs" onClick="view_specs(<?= $post['id'];?>)"><i class="icon-info22"></i></a>
+                                                    <?php } ?>
+                                                </td>
                                                 </tr>
                                                 <?php
                                             endforeach;
@@ -331,11 +338,50 @@ if ($get_date != '')
         </div>
     </div>
 </div>
+<div id="notesModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Product Serial Notes</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="notes_details_container">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="specsModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Product Serial Specs</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="specs_details_container">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 <script type="text/javascript">
     function onload() {
         $('#product_tbl').hide();
         $('#pagination').hide();
-    }
+    }       
     window.addEventListener('load', onload());
 
 
@@ -452,12 +498,9 @@ if ($get_date != '')
         var date = '<?php echo $this->input->get('date') ?>';
         var flag = 1;
         if ((keywords == '' && searchfor != 'none')) {
-            console.log('in if flag = 0');
             flag = 0;
         }
         if (flag == 1) {
-            console.log('in if flag = 1');
-            console.log('date data', date);
 
             $.ajax({
                 type: 'POST',
@@ -596,6 +639,42 @@ if ($get_date != '')
         } else {
             return uri + separator + key + "=" + value;
         }
+    }
+
+        function view_notes(serial_id){
+        $.ajax({
+            url: 'admin/inventory/master_sheet/view_notes/' + serial_id,
+            method: 'post',
+            success: function (resp) {
+                resp = JSON.parse(resp);
+                if (resp.status == 1)
+                {
+                    $('#notesModal').find('.notes_details_container').html(resp.data);
+                } else
+                {
+                    $('#notesModal').find('.notes_details_container').html('Not able to load data. Please try again');
+                }
+                $('#notesModal').modal('show');
+            }
+        });
+    }
+
+    function view_specs(serial_id){
+        $.ajax({
+            url: 'admin/inventory/master_sheet/view_specs/' + serial_id,
+            method: 'post',
+            success: function (resp) {
+                resp = JSON.parse(resp);
+                if (resp.status == 1)
+                {
+                    $('#specsModal').find('.specs_details_container').html(resp.data);
+                } else
+                {
+                    $('#specsModal').find('.specs_details_container').html('Not able to load data. Please try again');
+                }
+                $('#specsModal').modal('show');
+            }
+        });
     }
 </script>
 

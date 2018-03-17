@@ -50,15 +50,15 @@
 									<td><?= $product['product_line']; ?></td>
 								</tr>
 								
-								<tr>
+								<!-- <tr>
 									<td><b>Release Date :</b></td>
 									<td><?= $product['release_date']; ?></td>
-								</tr>
+								</tr> -->
 							</tbody>
 						</table>
 					</div>
 					<div class="col-md-6">
-						<table class="table specifications">
+						<!-- <table class="table specifications">
 							<tbody>
 								<tr>
 									<td><b>CPU :</b></td>
@@ -94,7 +94,7 @@
 								</tr>
 								
 							</tbody>
-						</table>
+						</table> -->
 					</div>
 				</div>
 				<div class="row">
