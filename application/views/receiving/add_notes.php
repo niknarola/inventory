@@ -43,17 +43,21 @@
 		$('input[name="part"]').focus();
 	});
 	function get_product_details(part){
+        var uri = '<?= $this->uri->segment(2);?>';
 		if(part!=''){
 			$.ajax({
 				url: 'receiving/find_product',
 				type: 'POST',
 				dataType: 'json',
-				data: {part: part},
+				data: {part: part, uri:uri},
 			})
 			.done(function(response) {
 				console.log('response',response);
 				if(response.status==1){
-					$("input.product_id").val(response.product.id);
+                    // response.product.forEach(function(prod){
+					//     $("input.product_id").val(prod.id);
+                    // })
+                    $("input.product_id").val(response.product.id);
 				}else{
 					$("input.product_id").val('');
 					$("div.search_results").html('<div class="text-center"><span>No such product found!</span></div>');

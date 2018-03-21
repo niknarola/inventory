@@ -22,7 +22,7 @@
 					</tr>
 					<tr>
 									<td><b>CPU :</b></td>
-									<td><?= implode(',',json_decode($product_serial['cpu'], true)); ?></td>
+									<td><?= ($product_serial['cpu']) ? implode(',',json_decode($product_serial['cpu'], true)) : "Not available"; ?></td>
 								</tr>
 								<tr>
 									<td><b>Memory :</b></td>
@@ -32,14 +32,14 @@
                                     <td><b>Storage :</b> <br/><b>SSD:</b>
                                     </td>
                                     <!-- <td><?//= $product_serial['storage']; ?><?//= ($product_serial['ssd'] == 1) ? ' SSD' : '' ; ?></td> -->
-                                    <td><?= implode(',',json_decode($product_serial['storage'], true))?> <br/>
-                                    <?= implode(',',json_decode($product_serial['ssd'], true))?></td>
+                                    <td><?= ($product_serial['storage']) ?  implode(',',json_decode($product_serial['storage'], true)) :"Not available";?> <br/>
+                                    <?= ($product_serial['ssd']) ? implode(',',json_decode($product_serial['ssd'], true)) : "Not Available"?></td>
 								</tr>
 								<tr>
                                     <td><b>Graphics :</b><br/><b>Dedicated:</b>
                                     </td>
-                                    <td><?= implode(',',json_decode($product_serial['graphics'], true))?> <br/>
-                                    <?= implode(',',json_decode($product_serial['dedicated'], true))?></td>
+                                    <td><?= ($product_serial['graphics']) ? implode(',',json_decode($product_serial['graphics'], true)) : "Not available";?> <br/>
+                                    <?= ($product_serial['dedicated']) ? implode(',',json_decode($product_serial['dedicated'], true)) : "Not available";?></td>
 									<!-- <td><?//= $product_serial['graphics']; ?><?//= ($product_serial['dedicated'] == 1) ? ' Dedicated' : '' ; ?></td> -->
 								</tr>
 								<tr>

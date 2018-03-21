@@ -124,40 +124,40 @@ class Locations extends CI_Controller {
     public function master(){
         $data['title'] = 'Locations Master';
         $this->load->model('Receiving_model','receiving');
-         $data['pallets'] = $this->receiving->get_key_value_pallets();
+        $data['pallets'] = $this->receiving->get_key_value_pallets();
         $data['locations'] = $this->basic->get_all_data('locations');
         $data['admin_prefix'] = $this->admin_prefix;
         $data['print_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/location_print' : 'barcode/location_print';
         if($this->input->post()){
             if($this->input->post('complete')){
-               
                 $pallet_id = $this->input->post('pallet_id');
                 $location = $this->basic->get_single_data_by_criteria('locations', array('name' => trim($this->input->post('location'))));
                 if(!empty($location)){
-                    $location_id = $location['id']; 
+                    $location_id = $location['id'];
                 }else{
                     $insert_data = [
                         'name'=>trim($this->input->post('location'))
                     ];
+                    // pr($insert_data);die;
                     $location_id = $this->basic->insert('locations', $insert_data);
                 }
-                $data = [
+                $ldata = [
                     'location_id'=>$location_id
                 ];
-            if($this->basic->update('product_serials', $data, ['pallet_id'=>$pallet_id])){
-                $product_serial_data = $this->basic->get_all_data_by_criteria('product_serials', ['pallet_id'=>$pallet_id]);
-                $timestamp = [
-                    'location_assigned_date'=>date('Y-m-d H:i:s'),
-                    'last_scan'=>date('Y-m-d H:i:s')
-                ];
-                foreach ($product_serial_data as $key => $serial_data) {
-                    $this->basic->update('serial_timestamps', $timestamp, ['serial_id'=>$serial_data['id']]);
+                if($this->basic->update('product_serials', $ldata, ['pallet_id'=>$pallet_id])){
+                    $product_serial_data = $this->basic->get_all_data_by_criteria('product_serials', ['pallet_id'=>$pallet_id]);
+                    $timestamp = [
+                        'location_assigned_date'=>date('Y-m-d H:i:s'),
+                        'last_scan'=>date('Y-m-d H:i:s')
+                    ];
+                    foreach ($product_serial_data as $key => $serial_data) {
+                        $this->basic->update('serial_timestamps', $timestamp, ['serial_id'=>$serial_data['id']]);
+                    }
+                    $this->session->set_flashdata('msg', 'Locations assigned successfully');
                 }
-                $this->session->set_flashdata('msg', 'Locations assigned successfully');
-            }
             }
         }
-        $this->template->load($this->layout, 'locations/locations_master', $data);
+        $this->template->load($this->layout, 'locations/locations_master',$data);
     }
 
     public function create_location(){

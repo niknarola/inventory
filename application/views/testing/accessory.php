@@ -425,7 +425,7 @@
 						</div>
                         <div class="col-md-12">
                             <div class="col-md-2 col-md-offset-9">
-                            <input type="text" name="scan_loc" value="" placeholder="Scan To Location" class="form-control scan_loc">
+                                <input type="text" name="scan_loc" value="" placeholder="Scan To Location" class="form-control scan_loc">
 									<input type="hidden" name="scan_loc_id" class="scan_loc_id" value="">
                             </div>
                             <div class="col-md-1">

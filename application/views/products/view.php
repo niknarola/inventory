@@ -8,14 +8,15 @@
 					<div class="col-md-12">
 						<h5 class="col-md-6 panel-title">Product Details</h5>
 						<div class="pull-right col-md-6">
-						<?php if($this->uri->segment(1)=='admin' && $product['status']==0){ ?>
-								<a href="admin/temporary_product/approve/<?= $product['id']; ?>" class="col-md-5 btn btn-primary approve_btn">Approve</a>
+                        <?php if($this->uri->segment(1)=='admin' && $product['status']==0){ ?>
+								<a href="admin/temporary_products/edit/<?= $product['id']; ?>" class="col-md-2 btn btn-warning approve_btn">Edit</a>
+								<a href="admin/temporary_product/approve/<?= $product['id']; ?>" class="col-md-2 btn btn-primary approve_btn">Approve</a>
 							<?php if($product['requested_for_clarification']==1){ ?>
 								<span class="btn btn-warning">Requested for Clarification</span>
 							<?php }elseif ($product['requested_for_clarification']==2){ ?>
 								<span class="btn btn-success">Clarification Provided</span>
 						<?php }else{ ?>
-								<a href="admin/temporary_product/request_clarification/<?= $product['id']; ?>" class="col-md-6 btn btn-success">Request For Clarification</a>
+								<a href="admin/temporary_product/request_clarification/<?= $product['id']; ?>" class="col-md-4 btn btn-success">Request For Clarification</a>
 						<?php } ?>
 						<?php } ?>
 						</div>
@@ -37,10 +38,10 @@
 									<td><b>Name :</b></td>
 									<td><?= $product['name']; ?></td>
 								</tr>
-								<tr>
+								<!-- <tr>
 									<td><b>Description :</b></td>
-									<td><?= $product['description']; ?></td>
-								</tr>
+									<td><?//= $product['description']; ?></td>
+								</tr> -->
 								<tr>
 									<td><b>Category :</b></td>
 									<td><?= ($product['category']!=null || $product['category'] != '') ? get_category_name($product['category']) : ''; ?></td>
@@ -114,12 +115,12 @@
 										</tr>
 									</thead>
 									<tbody>
-										<?php $i=1; foreach ($product['serial_products'] as $serial_products): ?>
+										<?php $i=1; foreach ($product['serial_products'] as $serial_products):  ?>
 											<tr>
 												<td><?= $i ?></td>
 												<td><?= $serial_products['serial']; ?></td>
 												<td><?= $serial_products['new_serial']; ?></td>
-												<td><?= $serial_products['condition']; ?></td>
+												<td><?= $serial_products['original_condition']; ?></td>
 												<td><?= $serial_products['cosmetic_grade']; ?></td>
 												<td><?= $serial_products['recv_notes']; ?></td>
 												<td><a href="<?php echo ($this->session->userdata('admin_validated')) ? 'admin/' : ''; ?>products/product_serial/<?=$serial_products['id']?>" class="btn-xs btn-default"><i class="icon-eye"></i></a><a href="<?php echo ($this->session->userdata('admin_validated')) ? 'admin/' : ''; ?>products/serial_delete/<?=$product['id']?>/<?=$serial_products['id']?>" class="btn-xs btn-default"><i class="icon-cross2"></i></a></td>

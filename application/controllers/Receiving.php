@@ -124,26 +124,40 @@ class Receiving extends CI_Controller {
             'serial' => $this->input->post('serial'),
             'new_serial' => $this->input->post('serial'),
         ];
-        $product = $this->products->product_search($data);
+        if($this->input->post('uri') == 'add_notes' || $this->input->post('uri') == 'barcode'){
+            // echo"in if";
+            $find_product = $this->products->get_product_by_part($data['part']);
+            // pr($find_product);die;
+        }else{
+            // echo"in else";die;
+            $product = $this->products->product_search($data);
+        }
         $data['units_in_house'] = $this->products->get_units_in_house($data['part']);
         $data['units_in_production'] = $this->products->get_units_in_production($data['part']);
         $data['ready_for_sale'] = $this->products->get_ready_for_sale($data['part']);
         $data['sold'] = $this->products->get_sold($data['part']);
-        // pr($product);die;
         $view['status'] = 0;
-        if(!empty($product)){
-           foreach($product as $key => $value){
-            // pr($value['id']);
-                // pr($data['units_in_house']);
-                // pr($data['units_in_production']);die;
-                $serial_products = $this->products->get_serials_by_product_id($value['id']);
-                $value['serial_products'] = $serial_products;
-                $category = ($value['category']!='') ? get_category_name($value['category']) : '';
-                $value['category_names'] = $category;
-                $data['product'][] = $value;
-                $view['product'][] = $value;
+        if(!empty($product) || !empty($find_product)){
+            if($this->input->post('uri') == 'add_notes' || $this->input->post('uri') == 'barcode'){
+                $serial_products = $this->products->get_serials_by_product_id($find_product['id']);
+                $find_product['serial_products'] = $serial_products;
+                $category = ($find_product['category']!='') ? get_category_name($find_product['category']) : '';
+                $find_product['category_names'] = $category;
+                $data['product'] = $find_product;
+                $view['product'] = $find_product;
                 $view['html_data'] = $this->load->view('products/serial_product', $data, true);
                 $view['status'] = 1;
+            }else{
+                foreach($product as $key => $value){
+                        $serial_products = $this->products->get_serials_by_product_id($value['id']);
+                        $value['serial_products'] = $serial_products;
+                        $category = ($value['category']!='') ? get_category_name($value['category']) : '';
+                        $value['category_names'] = $category;
+                        $data['product'][] = $value;
+                        $view['product'][] = $value;
+                        $view['html_data'] = $this->load->view('products/serial_product', $data, true);
+                        $view['status'] = 1;
+                    }
             }
         }
         echo json_encode($view); 
@@ -151,7 +165,7 @@ class Receiving extends CI_Controller {
     }
     public function find_serial(){
         $serial = $this->input->post('serial');
-		$product_id = $this->input->post('product_id');
+        $product_id = $this->input->post('product_id');
         $serial_product = $this->products->get_serial($serial, $product_id);
         $view['status'] = 0;
         if(!empty($serial_product)){
@@ -496,6 +510,7 @@ class Receiving extends CI_Controller {
     }
 
     public function quick_receive(){
+        // $this->session->unset_userdata('products');
         $data['title'] = 'Quick Receive';
         $data['pallets'] = $this->receiving->get_key_value_pallets();
         $data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/products/find_product' : 'products/find_product';
@@ -535,6 +550,7 @@ class Receiving extends CI_Controller {
                         'id'=>$i,
                         'serial'=>$serial,
                         'part'=>$parts[$key],
+                        // 'part'=>implode(',',$parts),
                         'location_id'=>$pallet_data['location_id'],
                         // 'inspection_notes'=>$notes[$key],
                         'description'=>(array_key_exists($key,$description)) ? $description[$key] : '',
@@ -545,8 +561,9 @@ class Receiving extends CI_Controller {
                     ];
                     $i++;
                     $products[] = $arr;
+                    // echo"product";pr($products);die;
                 }
-               
+                
                $this->session->set_userdata( 'products',$products );
                foreach ($products as $key => $product) {
                        $id_exists = $this->products->product_exists($product['part']);
@@ -629,6 +646,126 @@ class Receiving extends CI_Controller {
         $data['title'] = 'Quick Receive Barcodes';
         $this->template->load($this->layout, 'receiving/quick_receive_barcode', $data);
     }
+    // public function dock_receive(){
+    //     $data['title'] = 'Dock Receive';
+    //     $data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/receiving/' : 'receiving/';
+    //     $data['locations'] = $this->products->get_key_value_pair('locations');
+    //     $totalRec = count($this->receiving->getRows());
+    //     $url = ($this->session->userdata('admin_validated')) ? 'admin/receiving/dockPagination' : 'receiving/dockPagination';
+    //     $data['url'] = $url;
+    //     $config['target']      = '#palletList';
+    //     $config['base_url']    = base_url().$url;
+    //     $config['total_rows']  = $totalRec;
+    //     $config['per_page']    = $this->perPage;
+    //     $config['link_func']   = 'searchFilter';
+    //     $config['uri_segment']   = 4;
+    //     $this->ajax_pagination->initialize($config);
+    //     //get the posts data
+    //     $data['pallets'] = $this->receiving->getRows(array('limit'=>$this->perPage));
+    //     //$data['pallets'] = $this->receiving->get_pallets();
+    //     $conditions = []; 
+    //     $this->session->set_userdata('pallets_search', false);
+    //     if($this->input->post()){
+    //         $main_location = $this->input->post('main_location');
+    //         // $bol_or_tracking = ($this->input->post('bol')) ? $this->input->post('bol') : $this->input->post('tracking');
+    //         $bol_or_tracking = $this->input->post('bol_or_tracking');
+    //         $ref = $this->input->post('ref');
+    //         if($this->input->post('search')){
+    //             $this->session->unset_userdata('pallets_next');
+    //             $conditions = array(
+    //                 'limit'=>$this->perPage,
+    //                 'bol_or_tracking'=>$bol_or_tracking,
+    //                 'location'=>$main_location,
+    //                 'ref'=>$ref
+    //             );
+    //             $this->session->set_userdata('pallets_search', true);
+    //             $config['total_rows']  = count($this->receiving->getRows($conditions));
+    //             $data['pallets'] = $this->receiving->getRows($conditions);
+    //         }else{
+    //             $pallet_count = (int) $this->input->post('pallet_count');
+    //             $get_todays_cnt = $this->receiving->get_todays_total_pallets();
+    //             $stored_pallet_count = (int) $this->receiving->get_total_pallets_by_bol_or_tracking($bol_or_tracking);
+    //             $pallet_count = $stored_pallet_count + $pallet_count;
+    //             $insert_data = [];
+    //             $item_count = $this->input->post('item_count');
+    //             $weight = $this->input->post('weight');
+    //             $location = $this->input->post('location');
+    //             $k=0; $j = $get_todays_cnt+1;
+    //             for ($i=$stored_pallet_count; $i < $pallet_count ; $i++) {
+    //                 $arr = [];
+    //                 $arr['bol_or_tracking'] = $bol_or_tracking;
+    //                 // $arr['is_bol_or_tracking'] = ($this->input->post('bol')) ? 1 : 2;
+    //                 $arr['pallet_id'] = 'DR'.date('mdY').'-'.$j;
+    //                 $arr['pallet_part'] = $i+1;
+    //                 $arr['total_pallet'] = $pallet_count;
+    //                 $arr['item_count'] = $item_count[$k];
+    //                 $arr['weight'] = $weight[$k];
+    //                 $arr['location_id'] = $location[$k];
+    //                 $arr['ref'] = $ref;
+    //                 $arr['received_by'] = $this->session->userdata('id');
+    //                 $insert_data[] = $arr;
+    //                 $k++; $j++;
+    //             }
+    //             $url = ($this->session->userdata('admin_validated')) ? 'admin/' : '';
+    //             if($this->input->post('print_labels')){
+    //                 $this->session->set_userdata(array('pallet_print_data'=>$insert_data));
+    //                 $session_data=[];
+    //                 $session_data['bol_or_tracking'] = $this->input->post('bol_or_tracking');
+    //                 $session_data['main_location'] = $main_location;
+    //                 $session_data['ref'] = $ref;
+    //                 $this->basic->insert_batch('pallets', $insert_data);
+    //                 $this->session->set_userdata(array('pallets_next'=>$session_data));
+    //                 redirect($url.'barcode/pallet_labels');
+    //             }
+    //             else if($this->input->post('next') || $this->input->post('complete')){
+    //                 if($this->input->post('next')){
+    //                     $session_data=[];
+    //                     // $session_data['bol_or_tracking'] = $this->input->post('bol_or_tracking');
+    //                     $session_data['bol_or_tracking'] = $bol_or_tracking;
+    //                     $session_data['main_location'] = $main_location;
+    //                     $session_data['ref'] = $ref;
+    //                     echo"session data";pr($session_data);die;
+    //                     $this->session->set_userdata(array('pallets_next'=>$session_data));
+    //                 }else{
+    //                     // $this->session->unset_userdata('pallets_next');
+    //                 }
+    //                 echo"insert data";pr($insert_data);
+    //                 $this->basic->insert_batch('pallets', $insert_data);
+    //                 $update_data = [];
+    //                 $update_data = [
+    //                     'total_pallet' => $pallet_count
+    //                 ];
+    //                 /*for($i=1; $i <= $pallet_count; $i++){
+    //                     $arr = [];
+    //                     $arr['total_pallet'] = $pallet_count;
+    //                     $arr['bol_or_tracking'] = $bol_or_tracking;           
+    //                     $update_data[] = $arr;
+    //                 }*/
+                    
+    //                 $this->basic->update('pallets', $update_data, ['bol_or_tracking'=>$bol_or_tracking]);
+    //                 die;
+    //                 // $this->basic->update_batch('pallets', $update_data, 'bol_or_tracking');
+                    
+    //                 redirect($url.'receiving/dock_receive');
+    //             }
+    //             else if($this->input->post('delete')){
+    //                 $this->session->unset_userdata('pallets_next');
+    //                 $check = $this->input->post('check');
+    //                 if(!empty($check)){
+    //                 if($this->receiving->delete_pallets($check)){
+    //                     $this->session->set_flashdata('msg', 'Pallets are deleted successfully');
+    //                 }else{
+    //                     $this->session->set_flashdata('msg', 'Something went wrong! Please try again');
+    //                 }
+    //             }
+    //             redirect($url.'receiving/dock_receive');
+    //         }
+    //         }
+    //     }
+        
+    //     $this->template->load($this->layout, 'receiving/dock_receive', $data);
+    // }
+
     public function dock_receive(){
         $data['title'] = 'Dock Receive';
         $data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/receiving/' : 'receiving/';

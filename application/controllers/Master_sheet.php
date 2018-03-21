@@ -179,6 +179,7 @@ class Master_sheet extends CI_Controller {
 
     public function view_specs($id){
         $data['specs'] = $this->master->get_specs_by_id($id);
+        // pr($data['specs']);die;
         if ($data['specs'])
         {
             $resp['status'] = 1;

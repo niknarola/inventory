@@ -1133,4 +1133,60 @@ class Reports extends CI_Controller
         echo json_encode($resp);
     }
 
+    public function download_part_numbers()
+    {
+        // ini_set('max_execution_time', 300); //300 seconds = 5 minutes
+        set_time_limit(0);
+
+        $this->load->library('excel');
+
+            $this->excel->createSheet();
+            $this->excel->setActiveSheetIndex(0);
+            $this->excel->getSheet(0)->setTitle("Part Numbers");
+            $this->data['part_numbers'] = $this->products->get_part_numbers();
+            // pr($this->data['part_numbers']);die;
+            $data = ["0" => ['part' => "Part Number"]];
+            foreach ($this->data['part_numbers'] as $result)
+            {
+                $data [] = ['part' => $result['part']];
+            }
+
+            $this->excel->getActiveSheet()->fromArray($data, null, 'A3');
+            $highestColumm = $this->excel->getActiveSheet()->getHighestColumn();
+            $highestRow = $this->excel->getActiveSheet()->getHighestRow();
+            $this->excel->getActiveSheet()->setCellValue('A1', 'Part Numbers');
+            $this->excel->getActiveSheet()->mergeCells('A1:' . $highestColumm . '2');
+            $this->excel->getActiveSheet()->getStyle('A1:' . $highestColumm . '2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $this->excel->getActiveSheet()->getStyle('A1:' . $highestColumm . '2')->getFont()->setSize(16);
+
+            for ($column = 'A'; $column <= $highestColumm; $column++)
+            {
+                $this->excel->getActiveSheet()->getStyle('A3:' . $highestColumm . '3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                $this->excel->getActiveSheet()->getStyle('A3:' . $highestColumm . '3')->getFont()->setSize(15);
+                $this->excel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
+            }
+
+            for ($row = '4'; $row <= $highestRow; $row++)
+            {
+                for ($column = 'A'; $column <= $highestColumm; $column++)
+                {
+                    $this->excel->getActiveSheet()->getStyle('A' . $row . ':' . $highestColumm . $row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                    $this->excel->getActiveSheet()->getStyle('A' . $row . ':' . $highestColumm . $row)->getFont()->setSize(12);
+                    $this->excel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
+                }
+            }
+            $filename = 'all_reports.xls';
+            
+//        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        header("Content-Type: application/force-download");
+        header("Content-Type: application/octet-stream; charset=UTF-8LE");
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+        $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');
+        ob_end_clean();
+        ob_start();
+        $objWriter->save('php://output');
+        exit;
+    }
+
 }

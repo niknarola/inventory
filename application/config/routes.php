@@ -92,9 +92,11 @@ $route['admin/products/upload_products'] = 'products/upload_products';
 $route['admin/products/find_product'] = 'products/find_product';
 $route['admin/products/ajaxPaginationData/(:any)']='products/ajaxPaginationData/$1';
 $route['admin/receiving/product_actions'] = 'receiving/product_actions';
+$route['admin/products/view/(:any)'] = 'products/view/$1';
 
 $route['admin/barcode/generate_barcodes'] = 'barcode/generate_barcodes';
 $route['admin/barcode/generate'] = 'barcode/generate';
+$route['admin/barcode/mtest'] = 'barcode/mtest';
 $route['admin/barcode'] = 'barcode';
 $route['admin/barcode/pallet_labels'] = 'barcode/pallet_labels';
 $route['admin/barcode/get_sub_category']='barcode/get_sub_category';
@@ -133,3 +135,4 @@ $route['admin/inventory/reports/ajaxPaginationData/(:any)']='reports/ajaxPaginat
 $route['admin/inventory/reports/hp_report/(:any)']='reports/hp_report/$1';
 $route['admin/inventory/reports/reports_results']='reports/reports_results';
 $route['admin/inventory/reports/tech_reports']='reports/tech_reports';
+$route['admin/inventory/reports/download_part_numbers']='reports/download_part_numbers';

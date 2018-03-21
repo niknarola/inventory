@@ -145,25 +145,43 @@ class Basic_model extends CI_Model
     }
     public function check_location_exists($loc_name)
     {
-        // $loc = array(
-            //     'name' => $loc_name
-            // );
+        $this->db->select('locations.id');
+        $this->db->where('locations.name',$loc_name);
+        $this->db->limit(1);
+        $query = $this->db->get('locations')->row_array();
+        // echo"model name";pr($loc_name);die;
+        if(isset($query['id'])){
+            return $query;
+        } else {
             
-            $this->db->select('locations.id');
-            $this->db->where('locations.name',$loc_name);
-            $this->db->limit(1);
-            $query = $this->db->get('locations')->row_array();
-            // echo"model name";pr($loc_name);die;
-            if(isset($query['id'])){
-                return $query;
-            } else {
-                
-                $loc = array(
-                    'name' => $loc_name
-                );
-                $location_id = $this->db->insert('locations',$loc);
-                $insert_id = $this->db->insert_id();
-                return $insert_id;
-            }
+            $loc = array(
+                'name' => $loc_name
+            );
+            $location_id = $this->db->insert('locations',$loc);
+            $insert_id = $this->db->insert_id();
+            return $insert_id;
+        }
+    }
+
+    public function check_pallet_exists($pallet_name)
+    {
+        // echo"in function<br/>";
+        $this->db->select('pallets.id');
+        $this->db->where('pallets.pallet_id',$pallet_name);
+        $this->db->limit(1);
+        $query = $this->db->get('pallets')->row_array();
+        // echo"model name";pr($pallet_name);echo"<br/>";
+        if(isset($query['id'])){
+            return $query;
+        } else {
+            $pallet = array(
+                'pallet_id' => $pallet_name
+            );
+            $pallet_id = $this->db->insert('pallets',$pallet);
+            // echo"pallet";pr($pallet_id); echo"<br/>";
+            $insert_id = $this->db->insert_id();
+            // pr($insert_id);die;
+            return $insert_id;
+        }
     }
 }

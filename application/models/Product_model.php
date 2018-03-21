@@ -140,6 +140,16 @@ class Product_model extends CI_Model
         return $data['id'];
     }
 
+
+    public function get_condition_by_product($product_id){
+        $this->db->select('oc.id,oc.name as original_condition, p.id as pid , p.name');
+        $this->db->join('original_condition oc','oc.id = p.original_condition_id','left');
+        $this->db->where('p.id',$product_id);
+        $query = $this->db->get('products p')->row_array();
+        return $query;
+
+    }
+
     public function get_ready_for_sale($part){
         $this->db->select('ps.id as sid, ps.status, ps.serial, p.id as pid,p.part');
         $this->db->join('product_serials ps','p.id = ps.product_id');
@@ -251,9 +261,12 @@ class Product_model extends CI_Model
 
     public function get_serials_by_product_id($product_id)
     {
-        $this->db->where('product_id', $product_id);
-        $this->db->where('is_delete', 0);
-        $data = $this->db->get('product_serials')->result_array();
+        $this->db->select('ps.*, oc.name as original_condition');
+        $this->db->where('ps.product_id', $product_id);
+        $this->db->where('ps.is_delete', 0);
+        $this->db->join('products p','p.id = ps.product_id','left');
+        $this->db->join('original_condition oc','oc.id = p.original_condition_id','left');
+        $data = $this->db->get('product_serials ps')->result_array();
         return $data;
     }
 
@@ -357,6 +370,8 @@ class Product_model extends CI_Model
         $this->db->where('p.is_delete', 0);
         $this->db->limit(1);
         $data = $this->db->get()->row_array();
+        // echo $this->db->last_query();
+        // pr($data);
         return $data;
     }
 
@@ -391,6 +406,17 @@ class Product_model extends CI_Model
         $this->db->where('product_id', $id);
         $data = $this->db->get('product_images');
         return $data->num_rows();
+    }
+
+    public function get_catetory_by_id($id)
+    {
+        $this->db->select('c.id as cid, c.name, c.parent');
+        $this->db->where('c.id',$id);
+        $this->db->get('categories c');
+        $query = $this->db->get('categories c')->row_array();
+        // echo $this->db->last_query();
+        // pr($query);die;
+        return $query;
     }
 
     function getRows($params = array(), $actArr = array())
@@ -443,6 +469,16 @@ class Product_model extends CI_Model
 //        echo$this->db->last_query();
         //return fetched data
         return ($query->num_rows() > 0) ? $query->result_array() : FALSE;
+    }
+
+    public function get_part_numbers()
+    {
+        $this->db->select('p.part');
+        // $this->db->where('p.is_delete',0);
+        $query = $this->db->get('products p')->result_array();
+        // echo $this->db->last_query();
+        // pr($query);die;
+        return $query;
     }
 
 }

@@ -57,13 +57,13 @@
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label>Serial Number</label>
-                                        <input type="text" class="form-control serial" name="serial[]" value="" placeholder="Serial #">
+                                        <input type="text" class="form-control serial" required="true" name="serial[]" value="" placeholder="Serial #">
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label>Part Number</label>
-                                        <input type="text" class="form-control part" name="part[]" value="" placeholder="Part #" onchange="get_product_details(1);">
+                                        <input type="text" class="form-control part" required="true" name="part[]" value="" placeholder="Part #" onchange="get_product_details(1);">
                                     </div>
                                 </div>
                                 <div class="other-field" style="display: none;">
@@ -346,7 +346,7 @@
     	var serial = $('.receive_div[data-row="'+row+'"]').find('input.serial').val();
     	//var new_serial = $('input.new_serial').val();
 		if(part!='' && serial!=''){
-			var data = {part: part};
+			var data = {part: part, serial: serial};
 			$.ajax({
 				url: '<?php echo $ajax_url; ?>',
 				type: 'POST',

@@ -2,17 +2,17 @@
 require_once(APPPATH.'libraries/barcode/BCGFontFile.php');
 require_once(APPPATH.'libraries/barcode/BCGColor.php');
 require_once(APPPATH.'libraries/barcode/BCGDrawing.php');
-require_once (APPPATH."libraries/barcode/BCGcode128.barcode.php");
+require_once(APPPATH."libraries/barcode/BCGcode128.php");
 
 class Barcode extends CI_Controller 
 {
-	function __construct()
+    function __construct()
 	{
-		parent::__construct();
+        parent::__construct();
 		if($this->uri->segment(1)=='admin' && !$this->session->userdata('admin_validated')){
-			redirect('admin/login');
+            redirect('admin/login');
 		}else if($this->uri->segment(1)=='barcode' && !$this->session->userdata('user_validated')) {
-			redirect('login');
+            redirect('login');
         }
         $this->load->model('Product_model', 'product');
         if($this->uri->segment(1)=='admin'){
@@ -26,13 +26,14 @@ class Barcode extends CI_Controller
 	
 	function index()
 	{
-		$text = rawurldecode($this->input->get('text'));
-		$barcode = rawurldecode($this->input->get('barcode'));
-		$scale = $this->input->get('scale') ? $this->input->get('scale') : 1;
-		$thickness = $this->input->get('thickness') ? $this->input->get('thickness') : 30;
-		$font = new BCGFontFile(APPPATH.'libraries/barcode/font/ArialBold.ttf', 12);
-		$color_black = new BCGColor(0, 0, 0);
-		$color_white = new BCGColor(255, 255, 255);
+        $text = rawurldecode($this->input->get('text'));
+        $barcode = rawurldecode($this->input->get('barcode'));
+        $scale = $this->input->get('scale') ? $this->input->get('scale') : 1;
+        $thickness = $this->input->get('thickness') ? $this->input->get('thickness') : 30;
+        $font = new BCGFontFile(APPPATH.'libraries\barcode\font\ArialBold.ttf', 12);
+        $color_black = new BCGColor(0, 0, 0);
+        $color_white = new BCGColor(255, 255, 255);
+
 		// Barcode Part
 		$code = new BCGcode128();
 		$code->setScale($scale);
@@ -40,15 +41,18 @@ class Barcode extends CI_Controller
 		$code->setForegroundColor($color_black);
 		$code->setBackgroundColor($color_white);
 		$code->setFont($font);
-		$code->setLabel($text);
-		$code->parse($barcode);
-		// Drawing Part
-		$drawing = new BCGDrawing('', $color_white);
+        // $code->setLabel($text);
+        $code->setStart(null);
+        $code->setTilde(true);
+        $code->parse($barcode);
+        
+        // Drawing Part
+        $drawing = new BCGDrawing('', $color_white);
 		$drawing->setBarcode($code);
-		$drawing->draw();
-		header('Content-Type: image/png');
-		$drawing->finish(BCGDrawing::IMG_FORMAT_PNG);	
-	}
+        $drawing->draw();
+        header('Content-Type: image/png');
+        $drawing->finish(BCGDrawing::IMG_FORMAT_PNG);	
+    }
 	public function generate_barcodes(){
 		$data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/receiving/find_product' : 'receiving/find_product';
 		$data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
@@ -136,7 +140,7 @@ class Barcode extends CI_Controller
 			$data['description'] = $description;*/
 			$data['product_line_names'] = $this->product->get_key_value_pair('product_line');
 			$data['title'] = 'Generated Barcodes';
-			// $this->load->view('barcode/generated_barcodes', $data);
+            // $this->load->view('barcode/generated_barcodes', $data);
 			$this->template->load($this->layout, 'barcode/generated_barcodes', $data);
 		}
 	}
@@ -148,7 +152,6 @@ class Barcode extends CI_Controller
 	}
 	public function pallet_labels(){
 		$print_labels = $this->session->userdata('pallet_print_data'); 
-		// pr($print_labels,1);
 		$data['print_labels'] = $print_labels;
 		$data['title'] = 'Pallet Labels';
 		$data['admin_prefix'] = $this->admin_prefix;

@@ -11,13 +11,17 @@ class Cleaning extends CI_Controller {
 		}else if($this->uri->segment(1)=='cleaning' && !$this->session->userdata('user_validated')) {
 			redirect('login');
         }
-        if($this->uri->segment(1)=='admin')
+        if($this->uri->segment(1)=='admin'){
             $this->layout = 'admin/admin_layout';
-        else
+        	$this->admin_prefix = 'admin/';
+        }else{
             $this->layout = 'layout'; 
+            $this->admin_prefix = '';
+        }
 	}
 	public function packout(){
 		if($this->input->post()){
+            // pr($this->input->post());
 			$product_data = [
 				'name' => $this->input->post('name'),
 				'description' => $this->input->post('description'),
@@ -32,7 +36,10 @@ class Cleaning extends CI_Controller {
 			if($this->input->post('category3')){
 				$category[]  = $this->input->post('category3');
 			}
-			$product_data['category'] = json_encode($category);
+            $product_data['category'] = json_encode($category);
+        //    echo"category"; pr($product_data['category']);echo"<br>";
+        //    echo"category decode";pr(json_decode($product_data['category']));
+        //    echo"product";pr($product_data);
 			$this->basic->update('products', $product_data, ['part'=>$this->input->post('part')]);
 			$packaging_fields = [
 				'candy_box' => ($this->input->post('candy_box')) ? 1 : 0,
@@ -43,7 +50,11 @@ class Cleaning extends CI_Controller {
 				'cleaned' => ($this->input->post('cleaned')) ? 1 : 0,
 				'taped' => ($this->input->post('taped')) ? 1 : 0,
 				'bagged' => ($this->input->post('bagged')) ? 1 : 0
-			];
+            ];
+            $pallet_name = $this->input->post('scan_loc');
+            // pr($pallet_name);echo"<br/>";
+            $pallet = $this->basic->check_pallet_exists($pallet_name);
+            // pr($pallet);
 			$serial_data = [
 				'new_serial' => $this->input->post('new_serial'),
 				'recv_notes' => $this->input->post('recv_notes'),
@@ -51,9 +62,13 @@ class Cleaning extends CI_Controller {
 				'packaging'=>json_encode($packaging_fields),
 				'cleaning'=>json_encode($cleaning_fields),
 				'packaging_ui'=> $this->input->post('packaging_ui'),
-				'packaging_notes'=> $this->input->post('packaging_notes'),
-				'packaging_condition'=>($this->input->post('packaging_condition')) ? $this->input->post('packaging_condition') : '',
-			];
+				'packaging_notes'=> $this->input->post('packout_notes'),
+                'packaging_condition'=>($this->input->post('packaging_condition')) ? $this->input->post('packaging_condition') : '',
+                'pallet_id' => $pallet,
+                'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : null
+            ];
+            // echo"serial";pr($serial_data);
+            // die;
 			$serial_data['packout_complete'] = ($this->input->post('packout_complete')) ? 1 : 0;
 			$serial_data['send_to_finished_goods'] = ($this->input->post('send_to_finished_goods')) ? 1 : 0;
 			$serial_data['cd_software'] = ($this->input->post('cd_software')) ? 1 : 0;
@@ -61,7 +76,7 @@ class Cleaning extends CI_Controller {
 			$serial_data['manual'] = ($this->input->post('manual')) ? 1 : 0;
 			$filesCount = count($_FILES['product_files']['name']);
 			$product_id = $this->input->post('product_id');
-			$serial_id = $this->input->post('serial_id');
+            $serial_id = $this->input->post('serial_id');
             $root_path = $this->input->server('DOCUMENT_ROOT');
             $serial_files = [];
             for($i = 0; $i < $filesCount; $i++){
@@ -87,6 +102,8 @@ class Cleaning extends CI_Controller {
             if(!empty($serial_data)){
             	$serial_data['files'] = implode(',',$serial_files);
             }
+            
+            $product_serial = $this->basic->get_single_data_by_criteria('product_serials', ['serial'=>$this->input->post('serial')]);
 			if($this->basic->update('product_serials', $serial_data, ['serial'=>$this->input->post('serial')])){
                 $timestamp = [
 					'last_scan' => date('Y-m-d H:i:s'),
@@ -94,8 +111,9 @@ class Cleaning extends CI_Controller {
 				];
 				$this->basic->update('serial_timestamps', $timestamp, ['serial_id'=>$product_serial['id']]);
 				$this->session->set_flashdata('msg', 'Details Saved');
-			}
-			redirect($this->session->userdata('role_name').'/packout');
+            }
+            $role_name = ($this->session->userdata('role_name') == 'Admin') ? 'cleaning' : $this->session->userdata('role_name');
+			redirect($this->admin_prefix.$role_name.'/packout');
 		}
 		$data['title'] = 'Packout';
 		$data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/products/find_product' : 'products/find_product';
@@ -105,6 +123,7 @@ class Cleaning extends CI_Controller {
 		$data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
 		$category_names = $this->products->get_categories();
         $data['categories'] = $category_names;
+        $data['admin_prefix'] = $this->admin_prefix;
 		$this->template->load($this->layout, 'cleaning/packout', $data);
 	}
 }

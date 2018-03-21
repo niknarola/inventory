@@ -32,7 +32,7 @@
 					</div>
 					<div class="row">
 						<div class="col-md-4">
-							<button type="submit" name="search" value="search" class="btn btn-sm btn-primary search ">Search</button>
+							<button  name="search" value="search" class="btn btn-sm btn-primary search ">Search</button>
 							<button type="submit" name="delete" value="delete" class="btn btn-sm btn-primary delete">Delete</button> 
 						</div>
 					</div>

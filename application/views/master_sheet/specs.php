@@ -6,11 +6,17 @@
     </tr>
     <tr>
         <td>Storage:</td>
-        <td><?= !empty($specs['storage']) ? implode(',',json_decode($specs['storage'], true)) : 'Not Available' ?></td>
-    </tr>
-    <tr>
-        <td>SSD:</td>
-        <td><?= !empty($specs['ssd']) ? implode(',',json_decode($specs['ssd'], true)) : 'Not Available' ?></td>
+        <td>
+            <?php foreach(json_decode($specs['storage']) as $key => $value){ 
+                    $ssd = json_decode($specs['ssd']);
+                    if($ssd[$key] == 0){
+                        echo $value.'<br>';
+                    }
+                    else{
+                        echo $value.'(ssd)<br>';
+                    }
+                }?>
+        </td>
     </tr>
     <tr>
         <td>Memory:</td>
@@ -18,7 +24,17 @@
     </tr>
     <tr>
         <td>Graphics:</td>
-        <td><?= !empty($specs['graphics']) ? implode(',',json_decode($specs['graphics'], true)) : 'Not Available' ?></td>
+        <td>
+            <?php foreach(json_decode($specs['graphics']) as $key => $value){ 
+                    $dedicated = json_decode($specs['dedicated']);
+                        if($dedicated[$key] == 0){
+                            echo $value.'<br>';
+                        }
+                        else{
+                            echo $value.'(dedicated)<br>';
+                        }
+            }?>
+        </td>
     </tr>
     <tr>
         <td>Dedicated:</td>

@@ -3,7 +3,7 @@
 </style>
 <div class="row">
 	<div class="">
-		<form method="post" action="cleaning/packout" enctype="multipart/form-data">
+		<form method="post" action="<?= $admin_prefix; ?>cleaning/packout" enctype="multipart/form-data">
 			<div class="panel panel-flat">
 				<div class="panel-heading">
 					<div class="row">
@@ -17,16 +17,16 @@
 						<div class="row">
 							<div class="col-md-4">
 								<div class="form-group">
-									<label>Part #:</label>
-									<input type="text" name="part" value="" onchange="get_product_details();" class="form-control part" required>
-									<input type="hidden" name="product_id" class="product_id" value="">
-								</div>
-							</div>
-							<div class="col-md-4">
-								<div class="form-group">
 									<label>Serial #:</label>
 									<input type="text" name="serial" value="" onchange="get_product_details();" class="form-control serial">
 									<input type="hidden" name="serial_id" class="serial_id" value="">
+								</div>
+                            </div>
+                            <div class="col-md-4">
+								<div class="form-group">
+									<label>Part #:</label>
+									<input type="text" name="part" value="" onchange="get_product_details();" class="form-control part" required>
+									<input type="hidden" name="product_id" class="product_id" value="">
 								</div>
 							</div>
 							<div class="col-md-4">
@@ -65,7 +65,7 @@
 								<div class="form-group">
 									<label>Category</label>
 									<select name="category1" class="category1 form-control" onchange="get_sub_categories(this.value, 'category2')">
-										<?php foreach ($categories as $key => $value) { ?>
+										<?php foreach ($categories as $key => $value) {  ?>
 											<option value="<?= $key ?>"><?= $value ?></option>
 										<?php } ?>
 									</select>
@@ -129,19 +129,22 @@
 											<span class="input-group-addon">
 												<input type="checkbox" value="1" name="candy_box" class="checkbx candy_box">
 											</span>
-											<input type="text" readonly="true" value="Candy Box" class="form-control"> 
+                                            <label class="check_label">Candy Box</label>
+											<!-- <input type="text" readonly="true" value="Candy Box" class="form-control">  -->
 										</div>
 										<div class="input-group">
 											<span class="input-group-addon">
 												<input type="checkbox" value="1" name="brown_box" class="checkbx brown_box">
 											</span>
-											<input type="text" readonly="true" value="Brown Box" class="form-control"> 
+                                            <label class="check_label">Brown Box</label>
+											<!-- <input type="text" readonly="true" value="Brown Box" class="form-control">  -->
 										</div>
 										<div class="input-group">
 											<span class="input-group-addon">
 												<input type="checkbox" value="1" name="damaged_box" class="checkbx damaged_box">
 											</span>
-											<input type="text" readonly="true" value="Damaged Box" class="form-control"> 
+                                            <label class="check_label">Damaged Box</label>
+											<!-- <input type="text" readonly="true" value="Damaged Box" class="form-control">  -->
 										</div>
 									</div>
 								</div>
@@ -160,19 +163,22 @@
 											<span class="input-group-addon">
 												<input type="checkbox" value="1" name="cd_software" class="checkbx cd_software">
 											</span>
-											<input type="text" readonly="true" value="CD/Software" class="form-control"> 
+                                            <label class="check_label">CD/Software</label>
+											<!-- <input type="text" readonly="true" value="CD/Software" class="form-control">  -->
 										</div>
 										<div class="input-group">
 											<span class="input-group-addon">
 												<input type="checkbox" value="1" name="power_cord" class="checkbx power_cord">
 											</span>
-											<input type="text" readonly="true" value="Power Cord" class="form-control"> 
+                                            <label class="check_label">Power Cord</label>
+											<!-- <input type="text" readonly="true" value="Power Cord" class="form-control">  -->
 										</div>
 										<div class="input-group">
 											<span class="input-group-addon">
 												<input type="checkbox" value="1" name="manual" class="checkbx manual">
 											</span>
-											<input type="text" readonly="true" value="Manual" class="form-control"> 
+                                            <label class="check_label">Manual</label>
+											<!-- <input type="text" readonly="true" value="Manual" class="form-control">  -->
 										</div>
 									</div>
 								</div>
@@ -199,19 +205,23 @@
 											<span class="input-group-addon">
 												<input type="checkbox" value="1" name="cleaned" class="checkbx cleaned">
 											</span>
-											<input type="text" readonly="true" value="Cleaned" class="form-control"> 
+											<!-- <input type="text" readonly="true" value="Cleaned" class="form-control">  -->
+                                            <label class="check_label">Manual</label>
+											<!-- <input type="text" readonly="true" value="Cleaned" class="form-control">  -->
 										</div>
 										<div class="input-group">
 											<span class="input-group-addon">
 												<input type="checkbox" value="1" name="taped" class="checkbx taped">
 											</span>
-											<input type="text" readonly="true" value="Taped" class="form-control"> 
+                                            <label class="check_label">Taped</label>
+											<!-- <input type="text" readonly="true" value="Taped" class="form-control">  -->
 										</div>
 										<div class="input-group">
 											<span class="input-group-addon">
 												<input type="checkbox" value="1" name="bagged" class="checkbx bagged">
 											</span>
-											<input type="text" readonly="true" value="Bagged" class="form-control"> 
+                                            <label class="check_label">Bagged</label>
+											<!-- <input type="text" readonly="true" value="Bagged" class="form-control">  -->
 										</div>
 									</div>
 								</div>
@@ -222,24 +232,56 @@
 											<span class="input-group-addon">
 												<input type="checkbox" value="1" name="packout_complete" class="checkbx packout_complete">
 											</span>
-											<input type="text" readonly="true" value="Packout Complete" class="form-control"> 
+                                            <label class="check_label">Packout Complete</label>
+											<!-- <input type="text" readonly="true" value="Packout Complete" class="form-control">  -->
 										</div>
 										<div class="input-group">
 											<span class="input-group-addon">
 												<input type="checkbox" value="1" name="send_to_finished_goods" class="checkbx send_to_finished_goods">
 											</span>
-											<input type="text" readonly="true" value="Send To Finished Goods" class="form-control"> 
+                                            <label class="check_label">Send To Finished Goods</label>
+											<!-- <input type="text" readonly="true" value="Send To Finished Goods" class="form-control">  -->
 										</div>
 									</div>
-								</div>
+                                </div>
+                               
 								</div>
 							</div>
-							</div>
-						
-						
-						<div class="text-right">
+                            </div>
+                            <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Status:</label>
+                                            <select name="status" class="form-control status">
+                                                <option value="">Select Option</option>
+                                                <option value="Sold">Sold</option>
+                                                <option value="RMA">RMA</option>
+                                                <option value="Ready For Sale">Ready For Sale</option>
+                                                <option value="Testing">Testing</option>
+                                                <option value="Failed">Failed</option>
+                                                <option value="Awaiting Repair">Awaiting Repair</option>
+                                                <option value="Packout">Packout</option>
+                                                <option value="Received">Received</option>
+                                                <option value="Shipped">Shipped</option>
+                                                <option value="FGI HOLD">FGI HOLD</option>
+                                                <option value="Other">Other</option>
+                                            </select>
+                                            <input style="display: none;" type="text" name="other_status" value="" class="form-control other_status" placeholder="">
+                                        </div>
+                                    </div>
+                                </div>
+                            <div class="col-md-12">
+                                <div class="col-md-2 col-md-offset-9">
+                                    <input type="text" name="scan_loc" value="" placeholder="Scan To Location" class="form-control scan_loc">
+									<input type="hidden" name="scan_loc_id" class="scan_loc_id" value="">
+                                </div>
+                                <div class="col-md-1">
+                                    <button type="submit" name="save" class="btn bg-pink-400">Save</button>
+                                </div>
+                            </div>
+						<!-- <div class="text-right">
 							<button type="submit" name="save" class="btn bg-pink-400">Save</button>
-						</div>
+						</div> -->
 					</div>
 				</div>
 			</form>
@@ -263,6 +305,15 @@
 	        }
 	    });
 	    get_sub_categories(1, 'category2');
+        $(document).on('change', '.status', function(event) {
+	     	if($(this).val() == 'Other'){
+	     		$('.other_status').css('display', 'block');
+	    	}else{
+	    		$('.other_status').css('display', 'none');
+	    	}
+
+	     });
+
 	    // $('.category3').multiselect();
 	});
 	
@@ -319,11 +370,13 @@
     	$el.val(values);
     }
     function get_product_details(){
-  		var part = $('input.part').val();
+  		//var part = $('input.part').val();
     	var serial = $('input.serial').val();
     	var new_serial = $('input.new_serial').val();
-		if(part!='' && serial!=''){
-			var data = {part: part, serial: serial};
+		//if(part!='' && serial!=''){
+		if(serial!=''){
+			// var data = {part: part, serial: serial};
+			var data = {serial: serial};
 			if(new_serial!=''){
 				data.new_serial = new_serial;
 			}
@@ -341,21 +394,25 @@
 					$('input[type="radio"]').prop('checked', false);
 					get_sub_categories(1, 'category2');
 					
+                    $('select.status').val('').trigger('change');
 					$('.other_category').css('display','none');
 				}else{
-                    if(response.product.location_id!=null){
+                // console.log('herer',response.product.product_name);
+                    // if(response.product.location_id!=null){
 				$('input.product_id').val(response.product.pid);
 				$('input.part').val(response.product.part);
 				$('input.serial_id').val(response.product.id);
 				$('input.new_serial').val(response.product.new_serial);
 				$('input.name').val(response.product.product_name);
 				$('input.packaging_ui').val(response.product.packaging_ui);
+                $('input.other_status').val(response.product.other_status);
 				
 				//---------------
 				$('textarea.description').html(response.product.product_desc);
 				$('textarea.additional_accessories').html(response.product.additional_accessories);
-				$('textarea.packaging_notes').html(response.product.packaging_notes);
+				$('textarea.packout_notes').html(response.product.packaging_notes);
 				$('textarea.recv_notes').html(response.product.recv_notes);
+                $('select.status').val(response.product.status).trigger('change');
 				//----------------
 				$('.packout_complete').prop('checked', false);
 				if(response.product.packout_complete==1){
@@ -421,7 +478,7 @@
 				}else{
 					// $('.category3').multiselect();
 				}
-			}
+			// }
             }
 			})
 			.fail(function() {

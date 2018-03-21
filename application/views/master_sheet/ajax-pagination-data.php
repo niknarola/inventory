@@ -1,6 +1,7 @@
 <table class="table" id="product_tbl">
     <thead>
         <tr>
+            <th>Images</th>
             <th>Serial #</th>
             <th>Part #</th>
             <th>Name</th>
@@ -22,6 +23,13 @@
                 }
                 ?>
                 <tr>
+                    <?php
+                        if($post['files'] != '' || $post['files'] != null){
+                    ?>
+                    <td><img src="<?= base_url().'/assets/uploads/'.$post['pid'].'/serials/'.$post['id'].'/'.$post['files']; ?>" alt="No image found"></td>
+                        <?php } else {?>
+                            <td><img src="<?= base_url().'/assets/images/not-available.jpg'?>" height="100px" width="100px" alt="No image found"></td>
+                        <?php } ?>
                     <td><?php echo $post['serial']; ?></td>
                     <td><?php echo $post['part']; ?></td>
                     <td><?php echo $post['product_name']; ?></td>

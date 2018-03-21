@@ -1,3 +1,5 @@
+
+<?//= $admin_prefix;die; ?>
 <div class="panel panel-flat">
     <div class="panel-heading">
         <h5 class="panel-title">Locations Master</h5>
@@ -26,7 +28,7 @@
 			</div>
 			<div class="row">
 				<div class="quick" style="display: none;">
-					<p>There seems no items in the selected pallet, Please move to <a href="<?= $admin_prefix?>receiving/quick_receive">Quick Receive</a> add the items in the pallet</p>
+					<p>There seems no items in the selected pallet, Please move to <a href="<?= $admin_prefix; ?>receiving/quick_receive">Quick Receive</a> add the items in the pallet</p>
 				</div>
 			</div>
 			<hr>

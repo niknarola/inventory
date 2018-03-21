@@ -42,7 +42,8 @@
 		</table>
 	</div>
 	<div class="clearfix"></div>
-		<hr>
+        <hr>
+        <?php if($product['status'] != 0){?>
 	<div class="row">
     	<table class="table" id="product_tbl">
 			<thead>
@@ -51,7 +52,7 @@
 					<th>Serial Number</th>
 					<th>Part</th>
 					<th>Name</th>
-					<th>Description</th>
+					<!-- <th>Description</th> -->
 					<th>Status</th>
 					<th>Sales Order</th>
 					<th>Tracking Number</th>
@@ -65,7 +66,7 @@
 						<td><?= $serial_product['serial'] ?></td>
 						<td><?= $product['part'] ?></td>
 						<td><?= $product['name'] ?></td>
-						<td><?= $product['description'] ?></td>
+						<!-- <td><?//= $product['description'] ?></td> -->
 						<td><?= $serial_product['status'] ?></td>
 						<td></td>
 						<td></td>
@@ -74,15 +75,14 @@
 				<?php }  ?>
 			</tbody>
 		</table>
-	</div>
-	</div>
-	<?php }else{ ?>
-			<div class="row col-md-6 col-md-offset-3 text-center">
+    </div>
+    <?php }else { ?>
+            <div class="row col-md-6 col-md-offset-3 text-center">  
 				<div class="alert alert-info">The product has already been added as Temporary Product and id pending for review.</div>
 			</div>
 			<div class="row col-md-6 col-md-offset-3 text-center">
-				<a class="btn btn-info" href="products/view/<?= $product['id'] ?>">View Product</a>
-				<a class="btn btn-primary" href="receiving/temporary_product_edit/<?= $product['id'] ?>">Edit Product</a>
+				<a class="btn btn-info" href="admin/products/view/<?= $product['id'] ?>">View Product</a>
+				<a class="btn btn-primary" href="admin/temporary_products/edit/<?= $product['id'] ?>">Edit Product</a>
 				<a class="btn btn-success" data-toggle="modal" data-target="#addquantity_modal">Add Quantity</a>
 				<div id="addquantity_modal" class="modal fade" role="dialog">
 				  <div class="modal-dialog">
@@ -107,8 +107,10 @@
 				    </div>
 				  </div>
 				</div>
-			</div>	
-	<?php } } elseif($_POST['serial']) {?>
+			</div>
+    <?php } ?>
+	</div>
+    <?php } } elseif($_POST['serial']) {?>
         <div class="row">
     	<table class="table" id="product_tbl">
 			<thead>
@@ -117,7 +119,7 @@
 					<th>Serial Number</th>
 					<th>Part</th>
 					<th>Name</th>
-					<th>Description</th>
+					<!-- <th>Description</th> -->
 					<th>Status</th>
 					<!-- <th>Sales Order</th> -->
 					<!-- <th>Tracking Number</th> -->
@@ -132,7 +134,7 @@
 						<td><?= $serial_product['serial'] ?></td>
 						<td><?= $serial_product['part'] ?></td>
 						<td><?= $serial_product['name'] ?></td>
-						<td><?= $serial_product['description'] ?></td>
+						<!-- <td><?//= $serial_product['description'] ?></td> -->
 						<td><?= $serial_product['serial_status'] ?></td>
 						<!-- <td></td>
 						<td></td> -->

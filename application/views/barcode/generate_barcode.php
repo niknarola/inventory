@@ -350,12 +350,13 @@
     	}
     }
     function get_product_details(part){
+        var uri = '<?= $this->uri->segment(2);?>';
 		if(part!=''){
 			$.ajax({
 				url: '<?php echo $ajax_url; ?>',
 				type: 'POST',
 				dataType: 'json',
-				data: {part: part},
+				data: {part: part, uri: uri},
 			})
 			.done(function(response) {
 				if(response.status==1){
