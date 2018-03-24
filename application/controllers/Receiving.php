@@ -5,7 +5,7 @@ class Receiving extends CI_Controller {
 	public function __construct(){
 		parent::__construct();
         $this->load->library('Ajax_pagination');
-        $this->perPage = 8;
+        $this->perPage = 10;
 		$this->load->model('Product_model','products');
         $this->load->model('Basic_model','basic');
 		$this->load->model('Receiving_model','receiving');
@@ -50,7 +50,7 @@ class Receiving extends CI_Controller {
 			$this->template->load($this->layout, 'receiving/search_results', $page_data);
 		}
 	}
-	public function temporary_product_flagged(){
+    public function temporary_product_flagged(){
 		$data['title'] = 'Temporary Product Flagged';
 		// $temp_products = $this->products->get_temp_products();
 		// $data['temp_products'] = $temp_products;
@@ -106,6 +106,7 @@ class Receiving extends CI_Controller {
         echo json_encode($output);
         exit;
     }
+
 
 	public function approve($id){
         $data = [

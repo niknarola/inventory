@@ -1,4 +1,4 @@
-<form method="post" action="<?php echo ($this->uri->segment(1)=='admin') ? 'admin/' : ''; ?>barcode/generate">
+<form method="post" action="<?php echo ($this->uri->segment(1)=='admin') ? 'admin/' : ''; ?>barcode/generate" class="panel panel-flat">
 	<div class="row">
 		<div class="col-md-12">
 			<div class="panel panel-flat">
@@ -42,7 +42,7 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-12 ">
 			<div class="form-group text-center">
 				<button type="button" data-toggle="modal" data-target="#myModal" name="generate" class="btn btn-success generate">Generate</button>
 				<button type="button" name="add_more" class="btn bg-pink-400 add_more_btn"><i class="icon-plus22"></i>Add more</button>
@@ -51,7 +51,7 @@
 				<button type="button" name="print_custom_labels" class="btn bg-teal-400 print_custom_labels">Print Custom Label</button>
 			</div>
 			<?php //for ($i=0; $i < 5; $i++) { ?>
-				<div class="panel panel-flat info_block">
+				<div class=" info_block">
 					<!-- <a href="#" class="close-thik"></a> -->
 					<span class="close_block" style="display: none;"><i class="icon-cross2"></i></span>
 					<div class="panel-body">

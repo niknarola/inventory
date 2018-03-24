@@ -1,5 +1,5 @@
-<div class="col-md-12">
-    <div class="panel panel-flat">
+<div class="">
+    <div class="panel panel-flat box-wrap">
         <div class="panel-heading">
             <h5 class="panel-title">Products</h5>
             <div class="heading-elements">
@@ -45,7 +45,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="">
                     <div class="col-md-12">
                         <div class="form-group">
                             <div class="post-list" id="productList">

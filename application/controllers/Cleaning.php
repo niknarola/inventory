@@ -37,9 +37,6 @@ class Cleaning extends CI_Controller {
 				$category[]  = $this->input->post('category3');
 			}
             $product_data['category'] = json_encode($category);
-        //    echo"category"; pr($product_data['category']);echo"<br>";
-        //    echo"category decode";pr(json_decode($product_data['category']));
-        //    echo"product";pr($product_data);
 			$this->basic->update('products', $product_data, ['part'=>$this->input->post('part')]);
 			$packaging_fields = [
 				'candy_box' => ($this->input->post('candy_box')) ? 1 : 0,
@@ -51,12 +48,9 @@ class Cleaning extends CI_Controller {
 				'taped' => ($this->input->post('taped')) ? 1 : 0,
 				'bagged' => ($this->input->post('bagged')) ? 1 : 0
             ];
-            $pallet_name = $this->input->post('scan_loc');
-            // pr($pallet_name);echo"<br/>";
-            $pallet = $this->basic->check_pallet_exists($pallet_name);
-            // pr($pallet);
+  
 			$serial_data = [
-				'new_serial' => $this->input->post('new_serial'),
+                'new_serial' => $this->input->post('new_serial'),
 				'recv_notes' => $this->input->post('recv_notes'),
 				'additional_accessories' => $this->input->post('additional_accessories'),
 				'packaging'=>json_encode($packaging_fields),
@@ -64,12 +58,24 @@ class Cleaning extends CI_Controller {
 				'packaging_ui'=> $this->input->post('packaging_ui'),
 				'packaging_notes'=> $this->input->post('packout_notes'),
                 'packaging_condition'=>($this->input->post('packaging_condition')) ? $this->input->post('packaging_condition') : '',
-                'pallet_id' => $pallet,
                 'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : null
             ];
-            // echo"serial";pr($serial_data);
+            $loc_name = $this->input->post('current_pallet');
+            $location = $this->basic->check_location_exists($loc_name);         
+            if($this->input->post('add')){
+                $serial_data['location_id'] = $location['id'];
+            }
+            if($this->input->post('close')){
+                $pallet_name = $this->input->post('scan_loc');
+                $pallet = $this->basic->check_pallet_exists($pallet_name);
+                $serial_data['pallet_id'] = $pallet['id'];
+            }
+            // echo"serial data";pr($serial_data);
             // die;
-			$serial_data['packout_complete'] = ($this->input->post('packout_complete')) ? 1 : 0;
+            $serial_data['packout_complete'] = ($this->input->post('packout_complete')) ? 1 : 0;
+            if($serial_data['packout_complete'] == '1'){
+                $serial_data['status'] = 'Ready For Sale';
+            }
 			$serial_data['send_to_finished_goods'] = ($this->input->post('send_to_finished_goods')) ? 1 : 0;
 			$serial_data['cd_software'] = ($this->input->post('cd_software')) ? 1 : 0;
 			$serial_data['power_cord'] = ($this->input->post('power_cord')) ? 1 : 0;
@@ -100,10 +106,11 @@ class Cleaning extends CI_Controller {
                 }
             }
             if(!empty($serial_data)){
-            	$serial_data['files'] = implode(',',$serial_files);
+                $serial_data['files'] = implode(',',$serial_files);
             }
             
             $product_serial = $this->basic->get_single_data_by_criteria('product_serials', ['serial'=>$this->input->post('serial')]);
+           
 			if($this->basic->update('product_serials', $serial_data, ['serial'=>$this->input->post('serial')])){
                 $timestamp = [
 					'last_scan' => date('Y-m-d H:i:s'),
@@ -124,6 +131,7 @@ class Cleaning extends CI_Controller {
 		$category_names = $this->products->get_categories();
         $data['categories'] = $category_names;
         $data['admin_prefix'] = $this->admin_prefix;
+        //$data['current_pallet'] = $this->products->get_current_pallet();
 		$this->template->load($this->layout, 'cleaning/packout', $data);
 	}
 }

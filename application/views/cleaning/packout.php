@@ -32,7 +32,7 @@
 							<div class="col-md-4">
 								<div class="form-group">
 									<label>New Serial #:</label>
-									<input type="text" name="new_serial" onchange="get_product_details();" value="" class="form-control new_serial">
+									<input type="text" name="new_serial"  value="" class="form-control new_serial">
 								</div>
 							</div>
 						</div>
@@ -156,7 +156,7 @@
 								</div>
 									</div>
 									<div class="col-md-6">
-										<div class="row">
+										<!-- <div class="row">
 										<div class="form-group">
 										<label>Accessories:</label>
 										<div class="input-group">
@@ -164,30 +164,54 @@
 												<input type="checkbox" value="1" name="cd_software" class="checkbx cd_software">
 											</span>
                                             <label class="check_label">CD/Software</label>
-											<!-- <input type="text" readonly="true" value="CD/Software" class="form-control">  -->
 										</div>
 										<div class="input-group">
 											<span class="input-group-addon">
 												<input type="checkbox" value="1" name="power_cord" class="checkbx power_cord">
 											</span>
                                             <label class="check_label">Power Cord</label>
-											<!-- <input type="text" readonly="true" value="Power Cord" class="form-control">  -->
 										</div>
 										<div class="input-group">
 											<span class="input-group-addon">
 												<input type="checkbox" value="1" name="manual" class="checkbx manual">
 											</span>
                                             <label class="check_label">Manual</label>
-											<!-- <input type="text" readonly="true" value="Manual" class="form-control">  -->
 										</div>
 									</div>
-								</div>
-								<div class="row">
-									<div class="form-group">
-										<label>Additional Accessories:</label>
-										<textarea name="additional_accessories" class="form-control additional_accessories"></textarea>
-									</div>
-								</div>
+								</div> -->
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <label>Additional Accessories:</label>
+                                            <textarea name="additional_accessories" class="form-control additional_accessories"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <label>Cleaning:</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <input type="checkbox" value="1" name="cleaned" class="checkbx cleaned">
+                                                </span>
+                                                <!-- <input type="text" readonly="true" value="Cleaned" class="form-control">  -->
+                                                <label class="check_label">Manual</label>
+                                                <!-- <input type="text" readonly="true" value="Cleaned" class="form-control">  -->
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <input type="checkbox" value="1" name="taped" class="checkbx taped">
+                                                </span>
+                                                <label class="check_label">Taped</label>
+                                                <!-- <input type="text" readonly="true" value="Taped" class="form-control">  -->
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <input type="checkbox" value="1" name="bagged" class="checkbx bagged">
+                                                </span>
+                                                <label class="check_label">Bagged</label>
+                                                <!-- <input type="text" readonly="true" value="Bagged" class="form-control">  -->
+                                            </div>
+                                        </div>
+                                    </div>
 								</div>
 							</div>
 							<div class="col-md-6">
@@ -199,56 +223,31 @@
 								</div>
 								<div class="row">
 									<div class="col-md-6">
-									<div class="form-group">
-										<label>Cleaning:</label>
-										<div class="input-group">
-											<span class="input-group-addon">
-												<input type="checkbox" value="1" name="cleaned" class="checkbx cleaned">
-											</span>
-											<!-- <input type="text" readonly="true" value="Cleaned" class="form-control">  -->
-                                            <label class="check_label">Manual</label>
-											<!-- <input type="text" readonly="true" value="Cleaned" class="form-control">  -->
-										</div>
-										<div class="input-group">
-											<span class="input-group-addon">
-												<input type="checkbox" value="1" name="taped" class="checkbx taped">
-											</span>
-                                            <label class="check_label">Taped</label>
-											<!-- <input type="text" readonly="true" value="Taped" class="form-control">  -->
-										</div>
-										<div class="input-group">
-											<span class="input-group-addon">
-												<input type="checkbox" value="1" name="bagged" class="checkbx bagged">
-											</span>
-                                            <label class="check_label">Bagged</label>
-											<!-- <input type="text" readonly="true" value="Bagged" class="form-control">  -->
-										</div>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label>&nbsp;</label>
-										<div class="input-group">
-											<span class="input-group-addon">
-												<input type="checkbox" value="1" name="packout_complete" class="checkbx packout_complete">
-											</span>
-                                            <label class="check_label">Packout Complete</label>
-											<!-- <input type="text" readonly="true" value="Packout Complete" class="form-control">  -->
-										</div>
-										<div class="input-group">
-											<span class="input-group-addon">
-												<input type="checkbox" value="1" name="send_to_finished_goods" class="checkbx send_to_finished_goods">
-											</span>
-                                            <label class="check_label">Send To Finished Goods</label>
-											<!-- <input type="text" readonly="true" value="Send To Finished Goods" class="form-control">  -->
-										</div>
-									</div>
-                                </div>
-                               
+									
+								    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>&nbsp;</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <input type="checkbox" value="1" name="packout_complete" class="checkbx packout_complete">
+                                                </span>
+                                                <label class="check_label">Packout Complete</label>
+                                                <!-- <input type="text" readonly="true" value="Packout Complete" class="form-control">  -->
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <input type="checkbox" value="1" name="send_to_finished_goods" class="checkbx send_to_finished_goods">
+                                                </span>
+                                                <label class="check_label">Send To Finished Goods</label>
+                                                <!-- <input type="text" readonly="true" value="Send To Finished Goods" class="form-control">  -->
+                                            </div>
+                                        </div>
+                                    </div>
 								</div>
 							</div>
                             </div>
-                            <div class="row">
+                            <!-- <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Status:</label>
@@ -269,14 +268,18 @@
                                             <input style="display: none;" type="text" name="other_status" value="" class="form-control other_status" placeholder="">
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             <div class="col-md-12">
-                                <div class="col-md-2 col-md-offset-9">
-                                    <input type="text" name="scan_loc" value="" placeholder="Scan To Location" class="form-control scan_loc">
+                                <div class="col-md-3">
+                                    <input type="text" name="current_pallet" value="" class="form-control current_pallet" placeholder="Current Pallet"/>
+                                </div>    
+                                <div class="col-md-2">
+                                <input type="text" name="scan_loc" value="" placeholder="Scan To Location" class="form-control scan_loc">
 									<input type="hidden" name="scan_loc_id" class="scan_loc_id" value="">
                                 </div>
-                                <div class="col-md-1">
-                                    <button type="submit" name="save" class="btn bg-pink-400">Save</button>
+                                <div class="col-md-4">
+                                    <button type="submit" name="add" value="add" class="btn bg-teal-400 add_btn">Add</button>
+                                    <button type="submit" name="close" value="close" class="btn bg-danger-400 close_btn">Close/New</button>
                                 </div>
                             </div>
 						<!-- <div class="text-right">
@@ -372,14 +375,14 @@
     function get_product_details(){
   		//var part = $('input.part').val();
     	var serial = $('input.serial').val();
-    	var new_serial = $('input.new_serial').val();
+    	// var new_serial = $('input.new_serial').val();
 		//if(part!='' && serial!=''){
 		if(serial!=''){
 			// var data = {part: part, serial: serial};
 			var data = {serial: serial};
-			if(new_serial!=''){
-				data.new_serial = new_serial;
-			}
+			// if(new_serial!=''){
+			// 	data.new_serial = new_serial;
+			// }
 			$.ajax({
 				url: '<?php echo $ajax_url; ?>',
 				type: 'POST',
@@ -399,6 +402,9 @@
 				}else{
                 // console.log('herer',response.product.product_name);
                     // if(response.product.location_id!=null){
+                // $('input.scan_loc').val(response.product.location_name);
+				// $('input.scan_loc_id').val(response.product.location_id);
+				$('input.current_pallet').val(response.product.location_name);
 				$('input.product_id').val(response.product.pid);
 				$('input.part').val(response.product.part);
 				$('input.serial_id').val(response.product.id);
@@ -442,6 +448,10 @@
 				}
 			}
 
+            if(response.product.accessory_name!=null $$ response.product.accessory_name!=''){
+                var accessorry = JSON.parse(response.product.accessory_names);
+                
+            }
 				if(response.product.cleaning!=null && response.product.cleaning!=''){
 				var cleaning_fields = JSON.parse(response.product.cleaning);
 				$('.cleaned').prop('checked', false);

@@ -44,6 +44,9 @@
 								<li class="<?php echo (strpos($uri, 'accessory') != false) ? 'active' : '' ?>"><a href="admin/testing/accessory"><i class="icon-menu"></i> <span>Accessory</span></a></li>
 								<li class="<?php echo (strpos($uri, 'printer') != false) ? 'active' : '' ?>"><a href="admin/testing/printer"><i class="icon-menu"></i> <span>Printer</span></a></li>
 								<li class="<?php echo (strpos($uri, 'other_item') != false) ? 'active' : '' ?>"><a href="admin/testing/other_item"><i class="icon-menu"></i> <span>Other Item</span></a></li>
+								<li class="<?php echo (strpos($uri, 'audit') != false) ? 'active' : '' ?>"><a href="admin/testing/audit"><i class="icon-menu"></i> <span>Audit</span></a></li>
+								<li class="<?php echo (strpos($uri, 'quality') != false) ? 'active' : '' ?>"><a href="admin/testing/quality"><i class="icon-menu"></i> <span>Quality Control</span></a></li>
+								<li class="<?php echo (strpos($uri, 'repair') != false) ? 'active' : '' ?>"><a href="admin/testing/repair"><i class="icon-menu"></i> <span>Repair</span></a></li>
 							</ul>
 						</li>
 						<li class="<?php echo (strpos($uri, 'packout') != false) ? 'active' : '' ?>"><a href="admin/cleaning/packout"><i class="icon-user"></i> <span>Packout</span></a></li>

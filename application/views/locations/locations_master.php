@@ -48,10 +48,10 @@
 			<hr>
 			<div class="row">
 			<div class="col-md-12">
-				<div class="row">
+				<div class="">
 					<div class="table-responsive">
 						<div class="pallet-list" id="palletList">
-						<table class="table">
+						<table class="table" style="width:99%;">
 							<thead>
 								<tr>
 									<th>Location</th>
@@ -122,4 +122,7 @@
 		});
 		}
 	}
+</script>
+<script type="text/javascript">
+    $('.pallet_id').select2();
 </script>

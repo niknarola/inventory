@@ -4,7 +4,7 @@
 	    </div>
 		<form method="post">
 		<div class="panel-body">
-			<div class="col-md-5" style="border-right: 1px solid #eee;">
+			<div class="col-md-12">
 					<div class="row">
 						<div class="col-md-4">
 							<div class="form-group">
@@ -31,7 +31,7 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-4">
+						<div class="col-md-12">
 							<button  name="search" value="search" class="btn btn-sm btn-primary search ">Search</button>
 							<button type="submit" name="delete" value="delete" class="btn btn-sm btn-primary delete">Delete</button> 
 						</div>
@@ -54,7 +54,7 @@
 		            </div>
 				
 			</div>
-			<div class="col-md-7">
+			<div class="col-md-12">
 				<div class="row">
 					<div class="table-responsive">
 						<div class="pallet-list" id="palletList">

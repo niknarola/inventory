@@ -76,6 +76,7 @@ $route['admin/cleaning/packout'] = 'cleaning/packout';
 $route['packing/notebook'] = 'testing/notebook';
 
 $route['admin/temporary_product_review'] = 'receiving/temporary_product_flagged';
+$route['admin/temporary_product_review/ajaxPaginationData/(:any)'] = 'receiving/ajaxPaginationData/$1';
 $route['admin/temporary_product/approve/(:any)'] = 'receiving/approve/$1';
 $route['admin/temporary_product/request_clarification/(:any)'] = 'receiving/request_clarification/$1';
 $route['admin/temporary_products/view/(:any)'] = 'products/view/$1';
@@ -124,6 +125,9 @@ $route['admin/testing/monitor']='testing/monitor';
 $route['admin/testing/accessory']='testing/accessory';
 $route['admin/testing/printer']='testing/printer';
 $route['admin/testing/other_item']='testing/other_item';
+$route['admin/testing/audit']='testing/audit';
+$route['admin/testing/quality']='testing/quality';
+$route['admin/testing/repair']='testing/repair';
 
 $route['admin/inventory/master_sheet']='master_sheet';
 $route['admin/inventory/master_sheet/ajaxPaginationData/(:any)']='master_sheet/ajaxPaginationData/$1';

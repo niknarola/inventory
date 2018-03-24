@@ -34,7 +34,7 @@
                     <td><?php echo ($post['location_name'] != '') ? $post['location_name'] . ' / ' . $post['palletid'] : ''; ?></td>
                     <td><?php echo $post['original_condition']; ?></td>
                     <td><?php echo $post['recv_notes']; ?></td>
-                    <td><button class="btn btn-link transfer_location" data-serial="<?php echo $post['serial']; ?>" data-location="<?php echo $post['location_name']; ?>" style="color: #1E88E5;" type="button">Transfer Location</button></td>
+                    <td><button class="btn-link transfer_location" data-serial="<?php echo $post['serial']; ?>" data-location="<?php echo $post['location_name']; ?>" style="color: #1E88E5;" type="button">Transfer Location</button></td>
                     <td><?php echo ($status != '') ? $status . '<br/>' . $post['modified'] : ''; ?></td>
                 </tr>
             <?php endforeach;

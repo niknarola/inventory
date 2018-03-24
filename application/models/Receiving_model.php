@@ -11,6 +11,58 @@ class Receiving_model extends CI_Model
         parent::__construct();
         $this->load->database();
     }
+    function getProducts($params = array(), $actArr = array())
+    {
+        $this->db->select('p.*');
+        $this->db->from('products p');
+        // $this->db->join('product_line pl', 'pl.id = p.product_line_id', 'left');
+        // $this->db->join('original_condition oc', 'oc.id = p.original_condition_id', 'left');
+        // $this->db->join('product_serials ps', 'p.id = ps.product_id', 'left');
+        //filter data by searched keywords
+        if (!empty($params['search']['keywords']))
+        {
+            if (!empty($params['search']['searchfor']))
+            {
+                // if($params['search']['searchfor']=='location'){
+                //     $this->db->like('p.name',$params['search']['keywords']);
+                // }else{
+                $this->db->like('p.' . $params['search']['searchfor'], $params['search']['keywords']);
+                // }
+            }
+            else
+            {
+                $this->db->like('p.description', $params['search']['keywords']);
+            }
+            if (!empty($catArr['category1']) && !empty($catArr['category2']))
+            {
+                $this->db->like('category', $catArr['category1']);
+                $this->db->like('category', $catArr['category2']);
+            }
+        }
+        //sort data by ascending or desceding order
+        /* if(!empty($params['search']['sortBy'])){
+          $this->db->order_by('p.id',$params['search']['sortBy']);
+          }else{
+          $this->db->order_by('p.id','desc');
+          } */
+        //sort data by ascending or desceding order
+        $this->db->where('added_as_temp', 1);
+        // $this->db->where('p.status', 1);
+        $this->db->where('p.is_delete', 0);
+        //set start and limit
+        if (array_key_exists("start", $params) && array_key_exists("limit", $params))
+        {
+            $this->db->limit($params['limit'], $params['start']);
+        }
+        elseif (!array_key_exists("start", $params) && array_key_exists("limit", $params))
+        {
+            $this->db->limit($params['limit']);
+        }
+        $query = $this->db->get();
+//        echo$this->db->last_query();
+        //return fetched data
+        return ($query->num_rows() > 0) ? $query->result_array() : FALSE;
+    }
     private function _get_datatables_query($mod = null)
     {
         $this->db->from($this->table);

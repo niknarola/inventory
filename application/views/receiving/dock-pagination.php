@@ -16,7 +16,8 @@
 		<tr>
 			<td><input type="checkbox" name="check[]" class="check_row" value="<?= $pallet['id'] ?>"></td>
 			<td><?= $pallet['bol_or_tracking']; ?></td>
-			<td><?= substr($pallet['pallet_id'], strpos($pallet['pallet_id'], "-") + 1).'/'.$pallet['pallet_part']; ?></td>
+            <td><?= $pallet['pallet_part'].'/'.$pallet['total_pallet']; ?></td>
+			<!-- <td><?//= substr($pallet['pallet_id'], strpos($pallet['pallet_id'], "-") + 1).'/'.$pallet['pallet_part']; ?></td> -->
 			<td><?= $pallet['pallet_id']; ?></td>
 			<td><?= $pallet['weight']; ?></td>
 			<td><?= $pallet['item_count']; ?></td>

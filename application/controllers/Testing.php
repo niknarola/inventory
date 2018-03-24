@@ -77,6 +77,11 @@ class Testing extends CI_Controller {
             	'last_scan'=>date('Y-m-d H:i:s')
             ];
 
+            $access_type_array = $this->input->post('access_type');
+            $access_type = json_encode($access_type_array);
+
+            $access_name_array = $this->input->post('access_name');
+            $access_name = json_encode($access_name_array);
             $loc_name = $this->input->post('scan_loc');
             $location = $this->basic->check_location_exists($loc_name);
 			$serial_data = [
@@ -92,7 +97,9 @@ class Testing extends CI_Controller {
 				'os' => $this->input->post('os'),
 				'additional_info' => $this->input->post('additional_info'),
 				'additional_features' => $this->input->post('additional_features'),
-				'additional_accessories' => $this->input->post('additional_accessories'),
+                'additional_accessories' => $this->input->post('additional_accessories'),
+                'accessory_type' => $access_type,
+                'accessory_name' => $access_name,	
 				'fail_option' => $this->input->post('fail_option'),
 				'fail_reason_notes' => ($this->input->post('fail_reason_notes')) ? $this->input->post('fail_reason_notes') : null,
 				'condition' => $this->input->post('final_condition'),
@@ -101,8 +108,8 @@ class Testing extends CI_Controller {
 				'cosmetic_issues_text' => $cosmetic_issues_text,
 				'cosmetic_issue' => $cosmetic_issue,
 				'fail_text' => $fail_text,
-				'cosmetic_grade' => $this->input->post('cosmetic_grade'),
-                'status' => $this->input->post('status'),
+				// 'cosmetic_grade' => $this->input->post('cosmetic_grade'),
+                // 'status' => $this->input->post('status'),
                 'location_id' => $location['id'],
 				'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : null
             ];
@@ -111,7 +118,17 @@ class Testing extends CI_Controller {
 			}
             if($product_serial_data['status'] != $serial_data['status']){
 				$timestamp['status_change_date'] = date('Y-m-d H:i:s');
-			}
+            }
+            $serial_data['cosmetic_grade'] = $this->input->post('cosmetic_grade');
+            if($serial_data['cosmetic_grade'] == 'MN'){
+                $serial_data['status'] = 'Packout';
+            }else if($serial_data['cosmetic_grade'] == 'F'){
+                $serial_data['status'] = 'Awating Repair';
+            }else if($serial_data['cosmetic_grade'] == 'X'){
+                $serial_data['status'] = 'Failed';
+            }else{
+                $serial_data['status'] = $this->input->post('status');
+            }
 			// $serial_data['ssd'] = ($this->input->post('ssd')) ? 1 : 0;
 			$serial_data['ssd'] = json_encode($ssd_array);
 			// $serial_data['dedicated'] = ($this->input->post('dedicated')) ? 1 : 0;
@@ -240,6 +257,11 @@ class Testing extends CI_Controller {
                 $s = ($this->input->post('dedicated'.$i)) ? 1 : 0;
                 $dedicated_array[] = $s;
             }
+            $access_type_array = $this->input->post('access_type');
+            $access_type = json_encode($access_type_array);
+
+            $access_name_array = $this->input->post('access_name');
+            $access_name = json_encode($access_name_array);
 			$serial_data = [
 				'new_serial' => $this->input->post('new_serial'),
 				'recv_notes' => $this->input->post('recv_notes'),
@@ -251,7 +273,9 @@ class Testing extends CI_Controller {
 				'os' => $this->input->post('os'),
 				'additional_info' => $this->input->post('additional_info'),
 				'additional_features' => $this->input->post('additional_features'),
-				'additional_accessories' => $this->input->post('additional_accessories'),
+                'additional_accessories' => $this->input->post('additional_accessories'),
+                'accessory_type' => $access_type,
+                'accessory_name' => $access_name,
 				'fail_option' => $this->input->post('fail_option'),
 				'fail_reason_notes' => ($this->input->post('fail_reason_notes')) ? $this->input->post('fail_reason_notes') : null,
 				'condition' => $this->input->post('final_condition'),
@@ -404,6 +428,11 @@ class Testing extends CI_Controller {
             	'testing_date'=>date('Y-m-d H:i:s'),
             	'last_scan'=>date('Y-m-d H:i:s')
             ];
+            $access_type_array = $this->input->post('access_type');
+            $access_type = json_encode($access_type_array);
+
+            $access_name_array = $this->input->post('access_name');
+            $access_name = json_encode($access_name_array);
 			$serial_data = [
 				'new_serial' => $this->input->post('new_serial'),
 				'recv_notes' => $this->input->post('recv_notes'),
@@ -415,7 +444,9 @@ class Testing extends CI_Controller {
 				'os' => $this->input->post('os'),
 				'additional_info' => $this->input->post('additional_info'),
 				'additional_features' => $this->input->post('additional_features'),
-				'additional_accessories' => $this->input->post('additional_accessories'),
+                'additional_accessories' => $this->input->post('additional_accessories'),
+                'accessory_type' => $access_type,
+                'accessory_name' => $access_name,	
 				'fail_option' => $this->input->post('fail_option'),
 				'fail_reason_notes' => ($this->input->post('fail_reason_notes')) ? $this->input->post('fail_reason_notes') : null,
 				'condition' => $this->input->post('final_condition'),
@@ -692,6 +723,12 @@ class Testing extends CI_Controller {
                 $s = ($this->input->post('dedicated'.$i)) ? 1 : 0;
                 $dedicated_array[] = $s;
             }
+            
+            $access_type_array = $this->input->post('access_type');
+            $access_type = json_encode($access_type_array);
+
+            $access_name_array = $this->input->post('access_name');
+            $access_name = json_encode($access_name_array);
 			$serial_data = [
 				'new_serial' => $this->input->post('new_serial'),
 				'recv_notes' => $this->input->post('recv_notes'),
@@ -704,7 +741,9 @@ class Testing extends CI_Controller {
 				'os' => $this->input->post('os'),
 				'additional_info' => $this->input->post('additional_info'),
 				'additional_features' => $this->input->post('additional_features'),
-				'additional_accessories' => $this->input->post('additional_accessories'),
+                'additional_accessories' => $this->input->post('additional_accessories'),
+                'accessory_type' => $access_type,
+                'accessory_name' => $access_name,
 				'fail_option' => $this->input->post('fail_option'),
 				'fail_reason_notes' => ($this->input->post('fail_reason_notes')) ? $this->input->post('fail_reason_notes') : null,
 				'condition' => $this->input->post('final_condition'),
@@ -809,6 +848,7 @@ class Testing extends CI_Controller {
 	}
 	public function tablet(){
 		if($this->input->post()){
+            
 			$product_data = [
 				'name' => $this->input->post('name'),
 				'description' => $this->input->post('description'),
@@ -858,6 +898,11 @@ class Testing extends CI_Controller {
 
             $loc_name = $this->input->post('scan_loc');
             $location = $this->basic->check_location_exists($loc_name);
+            $access_type_array = $this->input->post('access_type');
+            $access_type = json_encode($access_type_array);
+
+            $access_name_array = $this->input->post('access_name');
+            $access_name = json_encode($access_name_array);
 			$serial_data = [
 				'new_serial' => $this->input->post('new_serial'),
 				'recv_notes' => $this->input->post('recv_notes'),
@@ -870,7 +915,9 @@ class Testing extends CI_Controller {
 				'os' => $this->input->post('os'),
 				'additional_info' => $this->input->post('additional_info'),
 				'additional_features' => $this->input->post('additional_features'),
-				'additional_accessories' => $this->input->post('additional_accessories'),
+                'additional_accessories' => $this->input->post('additional_accessories'),
+                'accessory_type' => $access_type,
+                'accessory_name' => $access_name,	
 				'fail_option' => $this->input->post('fail_option'),
 				'fail_reason_notes' => ($this->input->post('fail_reason_notes')) ? $this->input->post('fail_reason_notes') : null,
 				'condition' => $this->input->post('final_condition'),
@@ -973,6 +1020,7 @@ class Testing extends CI_Controller {
 	}
 	public function monitor(){
 		if($this->input->post()){
+            // pr($this->input->post());die;
 			$product_data = [
 				'name' => $this->input->post('name'),
 				'description' => $this->input->post('description'),
@@ -1006,6 +1054,13 @@ class Testing extends CI_Controller {
             	'testing_date'=>date('Y-m-d H:i:s'),
             	'last_scan'=>date('Y-m-d H:i:s')
             ];
+
+            $access_type_array = $this->input->post('access_type');
+            $access_type = json_encode($access_type_array);
+
+            $access_name_array = $this->input->post('access_name');
+            $access_name = json_encode($access_name_array);
+            
 			$serial_data = [
 				'new_serial' => $this->input->post('new_serial'),
 				'recv_notes' => $this->input->post('recv_notes'),
@@ -1015,6 +1070,8 @@ class Testing extends CI_Controller {
 				'additional_info' => $this->input->post('additional_info'),
 				'additional_features' => $this->input->post('additional_features'),
 				'additional_accessories' => $this->input->post('additional_accessories'),
+                'accessory_type' => $access_type,
+                'accessory_name' => $access_name,
 				'fail_option' => $this->input->post('fail_option'),
 				'fail_reason_notes' => ($this->input->post('fail_reason_notes')) ? $this->input->post('fail_reason_notes') : null,
 				'condition' => $this->input->post('final_condition'),
@@ -1026,8 +1083,8 @@ class Testing extends CI_Controller {
 				'cosmetic_grade' => $this->input->post('cosmetic_grade'),
 				'status' => $this->input->post('status'),
 				'location_id'=>$location['id'],
-				'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : null
-			];
+                'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : null
+            ];
 			if($product_serial_data['location_id'] != $serial_data['location_id']){
 				$timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
 			}
@@ -1167,12 +1224,19 @@ class Testing extends CI_Controller {
             ];
 			$loc_name = $this->input->post('scan_loc');
             $location = $this->basic->check_location_exists($loc_name);
+            $access_type_array = $this->input->post('access_type');
+            $access_type = json_encode($access_type_array);
+
+            $access_name_array = $this->input->post('access_name');
+            $access_name = json_encode($access_name_array);
 			$serial_data = [
 				'new_serial' => $this->input->post('new_serial'),
 				'recv_notes' => $this->input->post('recv_notes'),
 				'additional_info' => $this->input->post('additional_info'),
 				'additional_features' => $this->input->post('additional_features'),
-				'additional_accessories' => $this->input->post('additional_accessories'),
+                'additional_accessories' => $this->input->post('additional_accessories'),
+                'accessory_type' => $access_type,
+                'accessory_name' => $access_name,	
 				'fail_option' => $this->input->post('fail_option'),
 				'fail_reason_notes' => ($this->input->post('fail_reason_notes')) ? $this->input->post('fail_reason_notes') : null,
 				'condition' => $this->input->post('final_condition'),
@@ -1326,6 +1390,12 @@ class Testing extends CI_Controller {
 
             $loc_name = $this->input->post('scan_loc');
             $location = $this->basic->check_location_exists($loc_name);
+            
+            $access_type_array = $this->input->post('access_type');
+            $access_type = json_encode($access_type_array);
+
+            $access_name_array = $this->input->post('access_name');
+            $access_name = json_encode($access_name_array);
 			$serial_data = [
 				'new_serial' => $this->input->post('new_serial'),
 				'recv_notes' => $this->input->post('recv_notes'),
@@ -1333,7 +1403,9 @@ class Testing extends CI_Controller {
 				'fail_option' => $this->input->post('fail_option'),
 				'fail_reason_notes' => ($this->input->post('fail_reason_notes')) ? $this->input->post('fail_reason_notes') : null,
 				'condition' => $this->input->post('final_condition'),
-				'warranty' => $this->input->post('warranty'),
+                'warranty' => $this->input->post('warranty'),
+                'accessory_type' => $access_type,
+                'accessory_name' => $access_name,	
 				'tech_notes' => $this->input->post('tech_notes'),
 				'cosmetic_issues_text' => $cosmetic_issues_text,
 				'cosmetic_issue' => $cosmetic_issue,
@@ -1476,6 +1548,11 @@ class Testing extends CI_Controller {
 
             $loc_name = $this->input->post('scan_loc');
             $location = $this->basic->check_location_exists($loc_name);
+            $access_type_array = $this->input->post('access_type');
+            $access_type = json_encode($access_type_array);
+
+            $access_name_array = $this->input->post('access_name');
+            $access_name = json_encode($access_name_array);
 			$serial_data = [
 				'new_serial' => $this->input->post('new_serial'),
 				'recv_notes' => $this->input->post('recv_notes'),
@@ -1484,7 +1561,9 @@ class Testing extends CI_Controller {
 				'fail_option' => $this->input->post('fail_option'),
 				'fail_reason_notes' => ($this->input->post('fail_reason_notes')) ? $this->input->post('fail_reason_notes') : null,
 				'condition' => $this->input->post('final_condition'),
-				'warranty' => $this->input->post('warranty'),
+                'warranty' => $this->input->post('warranty'),
+                'accessory_type' => $access_type,
+                'accessory_name' => $access_name,	
 				'tech_notes' => $this->input->post('tech_notes'),
 				'cosmetic_issues_text' => $cosmetic_issues_text,
 				'cosmetic_issue' => $cosmetic_issue,
@@ -1572,12 +1651,49 @@ class Testing extends CI_Controller {
 		$data['original_condition'] = $this->products->get_key_value_pair('original_condition');
 		$data['fail_options'] = $this->products->get_key_value_pair('fail_options');
 		$data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
-		$data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
+		$data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/get_sub_category' : 'barcode/get_sub_category';
 		$category_names = $this->products->get_categories();
         $data['categories'] = $category_names;
         $data['admin_prefix'] = $this->admin_prefix;
 		$this->template->load($this->layout, 'testing/other_item', $data);
 	
 	}
+
+    public function audit(){
+        $data['title'] = 'Audit';
+		// $data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/products/find_product' : 'products/find_product';
+		$data['original_condition'] = $this->products->get_key_value_pair('original_condition');
+		$data['fail_options'] = $this->products->get_key_value_pair('fail_options');
+		$data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
+		$data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
+		$category_names = $this->products->get_categories();
+        $data['categories'] = $category_names;
+        $data['admin_prefix'] = $this->admin_prefix;
+		$this->template->load($this->layout, 'testing/audit', $data);
+    }
+    public function quality(){
+        $data['title'] = 'Quality Control';
+		// $data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/products/find_product' : 'products/find_product';
+		$data['original_condition'] = $this->products->get_key_value_pair('original_condition');
+		$data['fail_options'] = $this->products->get_key_value_pair('fail_options');
+		$data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
+		$data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
+		$category_names = $this->products->get_categories();
+        $data['categories'] = $category_names;
+        $data['admin_prefix'] = $this->admin_prefix;
+		$this->template->load($this->layout, 'testing/quality', $data);
+    }
+    public function repair(){
+        $data['title'] = 'Repair';
+		// $data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/products/find_product' : 'products/find_product';
+		$data['original_condition'] = $this->products->get_key_value_pair('original_condition');
+		$data['fail_options'] = $this->products->get_key_value_pair('fail_options');
+		$data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
+		$data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
+		$category_names = $this->products->get_categories();
+        $data['categories'] = $category_names;
+        $data['admin_prefix'] = $this->admin_prefix;
+		$this->template->load($this->layout, 'testing/repair', $data);
+    }
 
 }

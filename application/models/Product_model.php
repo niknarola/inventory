@@ -481,4 +481,12 @@ class Product_model extends CI_Model
         return $query;
     }
 
+    public function get_current_pallet()
+    {
+        $this->db->select('p.id,p.pallet_id');
+        $this->db->where('current_pallet',1);
+        $query = $this->db->get('pallets p')->row_array();
+        return $query;
+    }
+    
 }

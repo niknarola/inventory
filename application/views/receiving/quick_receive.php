@@ -6,7 +6,7 @@
         <div class="panel-body">
             <form method="post">
                 <div class="row">
-                    <div class="col-md-12" style="border-right: 1px solid #eee;">
+                    <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
@@ -27,9 +27,8 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
+                        
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Display additional fields?</label>
                                     <div class="checkbox checkbox-switch">
@@ -39,7 +38,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label>Lock Part#</label>
                                     <div class="checkbox checkbox-switch">
@@ -50,7 +49,6 @@
                                 </div>
                             </div>
                         </div>
-                        <hr>
                         <div class="pallet_div">
         <?php // for ($i=0; $i < 10; $i++) {  ?>
                             <div class="row receive_div" data-row="1">
@@ -113,7 +111,7 @@
                         <hr>
 <?php // }  ?>
                     </div>
-                    <div class="pallet_actions">
+                    <div class="col-md-12 pallet_actions">
                         <button type="submit" name="print_labels" value="print_labels" class="btn btn-sm btn-primary print_labels">Receive and Print Labels</button>   
                         <button type="submit" name="receive" value="receive" class="btn btn-sm btn-primary receive">Receive</button> 
                         <!-- <button type="submit" name="remove" value="remove" class="btn btn-sm btn-primary remove">Remove</button> 
@@ -125,10 +123,10 @@
                 <hr>
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="row">
+                        <div class="">
                             <div class="table-responsive">
                                 <div class="pallet-list" id="palletList">
-                                    <table class="table">
+                                    <table class="table" style="width:99%;">
                                         <thead>
                                             <tr>
                                                 <th><input type="checkbox" name="check_all" class="check_all" value=""></th>
@@ -437,6 +435,14 @@
         var len = $(".pallet_div").find('.receive_div').length;
         $(".pallet_div").find('.receive_div').last().attr("data-row",len);
         $(".pallet_div").find('.receive_div').last().find('.category1').attr('onchange',"get_sub_categories(this.value, 'category2_"+len+"')"); 
+        if($('#lock_part').is(':checked')) {
+                console.log('if',$('.part').first().val());
+                $('.part').val($('.part').first().val());
+            } else {
+                console.log('else');
+                $('.part:not(:first)').val('');
+
+            }
     });
 </script>
 <script type="text/javascript">

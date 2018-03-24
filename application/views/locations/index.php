@@ -8,8 +8,8 @@
         </div>
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-6 col-md-offset-3">
-                    <div class="row" style="margin-bottom: 5px;">
+                <div class="col-md-12 serieal-location">
+                    <div class="row" style="margin-bottom:10px;">
                         <div class="col-md-4"><input type="text" name="serial_num" class="form-control serial_num" value="" placeholder="Serial Number"></div>
                         <!-- <div class="col-md-4"><input type="text" name="part_num" class="form-control part_num" value="" placeholder="Part Number"></div> -->
                         <div class="col-md-4"><input type="text" name="location" class="form-control location" value="" placeholder="Location"></div>
@@ -22,15 +22,14 @@
                     </div>
                 </div>
             </div>
-            <hr>
             <div class="table-responsive">
-
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>&nbsp;</label>
-                        <input type="text" class="form-control" id="keywords" placeholder="Type keywords to filter posts" onkeyup="searchFilter()"/>
+                <div class="keyword-none">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <input type="text" class="form-control" id="keywords" placeholder="Type keywords to filter posts" onkeyup="searchFilter()"/>
+                        </div>
                     </div>
-                </div>
                 <!-- <div class="col-md-4">
                     <div class="form-group">
                         <label>&nbsp;</label>
@@ -42,20 +41,21 @@
                     </div>
                 </div> -->
 
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label>&nbsp;</label>
-                        <select class="form-control" id="search_field" onchange="searchFilter()">
-                            <option value="none">None</option>
-                            <option value="part">Part</option>
-                            <option value="name">Name</option>
-                            <option value="location">Location</option>
-                        </select>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>&nbsp;</label>
+                            <select class="form-control" id="search_field" onchange="searchFilter()">
+                                <option value="none">None</option>
+                                <option value="part">Part</option>
+                                <option value="name">Name</option>
+                                <option value="location">Location</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
                 <div class="post-list" id="postList">
-                    <table class="table" id="product_tbl">
+                    <table class="table" id="product_tbl" style="width:99%;">
                         <thead>
                             <tr>
                                 <th><input type="checkbox" name="check_all" class="check_all" value=""></th>
@@ -91,7 +91,7 @@
                                         <td><?php echo ($post['location_name'] != '') ? $post['location_name'] . ' / ' . $post['palletid'] : ''; ?></td>
                                         <td><?php echo $post['original_condition']; ?></td>
                                         <td><?php echo $post['recv_notes']; ?></td>
-                                        <td><button class="btn btn-link transfer_location" data-serial="<?php echo $post['serial']; ?>" data-location="<?php echo $post['location_name']; ?>" style="color: #1E88E5;" type="button">Transfer Location</button></td>
+                                        <td><button class="btn-link transfer_location" data-serial="<?php echo $post['serial']; ?>" data-location="<?php echo $post['location_name']; ?>" style="color:#26A69A;" type="button">Transfer Location</button></td>
                                         <td><?php echo ($status != '') ? $status . '<br/>' . $post['modified'] : ''; ?></td>
                                     </tr>
                                 <?php endforeach;

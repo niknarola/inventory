@@ -149,6 +149,7 @@ class Basic_model extends CI_Model
         $this->db->where('locations.name',$loc_name);
         $this->db->limit(1);
         $query = $this->db->get('locations')->row_array();
+        // echo"query".$this->db->last_query();
         // echo"model name";pr($loc_name);die;
         if(isset($query['id'])){
             return $query;
@@ -170,6 +171,7 @@ class Basic_model extends CI_Model
         $this->db->where('pallets.pallet_id',$pallet_name);
         $this->db->limit(1);
         $query = $this->db->get('pallets')->row_array();
+        // echo"query".$this->db->last_query();
         // echo"model name";pr($pallet_name);echo"<br/>";
         if(isset($query['id'])){
             return $query;

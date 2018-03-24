@@ -215,7 +215,7 @@ if ($get_date != '')
                                 <input type="hidden" name="date" id="date"  value="<?php echo $date; ?>">
                                 <!--</div>-->
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <select name="tech_category1" id="tech_category1" class="tech_category1 form-control" onchange="get_sub_categories(this.value, 'tech_category2')">
                                     <option value="">Select Category</option>
                                     <?php
@@ -226,7 +226,7 @@ if ($get_date != '')
                                     <?php } ?>
                                 </select>
                             </div>
-                            <div class="col-md-3 category_dropdn">
+                            <div class="col-md-2 category_dropdn">
                                 <select name="tech_category2" id="tech_category2" disabled="true" class="tech_category2 form-control" onchange="get_sub_categories(this.value, 'tech_category3')">
                                     <option value="">Select Sub Category</option>
                                 </select>

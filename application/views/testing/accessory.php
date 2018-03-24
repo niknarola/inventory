@@ -87,12 +87,12 @@
 								</div>
 							</div>
 							<div class="row">
-								<div class="col-md-6">
+								<!-- <div class="col-md-6">
 									<div class="form-group">
 										<label>Description:</label>
 										<textarea name="description" class="form-control description"></textarea>
 									</div>
-								</div>
+								</div> -->
 								<div class="col-md-6">
 									<div class="form-group">
 										<label>Recv_note:</label>
@@ -145,31 +145,31 @@
 										<span class="input-group-addon">
 											<label class="radio-inline">
 												<input type="radio" value="A" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx">
-												A
+												TN
 											</label>
 										</span>
 										<span class="input-group-addon">
 											<label class="radio-inline">
 												<input type="radio" value="B" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx">
-												B
+												MN
 											</label>
 										</span>
 										<span class="input-group-addon">
 											<label class="radio-inline">
 												<input type="radio" value="C" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx">
-												C
+												B
 											</label>
 										</span>
 										<span class="input-group-addon">
 											<label class="radio-inline">
 												<input type="radio" value="D" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx">
-												D
+												C
 											</label>
 										</span>
                                                                                 
 									</div>
 									</div>
-									<span><b>A</b> – Like New / <b>B</b> - Light Scratches / <b>C</b> - Deep Scratches / <b>D</b> - Significant Physical Damage </span>
+									<span><b>MN</b> – Manufacturer New / <b>TN</b> - Tested New / <b>B</b> - Light Scratches / <b>C</b> - Deep Scratches </span>
 								</div>
                                     <div class="col-md-6 form-group ">
 									<div class="costmatic-fx" style="margin-bottom: 5px;">
@@ -195,7 +195,7 @@
                                  </div>
                                  <div class="col-md-4">
                                  	<div class="form-group">
-									<label>Failure Explaination:</label>
+									<label>Failure Explanation:</label>
                                                                         <textarea name="fail_text" class="form-control" rows="5" cols="8"></textarea>
 									<!--<input type="text" name="fail_1" value="" class="form-control fail_1">-->
 								</div>
@@ -309,31 +309,37 @@
 								</div>
                             <div class="col-md-2">
 								<div class="col-md-12">
-										<div class="row">
-										<div class="form-group">
-										<label>Accessories:</label>
-										<div class="input-group">
+										<!-- <div class="row"> -->
+										<!-- <div class="form-group"> -->
+										<!-- <label>Accessories:</label> -->
+										<!-- <div class="input-group">
 											<span class="input-group-addon">
 												<input type="checkbox" value="1" name="cd_software" class="checkbx cd_software">
 											</span>
 											<input type="text" readonly="true" value="CD/Software" class="form-control"> 
-										</div>
-										<div class="input-group">
+										</div> -->
+										<!-- <div class="input-group">
 											<span class="input-group-addon">
 												<input type="checkbox" value="1" name="power_cord" class="checkbx power_cord">
 											</span>
 											<input type="text" readonly="true" value="Power Cord" class="form-control"> 
-										</div>
-										<div class="input-group">
+										</div> -->
+										<!-- <div class="input-group">
 											<span class="input-group-addon">
 												<input type="checkbox" value="1" name="manual" class="checkbx manual">
 											</span>
 											<input type="text" readonly="true" value="Manual" class="form-control"> 
-										</div>
-									</div>
-								</div>
+										</div> -->
+									<!-- </div> -->
+								<!-- </div> -->
 							</div>
 							</div>
+                            </div>
+                            <div class="row accessories-div" style="display:none;">
+                                <div class="col-md-12 title-div-text">
+                                    <h6>Accessories(Type/Name)</h6>
+                                    
+                                </div>   
                             </div>
 							<div class="row">
 								<div class="col-md-3">
@@ -394,7 +400,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="col-md-6">
+							<!-- <div class="col-md-6">
 								<div class="form-group">
 									<label>Status:</label>
 									<select name="status" class="form-control status">
@@ -413,7 +419,7 @@
 									</select>
 									<input style="display: none;" type="text" name="other_status" value="" class="form-control other_status" placeholder="">
 								</div>
-							</div>
+							</div> -->
 						</div>
 						<div class="row">
 							<div class="col-md-12">
@@ -439,6 +445,59 @@
 	</div>
 	<!-- <div class=""></div> -->
 </div>	
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <center><h4 class="modal-title">Accessories Not in database</h4></center>
+            </div>
+            <div class="modal-body">
+                <center><button type="button" class="btn btn-info btn-lg add_now" data-toggle="modal" data-target="#myModal2">Add Now</button></center>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal2" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row accessories">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            Accessories Type
+                            <input type="text" class="form-control cd_soft" name="access_type[]" value="" placeholder="" />
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            Accessories Name
+                            <input type="text" class="form-control cd_soft" name="access_name[]" value="" placeholder="" />
+                        </div>
+                    </div>
+                    <div class="col-md-2" ><i class="icon-plus-circle2 add_more_access"></i></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+            <center><button type="button" class="btn btn-info btn-lg add_ok" data-toggle="modal" data-target="">Add Now</button></center>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row access1" style="display:none;">
+<div class="col-md-5">
+                        <div class="form-group">
+                            <input type="text" class="form-control cd_soft" name="access_type[]" value="" placeholder="" />
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <input type="text" class="form-control cd_soft" name="access_name[]" value="" placeholder="" />
+                        </div>
+                    </div>
+                                        </div>
+
 <script type="text/javascript" src="assets/js/uniform.min.js"></script>
 <script type="text/javascript" src="assets/js/bootstrap_multiselect.js"></script>
 <script type="text/javascript" src="assets/js/fileinput.min.js"></script>
@@ -567,6 +626,13 @@
 					$('select.status').val('').trigger('change');
 					$('.other_category').css('display','none');
 				}else{
+					if(response.product.tested_by == '' || response.product.tested_by == 0 || response.product.tested_by == null){
+                        $('#myModal').modal('show');
+                        $('.add_now').on('click', function() {
+                            $('#myModal').modal('hide');
+                            $('#newModal').modal('show');
+                        });
+                    }
 					$('input.scan_loc').val(response.product.location_name);
 				$('input.scan_loc_id').val(response.product.location_id);
 				$('input.product_id').val(response.product.pid);
@@ -735,6 +801,31 @@
         // Styled checkboxes and radios
     });
     $(".styled, .multiselect-container input").uniform({ radioClass: 'choice'});
+    $('.add_more_access').on('click', function() {
+        $('.accessories').append($('.access1').html());
+    })
+    $('.add_ok').on('click', function(){
+        var access_type = $('.accessories').find("input[name='access_type[]']");
+        var access_name = $('.accessories').find("input[name='access_name[]']");
 
-    
+       var type = $('.accessories').find("input[name='access_type[]']").length; 
+       for(i=0; i<type; i++){
+            $('.accessories').find("input[name='access_type[]']:eq("+ i +")").val();
+       }
+
+       var name = $('.accessories').find("input[name='access_name[]']").length;
+       var html = '';
+       for(i=0; i<name; i++){
+           
+           var get_type = $('.accessories').find("input[name='access_type[]']:eq("+ i +")").val();
+           var get_value =  $('.accessories').find("input[name='access_name[]']:eq("+ i +")").val();
+           
+        //    html = html + '<div class="col-md-12 title-div-text">headding</div>';
+           html = html + '<div class="col-md-6"><input type="text" class="form-control" name="access_type[]" value="'+ get_type +'"></div><div class="col-md-6"><input type="text"  class="form-control" name="access_name[]" value="'+ get_value +'"></div>';
+       }
+        $('.title-div-text').append(html);
+        $('.accessories-div').show();
+        $('#myModal2').modal('hide');
+
+    });
 </script>
