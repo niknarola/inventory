@@ -48,11 +48,13 @@ class Cleaning extends CI_Controller {
 				'taped' => ($this->input->post('taped')) ? 1 : 0,
 				'bagged' => ($this->input->post('bagged')) ? 1 : 0
             ];
-  
+            $accessory_array = $this->input->post('access_name');
+            $access_name = json_encode($accessory_array);
 			$serial_data = [
                 'new_serial' => $this->input->post('new_serial'),
 				'recv_notes' => $this->input->post('recv_notes'),
-				'additional_accessories' => $this->input->post('additional_accessories'),
+                'additional_accessories' => $this->input->post('additional_accessories'),
+                'accessory_name' => $access_name,
 				'packaging'=>json_encode($packaging_fields),
 				'cleaning'=>json_encode($cleaning_fields),
 				'packaging_ui'=> $this->input->post('packaging_ui'),

@@ -49,6 +49,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <div class="post-list" id="productList">
+                            <div id='loader' style="display:none;"><img src='assets/images/2.gif'></div>        
                                 <table class="table" id="product_tbl">
                                     <thead>
                                         <tr>
@@ -132,6 +133,7 @@
         }
         if (flag == 1) {
             console.log('in if flag1');
+            $('#loader').show();
             $.ajax({
                 type: 'POST',
                 url: '<?php echo base_url() . $url; ?>/' + page_num,
@@ -140,6 +142,7 @@
                     $('.loading').show();
                 },
                 success: function (html) {
+                    $('#loader').hide();
                     $('#productList').html(html);
                     $('.loading').fadeOut("slow");
                 }

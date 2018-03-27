@@ -25,6 +25,8 @@
 	
 	<!-- /core JS files -->
 	<!-- Theme JS files -->
+    <script src="assets/js/sweetalert.min.js"></script>
+<link rel="stylesheet" type="text/css" href="assets/css/sweetalert.css">
 	<script type="text/javascript" src="<?=base_url()?>assets/js/app.js"></script>
         <script type="text/javascript" src="<?=base_url()?>assets/js/moment.min.js"></script>
         <script type="text/javascript" src="<?=base_url()?>assets/js/daterangepicker.js"></script>

@@ -50,4 +50,6 @@
 <?php endif; ?>
     </tbody>
 </table>
+<div id="pagination">
 <?php echo $this->ajax_pagination->create_links(); ?>
+</div>

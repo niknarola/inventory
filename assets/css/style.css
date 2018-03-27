@@ -102,7 +102,7 @@ button.btn{ padding: 8px 25px; background: #26a69a; line-height: 20px; border: 2
 h5.panel-title, .h5.panel-title {color:#263238;}
 
 .panel-flat > .panel-heading:after{ content:''; width: 0;  height: 0;  border-left: 20px solid transparent; border-right: 20px solid transparent; border-top: 20px solid #f3f5f5; position: absolute; bottom:-12px; left:15px; }
-.input-group-addon {border: 1px solid #eee;border-radius: 3px;}
+.input-group-addon {border: 1px solid #eee;border-radius: 3px; padding:11px 12px;}
 .btn-sm, .btn-group-sm > .btn{padding:8px 25px;}
 .btn-success {background-color: #4CAF50; border:2px solid #4CAF50;}
 .btn-success:focus,
@@ -115,3 +115,10 @@ h5.panel-title, .h5.panel-title {color:#263238;}
 .accessories .col-md-2{margin-top:30px;}
 .title-div-text{ font-size:13px; margin-bottom:7px; font-weight: 400; color:#333;}
 .radio-inline, .checkbox-inline {line-height: 18px;}
+label.check_label {border: 1px solid #EEE;  padding: 12px 0 10px 15px; }
+.multi-select-full  button.multiselect.btn{ width: 100%; min-width: 100%; text-align: left;padding-left: 12px; padding-right: 29px; text-overflow: ellipsis; overflow: hidden; text-transform: initial; font-weight:400; line-height: 26px; border:1px solid #eee !important;}
+.multi-select-full  button.multiselect.btn:hover,
+.multi-select-full  button.multiselect.btn:focus{    color: #333 !important;}
+
+#loader{ position:absolute; top:50%; left:50%; -webkit-transform:translate(-50%, -50%); -moz-transform:translate(-50%, -50%); transform:translate(-50%, -50%); width:100%; height:100%; text-align:center; background:rgba(255,255,255,.8); z-index:10;}
+#loader img{position:absolute; top:50%; left:50%; -webkit-transform:translate(-50%, -50%); -moz-transform:translate(-50%, -50%); transform:translate(-50%, -50%);}

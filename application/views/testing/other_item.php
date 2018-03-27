@@ -325,9 +325,11 @@
 							
 							</div>
                             <div class="row accessories-div" style="display:none;">
-                                <div class="col-md-12 title-div-text">
-                                    <h6>Accessories(Type/Name)</h6>
+                                <div class="col-md-4 title-div-text">
+                                <!-- <div class="col-md-6 "> -->
+                                    <label>Accessories</label>
                                     
+                                    <!-- </div> -->
                                 </div>   
                             </div>
 							<div class="row">
@@ -767,21 +769,7 @@
 		}
 	}
 
-    $( ".cosmetic_grade_boxes" ).change(function() {
-        var grade = $("input[name='cosmetic_grade']:checked").val();
-        if(grade == 'F' || grade == 'X')
-        {
-            $('.based-on-radio').find("input,textarea").prop('disabled',true);
-            $("input[name='pass']").prop('checked',false);
-            $("input[name='fail']").prop('checked',true);
-        }
-        else
-        {
-            $('.based-on-radio').find("input,textarea").prop('disabled',false);
-            $("input[name='pass']").prop('checked',true);
-            $("input[name='fail']").prop('checked',false);
-        }
-    });
+    
     
         $('.multiselect').multiselect({
             onChange: function() {
@@ -793,7 +781,64 @@
     $('.add_more_access').on('click', function() {
         $('.accessories').append($('.access1').html());
     }) 
-    $('.add_ok').on('click', function(){
+    $('.pass').change(function(){
+            if(this.checked){
+                $("input[name='fail']").prop('disabled',true);
+                $('.f').prop('disabled', true);
+                $('.x').prop('disabled', true);
+            }else{
+                $("input[name='fail']").prop('disabled',false);
+                $('.f').prop('disabled', false);
+                $('.x').prop('disabled', false);
+            }
+        })
+
+        $('.fail').change(function(){
+            if(this.checked){
+                $("input[name='pass']").prop('disabled',true);
+                $('.mn').prop('disabled', true);
+                $('.tn').prop('disabled', true);
+                $('.b').prop('disabled', true);
+                $('.c').prop('disabled', true);
+            }
+            else{
+                $("input[name='pass']").prop('disabled',false);
+                $('.mn').prop('disabled', false);
+                $('.tn').prop('disabled', false);
+                $('.b').prop('disabled', false);
+                $('.c').prop('disabled', false);
+            }
+        })
+    $( ".cosmetic_grade_boxes" ).change(function() {
+        var grade = $("input[name='cosmetic_grade']:checked").val();
+        if(grade == 'F' || grade == 'X')
+        {
+            $('.based-on-radio').find("input,textarea").prop('disabled',true);
+            //pass
+            $("input[name='pass']").prop('disabled',true);
+            $("input[name='pass']").prop('checked',false);
+            $('.mn').prop('disabled', true);
+            $('.tn').prop('disabled', true);
+            $('.b').prop('disabled', true);
+            $('.c').prop('disabled', true);
+            //fail
+            $("input[name='fail']").prop('checked',true);
+        }
+        else
+        {
+            $('.based-on-radio').find("input,textarea").prop('disabled',false);
+           //pass
+            $("input[name='pass']").prop('disabled',false);
+            $("input[name='pass']").prop('checked',true);
+            //fail
+            $("input[name='fail']").prop('checked',false);
+            $("input[name='fail']").prop('disabled',true);
+            $('.f').prop('disabled', true);
+            $('.x').prop('disabled', true);
+        }
+    });
+
+$('.add_ok').on('click', function(){
         var access_type = $('.accessories').find("input[name='access_type[]']");
         var access_name = $('.accessories').find("input[name='access_name[]']");
 
@@ -810,7 +855,8 @@
            var get_value =  $('.accessories').find("input[name='access_name[]']:eq("+ i +")").val();
            
         //    html = html + '<div class="col-md-12 title-div-text">headding</div>';
-           html = html + '<div class="col-md-6"><input type="text" class="form-control" name="access_type[]" value="'+ get_type +'"></div><div class="col-md-6"><input type="text"  class="form-control" name="access_name[]" value="'+ get_value +'"></div>';
+        //    html = html + '<div class="col-md-4"><input type="text"  class="form-control" name="access_name[]" value="'+ get_value +'"></div>';
+        html = html + '<div class="input-group"><span class="input-group-addon"><input type="hidden" value="'+get_type+'" name="access_type[]"><input type="checkbox" value="'+get_value+'" name="access_name[]" class="'+get_value+' checkbx"></span><label class="check_label">'+ get_value +'</label></div>';
        }
         $('.title-div-text').append(html);
         $('.accessories-div').show();

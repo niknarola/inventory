@@ -222,8 +222,11 @@
 									</div>
 								</div>
 								<div class="row">
-									<div class="col-md-6">
-									
+									<div class="col-md-6 accessories" style="display:none;">
+                                        <div class="col-md-6 title-div-text">
+                                            <label>Accessories</label>
+
+                                        </div>
 								    </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -447,9 +450,14 @@
 					$('.damaged_box').prop('checked', true);
 				}
 			}
-
-            if(response.product.accessory_name!=null $$ response.product.accessory_name!=''){
-                var accessorry = JSON.parse(response.product.accessory_names);
+            if(response.product.accessory_name!=null && response.product.accessory_name!=''){
+                var accessory = JSON.parse(response.product.accessory_name);
+                var html ='';
+                for(i=0;i<accessory.length;i++){
+                    html = html + '<div class="input-group"><span class="input-group-addon"><input type="checkbox" value="'+accessory[i]+'" name="access_name[]" class="'+accessory[i]+' checkbx"></span><label class="check_label">'+accessory[i]+'</label></div>';
+                }
+                $('.title-div-text').append(html);
+                $('.accessories').show();
                 
             }
 				if(response.product.cleaning!=null && response.product.cleaning!=''){

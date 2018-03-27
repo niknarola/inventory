@@ -38,7 +38,7 @@ class Products extends CI_Controller
         $data['title'] = 'Products';
         //total rows count
         $totalRec = count($this->products->getRows());
-//        $totalRec = $this->products->count_all('products');
+        //$totalRec = $this->products->count_all('products');
         $data['cat_url'] = ($this->uri->segment(1) == 'admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
         $category_names = $this->products->get_categories();
         $data['categories'] = $category_names;
@@ -101,7 +101,7 @@ class Products extends CI_Controller
         
         //total rows count
         $totalRec = count($this->products->getRows($conditions));
-//        $totalRec = $this->products->count_all('products');
+        //$totalRec = $this->products->count_all('products');
         //pagination configuration
         $config['target']      = '#productList';
         $url = ($this->session->userdata('admin_validated')) ? 'admin/products/ajaxPaginationData' : 'products/ajaxPaginationData';
@@ -122,8 +122,8 @@ class Products extends CI_Controller
         );
         //get posts data
         $data['products'] = $this->products->getRows($conditions,$cat);
-//        echo $this->db->last_query();
-//        pr($data['products'],1);
+        //echo $this->db->last_query();
+        //pr($data['products'],1);
         //load the view
         $this->load->view('products/ajax-pagination-data', $data, FALSE);
     }

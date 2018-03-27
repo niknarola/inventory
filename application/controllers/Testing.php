@@ -6,6 +6,7 @@ class Testing extends CI_Controller {
 		parent::__construct();
 		$this->load->model('Product_model','products');
 		$this->load->model('Basic_model','basic');
+		$this->load->model('Master_sheet_model','master');
 		if($this->uri->segment(1)=='admin' && !$this->session->userdata('admin_validated')){
 			redirect('admin/login');
 		}else if($this->uri->segment(1)=='testing' && !$this->session->userdata('user_validated')) {
@@ -45,11 +46,11 @@ class Testing extends CI_Controller {
 				'cs1' => $this->input->post('cs1'),
 				'cs2' => $this->input->post('cs2')
 			]);
-//			$fail_text = json_encode([
-//				'fail_1' => $this->input->post('fail_1'),
-//				'fail_2' => $this->input->post('fail_2'),
-//				'fail_3' => $this->input->post('fail_3')
-//			]);
+        //			$fail_text = json_encode([
+        //				'fail_1' => $this->input->post('fail_1'),
+        //				'fail_2' => $this->input->post('fail_2'),
+        //				'fail_3' => $this->input->post('fail_3')
+        //			]);
             $fail_text = $this->input->post('fail_text');
             $cpu = json_encode($this->input->post('cpu'));
             
@@ -1651,17 +1652,33 @@ class Testing extends CI_Controller {
 		$data['original_condition'] = $this->products->get_key_value_pair('original_condition');
 		$data['fail_options'] = $this->products->get_key_value_pair('fail_options');
 		$data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
-		$data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/get_sub_category' : 'barcode/get_sub_category';
+		$data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
 		$category_names = $this->products->get_categories();
         $data['categories'] = $category_names;
         $data['admin_prefix'] = $this->admin_prefix;
 		$this->template->load($this->layout, 'testing/other_item', $data);
 	
-	}
+    }
+    
+    public function find_product(){
+        $data['serial'] = $this->input->post('serial');   
+        $product = $this->products->product_searching($data['serial']);
+        $view['status'] = 0;
+        if(!empty($product)){
+            $data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
+            $data['original_condition'] = $this->products->get_key_value_pair('original_condition');
+            $data['product'] = $product;
+            $view['product'] = $product;
+            $view['html_data'] = $this->load->view('testing/serial_product', $data, true);
+            $view['status'] = 1;
+        }
+        echo json_encode($view); 
+        exit;
+    }
 
     public function audit(){
         $data['title'] = 'Audit';
-		// $data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/products/find_product' : 'products/find_product';
+		$data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/testing/find_product' : 'receiving/find_product';
 		$data['original_condition'] = $this->products->get_key_value_pair('original_condition');
 		$data['fail_options'] = $this->products->get_key_value_pair('fail_options');
 		$data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
@@ -1671,9 +1688,76 @@ class Testing extends CI_Controller {
         $data['admin_prefix'] = $this->admin_prefix;
 		$this->template->load($this->layout, 'testing/audit', $data);
     }
+
+    public function edit_audit_record($serial_id){
+        $data['title'] = 'Edit Product';
+        $data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
+        $data['original_condition'] = $this->products->get_key_value_pair('original_condition');
+        $data['product'] = $this->products->get_product_serial_by_id($serial_id);
+        // echo"query".$this->db->last_query();
+        // pr($data['product']);die;
+        if($this->input->post()){
+            // part'=>trim($this->input->post('part')),
+            $data = [
+                // 'serial'=>$this->input->post('serial'),
+                'new_serial'=>$this->input->post('new_serial'),
+                'condition' => $this->input->post('final_condition'),
+                'cosmetic_grade' => $this->input->post('grade'),
+                'location_id' => $this->input->post('location'),
+                'comments' => $this->input->post('comment'),
+                // 'physical_location_id' => $this->input->post('location'),
+
+            ];
+            if($this->basic->update('product_serials', $data, ['id'=>$serial_id])){
+                $this->session->set_flashdata('msg', 'Product has been updated successfully');
+            }else{
+                $this->session->set_flashdata('msg', 'Something went wrong');
+            }
+            if($this->uri->segment(1)=='admin')
+                redirect('admin/testing/edit_audit_record/'.$serial_id);
+            else
+                redirect('testing/edit_audit_record/'.$serial_id);
+        }
+        $this->template->load($this->layout, 'testing/edit', $data);
+    }
+
+    public function delete($id)
+    {
+        $this->products->delete('product_id', $id, 'product_serials');
+        // $this->session->set_flashdata('msg', 'Product deleted successfully');
+        if ($id)
+            {
+                $update_array = array(
+                    'is_delete' => 1
+                );
+                if ($this->basic->update('product_serials', $update_array, ['id'=>$id]))
+                {
+                    echo '{"status":"1","message":"Business deleted successfully!"}';
+                }
+                else
+                {
+                    echo '{"status":"0","message":"Business cannot be deleted!"}';
+                }
+            }
+    }
+
+    public function view_notes($id){
+        $data['notes'] = $this->master->get_notes_by_id($id);
+        if ($data['notes'])
+        {
+            $resp['status'] = 1;
+            $resp['data'] = $this->load->view('testing/notes', $data, TRUE);
+        }
+        else
+        {
+            $resp['status'] = 0;
+        }
+        echo json_encode($resp);
+    }
+
     public function quality(){
         $data['title'] = 'Quality Control';
-		// $data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/products/find_product' : 'products/find_product';
+		$data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/testing/find_product' : 'testing/find_product';
 		$data['original_condition'] = $this->products->get_key_value_pair('original_condition');
 		$data['fail_options'] = $this->products->get_key_value_pair('fail_options');
 		$data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
@@ -1685,7 +1769,14 @@ class Testing extends CI_Controller {
     }
     public function repair(){
         $data['title'] = 'Repair';
-		// $data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/products/find_product' : 'products/find_product';
+        $loc_name = $this->input->post('scan_loc');
+        $location = $this->basic->check_location_exists($loc_name);
+        $serial_data = [
+            'repair_notes' => $this->input->post('rep_notes'),
+            'location_id' => $location['id']
+        ];
+        $this->basic->update('product_serials', $serial_data, ['serial'=>$this->input->post('serial')]);
+		$data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/testing/find_product' : 'testing/find_product';
 		$data['original_condition'] = $this->products->get_key_value_pair('original_condition');
 		$data['fail_options'] = $this->products->get_key_value_pair('fail_options');
 		$data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');

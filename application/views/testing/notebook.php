@@ -356,12 +356,14 @@
 									</div>
 								</div>
                             </div>
-                            <div class="row accessories-div" style="display:none;">
-                                <div class="col-md-12 title-div-text">
-                                    <h6>Accessories(Type/Name)</h6>
-                                    
-                                </div>   
-                            </div>
+                                <div class="row accessories-div" style="display:none;">
+                                    <div class="col-md-4 title-div-text">
+                                    <!-- <div class="col-md-6 "> -->
+                                        <label>Accessories</label>
+                                        
+                                        <!-- </div> -->
+                                    </div>   
+                                </div>
 							<div class="row">
 								<div class="col-md-3">
 								<div class="form-group">
@@ -540,16 +542,16 @@
 </div>
 <div class="row access1" style="display:none;">
 <div class="col-md-5">
-                        <div class="form-group">
-                            <input type="text" class="form-control cd_soft" name="access_type[]" value="" placeholder="" />
-                        </div>
-                    </div>
-                    <div class="col-md-5">
-                        <div class="form-group">
-                            <input type="text" class="form-control cd_soft" name="access_name[]" value="" placeholder="" />
-                        </div>
-                    </div>
-                                        </div>
+    <div class="form-group">
+    <input type="text" class="form-control cd_soft" name="access_type[]" value="" placeholder="" />
+    </div>
+    </div>
+    <div class="col-md-5">
+    <div class="form-group">
+    <input type="text" class="form-control cd_soft" name="access_name[]" value="" placeholder="" />
+    </div>
+    </div>
+</div>
 
 <script type="text/javascript" src="assets/js/uniform.min.js"></script>
 <script type="text/javascript" src="assets/js/bootstrap_multiselect.js"></script>
@@ -959,7 +961,7 @@
            
         //    html = html + '<div class="col-md-12 title-div-text">headding</div>';
         //    html = html + '<div class="col-md-4"><input type="text"  class="form-control" name="access_name[]" value="'+ get_value +'"></div>';
-        html = html + '<div class="col-md-4"><div class="input-group"><span class="input-group-addon"><input type="checkbox" value="" name="cosmetic_issue[]" class="cosmetic_boxes checkbx"></span><label class="check_label">Scratch Side</label><!-- <input type="text" readonly="true" value="Scratch Side" class="form-control"></div></div>';
+        html = html + '<div class="input-group"><span class="input-group-addon"><input type="hidden" value="'+get_type+'" name="access_type[]"><input type="checkbox" value="'+get_value+'" name="access_name[]" class="'+get_value+' checkbx"></span><label class="check_label">'+ get_value +'</label></div>';
        }
         $('.title-div-text').append(html);
         $('.accessories-div').show();

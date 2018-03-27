@@ -128,6 +128,9 @@ $route['admin/testing/other_item']='testing/other_item';
 $route['admin/testing/audit']='testing/audit';
 $route['admin/testing/quality']='testing/quality';
 $route['admin/testing/repair']='testing/repair';
+$route['admin/testing/find_product'] = 'testing/find_product';
+$route['admin/testing/view_notes/(:any)']='testing/view_notes/$1';
+$route['admin/testing/edit_audit_record/(:any)'] = 'testing/edit_audit_record/$1';
 
 $route['admin/inventory/master_sheet']='master_sheet';
 $route['admin/inventory/master_sheet/ajaxPaginationData/(:any)']='master_sheet/ajaxPaginationData/$1';
