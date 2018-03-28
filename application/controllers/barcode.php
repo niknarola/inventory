@@ -30,7 +30,7 @@ class Barcode extends CI_Controller
         $barcode = rawurldecode($this->input->get('barcode'));
         $scale = $this->input->get('scale') ? $this->input->get('scale') : 1;
         $thickness = $this->input->get('thickness') ? $this->input->get('thickness') : 30;
-        $font = new BCGFontFile(APPPATH.'libraries\barcode\font\ArialBold.ttf', 12);
+        $font = new BCGFontFile(APPPATH.'libraries/barcode/font/ArialBold.ttf', 12);
         $color_black = new BCGColor(0, 0, 0);
         $color_white = new BCGColor(255, 255, 255);
 

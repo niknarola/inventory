@@ -1663,6 +1663,7 @@ class Testing extends CI_Controller {
     public function find_product(){
         $data['serial'] = $this->input->post('serial');   
         $product = $this->products->product_searching($data['serial']);
+        // pr($product);die;
         $view['status'] = 0;
         if(!empty($product)){
             $data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
@@ -1679,7 +1680,7 @@ class Testing extends CI_Controller {
     public function audit(){
         $data['title'] = 'Audit';
 		$data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/testing/find_product' : 'receiving/find_product';
-		$data['original_condition'] = $this->products->get_key_value_pair('original_condition');
+        $data['original_condition'] = $this->products->get_key_value_pair('original_condition');
 		$data['fail_options'] = $this->products->get_key_value_pair('fail_options');
 		$data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
 		$data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
@@ -1708,23 +1709,24 @@ class Testing extends CI_Controller {
                 // 'physical_location_id' => $this->input->post('location'),
 
             ];
+            // pr($data);die;
             if($this->basic->update('product_serials', $data, ['id'=>$serial_id])){
                 $this->session->set_flashdata('msg', 'Product has been updated successfully');
             }else{
                 $this->session->set_flashdata('msg', 'Something went wrong');
             }
             if($this->uri->segment(1)=='admin')
+                // redirect('admin/testing/audit');
                 redirect('admin/testing/edit_audit_record/'.$serial_id);
             else
                 redirect('testing/edit_audit_record/'.$serial_id);
+                // redirect('testing/audit');
         }
         $this->template->load($this->layout, 'testing/edit', $data);
     }
 
     public function delete($id)
     {
-        $this->products->delete('product_id', $id, 'product_serials');
-        // $this->session->set_flashdata('msg', 'Product deleted successfully');
         if ($id)
             {
                 $update_array = array(
@@ -1757,6 +1759,19 @@ class Testing extends CI_Controller {
 
     public function quality(){
         $data['title'] = 'Quality Control';
+        if($this->input->post()){
+            $loc_name = $this->input->post('scan_loc');
+            $location = $this->basic->check_location_exists($loc_name);
+            $serial_data = [
+                'qc_notes' => $this->input->post('qc_notes'),
+                'location_id' => $location['id']
+            ];
+            $serial_data['pack_access'] = ($this->input->post('yes')) ? 1 : 0;
+            $serial_data['pack_access'] = ($this->input->post('no')) ?  0 : 1;
+            $serial_data['pass_qc'] = ($this->input->post('qc')) ?  1 : 0;
+            $this->basic->update('product_serials', $serial_data, ['serial'=>$this->input->post('serial')]);
+            echo"query".$this->db->last_query();
+        }
 		$data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/testing/find_product' : 'testing/find_product';
 		$data['original_condition'] = $this->products->get_key_value_pair('original_condition');
 		$data['fail_options'] = $this->products->get_key_value_pair('fail_options');
@@ -1769,13 +1784,16 @@ class Testing extends CI_Controller {
     }
     public function repair(){
         $data['title'] = 'Repair';
-        $loc_name = $this->input->post('scan_loc');
-        $location = $this->basic->check_location_exists($loc_name);
-        $serial_data = [
-            'repair_notes' => $this->input->post('rep_notes'),
-            'location_id' => $location['id']
-        ];
-        $this->basic->update('product_serials', $serial_data, ['serial'=>$this->input->post('serial')]);
+        if($this->input->post()){
+            $loc_name = $this->input->post('scan_loc');
+            $location = $this->basic->check_location_exists($loc_name);
+            $serial_data = [
+                'repair_notes' => $this->input->post('rep_notes'),
+                'location_id' => $location['id']
+            ];
+        
+            $this->basic->update('product_serials', $serial_data, ['serial'=>$this->input->post('serial')]);
+        }
 		$data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/testing/find_product' : 'testing/find_product';
 		$data['original_condition'] = $this->products->get_key_value_pair('original_condition');
 		$data['fail_options'] = $this->products->get_key_value_pair('fail_options');

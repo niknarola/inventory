@@ -1,4 +1,4 @@
-<?php //echo"product"; pr($product);die;?>
+<?php //echo"product"; pr($product);?>
 <div class="row">
 	<div class="col-md-12">
 		<form method="post" name="edit_audit_record" action="<?php echo ($this->uri->segment(1)=='admin') ? 'admin/' : ''; ?>testing/edit_audit_record/<?php echo $product['id']; ?>" enctype="multipart/form-data">
@@ -36,15 +36,8 @@
                         <div class="form-group">
                             <label>Received Condition:</label>
                             <select name="condition" data-placeholder="Select Original Condition" class="form-control select original_condition">
-                                <?php foreach ($original_condition as $key => $value) {
-                                    $selected ='';
-                                    if($key == $product['location_id']){
-                                        echo $selected = 'selected';
-                                    }
-                                    else{
-                                        echo $selected = '';
-                                    } ?>
-                                    <option value="<?= $key; ?>" selected="<?= $selected; ?>"><?= $value; ?></option>
+                                <?php foreach ($original_condition as $key => $value) {?>
+                                    <option <?php echo ($key == $product['condition']) ? 'selected' : '' ?> value="<?= $key; ?>"><?= $value; ?></option>
                                 <?php }  ?>
                             </select>
                         </div>
@@ -79,19 +72,23 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Item Location:</label>
-                            <input class="form-control" type="text" name="location" value="<?= $product['location_name']?>">
+                            <input class="form-control" type="text" name="location" value="<?= $product['pallet']?>">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Physical Location:</label>            
-                            <input class="form-control" type="text" name="physical_location" value="">
+                            <input class="form-control" type="text" name="physical_location" value="<?= $product['locationname']?>">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label>Comment:</label>            
-                            <textarea name="comment"class="form-control"></textarea>
+                            <label>Comment:</label>
+                            <?php if ($product['comments']!='' || $product['comments']!=null){?>            
+                            <textarea name="comment"class="form-control"><?= $product['comments']?></textarea>
+                            <?php }else{?>
+                                <textarea name="comment"class="form-control"></textarea>
+                            <?php } ?>
                         </div>
                     </div>
                     <div class="col-md-12">

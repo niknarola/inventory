@@ -1,8 +1,5 @@
-
-
 <div class="row">
-	<div class="col-md-10 col-md-offset-1">
-    <!-- action="receiving/search_results" -->
+	<div class="col-md-12">
 		<form method="post" >
 			<div class="panel panel-flat">
 				<div class="panel-heading">
@@ -17,7 +14,6 @@
 						<div class="col-md-12">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <!-- <label>Serial #:</label> -->
                                     <input type="text" value="" name="serial" class="form-control serial" onchange="get_product_details(this.value);" placeholder="Serial #"> 
                                 </div>
                             </div>
@@ -30,7 +26,6 @@
 			</div>
 		</form>
 	</div>
-	<!-- <div class=""></div> -->
 </div>
 	<div class="row search_results"></div>
     <div id="notesModal" class="modal fade" role="dialog">
@@ -53,9 +48,9 @@
         </div>
 </div>
 <script type="text/javascript">
-	jQuery(document).ready(function($) {
-		$('input[name="part"]').focus();
-	});
+	// jQuery(document).ready(function($) {
+	// 	// $('input[name="part"]').focus();
+	// });
 	function get_product_details(){
         // var part = $('input.part').val();
     	var serial = $('input.serial').val();

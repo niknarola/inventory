@@ -37,10 +37,10 @@
                         <div class="col-md-2">
                             <select name="grade" id="grade" class="grade form-control" >
                                 <option value="">Select Grade</option>
-                                <option value="A">A</option>
+                                <option value="MN">MN</option>
+                                <option value="TN">TN</option>
                                 <option value="B">B</option>
                                 <option value="C">C</option>
-                                <option value="D">D</option>
                             </select>
                         </div>
                         <div class="col-md-2">

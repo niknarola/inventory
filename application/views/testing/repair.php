@@ -39,11 +39,13 @@
                         </div>
                     </div>
                     <div class="col-md-12">
-                        <!-- <div class="col-md-4">
-                        <input type="text" name="scan_loc" value="" placeholder="Scan To Location" class="form-control scan_loc">
-					    <input type="hidden" name="scan_loc_id" class="scan_loc_id" value="">
-                        </div> -->
-                        <button type="submit" name="save" value="save" class="btn bg-teal-400 add_btn">Save</button>
+                        <div class="row ">
+                            <div class="col-md-4 ">
+                                <input type="text" name="scan_loc" value="" placeholder="Scan To Location" class="form-control scan_loc">
+                                <input type="hidden" name="scan_loc_id" class="scan_loc_id" value="">
+                            </div>
+                            <button type="submit" name="save" value="save" class="btn bg-teal-400 add_btn">Save</button>
+                        </div>    
                     </div>
             </div>
 		</form>

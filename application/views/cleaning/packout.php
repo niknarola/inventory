@@ -88,18 +88,18 @@
 								</div>
 							</div>
 							<div class="row">
-								<div class="col-md-6">
+								<!-- <div class="col-md-6">
 									<div class="form-group">
 										<label>Description:</label>
 										<textarea name="description" class="form-control description"></textarea>
 									</div>
-								</div>
-								<div class="col-md-6">
+								</div> -->
+								<!-- <div class="col-md-6">
 									<div class="form-group">
 										<label>Recv_note:</label>
 										<textarea name="recv_notes" class="form-control recv_notes"></textarea>
 									</div>
-								</div>
+								</div> -->
 							</div>
 						<hr>
 							<div class="row">

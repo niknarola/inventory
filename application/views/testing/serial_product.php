@@ -29,28 +29,22 @@
                     <div class="col-md-4">
                         <div class="form-group">
                         <label>Tech ID:</label>
-                            <input  class="form-control" type="text" name="part" value="<?= $product['tested_by']?>">
+                            <input  class="form-control" type="text" name="part" value="<?= $product['username']?>">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                         <label>PO ID:</label>
-                            <input class="form-control" type="text" name="part" value="<?= $product['tested_by']?>">
+                            <input class="form-control" type="text" name="part" value="<?= $product['username']?>">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Received Condition:</label>
                             <select name="condition" data-placeholder="Select Original Condition" class="form-control select original_condition">
-                                <?php foreach ($original_condition as $key => $value) {
-                                    $selected ='';
-                                    if($key == $product['location_id']){
-                                        echo $selected = 'selected';
-                                    }
-                                    else{
-                                        echo $selected = '';
-                                    } ?>
-                                    <option value="<?= $key; ?>" selected="<?= $selected; ?>"><?= $value; ?></option>
+                                <?php 
+                                foreach ($original_condition as $key => $value) {?>
+                                   <option <?php echo ($key == $product['original_condition_id']) ? 'selected' : '' ?> value="<?= $key; ?>"><?= $value; ?></option>
                                 <?php }  ?>
                             </select>
                         </div>
@@ -58,7 +52,8 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Grade:</label>
-                            <select name="grade" data-placeholder="Select Grade" class="form-control select grade">
+                            <input type="text" class="form-control" type="text" name="part" value="<?= $product['cosmetic_grade'] ?>">
+                            <!-- <select name="grade" data-placeholder="Select Grade" class="form-control select grade">
                                 <?php //foreach ($original_condition as $key => $value) { ?>
                                     <option value="MN">MN - Manufacturer New</option>
                                     <option value="TN">TN - Tested New</option>
@@ -67,7 +62,7 @@
                                     <option value="F">F - Fail</option>
                                     <option value="X">X - Unsellable</option>
                                 <?php //}  ?>
-                            </select>
+                            </select> -->
                         </div>
                     </div>
                     
@@ -76,7 +71,6 @@
                             <label>Final Condition:</label>
                             <select name="final_condition" data-placeholder="Select Final Condition" class="form-control select original_condition">
                                 <?php foreach ($original_condition as $key => $value) { ?>
-                                    
                                     <option value="<?= $key; ?>"><?= $value; ?></option>
                                 <?php }  ?>
                             </select>
@@ -84,14 +78,14 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                        <label>CPU:</label>
-                            <textarea  class="form-control" type="text" name="part"><?= ($product['cpu']!=null) ? implode(',',json_decode($product['cpu'], true)) : ''; ?></textarea>
+                        <label>Memory:</label>
+                            <input type="text" class="form-control" type="text" name="part" value="<?= $product['memory'] ?>">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                        <label>Memory:</label>
-                            <textarea class="form-control" type="text" name="part"><?= $product['memory'] ?></textarea>
+                        <label>CPU:</label>
+                            <textarea  class="form-control" type="text" name="part"><?= ($product['cpu']!=null) ? implode(',',json_decode($product['cpu'], true)) : ''; ?></textarea>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -109,25 +103,13 @@
                     <div class="col-md-4">
                         <div class="form-group">
                         <label>Screen:</label>
-                            <textarea class="form-control" type="text" name="part"><?= $product['screen'] ?></textarea>
+                            <input type="text" class="form-control" type="text" name="part" value"<?= $product['screen'] ?>">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                         <label>OS:</label>
-                            <textarea  class="form-control" type="text" name="part"><?= $product['os'] ?></textarea>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label>Item Location:</label>
-                            <input class="form-control" type="text" name="location" value="<?= $product['location_name']?>">
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label>Physical Location:</label>            
-                            <input class="form-control" type="text" name="physical_location" value="">
+                            <input type="text" class="form-control" type="text" name="part" value="<?= $product['os'] ?>">
                         </div>
                     </div>
                     <div class="col-md-12">
