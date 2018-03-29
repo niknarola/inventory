@@ -41,7 +41,7 @@ class Testing extends CI_Controller {
 			$product_data['category'] = json_encode($category);
 			// pr($product_data,1);
 			$this->basic->update('products', $product_data, ['part'=>$this->input->post('part')]);
-			$cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
+			// $cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
 			$cosmetic_issues_text = json_encode([
 				'cs1' => $this->input->post('cs1'),
 				'cs2' => $this->input->post('cs2')
@@ -107,7 +107,7 @@ class Testing extends CI_Controller {
 				'warranty' => $this->input->post('warranty'),
 				'tech_notes' => $this->input->post('tech_notes'),
 				'cosmetic_issues_text' => $cosmetic_issues_text,
-				'cosmetic_issue' => $cosmetic_issue,
+				// 'cosmetic_issue' => $cosmetic_issue,
 				'fail_text' => $fail_text,
 				// 'cosmetic_grade' => $this->input->post('cosmetic_grade'),
                 // 'status' => $this->input->post('status'),
@@ -207,7 +207,7 @@ class Testing extends CI_Controller {
 		$data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/products/find_product' : 'products/find_product';
 		$data['original_condition'] = $this->products->get_key_value_pair('original_condition');
 		$data['fail_options'] = $this->products->get_key_value_pair('fail_options');
-		$data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
+		// $data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
 		$data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
 		$category_names = $this->products->get_categories();
         $data['categories'] = $category_names;
@@ -234,7 +234,7 @@ class Testing extends CI_Controller {
 			$product_data['category'] = json_encode($category);
 			// pr($product_data,1);
 			$this->basic->update('products', $product_data, ['part'=>$this->input->post('part')]);
-			$cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
+			// $cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
 			$cosmetic_issues_text = json_encode([
 				'cs1' => $this->input->post('cs1'),
 				'cs2' => $this->input->post('cs2')
@@ -283,7 +283,7 @@ class Testing extends CI_Controller {
 				'warranty' => $this->input->post('warranty'),
 				'tech_notes' => $this->input->post('tech_notes'),
 				'cosmetic_issues_text' => $cosmetic_issues_text,
-				'cosmetic_issue' => $cosmetic_issue,
+				// 'cosmetic_issue' => $cosmetic_issue,
 				'fail_text' => $fail_text,
 				'cosmetic_grade' => $this->input->post('cosmetic_grade'),
 				'status' => $this->input->post('status'),
@@ -371,7 +371,7 @@ class Testing extends CI_Controller {
 		$data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/products/find_product' : 'products/find_product';
 		$data['original_condition'] = $this->products->get_key_value_pair('original_condition');
 		$data['fail_options'] = $this->products->get_key_value_pair('fail_options');
-		$data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
+		// $data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
 		$data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
 		$category_names = $this->products->get_categories();
         $data['categories'] = $category_names;
@@ -398,7 +398,7 @@ class Testing extends CI_Controller {
 			$product_data['category'] = json_encode($category);
 			// pr($product_data,1);
 			$this->basic->update('products', $product_data, ['part'=>$this->input->post('part')]);
-			$cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
+			// $cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
 			$cosmetic_issues_text = json_encode([
 				'cs1' => $this->input->post('cs1'),
 				'cs2' => $this->input->post('cs2')
@@ -454,7 +454,7 @@ class Testing extends CI_Controller {
 				'warranty' => $this->input->post('warranty'),
 				'tech_notes' => $this->input->post('tech_notes'),
 				'cosmetic_issues_text' => $cosmetic_issues_text,
-				'cosmetic_issue' => $cosmetic_issue,
+				// 'cosmetic_issue' => $cosmetic_issue,
 				'fail_text' => $fail_text,
 				'cosmetic_grade' => $this->input->post('cosmetic_grade'),
 				'status' => $this->input->post('status'),
@@ -544,7 +544,7 @@ class Testing extends CI_Controller {
 		$data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
 		$data['original_condition'] = $this->products->get_key_value_pair('original_condition');
 		$data['fail_options'] = $this->products->get_key_value_pair('fail_options');
-		$data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
+		// $data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
 		$category_names = $this->products->get_categories();
         $data['categories'] = $category_names;
         $data['admin_prefix'] = $this->admin_prefix;
@@ -570,7 +570,7 @@ class Testing extends CI_Controller {
 			$product_data['category'] = json_encode($category);
 			// pr($product_data,1);
 			$this->basic->update('products', $product_data, ['part'=>$this->input->post('part')]);
-			$cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
+			// $cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
 			$cosmetic_issues_text = json_encode([
 				'cs1' => $this->input->post('cs1'),
 				'cs2' => $this->input->post('cs2')
@@ -598,7 +598,7 @@ class Testing extends CI_Controller {
 				'warranty' => $this->input->post('warranty'),
 				'tech_notes' => $this->input->post('tech_notes'),
 				'cosmetic_issues_text' => $cosmetic_issues_text,
-				'cosmetic_issue' => $cosmetic_issue,
+				// 'cosmetic_issue' => $cosmetic_issue,
 				'fail_text' => $fail_text,
 				'cosmetic_grade' => $this->input->post('cosmetic_grade'),
 				'status' => $this->input->post('status'),
@@ -672,7 +672,7 @@ class Testing extends CI_Controller {
 		$data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/products/find_product' : 'products/find_product';
 		$data['original_condition'] = $this->products->get_key_value_pair('original_condition');
 		$data['fail_options'] = $this->products->get_key_value_pair('fail_options');
-		$data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
+		// $data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
 		$data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
 		$category_names = $this->products->get_categories();
         $data['categories'] = $category_names;
@@ -700,7 +700,7 @@ class Testing extends CI_Controller {
 			$product_data['category'] = json_encode($category);
 			// pr($product_data,1);
 			$this->basic->update('products', $product_data, ['part'=>$this->input->post('part')]);
-			$cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
+			// $cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
 			$cosmetic_issues_text = json_encode([
 				'cs1' => $this->input->post('cs1'),
 				'cs2' => $this->input->post('cs2')
@@ -751,7 +751,7 @@ class Testing extends CI_Controller {
 				'warranty' => $this->input->post('warranty'),
 				'tech_notes' => $this->input->post('tech_notes'),
 				'cosmetic_issues_text' => $cosmetic_issues_text,
-				'cosmetic_issue' => $cosmetic_issue,
+				// 'cosmetic_issue' => $cosmetic_issue,
 				'fail_text' => $fail_text,
 				'cosmetic_grade' => $this->input->post('cosmetic_grade'),
 				'status' => $this->input->post('status'),
@@ -839,7 +839,7 @@ class Testing extends CI_Controller {
 		$data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/products/find_product' : 'products/find_product';
 		$data['original_condition'] = $this->products->get_key_value_pair('original_condition');
 		$data['fail_options'] = $this->products->get_key_value_pair('fail_options');
-		$data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
+		// $data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
 		$data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
 		$category_names = $this->products->get_categories();
         $data['categories'] = $category_names;
@@ -867,7 +867,7 @@ class Testing extends CI_Controller {
 			$product_data['category'] = json_encode($category);
 			// pr($product_data,1);
 			$this->basic->update('products', $product_data, ['part'=>$this->input->post('part')]);
-			$cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
+			// $cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
 			$cosmetic_issues_text = json_encode([
 				'cs1' => $this->input->post('cs1'),
 				'cs2' => $this->input->post('cs2')
@@ -925,7 +925,7 @@ class Testing extends CI_Controller {
 				'warranty' => $this->input->post('warranty'),
 				'tech_notes' => $this->input->post('tech_notes'),
 				'cosmetic_issues_text' => $cosmetic_issues_text,
-				'cosmetic_issue' => $cosmetic_issue,
+				// 'cosmetic_issue' => $cosmetic_issue,
 				'fail_text' => $fail_text,
 				'cosmetic_grade' => $this->input->post('cosmetic_grade'),
 				'status' => $this->input->post('status'),
@@ -1012,7 +1012,7 @@ class Testing extends CI_Controller {
 		$data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/products/find_product' : 'products/find_product';
 		$data['original_condition'] = $this->products->get_key_value_pair('original_condition');
 		$data['fail_options'] = $this->products->get_key_value_pair('fail_options');
-		$data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
+		// $data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
 		$data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
 		$category_names = $this->products->get_categories();
         $data['categories'] = $category_names;
@@ -1040,7 +1040,7 @@ class Testing extends CI_Controller {
 			$product_data['category'] = json_encode($category);
 			// pr($product_data,1);
 			$this->basic->update('products', $product_data, ['part'=>$this->input->post('part')]);
-			$cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
+			// $cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
 			$cosmetic_issues_text = json_encode([
 				'cs1' => $this->input->post('cs1'),
 				'cs2' => $this->input->post('cs2')
@@ -1079,7 +1079,7 @@ class Testing extends CI_Controller {
 				'warranty' => $this->input->post('warranty'),
 				'tech_notes' => $this->input->post('tech_notes'),
 				'cosmetic_issues_text' => $cosmetic_issues_text,
-				'cosmetic_issue' => $cosmetic_issue,
+				// 'cosmetic_issue' => $cosmetic_issue,
 				'fail_text' => $fail_text,
 				'cosmetic_grade' => $this->input->post('cosmetic_grade'),
 				'status' => $this->input->post('status'),
@@ -1161,7 +1161,7 @@ class Testing extends CI_Controller {
 		$data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/products/find_product' : 'products/find_product';
 		$data['original_condition'] = $this->products->get_key_value_pair('original_condition');
 		$data['fail_options'] = $this->products->get_key_value_pair('fail_options');
-		$data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
+		// $data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
 		$data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
 		$category_names = $this->products->get_categories();
         $data['categories'] = $category_names;
@@ -1190,7 +1190,7 @@ class Testing extends CI_Controller {
 			$product_data['category'] = json_encode($category);
 			// pr($product_data,1);
 			$this->basic->update('products', $product_data, ['part'=>$this->input->post('part')]);
-			$cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
+			// $cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
 			$cosmetic_issues_text = json_encode([
 				'cs1' => $this->input->post('cs1'),
 				'cs2' => $this->input->post('cs2')
@@ -1244,7 +1244,7 @@ class Testing extends CI_Controller {
 				'warranty' => $this->input->post('warranty'),
 				'tech_notes' => $this->input->post('tech_notes'),
 				'cosmetic_issues_text' => $cosmetic_issues_text,
-				'cosmetic_issue' => $cosmetic_issue,
+				// 'cosmetic_issue' => $cosmetic_issue,
 				'fail_text' => $fail_text,
 				'cosmetic_grade' => $this->input->post('cosmetic_grade'),
 				'status' => $this->input->post('status'),
@@ -1326,7 +1326,7 @@ class Testing extends CI_Controller {
 		$data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/products/find_product' : 'products/find_product';
 		$data['original_condition'] = $this->products->get_key_value_pair('original_condition');
 		$data['fail_options'] = $this->products->get_key_value_pair('fail_options');
-		$data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
+		// $data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
 		$data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
 		$category_names = $this->products->get_categories();
         $data['categories'] = $category_names;
@@ -1354,7 +1354,7 @@ class Testing extends CI_Controller {
 			$product_data['category'] = json_encode($category);
 			// pr($product_data,1);
 			$this->basic->update('products', $product_data, ['part'=>$this->input->post('part')]);
-			$cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
+			// $cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
 			$cosmetic_issues_text = json_encode([
 				'cs1' => $this->input->post('cs1'),
 				'cs2' => $this->input->post('cs2')
@@ -1409,7 +1409,7 @@ class Testing extends CI_Controller {
                 'accessory_name' => $access_name,	
 				'tech_notes' => $this->input->post('tech_notes'),
 				'cosmetic_issues_text' => $cosmetic_issues_text,
-				'cosmetic_issue' => $cosmetic_issue,
+				// 'cosmetic_issue' => $cosmetic_issue,
 				'fail_text' => $fail_text,
 				'cosmetic_grade' => $this->input->post('cosmetic_grade'),
 				'status' => $this->input->post('status'),
@@ -1486,7 +1486,7 @@ class Testing extends CI_Controller {
 		$data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/products/find_product' : 'products/find_product';
 		$data['original_condition'] = $this->products->get_key_value_pair('original_condition');
 		$data['fail_options'] = $this->products->get_key_value_pair('fail_options');
-		$data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
+		// $data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
 		$data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
 		$category_names = $this->products->get_categories();
         $data['categories'] = $category_names;
@@ -1516,7 +1516,7 @@ class Testing extends CI_Controller {
 			$product_data['category'] = json_encode($category);
 			// pr($product_data,1);
 			$this->basic->update('products', $product_data, ['part'=>$this->input->post('part')]);
-			$cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
+			// $cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
 			$cosmetic_issues_text = json_encode([
 				'cs1' => $this->input->post('cs1'),
 				'cs2' => $this->input->post('cs2')
@@ -1567,7 +1567,7 @@ class Testing extends CI_Controller {
                 'accessory_name' => $access_name,	
 				'tech_notes' => $this->input->post('tech_notes'),
 				'cosmetic_issues_text' => $cosmetic_issues_text,
-				'cosmetic_issue' => $cosmetic_issue,
+				// 'cosmetic_issue' => $cosmetic_issue,
 				'fail_text' => $fail_text,
 				'cosmetic_grade' => $this->input->post('cosmetic_grade'),
 				'status' => $this->input->post('status'),
@@ -1651,7 +1651,7 @@ class Testing extends CI_Controller {
 		$data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/products/find_product' : 'products/find_product';
 		$data['original_condition'] = $this->products->get_key_value_pair('original_condition');
 		$data['fail_options'] = $this->products->get_key_value_pair('fail_options');
-		$data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
+		// $data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
 		$data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
 		$category_names = $this->products->get_categories();
         $data['categories'] = $category_names;
@@ -1682,7 +1682,7 @@ class Testing extends CI_Controller {
 		$data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/testing/find_product' : 'receiving/find_product';
         $data['original_condition'] = $this->products->get_key_value_pair('original_condition');
 		$data['fail_options'] = $this->products->get_key_value_pair('fail_options');
-		$data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
+		// $data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
 		$data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
 		$category_names = $this->products->get_categories();
         $data['categories'] = $category_names;
@@ -1775,7 +1775,7 @@ class Testing extends CI_Controller {
 		$data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/testing/find_product' : 'testing/find_product';
 		$data['original_condition'] = $this->products->get_key_value_pair('original_condition');
 		$data['fail_options'] = $this->products->get_key_value_pair('fail_options');
-		$data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
+		// $data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
 		$data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
 		$category_names = $this->products->get_categories();
         $data['categories'] = $category_names;
@@ -1797,7 +1797,7 @@ class Testing extends CI_Controller {
 		$data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/testing/find_product' : 'testing/find_product';
 		$data['original_condition'] = $this->products->get_key_value_pair('original_condition');
 		$data['fail_options'] = $this->products->get_key_value_pair('fail_options');
-		$data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
+		// $data['cosmetic_issues'] = $this->products->get_key_value_pair('cosmetic_issues');
 		$data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
 		$category_names = $this->products->get_categories();
         $data['categories'] = $category_names;

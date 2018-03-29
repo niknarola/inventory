@@ -32,23 +32,28 @@
 								<li class="<?php echo (strpos($uri, 'print_labels') != false) ? 'active' : '' ?>"><a href="admin/receiving/print_labels"><i class="icon-menu"></i> <span>Print Labels</span></a></li>
 							</ul>
 					</li>
-					<li class="<?php echo ($uri == 'testing') ? 'active' : '' ?>">
-						<a href="#"><i class="icon-stack2"></i> <span>Testing</span></a>
-							<ul>
-								<li class="<?php echo (strpos($uri, 'notebook') != false) ? 'active' : '' ?>"><a href="admin/testing/notebook"><i class="icon-menu"></i> <span>Notebook</span></a></li>
-								<li class="<?php echo (strpos($uri, 'desktop') != false) ? 'active' : '' ?>"><a href="admin/testing/desktop"><i class="icon-menu"></i> <span>Desktop</span></a></li>
-								<li class="<?php echo (strpos($uri, 'thin_client') != false) ? 'active' : '' ?>"><a href="admin/testing/thin_client"><i class="icon-menu"></i> <span>Thin Client</span></a></li>
-								<li class="<?php echo (strpos($uri, 'all_in_one') != false) ? 'active' : '' ?>"><a href="admin/testing/all_in_one"><i class="icon-menu"></i> <span>All-In-One</span></a></li>
-								<li class="<?php echo (strpos($uri, 'tablet') != false) ? 'active' : '' ?>"><a href="admin/testing/tablet"><i class="icon-menu"></i> <span>Tablet</span></a></li>
-								<li class="<?php echo (strpos($uri, 'monitor') != false) ? 'active' : '' ?>"><a href="admin/testing/monitor"><i class="icon-menu"></i> <span>Monitor</span></a></li>
-								<li class="<?php echo (strpos($uri, 'accessory') != false) ? 'active' : '' ?>"><a href="admin/testing/accessory"><i class="icon-menu"></i> <span>Accessory</span></a></li>
-								<li class="<?php echo (strpos($uri, 'printer') != false) ? 'active' : '' ?>"><a href="admin/testing/printer"><i class="icon-menu"></i> <span>Printer</span></a></li>
-								<li class="<?php echo (strpos($uri, 'other_item') != false) ? 'active' : '' ?>"><a href="admin/testing/other_item"><i class="icon-menu"></i> <span>Other Item</span></a></li>
-								<li class="<?php echo (strpos($uri, 'audit') != false) ? 'active' : '' ?>"><a href="admin/testing/audit"><i class="icon-menu"></i> <span>Audit</span></a></li>
-								<li class="<?php echo (strpos($uri, 'quality') != false) ? 'active' : '' ?>"><a href="admin/testing/quality"><i class="icon-menu"></i> <span>Quality Control</span></a></li>
-								<li class="<?php echo (strpos($uri, 'repair') != false) ? 'active' : '' ?>"><a href="admin/testing/repair"><i class="icon-menu"></i> <span>Repair</span></a></li>
-							</ul>
-						</li>
+                        <li class="<?php echo ($uri == 'testing') ? 'active' : '' ?>">
+                            <a href="#"><i class="icon-tree5"></i> <span>Testing</span></a>
+                            <ul>
+                                <li>
+                                    <a href="#"><i class="icon-menu"></i> Testing Modules</a>
+                                    <ul>
+                                        <li class="<?php echo (strpos($uri, 'notebook') != false) ? 'active' : '' ?>"><a href="admin/testing/notebook"><i class="icon-menu"></i> <span>Notebook</span></a></li>
+                                        <li class="<?php echo (strpos($uri, 'desktop') != false) ? 'active' : '' ?>"><a href="admin/testing/desktop"><i class="icon-menu"></i> <span>Desktop</span></a></li>
+                                        <li class="<?php echo (strpos($uri, 'thin_client') != false) ? 'active' : '' ?>"><a href="admin/testing/thin_client"><i class="icon-menu"></i> <span>Thin Client</span></a></li>
+                                        <li class="<?php echo (strpos($uri, 'all_in_one') != false) ? 'active' : '' ?>"><a href="admin/testing/all_in_one"><i class="icon-menu"></i> <span>All-In-One</span></a></li>
+                                        <li class="<?php echo (strpos($uri, 'tablet') != false) ? 'active' : '' ?>"><a href="admin/testing/tablet"><i class="icon-menu"></i> <span>Tablet</span></a></li>
+                                        <li class="<?php echo (strpos($uri, 'monitor') != false) ? 'active' : '' ?>"><a href="admin/testing/monitor"><i class="icon-menu"></i> <span>Monitor</span></a></li>
+                                        <li class="<?php echo (strpos($uri, 'accessory') != false) ? 'active' : '' ?>"><a href="admin/testing/accessory"><i class="icon-menu"></i> <span>Accessory</span></a></li>
+                                        <li class="<?php echo (strpos($uri, 'printer') != false) ? 'active' : '' ?>"><a href="admin/testing/printer"><i class="icon-menu"></i> <span>Printer</span></a></li>
+                                        <li class="<?php echo (strpos($uri, 'other_item') != false) ? 'active' : '' ?>"><a href="admin/testing/other_item"><i class="icon-menu"></i> <span>Other Item</span></a></li>
+                                    </ul>
+                                </li>
+                                <li class="<?php echo (strpos($uri, 'audit') != false) ? 'active' : '' ?>"><a href="admin/testing/audit"><i class="icon-menu"></i> <span>Audit</span></a></li>
+                                <li class="<?php echo (strpos($uri, 'quality') != false) ? 'active' : '' ?>"><a href="admin/testing/quality"><i class="icon-menu"></i> <span>Quality Control</span></a></li>
+                                <li class="<?php echo (strpos($uri, 'repair') != false) ? 'active' : '' ?>"><a href="admin/testing/repair"><i class="icon-menu"></i> <span>Repair</span></a></li>
+                            </ul>
+                        </li>
 						<li class="<?php echo (strpos($uri, 'packout') != false) ? 'active' : '' ?>"><a href="admin/cleaning/packout"><i class="icon-user"></i> <span>Packout</span></a></li>
 						<li class="<?php echo (strpos($uri, 'inventory') )? 'active' : '' ?>">
 							<a href="#"><i class="icon-stack2"></i> <span>Inventory</span></a>
@@ -57,6 +62,8 @@
 								<li class="<?php echo (strpos($uri, 'locations') != false) ? 'active' : '' ?>"><a href="admin/inventory/locations"><i class="icon-menu"></i> <span>Locations</span></a></li>
 								<li class="<?php echo (strpos($uri, 'master_sheet') != false) ? 'active' : '' ?>"><a href="admin/inventory/master_sheet"><i class="icon-menu"></i> <span>Master Sheet</span></a></li>
 								<li class="<?php echo (strpos($uri, 'reports') != false) ? 'active' : '' ?>"><a href="admin/inventory/reports"><i class="icon-menu"></i> <span>Reports</span></a></li>
+								<li class="<?php echo (strpos($uri, 'create_pallet') != false) ? 'active' : '' ?>"><a href="admin/inventory/create_pallet"><i class="icon-menu"></i> <span>Create Pallet</span></a></li>
+								<li class="<?php echo (strpos($uri, 'utility') != false) ? 'active' : '' ?>"><a href="admin/inventory/utility"><i class="icon-menu"></i> <span>Utility Module</span></a></li>
 							</ul>
 						</li>
 					<li class="<?php echo (strpos($uri, 'search') != false) ? 'active' : '' ?>"><a href="admin/receiving/search"><i class="icon-user"></i> <span>Search</span></a></li>

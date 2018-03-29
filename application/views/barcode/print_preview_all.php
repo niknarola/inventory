@@ -11,21 +11,21 @@
 		.pallet_id{ font-size: 	25px !important; }
 		/*.bol{ padding: 2px; background-color: grey; color: #fff !important; }*/
 </style>
-<form id="pallet-labels" action="admin/barcode/print_preview">
+<form id="print-preview-all">
     <div class="row hidden-print">
-        <a href="<?= $admin_prefix ?>receiving/dock_receive" class="btn btn-success">Back To Pallet</a>
+        <a href="<?= $admin_prefix ?>barcode/pallet_labels" class="btn btn-success">Back To Pallet Labels</a>
     </div>
     <div class="row">
         <div class="col-md-12">
             <div class="hidden-print" style="margin-bottom: 5px;">
                 <div class="text-center">
-                    <button type="submit" class="btn btn-info print_all hidden-print">Print Preview All</button>
+                    <button type="button" class="btn btn-info print_all hidden-print">Print All</button>
                 </div>
             </div>
             <div class="printarea">
             
             <?php $i = 1; ?>
-            <?php foreach ($print_labels as $key => $value): ?>
+            <?php foreach ($print_labels as $key => $value): pr($print_labels)?>
                 <div class="print-panel hidden-print">
                     <div class="row text-center barcode_labels">
                         <div class="col-md-6 col-md-offset-3 block">
@@ -44,10 +44,32 @@
                             <div class="row">
                                 <span><b>Ref Number: <?php echo $value['ref'] ?></b></span>
                             </div>
-                            <div class="row"><button type="submit" class="btn btn-info print_btn hidden-print">Print Preview</button></div>
+                            <!-- <div class="row"><button type="button" class="btn btn-info print_btn hidden-print">Print</button></div> -->
                         </div>
+                    </div>
+                    <div class="row text-center barcode_labels">
+                        <div class="col-md-6 col-md-offset-3 block">
+                        <div class="row">
+                            <span class="bol"><b>BOL # <?php echo $value['bol_or_tracking'] ?></b></span>
                         </div>
+                        <div class="row">
+                            <span><b>Pallet <?php echo $i.'/'.$value['pallet_part'] ?> - Item Count: <?php echo $value['item_count'] ?></b></span>
+                        </div>
+                        <div class="row">
+                            <span class="pallet_id"><b><?php echo $value['pallet_id'] ?></b></span>
+                        </div>
+                            <div class="row">
+                                <img style="margin-bottom: 5px;" src="<?php echo ($this->uri->segment(1) == 'admin') ? 'admin/' : ''; ?><?php echo 'barcode?barcode='.rawurlencode($value['pallet_id']).'&text='.rawurlencode($value['pallet_id']).'&scale=4.5&thickness=30' ?>"/>
+                            </div>
+                            <div class="row">
+                                <span><b>Ref Number: <?php echo $value['ref'] ?></b></span>
+                            </div>
+                            <div class="row"><button type="button" class="btn btn-info print_btn hidden-print">Print</button></div>
+                        </div>
+                    </div>
                 </div>
+                
+                
                 <hr>
             <?php $i++; endforeach ?>
             </div>
@@ -56,16 +78,11 @@
 </form>
 <script type="text/javascript">
 	jQuery(document).ready(function($) {
-		$('button.print_btn').click(function(){
-			$('div.printarea div.print-panel').removeClass('hidden-print').addClass('hidden-print');
-			$(this).parents('div.print-panel').removeClass('hidden-print');
-			$('hr').removeClass('hidden-print').addClass('hidden-print');
-			// window.print();
-		});
 		$('button.print_all').click(function(){
 			$('div.printarea div.print-panel').removeClass('hidden-print'); 
 			$('hr').removeClass('hidden-print');
 			// window.print();
 		});
+        $('button.print_all').click();
 	});
 </script>

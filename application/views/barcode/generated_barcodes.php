@@ -36,14 +36,14 @@
 						<?php //if(in_array('serial', $print_labels)){ ?>
 							<?php if(in_array($i, $serial_chk) && $serial[$i]!=''){ ?>
 								<div class="row">
-									<img style="margin-bottom: 5px;" src="<?php echo ($this->uri->segment(1) == 'admin') ? 'admin/' : ''; ?><?php echo 'barcode?barcode='.rawurlencode($serial[$i]).'&text='.rawurlencode("S/N: ".$serial[$i]).'&scale=2.4&thickness=25' ?>"/>
+									<img style="margin-bottom: 5px;" src="<?php echo ($this->uri->segment(1) == 'admin') ? 'admin/' : ''; ?><?php echo 'barcode?barcode='.rawurlencode($serial[$i]).'&text='.rawurlencode("Serial Number: ".$serial[$i]).'&scale=2.4&thickness=25' ?>"/>
 								</div>
 							<?php } ?>
 						<?php //} ?>
 						<?php //if(in_array('part', $print_labels)){ ?>
 							<?php if(in_array($i, $part_chk) && $part[$i]!=''){ ?>
 								<div class="row">
-									<img style="margin-bottom: 2px;" src="<?php echo ($this->uri->segment(1) == 'admin') ? 'admin/' : ''; ?><?php echo 'barcode?barcode='.rawurlencode($part[$i]).'&text='.rawurlencode("P/N: ".$part[$i]).'&scale=2.4&thickness=25' ?>"/>
+									<img style="margin-bottom: 2px;" src="<?php echo ($this->uri->segment(1) == 'admin') ? 'admin/' : ''; ?><?php echo 'barcode?barcode='.rawurlencode($part[$i]).'&text='.rawurlencode("Part Number: ".$part[$i]).'&scale=2.4&thickness=25' ?>"/>
 								</div>
 							<?php } ?>
 						<?php //} ?>

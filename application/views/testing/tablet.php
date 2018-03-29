@@ -210,19 +210,19 @@
 										<input type="text" class="form-control cs2" name="cs2" value=""  placeholder="User Input">
 									</div>
 								</div>
-									<div class="row">
+									<!-- <div class="row">
 									<div class="form-group">
 										<label>Cosmetic Issues:</label>
-										<?php foreach ($cosmetic_issues as $key => $value) { ?>
+										<?php //foreach ($cosmetic_issues as $key => $value) { ?>
 										<div class="input-group">
 											<span class="input-group-addon">
 												<input type="checkbox" value="<?= $key ?>" name="cosmetic_issue[]" class="cosmetic_boxes checkbx">
 											</span>
 											<input type="text" readonly="true" value="<?= $value ?>" class="form-control"> 
 										</div>
-										<?php } ?>
+										<?php //} ?>
 									</div>
-								</div>
+								</div> -->
 							</div>
 								<div class="col-md-6 based-on-radio">
 									<div class="col-md-8">

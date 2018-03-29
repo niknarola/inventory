@@ -41,7 +41,7 @@ class Barcode extends CI_Controller
 		$code->setForegroundColor($color_black);
 		$code->setBackgroundColor($color_white);
 		$code->setFont($font);
-        // $code->setLabel($text);
+        $code->setLabel($text);
         $code->setStart(null);
         $code->setTilde(true);
         $code->parse($barcode);
@@ -168,6 +168,14 @@ class Barcode extends CI_Controller
         $data['print_labels'] = $print_labels;
 
         $this->template->load($this->layout, 'barcode/print_labels_barcode', $data);
-	}
+    }
+    
+    public function print_preview(){
+        $print_labels = $this->session->userdata('pallet_print_data'); 
+		$data['print_labels'] = $print_labels;
+		$data['title'] = 'Pallet Labels';
+		$data['admin_prefix'] = $this->admin_prefix;
+		$this->template->load($this->layout, 'barcode/print_preview', $data);
+    }
 }
 ?>
