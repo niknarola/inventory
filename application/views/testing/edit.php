@@ -45,16 +45,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Grade:</label>
-                            <select name="grade" data-placeholder="Select Grade" class="form-control select grade">
-                                <?php //foreach ($original_condition as $key => $value) { ?>
-                                    <option value="MN">MN - Manufacturer New</option>
-                                    <option value="TN">TN - Tested New</option>
-                                    <option value="B">B - Light Scratches</option>
-                                    <option value="C">C - Deep Scratches</option>
-                                    <option value="F">F - Fail</option>
-                                    <option value="X">X - Unsellable</option>
-                                <?php //}  ?>
-                            </select>
+                            <input type="text" class="form-control" type="text" name="part" value="<?= $product['cosmetic_grade'] ?>">
                         </div>
                     </div>
                     

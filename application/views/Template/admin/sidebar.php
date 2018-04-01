@@ -62,7 +62,7 @@
 								<li class="<?php echo (strpos($uri, 'locations') != false) ? 'active' : '' ?>"><a href="admin/inventory/locations"><i class="icon-menu"></i> <span>Locations</span></a></li>
 								<li class="<?php echo (strpos($uri, 'master_sheet') != false) ? 'active' : '' ?>"><a href="admin/inventory/master_sheet"><i class="icon-menu"></i> <span>Master Sheet</span></a></li>
 								<li class="<?php echo (strpos($uri, 'reports') != false) ? 'active' : '' ?>"><a href="admin/inventory/reports"><i class="icon-menu"></i> <span>Reports</span></a></li>
-								<li class="<?php echo (strpos($uri, 'create_pallet') != false) ? 'active' : '' ?>"><a href="admin/inventory/create_pallet"><i class="icon-menu"></i> <span>Create Pallet</span></a></li>
+								<li class="<?php echo ($uri == 'create_pallet') ? 'active' : '' ?>"><a href="admin/inventory/create_pallet"><i class="icon-menu"></i> <span>Create Pallet</span></a></li>
 								<li class="<?php echo (strpos($uri, 'utility') != false) ? 'active' : '' ?>"><a href="admin/inventory/utility"><i class="icon-menu"></i> <span>Utility Module</span></a></li>
 							</ul>
 						</li>

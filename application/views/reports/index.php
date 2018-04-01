@@ -128,6 +128,7 @@ if ($get_date != '')
                                             <!-- <th><input type="checkbox" name="check_all" class="check_all" value=""></th> -->
                                             <th>#</th>
                                             <th>Serial #</th>
+                                            <th>New Serial #</th>
                                             <th>Part #</th>
                                             <th>Name</th>
                                             <th>Condition</th>
@@ -150,6 +151,7 @@ if ($get_date != '')
                                                     <!-- <td><input type="checkbox" name="check[]" class="check_row" value="<?= $post['id'] ?>"></td> -->
                                                     <td><?php echo $post['id']; ?></td>
                                                     <td><?php echo $post['serial']; ?></td>
+                                                    <td><?php echo $post['new_serial']; ?></td>
                                                     <td><?php echo $post['part']; ?></td>
                                                     <td><?php echo $post['product_name']; ?></td>
                                                     <td><?php echo $post['original_condition']; ?></td>
@@ -641,22 +643,22 @@ if ($get_date != '')
         }
     }
 
-        function view_notes(serial_id){
-        $.ajax({
-            url: 'admin/inventory/master_sheet/view_notes/' + serial_id,
-            method: 'post',
-            success: function (resp) {
-                resp = JSON.parse(resp);
-                if (resp.status == 1)
-                {
-                    $('#notesModal').find('.notes_details_container').html(resp.data);
-                } else
-                {
-                    $('#notesModal').find('.notes_details_container').html('Not able to load data. Please try again');
+    function view_notes(serial_id){
+            $.ajax({
+                url: 'admin/inventory/master_sheet/view_notes/' + serial_id,
+                method: 'post',
+                success: function (resp) {
+                    resp = JSON.parse(resp);
+                    if (resp.status == 1)
+                    {
+                        $('#notesModal').find('.notes_details_container').html(resp.data);
+                    } else
+                    {
+                        $('#notesModal').find('.notes_details_container').html('Not able to load data. Please try again');
+                    }
+                    $('#notesModal').modal('show');
                 }
-                $('#notesModal').modal('show');
-            }
-        });
+            });
     }
 
     function view_specs(serial_id){

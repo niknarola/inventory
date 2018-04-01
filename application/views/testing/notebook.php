@@ -380,9 +380,9 @@
 									<div class="form-group">
 										<label>Warranty: </label>
 										<select name="warranty" class="form-control warranty" onchange="warranty_change(this.value)">
+											<option value="Unknown">Unknown</option>
 											<option value="Active">Active</option>
 											<option value="Expired">Expired</option>
-											<option value="Unknown">Unknown</option>
 										</select>
 									</div>
 								</div>
@@ -522,13 +522,38 @@
                     <div class="col-md-5">
                         <div class="form-group">
                             Accessories Type
-                            <input type="text" class="form-control cd_soft" name="access_type[]" value="" placeholder="" />
+                            <select name="access_type[]" class="form-control cd_soft access-type-select">
+                            	<option value="AC Adapter">AC Adapter</option>
+                            	<option value="Mouse">Mouse</option>
+                            	<option value="Keyboard">Keyboard</option>
+                            	<option value="Stylus Pen">Stylus Pen</option>
+                            	<option value="Docking Station">Docking Station</option>
+                            	<option value="Power Jacket">Power Jacket</option>
+                            	<option value="Rugged Jacket">Rugged Jacket</option>
+                            	<option value="Detachable Keyboard">Detachable Keyboard</option>
+                            	<option value="Detachable Power Keyboard">Detachable Power Keyboard</option>
+                            	<option value="Other">Other</option>
+                            </select>
+                            <input style="display: none; margin-top:10px;" type="text" name="other_access_type" value="" class="form-control other_access_type" placeholder="">
                         </div>
                     </div>
                     <div class="col-md-5">
-                        <div class="form-group">
+                        <div class="form-group" >
                             Accessories Name
-                            <input type="text" class="form-control cd_soft" name="access_name[]" value="" placeholder="" />
+                            <input  type="text" class="form-control cd_soft access-name-input" style="display:none;" name="access_name[]" value="" placeholder="" />
+
+                            <select name="access_name[]" style="display:block;" class="form-control cd_soft access-name-select">
+                            	<option value="45W Blue Tip">45W Blue Tip</option>
+                            	<option value="65W Blue Tip">65W Blue Tip</option>
+                            	<option value="150W+ Blue Tip">150W+ Blue Tip</option>
+                            	<option value="45W Black Tip">45W Black Tip</option>
+                            	<option value="65W Black Tip">65W Black Tip</option>
+                            	<option value="150W+ Black Tip">150W+ Black Tip</option>
+                            	<option value="No AC Adapter">No AC Adapter</option>
+                            	<option value="Other">Other</option>
+                            </select>
+
+                            <input style="display: none; margin-top:10px;" type="text" name="other_access_name" value="" class="form-control other_access_name" placeholder="">
                         </div>
                     </div>
                     <div class="col-md-2" ><i class="icon-plus-circle2 add_more_access"></i></div>
@@ -541,15 +566,41 @@
     </div>
 </div>
 <div class="row access1" style="display:none;">
-<div class="col-md-5">
-    <div class="form-group">
-    <input type="text" class="form-control cd_soft" name="access_type[]" value="" placeholder="" />
-    </div>
+	<div class="col-md-5">
+        <div class="form-group">
+            Accessories Type
+            <select name="access_type[]" class="form-control cd_soft access-type-select">
+            	<option value="AC Adapter">AC Adapter</option>
+            	<option value="Mouse">Mouse</option>
+            	<option value="Keyboard">Keyboard</option>
+            	<option value="Stylus Pen">Stylus Pen</option>
+            	<option value="Docking Station">Docking Station</option>
+            	<option value="Power Jacket">Power Jacket</option>
+            	<option value="Rugged Jacket">Rugged Jacket</option>
+            	<option value="Detachable Keyboard">Detachable Keyboard</option>
+            	<option value="Detachable Power Keyboard">Detachable Power Keyboard</option>
+            	<option value="Other">Other</option>
+            </select>
+            <input style="display: none; margin-top:10px;" type="text" name="other_access_type" value="" class="form-control other_access_type" placeholder="">
+        </div>
     </div>
     <div class="col-md-5">
-    <div class="form-group">
-    <input type="text" class="form-control cd_soft" name="access_name[]" value="" placeholder="" />
-    </div>
+        <div class="form-group" >
+            Accessories Name
+            <input  type="text" class="form-control cd_soft access-name-input" style="display:none;" name="access_name[]" value="" placeholder="" />
+
+            <select name="access_name[]" style="display:block;" class="form-control cd_soft access-name-select">
+            	<option value="45W Blue Tip">45W Blue Tip</option>
+            	<option value="65W Blue Tip">65W Blue Tip</option>
+            	<option value="150W+ Blue Tip">150W+ Blue Tip</option>
+            	<option value="45W Black Tip">45W Black Tip</option>
+            	<option value="65W Black Tip">65W Black Tip</option>
+            	<option value="150W+ Black Tip">150W+ Black Tip</option>
+            	<option value="No AC Adapter">No AC Adapter</option>
+            	<option value="Other">Other</option>
+            </select>
+            <input style="display: none; margin-top:10px;" type="text" name="other_access_name" value="" class="form-control other_access_name" placeholder="">
+        </div>
     </div>
 </div>
 
@@ -578,6 +629,33 @@
 	    	}
 
 	     });
+	    $(document).on('change', '.access-type-select', function(event) {
+	     	if($(this).val() == 'Other'){
+	     		$('.other_access_type').css('display', 'block');
+	    	}else{
+	    		$('.other_access_type').css('display', 'none');
+	    	}
+
+	     });
+	    $(document).on('change', '.access-type-select', function(event) {
+	     	if($(this).val() == 'AC Adapter'){
+	     		$('.access-name-select').css('display', 'block');
+	    		$('.access-name-input').css('display', 'none');
+	    	}else if($(this).val() != 'AC Adapter'){
+	    		$('.access-name-input').css('display', 'block');
+	    		$('.access-name-select').css('display', 'none');
+	    	}
+
+	     });
+	    $(document).on('change', '.access-name-select', function(event) {
+	     	if($(this).val() == 'Other'){
+	     		$('.other_access_name').css('display', 'block');
+	    	}else{
+	    		$('.other_access_name').css('display', 'none');
+	    	}
+
+	     });
+
 	    get_sub_categories(1, 'category2');
 	    $(document).on('change', '.fail_option', function(event) {
 	    	if($(this).val()==6){
@@ -591,6 +669,7 @@
 //            var grade = $("input[name='cosmetic_grade']:checked").val();
 //        console.log('abcdeffhbkj',grade);
 	});
+	$('input.warranty_date').attr('disabled',true);
 	function warranty_change(val){
 		if(val!='Active'){
 	    		$('input.warranty_date').attr('disabled',true);

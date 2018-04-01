@@ -11,7 +11,7 @@ class Receiving_model extends CI_Model
         parent::__construct();
         $this->load->database();
     }
-    function getProducts($params = array(), $actArr = array())
+    function getProducts($params = array(), $catArr = array())
     {
         $this->db->select('p.*');
         $this->db->from('products p');
@@ -177,6 +177,12 @@ class Receiving_model extends CI_Model
         return ($query->num_rows() > 0)?$query->result_array():FALSE;
     }
     public function get_total_pallets_by_bol_or_tracking($bol_or_tracking)
+    {
+        $this->db->where('bol_or_tracking', $bol_or_tracking);
+        $query = $this->db->get('pallets');
+        return $query->num_rows();
+    }
+    public function get_total_pallets_by_pallet_id($pallet_id)
     {
         $this->db->where('bol_or_tracking', $bol_or_tracking);
         $query = $this->db->get('pallets');

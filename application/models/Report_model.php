@@ -28,23 +28,22 @@ class Report_model extends CI_Model
                 if ($params['search']['searchfor'] == 'location')
                 {
                     $this->db->like('loc.name', $params['search']['keywords']);
-                }if ($params['search']['searchfor'] == 'serial')
-                {
-                    $this->db->like('ps.' . $params['search']['searchfor'], $params['search']['keywords']);
-                }
-                if ($params['search']['searchfor'] == 'new_serial')
-                {
-                    $this->db->like('ps.' . $params['search']['searchfor'], $params['search']['keywords']);
-                }
-                else
-                {
-                    $this->db->like('p.' . $params['search']['searchfor'], $params['search']['keywords']);
+                }if($params['search']['searchfor']=='serial'){
+                    $this->db->or_like('ps.'.$params['search']['searchfor'],$params['search']['keywords']);
+                }else if($params['search']['searchfor']=='new_serial'){
+                    $this->db->or_like('ps.'.$params['search']['searchfor'],$params['search']['keywords']);
+                }else if($params['search']['searchfor']=='part'){
+                    $this->db->or_like('p.'.$params['search']['searchfor'],$params['search']['keywords']);
+                }else if($params['search']['searchfor']=='name'){
+                    $this->db->or_like('p.'.$params['search']['searchfor'],$params['search']['keywords']);
                 }
             }
             else
             {
                 $this->db->like('ps.serial', $params['search']['keywords']);
                 $this->db->or_like('ps.new_serial', $params['search']['keywords']);
+                $this->db->or_like('p.part',$params['search']['keywords']);
+                $this->db->or_like('p.name',$params['search']['keywords']);
             }
         }
         if (!empty($params['search']['category1']) && !empty($params['search']['category2']))
@@ -158,7 +157,7 @@ class Report_model extends CI_Model
         $this->db->join('original_condition oc', 'oc.id = ps.condition', 'left');
         $this->db->join('locations loc', 'loc.id = ps.location_id', 'left');
         $this->db->join('serial_timestamps st', 'st.serial_id = ps.id', 'left');
-//        $this->db->where('ps.is_delete','0');
+        //$this->db->where('ps.is_delete','0');
         if (!empty($catArr['tech_category1']) && !empty($catArr['tech_category2']))
         {
             $this->db->like('category', $catArr['tech_category1']);

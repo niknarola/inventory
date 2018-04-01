@@ -49,6 +49,12 @@
                     <textarea class="form-control" readonly="true" disabled="true"><?= $notes['inspection_notes']; ?></textarea>
                 </div>
             </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Repair Notes:</label>
+                    <textarea class="form-control" readonly="true" disabled="true"><?= $notes['repair_notes']; ?></textarea>
+                </div>
+            </div>
         </div>
     </div>
 </div>

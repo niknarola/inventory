@@ -238,7 +238,7 @@ class Product_model extends CI_Model
     }
     public function product_searching($serial)
     {
-        $this->db->select('products.*,ps.id as sid, ps.location_id as pslocation, ps.status as serial_status, ps.serial, ps.*, 
+        $this->db->select('products.*,products.id as pid,ps.id as sid, ps.location_id as pslocation, ps.status as serial_status, ps.serial, ps.*, 
                             oc.name as original_condition, loc.id as locationid, loc.name as locationname, 
                             loc1.id as locid, loc1.name as location_name,u.id as uid, u.name as username, 
                             pl.id as plid, pl.pallet_id as pallet');

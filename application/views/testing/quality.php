@@ -91,10 +91,16 @@
                      </select>
                   </div>
                </div>
-               <div class="col-md-8">
+               <div class="col-md-4">
                   <div class="form-group">
                      <label>Grading notes:</label>
                      <textarea disabled="true" name="grading_notes" class="form-control grading_notes"></textarea>
+                  </div>
+               </div>
+               <div class="col-md-4">
+                  <div class="form-group">
+                     <label>Repair Notes:</label>
+                     <textarea disabled="true" name="repair_notes" class="form-control repair_notes"></textarea>
                   </div>
                </div>
                <hr>
@@ -379,7 +385,7 @@
    			$('input.part').val(response.product.part);
    			$('input.serial_id').val(response.product.id);
    			$('input.new_serial').val(response.product.new_serial);
-   			$('input.model').val(response.product.product_name);
+   			$('input.model').val(response.product.name);
    			//$('input.cpu').val(response.product.cpu);
    			$('input.memory').val(response.product.memory);
    			//$('input.storage').val(response.product.storage);
@@ -498,6 +504,7 @@
                     //   $('.cs1').val(cs_issue_text.cs1);
                     //   $('.cs2').val(cs_issue_text.cs2);
                   }
+                  $('textarea.repair_notes').html(response.product.repair_notes);
    			// var fail_text = JSON.parse(response.product.fail_text);
    			// $('.fail_1').val(fail_text.fail_1);
    			// $('.fail_2').val(fail_text.fail_2);

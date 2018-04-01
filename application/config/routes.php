@@ -104,6 +104,7 @@ $route['admin/barcode/get_sub_category']='barcode/get_sub_category';
 $route['admin/barcode/location_print/(:any)']='barcode/location_print/$1';
 $route['admin/barcode/print_labels_barcode']='barcode/print_labels_barcode';
 $route['admin/barcode/print_preview']='barcode/print_preview';
+$route['admin/barcode/dup_index']='barcode/dup_index';
 
 $route['admin/roles/edit/(:any)'] = 'admin/roles/add/$1';
 $route['admin/user/edit/(:any)']='admin/user/add/$1';
@@ -146,4 +147,6 @@ $route['admin/inventory/reports/reports_results']='reports/reports_results';
 $route['admin/inventory/reports/tech_reports']='reports/tech_reports';
 $route['admin/inventory/reports/download_part_numbers']='reports/download_part_numbers';
 $route['admin/inventory/create_pallet']='create_pallet';
+$route['admin/inventory/create_pallet/print_contents']='create_pallet/print_contents';
+$route['admin/inventory/create_pallet/printed_contents']='create_pallet/printed_contents';
 $route['admin/inventory/utility']='utility';

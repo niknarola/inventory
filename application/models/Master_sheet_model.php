@@ -29,9 +29,14 @@ class Master_sheet_model extends CI_Model
                 }else if($params['search']['searchfor']=='name'){
                     $this->db->or_like('p.'.$params['search']['searchfor'],$params['search']['keywords']);
                 }
+            }else{
+                $this->db->like('ps.serial', $params['search']['keywords']);
+                $this->db->or_like('ps.new_serial', $params['search']['keywords']);
+                $this->db->or_like('p.part',$params['search']['keywords']);
+                $this->db->or_like('p.name',$params['search']['keywords']);
             }
         }
-   #nik------------
+        #nik------------
         if(!empty($params['search']['category1']) && !empty($params['search']['category2'])){
            $this->db->like($params['search']['category1']);
            $this->db->like($params['search']['category2']);
@@ -99,7 +104,7 @@ class Master_sheet_model extends CI_Model
     }
 
     public function get_notes_by_id($id){
-        $this->db->select('ps.cosmetic_issues_text,ps.fail_text,ps.recv_notes,ps.tech_notes,ps.packaging_notes,ps.inspection_notes');
+        $this->db->select('ps.cosmetic_issues_text,ps.fail_text,ps.recv_notes,ps.tech_notes,ps.packaging_notes,ps.inspection_notes,ps.repair_notes');
         $this->db->where('ps.id',$id);
         $this->db->where('ps.is_delete','0');
         $query = $this->db->get('product_serials ps')->row_array();
@@ -111,5 +116,23 @@ class Master_sheet_model extends CI_Model
         $this->db->where('ps.is_delete','0');
         $query = $this->db->get('product_serials ps')->row_array();
         return $query;
+    }
+
+    //create pallet code
+    public function get_data($params = array())
+    {
+        // echo"params";pr($params);die;
+        $this->db->select('ps.id as sid, ps.serial, p.id as pid, p.part, p.name, 
+            loc.name as location_name, pl.pallet_id as pallet');
+        $this->db->join('products p','p.id = ps.product_id','left');
+        $this->db->join('locations loc','loc.id = ps.location_id','left');
+        $this->db->join('pallets pl','pl.id = ps.pallet_id','left');
+        $this->db->where_in('ps.serial',$params);
+        $this->db->where('p.is_delete',0);
+        $this->db->where('ps.is_delete',0);
+        $query = $this->db->get('product_serials ps')->result_array();
+        // echo"query in model".$this->db->last_query();
+        return $query;
+        
     }
 }

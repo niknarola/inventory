@@ -1,5 +1,5 @@
-<div class="col-md-3">
-    <div>
+<div class="col-md-12">
+    <div class="founder-name">
         <?php echo $tech_name; ?>  Productivity
     </div>
 </div>

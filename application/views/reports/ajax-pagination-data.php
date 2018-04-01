@@ -4,6 +4,7 @@
             <!-- <th><input type="checkbox" name="check_all" class="check_all" value=""></th> -->
             <th>#</th>
             <th>Serial #</th>
+            <th>New Serial #</th>
             <th>Part #</th>
             <th>Name</th>
             <th>Condition</th>
@@ -26,6 +27,7 @@
                     <!-- <td><input type="checkbox" name="check[]" class="check_row" value="<?= $post['id'] ?>"></td> -->
                     <td><?php echo '#' . $post['id']; ?></td>
                     <td><?php echo $post['serial']; ?></td>
+                    <td><?php echo $post['new_serial']; ?></td>
                     <td><?php echo $post['part']; ?></td>
                     <td><?php echo $post['product_name']; ?></td>
                     <td><?php echo $post['original_condition']; ?></td>

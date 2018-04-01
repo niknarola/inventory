@@ -92,6 +92,7 @@
         <tr>
             <th>Images</th>
             <th>Serial #</th>
+            <th>New Serial #</th>
             <th>Part #</th>
             <th>Name</th>
             <th>Condition</th>
@@ -120,6 +121,7 @@
                             <td><img src="<?= base_url().'/assets/images/not-available.jpg'?>" height="100px" width="100px" alt="No image found"></td>
                         <?php } ?>
                     <td><?php echo $post['serial']; ?></td>
+                    <td><?php echo $post['new_serial']; ?></td>
                     <td><?php echo $post['part']; ?></td>
                     <td><?php echo $post['product_name']; ?></td>
                     <td><?php echo $post['original_condition']; ?></td>

@@ -131,7 +131,7 @@
 		<div class="col-md-4">
 			<div class="form-group">
 				<label>Item Count:</label>
-				<input type="text" name="item_count[]" value="" class="item_count form-control" required>
+				<input type="text" name="item_count[]" value="" class="item_count form-control" >
 			</div>
 		</div>
 		<div class="col-md-4">

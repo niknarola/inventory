@@ -49,6 +49,12 @@
                     <textarea class="form-control" readonly="true" disabled="true"><?= ($notes['inspection_notes'] !=null || $notes['inspection_notes'] !='') ? $notes['inspection_notes'] : 'Not Available' ?></textarea>
                 </div>
             </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Repair Notes:</label>
+                    <textarea class="form-control" readonly="true" disabled="true"><?= ($notes['repair_notes'] !=null || $notes['repair_notes'] !='') ? $notes['repair_notes'] : 'Not Available' ?></textarea>
+                </div>
+            </div>
         </div>
     </div>
 </div>

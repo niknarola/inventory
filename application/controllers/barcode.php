@@ -51,8 +51,41 @@ class Barcode extends CI_Controller
 		$drawing->setBarcode($code);
         $drawing->draw();
         header('Content-Type: image/png');
-        $drawing->finish(BCGDrawing::IMG_FORMAT_PNG);	
+        //$drawing->setFilename('assets/images/barcode/'.$text.'.png');
+        $drawing->finish(BCGDrawing::IMG_FORMAT_PNG);
     }
+
+    public function dup_index($pallet_id)
+	{
+		//echo $pallet_id; die;
+        $text = $barcode = rawurldecode($pallet_id);
+        $scale = 2.4;
+        $thickness = 30;
+        $font = new BCGFontFile(APPPATH.'libraries/barcode/font/ArialBold.ttf', 12);
+        $color_black = new BCGColor(0, 0, 0);
+        $color_white = new BCGColor(255, 255, 255);
+
+		// Barcode Part
+		$code = new BCGcode128();
+		$code->setScale($scale);
+		$code->setThickness($thickness);
+		$code->setForegroundColor($color_black);
+		$code->setBackgroundColor($color_white);
+		$code->setFont($font);
+        $code->setLabel($text);
+        $code->setStart(null);
+        $code->setTilde(true);
+        $code->parse($barcode);
+		
+        // Drawing Part
+        $drawing = new BCGDrawing('', $color_white);
+		$drawing->setBarcode($code);
+        $drawing->draw();
+        //header('Content-Type: image/png');        
+        $drawing->setFilename('assets/images/barcode/'.$text.'.png');
+        $drawing->finish(BCGDrawing::IMG_FORMAT_PNG);
+    }
+
 	public function generate_barcodes(){
 		$data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/receiving/find_product' : 'receiving/find_product';
 		$data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
@@ -172,10 +205,25 @@ class Barcode extends CI_Controller
     
     public function print_preview(){
         $print_labels = $this->session->userdata('pallet_print_data'); 
+        foreach($print_labels as $k => $v){
+        	$this->dup_index(rawurlencode($v['pallet_id']));
+        }
 		$data['print_labels'] = $print_labels;
 		$data['title'] = 'Pallet Labels';
-		$data['admin_prefix'] = $this->admin_prefix;
-		$this->template->load($this->layout, 'barcode/print_preview', $data);
+        $data['admin_prefix'] = $this->admin_prefix;
+        $pdf_print = $this->load->view('barcode/print_preview', $data, true);
+        //echo $pdf_print; die;
+        $file_path = 'assets/images/barcode/'.time().'.pdf';
+		$this->load->library('m_pdf');
+		$this->m_pdf->pdf->WriteHTML($pdf_print);
+		$this->m_pdf->pdf->Output($file_path,'F');
+		$data['file_path'] = $file_path;
+		$this->template->load($this->layout, 'barcode/pallet_labels', $data);
+
+        //$this->template->load($this->layout, 'barcode/print_preview', $data);
+        //echo $pdf_print;
+         // echo json_encode($pdf_print);
+         // die;
     }
 }
 ?>

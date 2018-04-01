@@ -121,7 +121,7 @@ class Testing extends CI_Controller {
 				$timestamp['status_change_date'] = date('Y-m-d H:i:s');
             }
             $serial_data['cosmetic_grade'] = $this->input->post('cosmetic_grade');
-            if($serial_data['cosmetic_grade'] == 'MN'){
+            if($serial_data['cosmetic_grade'] == 'MN' || $serial_data['cosmetic_grade'] == 'TN' || $serial_data['cosmetic_grade'] == 'B' || $serial_data['cosmetic_grade'] == 'C'){
                 $serial_data['status'] = 'Packout';
             }else if($serial_data['cosmetic_grade'] == 'F'){
                 $serial_data['status'] = 'Awating Repair';
@@ -1770,7 +1770,7 @@ class Testing extends CI_Controller {
             $serial_data['pack_access'] = ($this->input->post('no')) ?  0 : 1;
             $serial_data['pass_qc'] = ($this->input->post('qc')) ?  1 : 0;
             $this->basic->update('product_serials', $serial_data, ['serial'=>$this->input->post('serial')]);
-            echo"query".$this->db->last_query();
+            //echo"query".$this->db->last_query();
         }
 		$data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/testing/find_product' : 'testing/find_product';
 		$data['original_condition'] = $this->products->get_key_value_pair('original_condition');
