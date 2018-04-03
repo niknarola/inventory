@@ -83,15 +83,28 @@
 								<div class="row"><span>Description - <?php echo $description[$i] ?></span></div>
 							<?php } ?> 
 						<?php //} ?> 
-						<div class="row"><button type="button" class="btn btn-info print_btn hidden-print">Print</button></div>
 					</div>
 				</div>
+				<div class="row"><button type="button" class="btn btn-info print_btn hidden-print">Print</button></div>
 			</div>
 			<hr>
 		<?php } ?>
 		</div>
 	</div>
 </div>
+<style>
+	.row.text-center.barcode_labels {
+		height: 2.4in;
+		width: 2.4in;
+		text-align: center;
+		margin: 0 auto;
+	}
+	.row.text-center.barcode_labels img{width:90%;}
+	button.btn.btn-info.print_btn.hidden-print {
+    margin: 0 auto;
+    display: block;
+}
+</style>
 <script type="text/javascript">
 	jQuery(document).ready(function($) {
 		$('button.print_btn').click(function(){

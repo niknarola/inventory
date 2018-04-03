@@ -22,173 +22,199 @@ class Utility extends CI_Controller {
     }
      public function index(){
         $data = array();
-        $data['title'] = 'Master Sheet';
-        //total rows count
-        $totalRec = count($this->master->getRows());
-        
-        #nik-----------
-        $data['cat_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
-        $category_names = $this->products->get_categories();
-        $data['categories'] = $category_names;
-        
-        $condtion = $this->products->get_key_value_pair('original_condition');
-        $data['condition'] = $condtion;
-        #nik-----------
-        
-        //pagination configuration
-        $data['ajax_url'] = ($this->session->userdata('admin_validated')) ? 'admin/inventory/master_sheet' : 'master_sheet';
-        $url = ($this->session->userdata('admin_validated')) ? 'admin/inventory/master_sheet/ajaxPaginationData' : 'master_sheet/ajaxPaginationData';
-        $data['url'] = $url;
-        $data['print_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/location_print' : 'barcode/location_print';
-        $config['target']      = '#postList';
-        $config['base_url']    = base_url().$url;
-        $config['total_rows']  = $totalRec;
-        $config['per_page']    = $this->perPage;
-        $config['link_func']   = 'searchFilter';
-        $config['uri_segment']   = 4;
-        $this->ajax_pagination->initialize($config);
-        
-        //get the posts data
-        $data['posts'] = $this->master->getRows(array('limit'=>$this->perPage));
+        $data['title'] = 'Utility Module';
+        if ($this->input->post())
+		{
+			if($this->input->post('upload_sheet')){
+				$data['upload'] = $this->input->post('upload_sheet');
+				$this->load->library('excel');
+				if (!empty($_FILES['excel']['tmp_name']))
+				{
+					$objPHPExcel = PHPExcel_IOFactory::load($_FILES['excel']['tmp_name']);
+					$cell_collection = $objPHPExcel->getActiveSheet()->getCellCollection();
+					foreach ($cell_collection as $cell)
+					{
+						$column = $objPHPExcel->getActiveSheet()->getCell($cell)->getColumn();
+						$row = $objPHPExcel->getActiveSheet()->getCell($cell)->getRow();
+						$data_value = $objPHPExcel->getActiveSheet()->getCell($cell)->getValue();
+						if ($row == 1)
+						{
+							$header[$row][$column] = trim($data_value);
+						}
+						else
+						{
+							$arr_data[$row][$column] = trim($data_value);
+						}
+					}
+					//send the data in an array format
+					$data['header'] = $header;
+					$data['values'] = $arr_data;
+					// pr($data,1);
+					$this->format_data($data['header'], $data['values'], $data['upload']);
+				}
+			}
+		}
         //load the view
         $this->template->load($this->layout, 'utility/index', $data);
     }
     
-    function ajaxPaginationData(){
-        $conditions = array();
-        //calc offset number
-        $page = $this->input->post('page');
-        if(!$page){
-            $offset = 0;
-        }else{
-            $offset = $page;
-        }
-        $data['print_url'] = ($this->uri->segment(1)=='admin') ? 'admin/barcode/location_print' : 'barcode/location_print';
-        //set conditions for search
-        $keywords = $this->input->post('keywords');
-        $searchfor = $this->input->post('searchfor');
-       #nik------------ 
-        $category1 = $this->input->post('category1');
-        $category2 = $this->input->post('category2');
-        $condition = $this->input->post('condition');
-        $grade = $this->input->post('grade');
-       #nik------------
-       if(!empty($keywords)){
-        $conditions['search']['keywords'] = $keywords;
-    }
-    if(!empty($searchfor) && $searchfor!='none'){
-        $conditions['search']['searchfor'] = $searchfor;
-    }
-    #nik------------
-    if(!empty($category1) && $category1!='none'){
-        $conditions['search']['category1'] = $category1;
-    }
-    if(!empty($category2) && $category2!='none'){
-        $conditions['search']['category2'] = $category2;
-    }
-    if(!empty($condition) && $condition!='none')
+	public function format_data($header, $values, $type)
     {
-        $conditions['search']['condition'] = $condition;
-    }
-    else if(!empty($grade) && $grade!='none')
-    {
-        $conditions['search']['grade'] = $grade;
-    }
-    else if(!empty($condition) && $condition!='none' && !empty($grade) && $grade!='none'){
-        $conditions['search']['condition'] = $condition;
-        $conditions['search']['grade'] = $grade;
-    }
-    if($this->input->post('ready'))
-    {
-        $conditions['search']['ready'] = "Ready for sale";
-    }
-    if($this->input->post('recent'))
-    {
-        $conditions['search']['recent'] = $this->db->order_by('ps.created','desc');
-    }
-    if($this->input->post('sold'))
-    {
-        $conditions['search']['sold'] = "Sold";
-    }
-        #nik------------
-        
-        //total rows count
-        $totalRec = count($this->master->getRows($conditions));
-        
-        //pagination configuration
-        $config['target']      = '#postList';
-        $url = ($this->session->userdata('admin_validated')) ? 'admin/inventory/master_sheet/ajaxPaginationData' : 'master_sheet/ajaxPaginationData';
-        $data['url'] = $url;
-        $data['ajax_url'] = ($this->session->userdata('admin_validated')) ? 'admin/inventory/master_sheet' : 'master_sheet';
-        $config['base_url']    = base_url().$url;
-        $config['total_rows']  = $totalRec;
-        $config['per_page']    = $this->perPage;
-        $config['link_func']   = 'searchFilter';
-        $config['uri_segment']   = 5;
-        $this->ajax_pagination->initialize($config);
-        
-        //set start and limit
-        $conditions['start'] = $offset;
-        $conditions['limit'] = $this->perPage;
-        
-        //get posts data
-        $data['posts'] = $this->master->getRows($conditions);
-        //load the view
-        $this->load->view('master_sheet/ajax-pagination-data', $data, FALSE);
-    }
-    public function ajax_list(){
-        $list = $this->products->get_datatables();
-        $data = array();
-        $no = $_POST['start'];
-        foreach ($list as $products) {
-            $no++;
-            $row = array();
-            $row[] = $no;
-            $row[] = $products->part;
-            $row[] = $products->name;
-            $row[] = $products->description;
-            $row[] = ($products->category!=null || $products->category != '') ? get_category_name($products->category) : '';
-            $row[] = ($products->is_cto == 0) ? 'No' : 'Yes';
-            $row[] = '<a title="View Product" href="'.(($this->session->userdata('admin_validated')) ? 'admin/' : '').'products/view/'.$products->id.'" class="btn-xs btn-default product_action_btn"><i class="icon-eye"></i></a><a title="Edit Product" href="'.(($this->session->userdata('admin_validated')) ? 'admin/' : '').'products/edit/'.$products->id.'" class="btn-xs btn-default product_action_btn"><i class="icon-pencil"></i></a><a title="Delete Product" href="'.(($this->session->userdata('admin_validated')) ? 'admin/' : '').'products/delete/'.$products->id.'" class="btn-xs btn-default product_action_btn"><i class="icon-cross2"></i></a>';
-            $data[] = $row;
-        }
-        $output = array(
-                    "draw" => $_POST['draw'],
-                    "recordsTotal" => $this->products->count_all(),
-                    "recordsFiltered" => $this->products->count_filtered(),
-                    "data" => $data,
-                );
-        //output to json format
-        echo json_encode($output);
-        exit;
-    }
-
-    public function view_notes($id){
-        $data['notes'] = $this->master->get_notes_by_id($id);
-        if ($data['notes'])
+        $finalres = [];
+        $i = 0;
+        $key_array = array();
+        $data = [];
+        if ($type == 'inventory')
         {
-            $resp['status'] = 1;
-            $resp['data'] = $this->load->view('master_sheet/notes', $data, TRUE);
+            foreach ($values as $val)
+            {
+                if (reset($val) != '')
+                {
+                    $x = array_combine($header[1], $val);
+                    if (!in_array(reset($val), $key_array))
+                    {
+                        if (!empty($data))
+                        {
+                            $i++;
+                        }
+                        $key_array[] = reset($val);
+                        $data[$i] = $x;
+                        $data[$i]['internal_part'][] = [
+                            'internal_part' => $data[$i]['Internal P/N'],
+                            'conditions' => $data[$i]['Condition']
+                        ];
+                    }
+                    else
+                    {
+                        $data[$i]['internal_part'][] = [
+                            'internal_part' => $x['Internal P/N'],
+                            'conditions' => $x['Condition']
+                        ];
+                    }
+                }
+            }
+            if ($this->insert_ink($data, $type))
+            {
+                $this->session->set_flashdata('msg', 'The data has been uploaded successfully');
+            }
+            else
+            {
+                $this->session->set_flashdata('msg', 'Something went wrong, Please try again');
+            }
         }
         else
         {
-            $resp['status'] = 0;
-        }
-        echo json_encode($resp);
-    }
+            $insert_data = [];
+            $insert_data['name'] = '';
+            $insert_data['ink'] = '';
+            $root_path = $this->input->server('DOCUMENT_ROOT');
 
-    public function view_specs($id){
-        $data['specs'] = $this->master->get_specs_by_id($id);
-        // pr($data['specs']);die;
-        if ($data['specs'])
-        {
-            $resp['status'] = 1;
-            $resp['data'] = $this->load->view('master_sheet/specs', $data, TRUE);
+            foreach ($values as $val)
+            {
+                if (reset($val) != '')
+                {
+                    $arr = array_combine(reset($header), $val);
+
+                    $image_data = [];
+                    foreach ($arr as $key => $value)
+                    {
+                        if ($key == 'Internal P/N')
+							$insert_data['internal_part'] = $value;
+						
+						if ($key == 'HP P/N')
+						$insert_data['hp_part'] = $value;
+
+                        if ($key == 'Name')
+                            $insert_data['name'] = $value;
+                        if ($key == 'Ink#')
+                            $insert_data['ink'] .= $value . ' ';
+                        if ($key == 'Type')
+							$insert_data['type'] .= $value . ' ';
+						if ($key == 'Type Code')
+							$insert_data['type_code'] .= $value . ' ';
+						if ($key == 'Color')
+							$insert_data['color'] .= $value . ' ';
+						if ($key == 'Color Code')
+							$insert_data['color_code'] .= $value . ' ';
+						if ($key == 'Condition')
+							$insert_data['conditions'] .= $value . ' ';
+						if ($key == 'Condition Code')
+                            $insert_data['condition_code'] .= $value . ' ';
+                        
+                    }
+                    $id_exists = $this->products->product_exists($insert_data['internal_part']);
+                    if ($id_exists != 0)
+                    {
+                        $insert_data['added_as_temp'] = 1;
+                        $insert_data['product_added_by'] = $this->session->userdata('id');
+                        $insert_data['status'] = 0;
+                    }
+                    $id = $this->basic->insert('ink_products', $insert_data);
+                    // if ($image_data['image'] != '')
+                    // {
+                    //     $folderPath = '/assets/uploads/' . $id;
+                    //     $filename = time() . '.jpg';
+                    //     $uploadPath = $root_path . $folderPath;
+                    //     if (!file_exists($uploadPath))
+                    //     {
+                    //         mkdir($uploadPath, 0777, true);
+                    //     }
+                    //     $uploadPath = $root_path . $folderPath . '/' . $filename;
+                    //     $ch = curl_init($image_data['image']);
+                    //     $fp = fopen($uploadPath, 'wb');
+                    //     curl_setopt($ch, CURLOPT_FILE, $fp);
+                    //     curl_setopt($ch, CURLOPT_HEADER, 0);
+                    //     curl_exec($ch);
+                    //     curl_close($ch);
+                    //     fclose($fp);
+                    //     $image_data = [
+                    //         'product_id' => $id,
+                    //         'image' => $filename
+                    //     ];
+                    //     $this->basic->insert('product_images', $image_data);
+                    // }
+                }
+            }
         }
-        else
+        // $this->basic_model->insert_batch('products', $finalres);
+	}
+	
+	public function insert_ink_products($data, $type)
+    {
+        if ($type == 'inventory')
         {
-            $resp['status'] = 0;
+            foreach ($data as $ink_product)
+            {
+                $id_exists = $this->products->ink_product_exists($product['Internal P/N']);
+                if ($id_exists == 0)
+                {
+                    $product_line = $this->basic->get_single_data_by_criteria('product_line', array('name' => $product['Product Line']));
+                    $insert_data = [
+                        'part' => $product['Part Number'],
+                        'description' => $product['Description'],
+                        'product_line_id' => $product_line['id']
+                    ];
+                    $id = $this->basic_model->insert('ink_products', $insert_data);
+                }
+                else
+                {
+                    $id = $id_exists;
+                }
+                // foreach ($product['serial'] as $serial)
+                // {
+                //     $serial_exists = $this->products->get_serial($serial['serial'], $id);
+                //     if (empty($serial_exists))
+                //     {
+                //         $condition = $this->basic->get_single_data_by_criteria('original_condition', array('name' => $serial['condition']));
+                //         $serial_data = [
+                //             'serial' => $serial['serial'],
+                //             'condition' => $condition['id'],
+                //             'product_id' => $id
+                //         ];
+                //         $this->basic->insert('product_serials', $serial_data);
+                //     }
+                // }
+            }
         }
-        echo json_encode($resp);
     }
 }

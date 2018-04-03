@@ -693,13 +693,20 @@
 					$('select.status').val('').trigger('change');
 					$('.other_category').css('display','none');
 				}else{
-					if(response.product.tested_by == '' || response.product.tested_by == 0 || response.product.tested_by == null){
-                        $('#myModal').modal('show');
+					if(response.product.ptested == '' || response.product.ptested == 0 || response.product.ptested == null){
+						$('#myModal').modal('show');
                         $('.add_now').on('click', function() {
                             $('#myModal').modal('hide');
                             $('#newModal').modal('show');
                         });
-                    }
+					}
+					// if(response.product.tested_by == '' || response.product.tested_by == 0 || response.product.tested_by == null){
+                    //     $('#myModal').modal('show');
+                    //     $('.add_now').on('click', function() {
+                    //         $('#myModal').modal('hide');
+                    //         $('#newModal').modal('show');
+                    //     });
+                    // }
 					$('input.scan_loc').val(response.product.location_name);
 				$('input.scan_loc_id').val(response.product.location_id);
 				$('input.product_id').val(response.product.pid);

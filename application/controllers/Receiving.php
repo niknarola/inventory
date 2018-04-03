@@ -511,7 +511,8 @@ class Receiving extends CI_Controller {
     }
 
     public function quick_receive(){
-        // $this->session->unset_userdata('products');
+		// $this->session->unset_userdata('quick_receive_barcode');
+		// pr($_SESSION);die;
         $data['title'] = 'Quick Receive';
         $data['pallets'] = $this->receiving->get_key_value_pallets();
         $data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/products/find_product' : 'products/find_product';
@@ -601,6 +602,8 @@ class Receiving extends CI_Controller {
                 }
             }
             if($this->input->post('print_labels')){
+				
+				// echo"in if";pr($this->input->post());die;
                 $barcode_name = $barcode_part = $barcode_serial = $barcode_condition = $barcode_categories = $barcode_product_line =  $barcode_description = $barcode_data =[];
                 foreach ($products as $key => $value) {
                     $pro_data = $this->basic->get_single_data_by_criteria('products',['part'=>$value['part']]);

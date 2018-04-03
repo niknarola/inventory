@@ -90,6 +90,7 @@ class Master_sheet_model extends CI_Model
                      ->group_end();
         }
         $this->db->where('ps.is_delete', 0);
+        $this->db->where('p.is_delete', 0);
         //set start and limit
         if(array_key_exists("start",$params) && array_key_exists("limit",$params)){
             $this->db->limit($params['limit'],$params['start']);

@@ -39,6 +39,7 @@ class Testing extends CI_Controller {
 			}
 			
 			$product_data['category'] = json_encode($category);
+			$product_data['tested'] = 1;
 			// pr($product_data,1);
 			$this->basic->update('products', $product_data, ['part'=>$this->input->post('part')]);
 			// $cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
@@ -87,7 +88,7 @@ class Testing extends CI_Controller {
             $location = $this->basic->check_location_exists($loc_name);
 			$serial_data = [
 				'new_serial' => $this->input->post('new_serial'),
-				'recv_notes' => $this->input->post('recv_notes'),
+				'recv_notes' => $this->input->post('recv_notes').'-'.date('y-m-d H:i:s'),
 				'cpu' => $cpu,
 				'memory' => $this->input->post('memory'),
 				'storage' => $storage,
@@ -151,6 +152,7 @@ class Testing extends CI_Controller {
 				$timestamp['hard_drive_wiped_date'] = date('Y-m-d H:i:s');
 			}
 			$serial_data['tested_by'] = $this->session->userdata('id');
+			// pr($serial_data);die;
 			$filesCount = count($_FILES['product_files']['name']);
 			$product_id = $this->input->post('product_id');
 			$serial_id = $this->input->post('serial_id');
@@ -232,6 +234,7 @@ class Testing extends CI_Controller {
 			}
 			
 			$product_data['category'] = json_encode($category);
+			$product_data['tested'] = 1;
 			// pr($product_data,1);
 			$this->basic->update('products', $product_data, ['part'=>$this->input->post('part')]);
 			// $cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
@@ -396,6 +399,7 @@ class Testing extends CI_Controller {
 			}
 			
 			$product_data['category'] = json_encode($category);
+			$product_data['tested'] = 1;
 			// pr($product_data,1);
 			$this->basic->update('products', $product_data, ['part'=>$this->input->post('part')]);
 			// $cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
@@ -568,6 +572,7 @@ class Testing extends CI_Controller {
 			}
 			
 			$product_data['category'] = json_encode($category);
+			$product_data['tested'] = 1;
 			// pr($product_data,1);
 			$this->basic->update('products', $product_data, ['part'=>$this->input->post('part')]);
 			// $cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
@@ -698,6 +703,7 @@ class Testing extends CI_Controller {
 			}
 			
 			$product_data['category'] = json_encode($category);
+			$product_data['tested'] = 1;
 			// pr($product_data,1);
 			$this->basic->update('products', $product_data, ['part'=>$this->input->post('part')]);
 			// $cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
@@ -865,6 +871,7 @@ class Testing extends CI_Controller {
 				$category[]  = $this->input->post('category3');
 			}	
 			$product_data['category'] = json_encode($category);
+			$product_data['tested'] = 1;
 			// pr($product_data,1);
 			$this->basic->update('products', $product_data, ['part'=>$this->input->post('part')]);
 			// $cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
@@ -1038,6 +1045,7 @@ class Testing extends CI_Controller {
 			}
 			
 			$product_data['category'] = json_encode($category);
+			$product_data['tested'] = 1;
 			// pr($product_data,1);
 			$this->basic->update('products', $product_data, ['part'=>$this->input->post('part')]);
 			// $cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
@@ -1188,6 +1196,7 @@ class Testing extends CI_Controller {
 			}
 			
 			$product_data['category'] = json_encode($category);
+			$product_data['tested'] = 1;
 			// pr($product_data,1);
 			$this->basic->update('products', $product_data, ['part'=>$this->input->post('part')]);
 			// $cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
@@ -1352,6 +1361,7 @@ class Testing extends CI_Controller {
 			}
 			
 			$product_data['category'] = json_encode($category);
+			$product_data['tested'] = 1;
 			// pr($product_data,1);
 			$this->basic->update('products', $product_data, ['part'=>$this->input->post('part')]);
 			// $cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));
@@ -1514,6 +1524,7 @@ class Testing extends CI_Controller {
 			}
 			
 			$product_data['category'] = json_encode($category);
+			$product_data['tested'] = 1;
 			// pr($product_data,1);
 			$this->basic->update('products', $product_data, ['part'=>$this->input->post('part')]);
 			// $cosmetic_issue = json_encode($this->input->post('cosmetic_issue'));

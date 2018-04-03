@@ -28,7 +28,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                         <label>Part Number:</label>
-                            <input disabled="true" class="form-control" type="text" name="part" value="<?= $product['part']?>">
+                            <input class="form-control" type="text" name="part" value="<?= $product['part']?>">
                         </div>
                     </div>
                 
@@ -45,7 +45,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Grade:</label>
-                            <input type="text" class="form-control" type="text" name="part" value="<?= $product['cosmetic_grade'] ?>">
+                            <input type="text" class="form-control" type="text" name="grade" value="<?= $product['cosmetic_grade'] ?>">
                         </div>
                     </div>
                     

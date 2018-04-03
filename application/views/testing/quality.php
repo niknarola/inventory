@@ -1,10 +1,10 @@
 <div class="row">
-<div class="">
+<div class="col-md-12">
    <form method="post" action="<?= $admin_prefix; ?>testing/quality" id="quality" enctype="multipart/form-data">
       <div class="panel panel-flat">
          <div class="panel-heading">
             <div class="row">
-               <div class="">
+               <div class="col-md-12">
                   <h5 class="panel-title">Quality Control</h5>
                </div>
             </div>
@@ -533,62 +533,7 @@
    		});
    	}
    }
-          $('.pass').change(function(){
-              if(this.checked){
-                  $("input[name='fail']").prop('disabled',true);
-                  $('.f').prop('disabled', true);
-                  $('.x').prop('disabled', true);
-              }else{
-                  $("input[name='fail']").prop('disabled',false);
-                  $('.f').prop('disabled', false);
-                  $('.x').prop('disabled', false);
-              }
-          })
-   
-          $('.fail').change(function(){
-              if(this.checked){
-                  $("input[name='pass']").prop('disabled',true);
-                  $('.mn').prop('disabled', true);
-                  $('.tn').prop('disabled', true);
-                  $('.b').prop('disabled', true);
-                  $('.c').prop('disabled', true);
-              }
-              else{
-                  $("input[name='pass']").prop('disabled',false);
-                  $('.mn').prop('disabled', false);
-                  $('.tn').prop('disabled', false);
-                  $('.b').prop('disabled', false);
-                  $('.c').prop('disabled', false);
-              }
-          })
-      $( ".cosmetic_grade_boxes" ).change(function() {
-          var grade = $("input[name='cosmetic_grade']:checked").val();
-          if(grade == 'F' || grade == 'X')
-          {
-              $('.based-on-radio').find("input,textarea").prop('disabled',true);
-              //pass
-              $("input[name='pass']").prop('disabled',true);
-              $("input[name='pass']").prop('checked',false);
-              $('.mn').prop('disabled', true);
-              $('.tn').prop('disabled', true);
-              $('.b').prop('disabled', true);
-              $('.c').prop('disabled', true);
-              //fail
-              $("input[name='fail']").prop('checked',true);
-          }
-          else
-          {
-              $('.based-on-radio').find("input,textarea").prop('disabled',false);
-             //pass
-              $("input[name='pass']").prop('disabled',false);
-              $("input[name='pass']").prop('checked',true);
-              //fail
-              $("input[name='fail']").prop('checked',false);
-              $("input[name='fail']").prop('disabled',true);
-              $('.f').prop('disabled', true);
-              $('.x').prop('disabled', true);
-          }
-      });
+          
       
           $('.multiselect').multiselect({
               onChange: function() {
@@ -598,49 +543,5 @@
       });
       $(".styled, .multiselect-container input").uniform({ radioClass: 'choice'});
    
-      $('.add_more_cpu').on('click',function(){
-          $('.cpu_row').append($('.cpu1').html());
-          // $(".cpu").find('.receive_div').last().attr("data-row",$(".pallet_div").find('.receive_div').length);
-      });
-      $('.add_more_storage').on('click',function(){
-          len = $('.ssd:visible').length;
-          $('.storage1').find('.ssd').attr('name','ssd'+len);
-          $('.storage_row').append($('.storage1').html());
-          // $(".cpu").find('.receive_div').last().attr("data-row",$(".pallet_div").find('.receive_div').length);
-      });
-      $('.add_more_graphics').on('click',function(){
-          len = $('.dedicated:visible').length;
-          $('.graphics1').find('.dedicated').attr('name','dedicated'+len);
-          $('.graphics_row').append($('.graphics1').html());
-          // $(".cpu").find('.receive_div').last().attr("data-row",$(".pallet_div").find('.receive_div').length);
-      });
-   
-      $('.add_more_access').on('click', function() {
-          $('.accessories').append($('.access1').html());
-      })
-      $('.add_ok').on('click', function(){
-          var access_type = $('.accessories').find("input[name='access_type[]']");
-          var access_name = $('.accessories').find("input[name='access_name[]']");
-   
-         var type = $('.accessories').find("input[name='access_type[]']").length; 
-         for(i=0; i<type; i++){
-              $('.accessories').find("input[name='access_type[]']:eq("+ i +")").val();
-         }
-   
-         var name = $('.accessories').find("input[name='access_name[]']").length;
-         var html = '';
-         for(i=0; i<name; i++){
-             
-             var get_type = $('.accessories').find("input[name='access_type[]']:eq("+ i +")").val();
-             var get_value =  $('.accessories').find("input[name='access_name[]']:eq("+ i +")").val();
-             
-          //    html = html + '<div class="col-md-12 title-div-text">headding</div>';
-          //    html = html + '<div class="col-md-4"><input type="text"  class="form-control" name="access_name[]" value="'+ get_value +'"></div>';
-          html = html + '<div class="input-group"><span class="input-group-addon"><input type="hidden" value="'+get_type+'" name="access_type[]"><input type="checkbox" value="'+get_value+'" name="access_name[]" class="'+get_value+' checkbx"></span><label class="check_label">'+ get_value +'</label></div>';
-         }
-          $('.title-div-text').append(html);
-          $('.accessories-div').show();
-          $('#myModal2').modal('hide');
-   
-      });
+      
 </script>

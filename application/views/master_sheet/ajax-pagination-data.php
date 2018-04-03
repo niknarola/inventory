@@ -43,8 +43,9 @@
                         <a href="javascript:;" data-id="<?= $post['id'];?>" class="btn-xs btn-default product_specs" onClick="view_specs(<?= $post['id'];?>)"><i class="icon-info22"></i></a>
                         <?php } ?></td>
                     <!-- <td><?php //echo $post['recv_notes']; ?></td> -->
-                    <td><?php echo $post['location_name']; ?></td>
-                    <td><?php echo ($status != '') ? $status . '<br/>' . $post['modified'] : ''; ?></td>
+					<td><?php echo $post['location_name']; ?></td>
+					<!-- date('m-d-Y h:i A', strtotime($val['modified_date']) + $_COOKIE['currentOffset'] ); -->
+                    <td><?php echo ($status != '') ? $status . '<br/>' . date('m-d-Y h:i A', strtotime($post['modified']) + $_COOKIE['currentOffset'] ) : ''; ?></td>
                 </tr>
             <?php endforeach;
         else: ?>

@@ -5,7 +5,8 @@
             <div class="heading-elements">
                 <!-- <button type="button" data-href="admin/role/add" class="btn bg-teal add_role">Add Role</button> -->
             </div>
-        </div>
+		</div>
+		<?php //pr($product);die;?>
         <div class="panel-body">
                     <div class="col-md-4">
                         <div class="form-group">
@@ -90,8 +91,19 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                        <label>Storage:</label>
-                            <textarea class="form-control" type="text" name="part"><?= ($product['storage']!=null) ? implode(',',json_decode($product['storage'], true)) : ''; ?></textarea>
+						<label>Storage:</label>
+                            <textarea class="form-control" type="text" name="part">
+							<?php foreach(json_decode($product['storage']) as $key => $value){ 
+							$ssd = json_decode($product['ssd']);
+							if($ssd[$key] == 0){
+								echo $value.'<br>';
+							}
+							else{
+								echo $value.'(ssd)<br>';
+							}
+						}?>
+							</textarea>
+							<?//= ($product['storage']!=null) ? implode(',',json_decode($product['storage'], true)) : ''; ?>
                         </div>
                     </div>
                     <div class="col-md-4">

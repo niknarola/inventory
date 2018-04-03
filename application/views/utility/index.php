@@ -3,13 +3,27 @@
 		<div class="panel-heading">
 			<div class="row">
 				<div class="">
-					<h5 class="panel-title">Create Pallet</h5>
+					<h5 class="panel-title">Utility Module</h5>
 				</div>
 			</div>
 		</div>
 		
 		<div class="panel-body">
 			<div class="row">
+				<div class="col-md-12">
+					<div class="form-group">
+						<label class="text-semibold">Browse Products Sheet:</label>
+						<input type="file" class="form-control" name="excel" value="" placeholder="" required>
+					</div>
+					<div class="upload_button">
+						<button type="button" value="upload" name="upload_sheet" class="btn btn-default">Upload</button>
+					</div>
+					<!-- <div class="col-md-6 text-center">
+						<div class="inline_search_button">
+							<button class="btn btn-default">button</button>
+						</div>
+					</div> -->
+				</div>
 				<div class="col-md-3 form-group">
 					<input type="text" value="" name="" class="form-control" placeholder="Internal P/N">
 				</div>
@@ -23,7 +37,16 @@
 				<div class="col-md-2 form-group">
 					<input type="text" value="" name="" class="form-control" placeholder="Write here">
 				</div>
-				<div class="col-md-5 form-group">
+				<div class="col-md-2 form-group">
+					<button class="btn bg-teal" type="submit">Print Label</button>
+					<!-- <button class="btn bg-teal" type="submit">Save</button> -->
+				</div>
+				<div class="col-md-2">
+					<div class="text_amount_box text-left">
+						<input type="text" class="form-control" placeholder="Amount">
+					</div>
+				</div>
+				<div class="col-md-2 form-group">
 					<button class="btn bg-teal" type="submit">Print Label</button>
 					<!-- <button class="btn bg-teal" type="submit">Save</button> -->
 				</div>

@@ -374,7 +374,7 @@ class Product_model extends CI_Model
 
     function get_product_serial_details($conditions)
     {
-        $this->db->select('ps.*, p.id as pid, p.part as part, p.name as product_name, p.description as product_desc, p.release_date as release_date, p.category as category, pl.name as product_line,p.original_condition_id, oc.name as original_condition, p.status as product_status, p.added_as_temp, ci.id as cosmetic_issue_id, ci.name as cosmetic_issue_name,fo.id as fail_option_id, fo.name as fail_option_name, loc.name as location_name');
+        $this->db->select('ps.*, p.id as pid, p.part as part,p.tested as ptested, p.name as product_name, p.description as product_desc, p.release_date as release_date, p.category as category, pl.name as product_line,p.original_condition_id, oc.name as original_condition, p.status as product_status, p.added_as_temp, ci.id as cosmetic_issue_id, ci.name as cosmetic_issue_name,fo.id as fail_option_id, fo.name as fail_option_name, loc.name as location_name');
         $this->db->from('products p');
         $this->db->join('product_serials ps', 'ps.product_id = p.id', 'left');
         $this->db->join('cosmetic_issues ci', 'ci.id = ps.cosmetic_issue', 'left');
@@ -410,6 +410,23 @@ class Product_model extends CI_Model
         $this->db->where('is_delete', 0);
         $this->db->limit(1);
         $data = $this->db->get('products')->row_array();
+        if (!empty($data))
+        {
+            return $data['id'];
+        }
+        else
+        {
+            return 0;
+        }
+	}
+	
+	function ink_product_exists($part)
+    {
+        $this->db->select('id');
+        $this->db->where('internal_part', $part);
+        $this->db->where('is_delete', 0);
+        $this->db->limit(1);
+        $data = $this->db->get('ink_products')->row_array();
         if (!empty($data))
         {
             return $data['id'];

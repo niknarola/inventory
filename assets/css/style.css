@@ -130,3 +130,5 @@ label.check_label {border: 1px solid #EEE;  padding: 12px 0 10px 15px; }
 .founder-name{     margin: 10px -10px 10px; padding: 0; font-size: 18px; line-height: normal; display: block; color: #4CAF50; text-transform: uppercase;} 
 #userData tr td:first-child{ text-align:center; }
 .print_btn{padding: 10px 25px;background: #26a69a;line-height: 20px;border: 2px solid #26a69a;text-transform: uppercase;font-weight: 500;font-size: 14px;color: #fff;}
+.upload_button button{margin-bottom: 15px;}
+.content{padding: 0 10px 60px 10px;}

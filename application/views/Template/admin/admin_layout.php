@@ -31,6 +31,11 @@
         <script type="text/javascript" src="<?=base_url()?>assets/js/moment.min.js"></script>
         <script type="text/javascript" src="<?=base_url()?>assets/js/daterangepicker.js"></script>
 	<!-- /theme JS files -->
+	<script>
+		var currentDate = new Date();
+        var currentOffset = (currentDate.getTimezoneOffset() * -1 ) * 60; // Seconds
+        document.cookie="currentOffset="+currentOffset;
+	</script>
 </head>
 <body>
 	<!-- Main navbar -->

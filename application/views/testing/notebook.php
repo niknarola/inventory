@@ -1,5 +1,5 @@
 <div class="row">
-	<div class="">
+	<div class="col-md-12">
 		<form method="post" action="<?= $admin_prefix; ?>testing/notebook" id="notebook" enctype="multipart/form-data">
 			<div class="panel panel-flat">
 				<div class="panel-heading">
@@ -139,25 +139,25 @@
 										<div class="input-group">
 										<span class="input-group-addon">
 											<label class="radio-inline">
-												<input type="radio" value="A" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx mn">
+												<input type="radio" value="MN" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx mn">
                                                 MN
 											</label>
 										</span>
 										<span class="input-group-addon">
 											<label class="radio-inline">
-												<input type="radio" value="B" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx tn">
+												<input type="radio" value="TN" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx tn">
 												TN
 											</label>
 										</span>
 										<span class="input-group-addon">
 											<label class="radio-inline">
-												<input type="radio" value="C" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx b">
+												<input type="radio" value="B" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx b">
 												B
 											</label>
 										</span>
 										<span class="input-group-addon">
 											<label class="radio-inline">
-												<input type="radio" value="D" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx c">
+												<input type="radio" value="C" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx c">
 												C
 											</label>
 										</span>
@@ -754,14 +754,37 @@
 					$('select.warranty').val('Active').trigger('change');
 					$('.other_category').css('display','none');
 				}else{
-                    
-                    if(response.product.tested_by == '' || response.product.tested_by == 0 || response.product.tested_by == null){
-                        $('#myModal').modal('show');
+                    if(response.product.ptested == '' || response.product.ptested == 0 || response.product.ptested == null){
+						$('#myModal').modal('show');
                         $('.add_now').on('click', function() {
                             $('#myModal').modal('hide');
                             $('#newModal').modal('show');
                         });
-                    }
+					} else {
+						// need to add html
+						var html="";
+						var array_type = '';
+						if(response.product.accessory_name){
+							var temp_name = JSON.parse(response.product.accessory_name);
+							var temp_type = JSON.parse(response.product.accessory_type);
+							html= html + '';
+							if(temp_name!=null){
+								for(var i=0;i<temp_name.length;i++){
+									$('.accessories-div').show();
+									$(".title-div-text").append('<div class="input-group"><span class="input-group-addon"><input type="hidden" value="" name="access_type[]"><input type="checkbox" value="'+temp_name[i]+'" name="access_name[]" checked="true" class=" '+temp_name[i]+' checkbx"></span><label class="check_label">'+temp_name[i]+'</label></div>');
+								}
+							}
+						}
+
+
+					}
+                    // if(response.product.tested_by == '' || response.product.tested_by == 0 || response.product.tested_by == null){
+                    //     $('#myModal').modal('show');
+                    //     $('.add_now').on('click', function() {
+                    //         $('#myModal').modal('hide');
+                    //         $('#newModal').modal('show');
+                    //     });
+                    // }
     			$('input.scan_loc').val(response.product.location_name);
 				$('input.scan_loc_id').val(response.product.location_id);
 				$('input.product_id').val(response.product.pid);
@@ -1031,8 +1054,10 @@
 			new_json.value1=$(this).find('.access-name-select').val();
 			//Ac adapter
 			if(new_json.name == 'AC Adapter'){
+				console.log('in if ac adapeter');
 				new_json.value1 = $(this).find('.access-name-select').val();
 				if(new_json.value1 == 'Other'){
+					console.log('in if ac adapeter other name');
 					new_json.value2 = $(this).find('.other_access_name').val();	
 				}
 	    	}
