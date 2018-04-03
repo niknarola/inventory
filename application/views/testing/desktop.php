@@ -368,9 +368,9 @@
 									<div class="form-group">
 										<label>Warranty: </label>
 										<select name="warranty" class="form-control warranty" onchange="warranty_change(this.value)">
+											<option value="Unknown">Unknown</option>
 											<option value="Active">Active</option>
 											<option value="Expired">Expired</option>
-											<option value="Unknown">Unknown</option>
 										</select>
 									</div>
 								</div>
@@ -502,18 +502,45 @@
         <div class="modal-content">
             <div class="modal-body">
                 <div class="row accessories">
-                    <div class="col-md-5">
+				<div class="new_add_wrapper">
+				    <div class="col-md-5">
                         <div class="form-group">
                             Accessories Type
-                            <input type="text" class="form-control cd_soft" name="access_type[]" value="" placeholder="" />
+                            <select name="access_type0[]" class="form-control cd_soft access-type-select">
+                            	<option value="AC Adapter">AC Adapter</option>
+                            	<option value="Mouse">Mouse</option>
+                            	<option value="Keyboard">Keyboard</option>
+                            	<option value="Stylus Pen">Stylus Pen</option>
+                            	<option value="Docking Station">Docking Station</option>
+                            	<option value="Power Jacket">Power Jacket</option>
+                            	<option value="Rugged Jacket">Rugged Jacket</option>
+                            	<option value="Detachable Keyboard">Detachable Keyboard</option>
+                            	<option value="Detachable Power Keyboard">Detachable Power Keyboard</option>
+                            	<option value="Other">Other</option>
+                            </select>
+                            <input style="display: none; margin-top:10px;" type="text" name="other_access_type0[]" value="" class="form-control other_access_type" placeholder="">
                         </div>
                     </div>
                     <div class="col-md-5">
-                        <div class="form-group">
+                        <div class="form-group" >
                             Accessories Name
-                            <input type="text" class="form-control cd_soft" name="access_name[]" value="" placeholder="" />
+                            <input  type="text" class="form-control cd_soft access-name-input" style="display:none;" name="access_name0[]" value="" placeholder="" />
+
+                            <select name="access_name0[]" style="display:block;" class="form-control cd_soft access-name-select">
+                            	<option value="45W Blue Tip">45W Blue Tip</option>
+                            	<option value="65W Blue Tip">65W Blue Tip</option>
+                            	<option value="150W+ Blue Tip">150W+ Blue Tip</option>
+                            	<option value="45W Black Tip">45W Black Tip</option>
+                            	<option value="65W Black Tip">65W Black Tip</option>
+                            	<option value="150W+ Black Tip">150W+ Black Tip</option>
+                            	<option value="No AC Adapter">No AC Adapter</option>
+                            	<option value="Other">Other</option>
+                            </select>
+
+                            <input style="display: none; margin-top:10px;" type="text" name="other_access_name0[]" value="" class="form-control other_access_name" placeholder="">
                         </div>
                     </div>
+				</div>
                     <div class="col-md-2" ><i class="icon-plus-circle2 add_more_access"></i></div>
                 </div>
             </div>
@@ -524,16 +551,43 @@
     </div>
 </div>
 <div class="row access1" style="display:none;">
-<div class="col-md-5">
-    <div class="form-group">
-        <input type="text" class="form-control cd_soft" name="access_type[]" value="" placeholder="" />
-    </div>
-</div>
-<div class="col-md-5">
-    <div class="form-group">
-        <input type="text" class="form-control cd_soft" name="access_name[]" value="" placeholder="" />
-    </div>
-</div>
+	<div class="new_add_wrapper">
+		<div class="col-md-5">
+			<div class="form-group">
+				Accessories Type
+				<select name="access_type[]" class="form-control cd_soft access-type-select">
+					<option value="AC Adapter">AC Adapter</option>
+					<option value="Mouse">Mouse</option>
+					<option value="Keyboard">Keyboard</option>
+					<option value="Stylus Pen">Stylus Pen</option>
+					<option value="Docking Station">Docking Station</option>
+					<option value="Power Jacket">Power Jacket</option>
+					<option value="Rugged Jacket">Rugged Jacket</option>
+					<option value="Detachable Keyboard">Detachable Keyboard</option>
+					<option value="Detachable Power Keyboard">Detachable Power Keyboard</option>
+					<option value="Other">Other</option>
+				</select>
+				<input style="display: none; margin-top:10px;" type="text" name="other_access_type[]" value="" class="form-control other_access_type" placeholder="">
+			</div>
+		</div>
+		<div class="col-md-5">
+			<div class="form-group" >
+				Accessories Name
+				<input  type="text" class="form-control cd_soft access-name-input" style="display:none;" name="access_name[]" value="" placeholder="" />
+				<select name="access_name[]" style="display:block;" class="form-control cd_soft access-name-select">
+					<option value="45W Blue Tip">45W Blue Tip</option>
+					<option value="65W Blue Tip">65W Blue Tip</option>
+					<option value="150W+ Blue Tip">150W+ Blue Tip</option>
+					<option value="45W Black Tip">45W Black Tip</option>
+					<option value="65W Black Tip">65W Black Tip</option>
+					<option value="150W+ Black Tip">150W+ Black Tip</option>
+					<option value="No AC Adapter">No AC Adapter</option>
+					<option value="Other">Other</option>
+				</select>
+				<input style="display: none; margin-top:10px;" type="text" name="other_access_name[]" value="" class="form-control other_access_name" placeholder="">
+			</div>
+		</div>
+	</div>
 </div>
 
 <script type="text/javascript" src="assets/js/uniform.min.js"></script>
@@ -576,6 +630,7 @@
 	    get_sub_categories(3, 'category2');
 	    // $('.category3').multiselect();
 	});
+	$('input.warranty_date').attr('disabled',true);
 	function warranty_change(val){
 		if(val!='Active'){
 	    		$('input.warranty_date').attr('disabled',true);
@@ -876,9 +931,7 @@
         $('.graphics_row').append($('.graphics1').html());
         // $(".cpu").find('.receive_div').last().attr("data-row",$(".pallet_div").find('.receive_div').length);
     });
-    $('.add_more_access').on('click', function() {
-        $('.accessories').append($('.access1').html());
-    })
+
     $('.pass').change(function(){
             if(this.checked){
                 $("input[name='fail']").prop('disabled',true);
@@ -936,29 +989,85 @@
         }
     });
 
-$('.add_ok').on('click', function(){
-        var access_type = $('.accessories').find("input[name='access_type[]']");
-        var access_name = $('.accessories').find("input[name='access_name[]']");
+$(document).on('change', '.status', function(event) {
+	     	if($(this).val() == 'Other'){
+	     		$('.other_status').css('display', 'block');
+	    	}else{
+	    		$('.other_status').css('display', 'none');
+	    	}
 
-       var type = $('.accessories').find("input[name='access_type[]']").length; 
-       for(i=0; i<type; i++){
-            $('.accessories').find("input[name='access_type[]']:eq("+ i +")").val();
-       }
+	    });
+	    $(document).on('change', '.access-type-select', function(event) {
+			$(this).parents('.new_add_wrapper').find('.access-name-select').css('display', 'none');
+	    		$(this).parents('.new_add_wrapper').find('.access-name-input').css('display', 'none');
+				$(this).parents('.new_add_wrapper').find('.other_access_type').css('display', 'none');
+	     	if($(this).val() == 'AC Adapter'){
+				$(this).parents('.new_add_wrapper').find('.access-name-select').css('display', 'block');
+	    		$(this).parents('.new_add_wrapper').find('.access-name-input').css('display', 'none');
+	    	}else if($(this).val() == 'Other'){
+				$(this).parents('.new_add_wrapper').find('.access-name-select').css('display', 'none');
+	    		$(this).parents('.new_add_wrapper').find('.access-name-input').css('display', 'block');
+				$(this).parents('.new_add_wrapper').find('.other_access_type').css('display', 'block');
+			}else if($(this).val() != 'AC Adapter'){
+	    		$(this).parents('.new_add_wrapper').find('.access-name-select').css('display', 'none');
+	    		$(this).parents('.new_add_wrapper').find('.access-name-input').css('display', 'block');
+	    	}
 
-       var name = $('.accessories').find("input[name='access_name[]']").length;
-       var html = '';
-       for(i=0; i<name; i++){
-           
-           var get_type = $('.accessories').find("input[name='access_type[]']:eq("+ i +")").val();
-           var get_value =  $('.accessories').find("input[name='access_name[]']:eq("+ i +")").val();
-           
-        //    html = html + '<div class="col-md-12 title-div-text">headding</div>';
-        //    html = html + '<div class="col-md-4"><input type="text"  class="form-control" name="access_name[]" value="'+ get_value +'"></div>';
-        html = html + '<div class="input-group"><span class="input-group-addon"><input type="hidden" value="'+get_type+'" name="access_type[]"><input type="checkbox" value="'+get_value+'" name="access_name[]" class="'+get_value+' checkbx"></span><label class="check_label">'+ get_value +'</label></div>';
-       }
-        $('.title-div-text').append(html);
-        $('.accessories-div').show();
-        $('#myModal2').modal('hide');
+	    });
+	    $(document).on('change', '.access-name-select', function(event) {
+	     	if($(this).val() == 'Other'){
+				$(this).parents('.new_add_wrapper').find('.other_access_name').css('display', 'block');
+	    	}else{
+	    		$(this).parents('.new_add_wrapper').find('.other_access_name').css('display', 'none');
+	    	}
+
+	    });
+		
+		$('.add_more_access').on('click', function() {
+		len = $('.access-type-select:visible').length;
+        $('.access1').find('.access-type-select').attr('name','access_type'+len+'[]');
+
+		len = $('.access-name-select:visible').length;
+        $('.access1').find('.access-name-select').attr('name','access_name'+len+'[]');
+
+        $('.accessories').append($('.access1').html());
+    })
+    $('.add_ok').on('click', function(){
+		var new_array = [];
+		$('.accessories .new_add_wrapper').each(function(obj){
+			var new_json = {};
+			new_json.name=$(this).find('.access-type-select').val();
+			new_json.value1=$(this).find('.access-name-select').val();
+			//Ac adapter
+			if(new_json.name == 'AC Adapter'){
+				new_json.value1 = $(this).find('.access-name-select').val();
+				if(new_json.value1 == 'Other'){
+					new_json.value2 = $(this).find('.other_access_name').val();	
+				}
+	    	}
+			//Other
+			else if(new_json.name == 'Other'){
+	    		new_json.value1 = $(this).find('.access-name-input').val();
+				new_json.value2 = $(this).find('.other_access_type').val();
+			}
+			//Other type
+			else if(new_json.name != 'AC Adapter'){
+	    		new_json.value1 = $(this).find('.access-name-input').val();
+	    	}
+			new_array.push(new_json);
+		});
+		var data="";
+		$.ajax({
+			url: 'admin/testing/get_accessories',
+			type: 'POST',
+			data: {"data": JSON.stringify(new_array)},
+			success: function (data) {
+				$('.title-div-text').append(data);
+			}
+		});
+				$('#myModal2').modal('hide');
+				$('.accessories-div').show();
+		
 
     });
 </script>

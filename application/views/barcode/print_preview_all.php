@@ -25,7 +25,7 @@
             <div class="printarea">
             
             <?php $i = 1; ?>
-            <?php foreach ($print_labels as $key => $value): pr($print_labels)?>
+            <?php foreach ($print_labels as $key => $value):?>
                 <div class="print-panel hidden-print">
                     <div class="row text-center barcode_labels">
                         <div class="col-md-6 col-md-offset-3 block">

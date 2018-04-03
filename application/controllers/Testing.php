@@ -1803,6 +1803,11 @@ class Testing extends CI_Controller {
         $data['categories'] = $category_names;
         $data['admin_prefix'] = $this->admin_prefix;
 		$this->template->load($this->layout, 'testing/repair', $data);
-    }
+	}
+	
+	function get_accessories(){
+		$data['access'] = json_decode($this->input->post('data'));
+		$this->load->view('testing/accessories_page', $data);
+	}
 
 }

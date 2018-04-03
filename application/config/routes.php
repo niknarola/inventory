@@ -118,6 +118,7 @@ $route['admin/inventory/location_master']='locations/master';
 $route['inventory/location_master']='locations/master';
 $route['admin/locations/get_serial_part_by_pallet']='locations/get_serial_part_by_pallet';
 
+$route['admin/testing/get_accessories']='testing/get_accessories';
 $route['admin/testing/notebook']='testing/notebook';
 $route['admin/testing/desktop']='testing/desktop';
 $route['admin/testing/thin_client']='testing/thin_client';

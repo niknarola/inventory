@@ -39,9 +39,7 @@ class Create_pallet extends CI_Controller {
         $data['admin_prefix'] = $this->admin_prefix;
         $data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/testing/find_product' : 'testing/find_product';
         $get_todays_cnt = $this->receiving->get_todays_total_pallets();
-        echo 'in control'.$this->db->last_query();
         if($this->input->post()){
-            pr($this->input->post());
             $pallet_type='';
             $prefix='';
             $action='';
@@ -71,35 +69,35 @@ class Create_pallet extends CI_Controller {
                 $prefix = 'IN';
             }
 
-            $loc_name = $this->input->post('location');
-            $location = $this->basic->check_location_exists($loc_name);
-            
-                $data['serial_array'] =  $_POST['serials'];
-                $data['action'] = $action;
-                $data['pallet_type'] = $pallet_type;
-                $data['serials'] = $this->master->get_data($data['serial_array']);
-                // pr($data['serials']);
-            
+			$loc_name = $this->input->post('location');
+			$location = $this->basic->check_location_exists($loc_name);
+			$data['serial_array'] =  $_POST['serials'];
+			$data['action'] = $action;
+			$data['pallet_type'] = $pallet_type;
+			$data['serials'] = $this->master->get_data($data['serial_array']);
 
-            $k=0; $j = $get_todays_cnt+1;
-            // for ($i=0; $i < 0; $i++) {
-                $arr = [];
-                $arr['pallet_id'] = $prefix .date('mdY').'-'.$j;
-                // $arr['location_id'] = $location['id'][$k];
-                $arr['received_by'] = $this->session->userdata('id');
-                $insert_data[] = $arr;
-                $k++; $j++;
-            // }
-                pr($insert_data);die;
-                $this->basic->insert_batch('pallets', $insert_data);
+			$k=0; $j = $get_todays_cnt+1;
+			$arr = [];
+			$arr['pallet_id'] = $prefix .date('mdY').'-'.$j;
+			$arr['location_id'] = $location['id'];
+			$arr['received_by'] = $this->session->userdata('id');
+			$insert_data[] = $arr;
+			$k++; $j++;
 
-            // if($pallet_type == 'receiving'){
-            //     $data['pallet_type'] =
-            // }
+			$this->basic->insert_batch('pallets', $insert_data);
 
+			// if($this->input->post('print_labels')){
+			// 	$this->session->set_userdata(array('pallet_print_data'=>$insert_data));
+			// 	$session_data=[];
+			// 	// $session_data['bol_or_tracking'] = $this->input->post('bol_or_tracking');
+			// 	// $session_data['main_location'] = $main_location;
+			// 	// $session_data['ref'] = $ref;
+			// 	// $this->basic->insert_batch('pallets', $insert_data);
+			// 	// $this->session->set_userdata(array('pallets_next'=>$session_data));
+			// 	redirect($url.'barcode/pallet_labels');
+			// }
         }
         $print = $this->load->view('create_pallet/print_contents', $data, true);
-        echo $print; die;
         echo json_encode($print);
         die;
     }

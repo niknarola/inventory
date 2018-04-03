@@ -84,6 +84,20 @@
 </div>
 </div>
 
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                
+            </div>
+            <div class="modal-body">
+			<input type="text" value="" name="custom_field" id="custom_field" class="form-control custom_field" placeholder="Custom Field">
+                <center><button type="button" class="btn btn-info btn-lg add_now">Add </button></center>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="hidden_content_div" id="hidden_content_div" style="display:none"></div>
 
 <script type="text/javascript">
@@ -139,6 +153,25 @@
     });
 
 
+	$('.print_labels').click(function(){
+		$('#myModal').modal('show');
+		$.ajax({
+                type: 'POST',
+                url: 'admin/inventory/create_pallet/print_labels',
+                async: false,
+                dataType: 'JSON',
+                data: data,
+                success: function (data) {
+                    $('.hidden_content_div').html(data);
+                    var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+                    mywindow.document.write(document.getElementById('hidden_content_div').innerHTML);
+                    mywindow.document.close();
+                    mywindow.focus();
+                    mywindow.print();
+                    mywindow.close();
+                }
+            });
+	})
     $(document).on('change','.pallet-btm .serial-new',function(){
         get_product_details($(this).val(),$(this).parents('.pallet-btm'));
     })
