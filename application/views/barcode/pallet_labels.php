@@ -25,32 +25,7 @@
             </div>
             <div class="printarea">
             
-            <?php //$i = 1; ?>
-            <?php //foreach ($print_labels as $key => $value): ?>
-                <!-- <div class="print-panel hidden-print" id="test_div">
-                    <div class="row text-center barcode_labels">
-                        <div class="col-md-6 col-md-offset-3 block">
-                        <div class="row">
-                            <span class="bol"><b>BOL # <?php //echo $value['bol_or_tracking'] ?></b></span>
-                        </div>
-                        <div class="row">
-                            <span><b>Pallet <?php //echo $i.'/'.$value['pallet_part'] ?> - Item Count: <?php //echo $value['item_count'] ?></b></span>
-                        </div>
-                        <div class="row">
-                            <span class="pallet_id"><b><?php //echo $value['pallet_id'] ?></b></span>
-                        </div>
-                            <div class="row">
-                                <img style="margin-bottom: 5px;" src="<?php //echo ($this->uri->segment(1) == 'admin') ? 'admin/' : ''; ?><?php //echo 'barcode?barcode='.rawurlencode($value['pallet_id']).'&text='.rawurlencode($value['pallet_id']).'&scale=4.5&thickness=30' ?>"/>
-                            </div>
-                            <div class="row">
-                                <span><b>Ref Number: <?php //echo $value['ref'] ?></b></span>
-                            </div>
-                            <div class="row"><button type="submit" class="btn btn-info print_btn hidden-print">Print Preview</button></div>
-                        </div>
-                        </div>
-                </div>
-                <hr> -->
-            <?php// $i++; endforeach ?>
+            
             </div>
         </div>
     </div>

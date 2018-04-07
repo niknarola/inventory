@@ -62,26 +62,35 @@ class Cleaning extends CI_Controller {
                 'packaging_condition'=>($this->input->post('packaging_condition')) ? $this->input->post('packaging_condition') : '',
                 'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : null
             ];
-            $loc_name = $this->input->post('current_pallet');
-            $location = $this->basic->check_location_exists($loc_name);         
-            if($this->input->post('add')){
-                $serial_data['location_id'] = $location['id'];
-            }
-            if($this->input->post('close')){
-                $pallet_name = $this->input->post('scan_loc');
-                $pallet = $this->basic->check_pallet_exists($pallet_name);
-				$serial_data['pallet_id'] = $pallet['id'];
+			$pallet_name = $this->input->post('current_pallet');
+			$pallet = $this->basic->check_pallet_exists($pallet_name);
 
-				$loc_name = $this->input->post('scan_loc');
-            	$location = $this->basic->check_location_exists($loc_name); 
+			$loc_name = $this->input->post('scan_loc');
+			$location = $this->basic->check_location_exists($loc_name);
+
+            // if($this->input->post('add') && ($this->input->post('current_pallet') !='')){
+				// $serial_data['pallet_id'] = $this->input->post('current_pallet_id');
+				// $serial_data['location_id'] = $this->input->post('scan_loc_id');
+			// }else 
+			if($this->input->post('add') && $this->input->post('current_pallet')){
+				$serial_data['pallet_id'] = $pallet['id'];
+			}
+			
+            // if($this->input->post('close') && ($this->input->post('scan_loc') !='')){
+			// 	$serial_data['pallet_id'] = $this->input->post('current_pallet_id');
+			// 	$serial_data['location_id'] = $this->input->post('scan_loc_id');
+			// }else 
+			if($this->input->post('close') && $this->input->post('scan_loc')){
 				$serial_data['location_id'] = $location['id'];
-            }
+			}
+			
             // echo"serial data";pr($serial_data);
             // die;
             $serial_data['packout_complete'] = ($this->input->post('packout_complete')) ? 1 : 0;
             if($serial_data['packout_complete'] == '1'){
                 $serial_data['status'] = 'Ready For Sale';
-            }
+			}
+			// pr($serial_data);die;
 			$serial_data['send_to_finished_goods'] = ($this->input->post('send_to_finished_goods')) ? 1 : 0;
 			$serial_data['cd_software'] = ($this->input->post('cd_software')) ? 1 : 0;
 			$serial_data['power_cord'] = ($this->input->post('power_cord')) ? 1 : 0;

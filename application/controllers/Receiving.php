@@ -511,7 +511,7 @@ class Receiving extends CI_Controller {
     }
 
     public function quick_receive(){
-		// $this->session->unset_userdata('quick_receive_barcode');
+		// $this->session->unset_userdata('products');
 		// pr($_SESSION);die;
         $data['title'] = 'Quick Receive';
         $data['pallets'] = $this->receiving->get_key_value_pallets();
@@ -590,9 +590,27 @@ class Receiving extends CI_Controller {
                         //'inspection_notes' => $product['inspection_notes'],
                         'product_id' => $id,
                         'pallet_id'=>$product['pallet_id'],
-                        'condition'=>$product['condition']
-                    ];
-                    $serial_id = $this->basic->insert('product_serials', $serial_data);
+						'condition'=>$product['condition'],
+						'status'=>'Received'
+					];
+					
+					$data['access'] = $this->products->get_accessory_by_part(array_filter($this->input->post('part')));
+					// echo"access";pr($data['access']);
+					$access = [];
+					foreach($data['access'] as $key => $value){
+						if((!empty($value['accessory_type'])) || (!empty($value['accessory_name']))){
+							$access[$key]['accessory_type'] = $value['accessory_type'];
+							$access[$key]['accessory_name'] = $value['accessory_name'];
+						}
+					}
+					// echo"access";pr($access);
+					foreach($access as $key =>$value){
+						$serial_data['accessory_type'] = $value['accessory_type'];
+						$serial_data['accessory_name'] = $value['accessory_name'];
+					}
+					// pr($serial_data);die;
+					$serial_id = $this->basic->insert('product_serials', $serial_data);
+					// echo"serial";pr($serial_data);die;
                     $product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['id'=>$serial_id]);
                     $timestamp = [
                         'received_date'=>date('Y-m-d H:i:s'),
@@ -602,7 +620,6 @@ class Receiving extends CI_Controller {
                 }
             }
             if($this->input->post('print_labels')){
-				
 				// echo"in if";pr($this->input->post());die;
                 $barcode_name = $barcode_part = $barcode_serial = $barcode_condition = $barcode_categories = $barcode_product_line =  $barcode_description = $barcode_data =[];
                 foreach ($products as $key => $value) {

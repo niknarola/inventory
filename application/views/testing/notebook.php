@@ -263,10 +263,10 @@
                                                 <div class="col-md-1"><i class="icon-plus-circle2 add_more_graphics"></i></div>
 											</div>
 											<div class="row scr-wrap">
-												<div class="col-md-2">Screen</div>
-												<div class="col-md-3"><input type="text" class="form-control screen" name="screen" value="" placeholder="Screen"></div>
-												<div class="col-md-3"><input type="text" class="form-control resolution" name="resolution" value="" placeholder="Resolution"></div>
+												<div class="col-md-2">Display Type</div>
 												<div class="col-md-3"><input type="text" class="form-control size" name="size" value="" placeholder="Size"></div>
+												<div class="col-md-3"><input type="text" class="form-control resolution" name="resolution" value="" placeholder="Resolution"></div>
+												<div class="col-md-3"><input type="text" class="form-control screen" name="screen" value="" placeholder="Display Type"></div>
 											</div>
 											<div class="row">
 												<div class="col-md-2">OS</div>
@@ -769,10 +769,12 @@
 							var temp_type = JSON.parse(response.product.accessory_type);
 							html= html + '';
 							if(temp_name!=null){
+								var str = "";
 								for(var i=0;i<temp_name.length;i++){
 									$('.accessories-div').show();
-									$(".title-div-text").append('<div class="input-group"><span class="input-group-addon"><input type="hidden" value="" name="access_type[]"><input type="checkbox" value="'+temp_name[i]+'" name="access_name[]" checked="true" class=" '+temp_name[i]+' checkbx"></span><label class="check_label">'+temp_name[i]+'</label></div>');
+									str = str +  '<div class="input-group"><span class="input-group-addon"><input type="hidden" value="" name="access_type[]"><input type="checkbox" value="'+temp_name[i]+'" name="access_name[]" checked="true" class=" '+temp_name[i]+' checkbx"></span><label class="check_label">'+temp_name[i]+'</label></div>';
 								}
+									$(".title-div-text").html(str);
 							}
 						}
 
@@ -814,6 +816,10 @@
 				$('.touchscreen').prop('checked', false);
 				if(response.product.touch_screen==1){
 					$('.touchscreen').prop('checked', true);
+				}
+				$('.tgfg_capable').prop('checked', false);
+				if(response.product.tgfg_capable==1){
+					$('.tgfg_capable').prop('checked', true);
 				}
 				$('.cosmetic_grade_boxes').each(function(index, el) {
 					$(this).prop('checked', false);
@@ -1054,17 +1060,18 @@
 			new_json.value1=$(this).find('.access-name-select').val();
 			//Ac adapter
 			if(new_json.name == 'AC Adapter'){
-				console.log('in if ac adapeter');
+				// console.log('in if ac adapeter');
 				new_json.value1 = $(this).find('.access-name-select').val();
 				if(new_json.value1 == 'Other'){
-					console.log('in if ac adapeter other name');
+					// console.log('in if ac adapeter other name');
+					// new_json.value1 = $(this).find('.other_access_type').val();
 					new_json.value2 = $(this).find('.other_access_name').val();	
 				}
 	    	}
 			//Other
 			else if(new_json.name == 'Other'){
-	    		new_json.value1 = $(this).find('.access-name-input').val();
-				new_json.value2 = $(this).find('.other_access_type').val();
+	    		new_json.value2 = $(this).find('.access-name-input').val();
+				new_json.value1 = $(this).find('.other_access_type').val();
 			}
 			//Other type
 			else if(new_json.name != 'AC Adapter'){

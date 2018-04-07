@@ -187,7 +187,8 @@ class Products extends CI_Controller
     {
         $conditions = $this->input->post();
         $product_details = $this->products->get_product_serial_details($conditions);
-        // pr($product_details,1);
+		// echo $this->db->last_query();
+		// pr($product_details,1);
         $view['status'] = 0;
         if (!empty($product_details))
         {

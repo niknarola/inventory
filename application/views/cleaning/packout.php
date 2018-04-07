@@ -223,8 +223,8 @@
 								</div>
 								<div class="row">
 									<div class="col-md-6 accessories" style="display:none;">
-                                        <div class="col-md-6 title-div-text">
-                                            <label>Accessories</label>
+                                            <label>Accessories:</label>
+                                        <div class="col-md-12 title-div-text">
 
                                         </div>
 								    </div>
@@ -275,6 +275,7 @@
                             <div class="col-md-12">
                                 <div class="col-md-3">
                                     <input type="text" name="current_pallet" value="" class="form-control current_pallet" placeholder="Current Pallet"/>
+									<input type="hidden" name="current_pallet_id" class="current_pallet_id" value="">
                                 </div>    
                                 <div class="col-md-2">
                                 <input type="text" name="scan_loc" value="" placeholder="Scan To Location" class="form-control scan_loc">
@@ -294,7 +295,24 @@
 		</div>
 	</div>
 	<!-- <div class=""></div> -->
+	<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content -->
+     <div class="modal-content">
+            <div class="modal-header">
+				Message
+            </div>
+            <div class="modal-body">
+				This product cannot be scanned  as its graded as F or X.
+			<!-- <input type="text" value="" name="custom_field" id="custom_field" class="form-control custom_field" placeholder="Custom Field">
+                <center><button type="button" class="btn btn-info btn-lg add_now">Add </button></center> -->
+            </div>
+        </div>
+    </div>
 </div>
+</div>
+
+
 <script type="text/javascript" src="assets/js/uniform.min.js"></script>
 <script type="text/javascript" src="assets/js/bootstrap_multiselect.js"></script>
 <script type="text/javascript" src="assets/js/fileinput.min.js"></script>
@@ -378,14 +396,15 @@
     function get_product_details(){
   		//var part = $('input.part').val();
     	var serial = $('input.serial').val();
+		var new_serial = $('input.serial').val();
     	// var new_serial = $('input.new_serial').val();
 		//if(part!='' && serial!=''){
 		if(serial!=''){
 			// var data = {part: part, serial: serial};
 			var data = {serial: serial};
-			// if(new_serial!=''){
-			// 	data.new_serial = new_serial;
-			// }
+			if(new_serial!=''){
+				data.new_serial = new_serial;
+			}
 			$.ajax({
 				url: '<?php echo $ajax_url; ?>',
 				type: 'POST',
@@ -403,11 +422,15 @@
                     $('select.status').val('').trigger('change');
 					$('.other_category').css('display','none');
 				}else{
-                // console.log('herer',response.product.product_name);
-                    // if(response.product.location_id!=null){
-                // $('input.scan_loc').val(response.product.location_name);
-				// $('input.scan_loc_id').val(response.product.location_id);
-				$('input.current_pallet').val(response.product.location_name);
+				if(response.product.cosmetic_grade == 'F' || response.product.cosmetic_grade == 'X'){
+					console.log('in if',response.product.cosmetic_grade);
+					$('#myModal').modal('show');
+				}
+				$('input.current_pallet_id').val(response.product.plid);
+				$('input.current_pallet').val(response.product.location_pallet);
+                $('input.scan_loc').val(response.product.location_name);
+				$('input.scan_loc_id').val(response.product.locid);
+				// $('input.current_pallet').val(response.product.location_name);
 				$('input.product_id').val(response.product.pid);
 				$('input.part').val(response.product.part);
 				$('input.serial_id').val(response.product.id);
@@ -418,7 +441,7 @@
 				
 				//---------------
 				$('textarea.description').html(response.product.product_desc);
-				$('textarea.additional_accessories').html(response.product.additional_accessories);
+				$('textarea.additional_accessories').html(response.product.additional_info);
 				$('textarea.packout_notes').html(response.product.packaging_notes);
 				$('textarea.recv_notes').html(response.product.recv_notes);
                 $('select.status').val(response.product.status).trigger('change');
@@ -450,15 +473,22 @@
 					$('.damaged_box').prop('checked', true);
 				}
 			}
+			var category = JSON.parse(response.product.category);
+            console.log(category);
+            if(category!=null){
+       			$('select.category1').val(category[0]);
+            }
             if(response.product.accessory_name!=null && response.product.accessory_name!=''){
                 var accessory = JSON.parse(response.product.accessory_name);
+				console.log('accessory',accessory);
                 var html ='';
-                for(i=0;i<accessory.length;i++){
-                    html = html + '<div class="input-group"><span class="input-group-addon"><input type="checkbox" value="'+accessory[i]+'" name="access_name[]" class="'+accessory[i]+' checkbx"></span><label class="check_label">'+accessory[i]+'</label></div>';
-                }
-                $('.title-div-text').append(html);
-                $('.accessories').show();
-                
+				if(accessory != 0 || accessory != null){
+					for(i=0;i<accessory.length;i++){
+						html = html + '<div class="input-group"><span class="input-group-addon"><input type="checkbox" value="'+accessory[i]+'" name="access_name[]" checked="checked" class="'+accessory[i]+' checkbx"></span><label class="check_label">'+accessory[i]+'</label></div>';
+					}
+					$('.accessories').show();
+					$('.title-div-text').html(html);
+				}
             }
 				if(response.product.cleaning!=null && response.product.cleaning!=''){
 				var cleaning_fields = JSON.parse(response.product.cleaning);

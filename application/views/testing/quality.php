@@ -1,5 +1,6 @@
 <div class="row">
 <div class="col-md-12">
+<?//pr ($product);die;?>
    <form method="post" action="<?= $admin_prefix; ?>testing/quality" id="quality" enctype="multipart/form-data">
       <div class="panel panel-flat">
          <div class="panel-heading">
@@ -58,7 +59,7 @@
                <div class="col-md-4">
                   <div class="form-group">
                      <label>Grade:</label>
-                     <select disabled="true"   name="grade" data-placeholder="Select Grade" class="form-control select grade">
+                     <select disabled="true"  name="grade" data-placeholder="Select Grade" class="form-control select grade">
                             
                         <option value="MN">MN - Manufacturer New</option>
                         <option value="TN">TN - Tested New</option>
@@ -109,6 +110,24 @@
                      <label>Specs:</label>
                   </div>
                </div>
+			   <div class="col-md-4">
+					<div class="form-group">
+					<label>Display Type:</label>
+					<input disabled="true"  type="text" class="form-control screen" name="screen" value="" placeholder="Display Type">
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+					<label>Resolution:</label>
+					<input disabled="true"  type="text" class="form-control resolution" name="resolution" value="" placeholder="resolution">
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+					<label>Size:</label>
+					<input disabled="true"  type="text" class="form-control size" name="size" value="" placeholder="size">
+					</div>
+				</div>
                <div class="col-md-4">
                   <div class="form-group">
                      <label>OS:</label>
@@ -121,6 +140,12 @@
                      <input disabled="true" type="text" class="form-control memory" name="memory" value="" placeholder="memory">
                   </div>
                </div>
+			   <div class="col-md-4">
+				<div class="form-group">
+					<label>Additional Info/Accessories:</label>
+						<textarea disabled="true" name="additional_info" class="form-control additional_info" name="cpu"></textarea>
+					</div>
+				</div>
                <div class="row">
                   <div class="col-md-12">
                      <div class="col-md-4">
@@ -131,14 +156,49 @@
                      </div>
                      <div class="col-md-4">
                         <div class="form-group">
+						<?php //pr($product);die;?>
                            <label>Storage:</label>
-                           <textarea disabled="true" name="storage" class="form-control storage"></textarea>
+						   <?php
+						
+						$new_sto_ssd = ''; 
+						if(isset($product['storage']) && !empty($product['storage'])){
+							foreach (json_decode($product['storage']) as $key => $value) {
+								$ssd = json_decode($product['ssd']);
+								if ($ssd[$key] == 0) {
+									$new_sto_ssd = $new_sto_ssd.$value . ', ';
+								} else {
+									$new_sto_ssd = $new_sto_ssd.$value . '(ssd), ';
+								}
+							}
+							$length = strlen($new_sto_ssd) - 1;
+							$new_sto_ssd = substr($new_sto_ssd, 0, $length);
+							// pr($new_sto_ssd);die;
+						}
+							?>
+                           <textarea disabled="true" name="storage" class="form-control storage"><?= $new_sto_ssd?></textarea>
                         </div>
                      </div>
                      <div class="col-md-4">
                         <div class="form-group">
                            <label>Graphics:</label>
-                           <textarea disabled="true" name="graphics" class="form-control graphics"></textarea>
+						   <?php
+						$new_gra_ded = ''; 
+						if(isset($product['graphics']) && !empty($product['graphics'])){
+							foreach (json_decode($product['graphics']) as $key => $value) {
+									$dedicated = json_decode($product['dedicated']);
+									if ($dedicated[$key] == 0) {
+										$new_gra_ded = $new_gra_ded.$value . ', ';
+									} else {
+										$new_gra_ded = $new_gra_ded.$value . '(dedicated), ';
+									}
+								}
+								$length = strlen($new_gra_ded) - 1;
+								$new_gra_ded = substr($new_gra_ded, 0, $length);
+								// pr($new_gra_ded);die;
+						}
+								
+							?>
+                           <textarea disabled="true" name="graphics" class="form-control graphics"> <?= $new_gra_ded?></textarea>
                         </div>
                      </div>
                   </div>
@@ -378,7 +438,50 @@
    				$('select.warranty').val('Active').trigger('change');
    				$('.other_category').css('display','none');
    			}else{
+
+                  var storage_array = JSON.parse(response.product.storage);
+                  $('textarea.storage').html(storage_array.join(','));
+
+                  var ssd_array = JSON.parse(response.product.ssd);
+                  if(ssd_array!=null){
+                      for(var i=0;i<ssd_array.length;i++){
+                          $('[name="ssd'+i+'"]').prop('checked', false);
+                          // console.log(typeof ssd_array[i],ssd_array[i]);
+                          if(ssd_array[i]==1){
+                              $('[name="ssd'+i+'"]').prop('checked', true);
+                          }
+                      }                    
                       
+                  }
+                  var graphics_array = JSON.parse(response.product.graphics);
+                  $('textarea.graphics').html(graphics_array.join(','));
+   
+                  var dedicated_array = JSON.parse(response.product.dedicated);
+                  if(dedicated_array!=null){
+                      for(var i=0;i<dedicated_array.length;i++){
+                           $('[name="dedicated'+i+'"]').prop('checked', false);
+                          if(dedicated_array[i]==1){
+                              $('[name="dedicated'+i+'"]').prop('checked', true);
+                          }
+                      }                    
+                      
+                  }
+                      
+				var storage = $('.storage').val();
+				var graphics = $('.graphics').val();
+				var storage_array1 = storage.split(', ');
+				var graphics_array1 = graphics.split(', ');
+
+				if(ssd_array[0] == 1 || ssd_array[1] == 1){
+					storage_array1[0] = storage_array1[0] + '(ssd) '
+				}
+				$('textarea.storage').html(storage_array1.join(', '));
+
+				if(dedicated_array[0] == 1 || dedicated_array[1] == 1){
+					graphics_array1[0] = graphics_array1[0] + '(decicated) '
+				}	
+				$('textarea.graphics').html(graphics_array1.join(', '));
+
       		$('input.scan_loc').val(response.product.locationname);
    			$('input.scan_loc_id').val(response.product.locid);
    			$('input.product_id').val(response.product.pid);
@@ -408,6 +511,10 @@
    			$('.touchscreen').prop('checked', false);
    			if(response.product.touch_screen==1){
    				$('.touchscreen').prop('checked', true);
+   			}
+            $('.tgfg_capable').prop('checked', false);
+   			if(response.product.tgfg_capable==1){
+   				$('.tgfg_capable').prop('checked', true);
    			}
    			$('.cosmetic_grade_boxes').each(function(index, el) {
    				$(this).prop('checked', false);
@@ -450,33 +557,8 @@
                   var cpu_array = JSON.parse(response.product.cpu);
                   $('textarea.cpu').html(cpu_array.join(','));
 
-                  var storage_array = JSON.parse(response.product.storage);
-                  $('textarea.storage').html(storage_array.join(','));
 
-                  var ssd_array = JSON.parse(response.product.ssd);
-                  if(ssd_array!=null){
-                      for(var i=0;i<ssd_array.length;i++){
-                          $('[name="ssd'+i+'"]').prop('checked', false);
-                          // console.log(typeof ssd_array[i],ssd_array[i]);
-                          if(ssd_array[i]==1){
-                              $('[name="ssd'+i+'"]').prop('checked', true);
-                          }
-                      }                    
-                      
-                  }
-                  var graphics_array = JSON.parse(response.product.graphics);
-                  $('textarea.graphics').html(graphics_array.join(','));
-   
-                  var dedicated_array = JSON.parse(response.product.dedicated);
-                  if(dedicated_array!=null){
-                      for(var i=0;i<dedicated_array.length;i++){
-                           $('[name="dedicated'+i+'"]').prop('checked', false);
-                          if(dedicated_array[i]==1){
-                              $('[name="dedicated'+i+'"]').prop('checked', true);
-                          }
-                      }                    
-                      
-                  }
+			   		
    			
    			
    			//----------------
@@ -500,7 +582,7 @@
             }
    			var cs_issue_text = JSON.parse(response.product.cosmetic_issues_text);
                   if(cs_issue_text!=null){
-                    $('textarea.grading_notes').html(cs_issue_text.cs1+','+cs_issue_text.cs2);
+                    $('textarea.grading_notes').html(cs_issue_text.cs1+', '+cs_issue_text.cs2);
                     //   $('.cs1').val(cs_issue_text.cs1);
                     //   $('.cs2').val(cs_issue_text.cs2);
                   }

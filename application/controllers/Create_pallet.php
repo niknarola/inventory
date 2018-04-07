@@ -24,6 +24,7 @@ class Create_pallet extends CI_Controller {
             $this->layout = 'layout';       
             $this->admin_prefix = '';
         }
+        
     }
     public function index(){
         $data = array();
@@ -35,11 +36,12 @@ class Create_pallet extends CI_Controller {
 
     public function print_contents()
     {
+        // pr($this->input->post());die;
         $data['title'] = 'Print Contents';
         $data['admin_prefix'] = $this->admin_prefix;
         $data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/testing/find_product' : 'testing/find_product';
         $get_todays_cnt = $this->receiving->get_todays_total_pallets();
-        if($this->input->post()){
+        if($this->input->post() || $this->input->post('print_contents')){
             $pallet_type='';
             $prefix='';
             $action='';
@@ -83,22 +85,20 @@ class Create_pallet extends CI_Controller {
 			$arr['received_by'] = $this->session->userdata('id');
 			$insert_data[] = $arr;
 			$k++; $j++;
+            // $this->session->set_userdata(array('pallet_print_data'=>$insert_data));
+            $this->basic->insert_batch('pallets', $insert_data);
 
-			$this->basic->insert_batch('pallets', $insert_data);
-
-			// if($this->input->post('print_labels')){
-			// 	$this->session->set_userdata(array('pallet_print_data'=>$insert_data));
-			// 	$session_data=[];
-			// 	// $session_data['bol_or_tracking'] = $this->input->post('bol_or_tracking');
-			// 	// $session_data['main_location'] = $main_location;
-			// 	// $session_data['ref'] = $ref;
-			// 	// $this->basic->insert_batch('pallets', $insert_data);
-			// 	// $this->session->set_userdata(array('pallets_next'=>$session_data));
-			// 	redirect($url.'barcode/pallet_labels');
-			// }
         }
         $print = $this->load->view('create_pallet/print_contents', $data, true);
         echo json_encode($print);
         die;
     }
+
+    // public function print_labels(){
+    //     if($this->input->post()){
+    //         $print_labels = $this->input->post();
+    //         $url = ($this->session->userdata('admin_validated')) ? 'admin/' : '';
+    //         redirect($url.'barcode/print_labels_barcode');
+    //     }
+    // }
 }

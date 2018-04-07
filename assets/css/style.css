@@ -132,3 +132,5 @@ label.check_label {border: 1px solid #EEE;  padding: 12px 0 10px 15px; }
 .print_btn{padding: 10px 25px;background: #26a69a;line-height: 20px;border: 2px solid #26a69a;text-transform: uppercase;font-weight: 500;font-size: 14px;color: #fff;}
 .upload_button button{margin-bottom: 15px;}
 .content{padding: 0 10px 60px 10px;}
+.form-group .multi-select-full button.multiselect.btn, 
+.input-group .multi-select-full button.multiselect.btn{color:#333}

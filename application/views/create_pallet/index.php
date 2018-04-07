@@ -1,3 +1,4 @@
+
 <div class="row">
 	<div class="">
         <form method="post" name="createpallet" id="createpallet" enctype="multipart/form-data">
@@ -5,7 +6,7 @@
                 <div class="panel-heading">
                     <div class="row">
                         <div class="">
-                            <h5 class="panel-title"><?= $title?></h5>
+                            <h5 class="panel-title"><?=$title?></h5>
                         </div>
                     </div>
                 </div>
@@ -31,7 +32,7 @@
                                     <option value="packout">Packout</option>
                                     <option value="inventory">Inventory</option>
                                 </select>
-                            </div> 
+                            </div>
                         </div>
                     </div>
 
@@ -41,11 +42,11 @@
                         <div class="col-md-5 form-group inputs">
                             <input type="text" value="" name="serial[]" id="serial" class="form-control serial  serial-new" placeholder="Serial Number#" required="">
                             <input type="hidden" name="serial_id[]" class="serial_id" value="">
-                        </div>    
+                        </div>
                         <div class="col-md-5 form-group">
                             <input type="text" value="" name="part[]" id="part" class="form-control part part-new" placeholder="Part Number#" required="">
                             <input type="hidden" name="product_id[]" class="product_id" value="">
-                        </div>    
+                        </div>
                         <div class="col-md-2 form-group">
                             <i class="icon-plus-circle2 add_more_row"></i>
                         </div>
@@ -64,7 +65,7 @@
                                 <input type="hidden" name="scan_loc_id" class="scan_loc_id" value="">
                             </div>
                             <button type="submit" name="save" value="save" class="btn bg-teal-400 add_btn">Save</button>
-                        </div>    
+                        </div>
                     </div>
                 </div>
             </div>
@@ -76,33 +77,37 @@
     <div class="col-md-5 form-group inputs">
         <input type="text" value="" name="serial[]" id="serial" class="form-control serial serial-new" placeholder="Serial Number#" required="">
         <input type="hidden" name="serial_id[]" class="serial_id" value="">
-    </div>    
+    </div>
     <div class="col-md-5 form-group">
         <input type="text" value="" name="part[]" id="part" class="form-control part part-new" placeholder="Part Number#" required="">
         <input type="hidden" name="product_id[]" class="product_id" value="">
-    </div>    
+    </div>
 </div>
 </div>
 
-<div class="modal fade" id="myModal" role="dialog">
+<!-- <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
+        Modal conten
+     <div class="modal-content">
             <div class="modal-header">
-                
+
             </div>
             <div class="modal-body">
 			<input type="text" value="" name="custom_field" id="custom_field" class="form-control custom_field" placeholder="Custom Field">
                 <center><button type="button" class="btn btn-info btn-lg add_now">Add </button></center>
             </div>
         </div>
-    </div>
-</div>
+    </div> -->
+<!-- </div> -->
 <div class="hidden_content_div" id="hidden_content_div" style="display:none"></div>
-
+<?php //echo"in index page down";die;?>
 <script type="text/javascript">
     var action = '';
     var counter = 1;
+    var pallet_type = $('.pallet_type').val();
+    var scan = $('.scan_loc').val();
+    // console.log($('.scan_loc').val());
+
     $('.add_more_row').on('click',function(){
         $('.pallet-btm-wrapper').append($('.more').html());
     });
@@ -117,21 +122,17 @@
         action = 'other';
     });
     $('.print_btn').on('click', function(){
-        // $('#createpallet').attr("action","<?php echo base_url('admin/inventory/create_pallet/print_contents')?>")
-        // $( "#createpallet" ).submit();
-        var serials = [];       
+        var serials = [];
         $('.pallet-btm-wrapper').find('.serial-new').each(function(){
             serials.push($(this).val());
         });
-        console.log('serial',serials)
+        // console.log('serial',serials)
 
-        var pallet_type = $('.pallet_type').val();
-        var location = $('.scan_loc').val();
 
         if(action){
-            var data = {serials: serials, action: action, pallet_type: pallet_type, location: location};
+            var data = {serials: serials, action: action, pallet_type: pallet_type, location: scan};
         }else {
-            var data = {serials: serials, pallet_type: pallet_type, location: location};
+            var data = {serials: serials, pallet_type: pallet_type, location: scan};
         }
         $.ajax({
                 type: 'POST',
@@ -154,7 +155,13 @@
 
 
 	$('.print_labels').click(function(){
-		$('#myModal').modal('show');
+		// $('#myModal').modal('show');
+
+        if(action){
+            var data = {action: action, pallet_type: pallet_type};
+        }else {
+            var data = {pallet_type: pallet_type};
+        }
 		$.ajax({
                 type: 'POST',
                 url: 'admin/inventory/create_pallet/print_labels',
@@ -206,37 +213,5 @@
             });
         }
     }
-    //  function print_contents()
-    //  {
-    //     var serials = [];       
-    //     $('.inputs').parents('.pallet-btm').find('input[name^=serial]').each(function(){
-    //         serials.push($(this).val());
-    //     });
-    //     // return false;
-         
-    //     if(serials!=''){
-    //         var data = {serials: serials};
-    //         $.ajax({
-    //             url: '<?//= $ajax_url; ?>',
-    //             type: 'POST',
-    //             datatype: 'json',
-    //             data: data,
-    //         })
-    //         .done(function(response){
-    //             console.log(response);  
-    //             if(response.status == 0){
 
-    //             }else{
-
-    //             }
-
-    //         })
-    //         .fail(function() {
-	// 			console.log("error");
-	// 		}) 
-    //         .always(function() {
-	// 			console.log("complete");
-	// 		});        
-    //     }
-    //  }
 </script>

@@ -146,8 +146,16 @@
 									<div class="form-group">
 										<label>Category</label>
 										<select name="category1" class="category1 form-control" onchange="get_sub_categories(this.value, 'category2')">
-											<?php foreach ($categories as $key => $value) { ?>
-												<option value="<?= $key ?>"><?= $value ?></option>
+											<?php 
+											$cat = json_decode($product['category']);
+											foreach ($categories as $key => $value) { 
+												echo $key;
+												$selected="";
+												if(in_array($key,$cat)){
+													$selected='selected="selected"';
+												}
+												?>
+												<option value="<?= $key ?>" <?= $selected ?> ><?= $value ?></option>
 											<?php } ?>
 										</select>
 									</div>

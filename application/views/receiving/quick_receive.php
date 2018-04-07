@@ -20,7 +20,7 @@
                                     ?>
                                     <label>Pallet </label>
                                     <select class="form-control pallet_id" name="pallet_id" id="pallet_id">
-                                        <option>No pallet Selected</option>
+                                        <option value="0">No pallet Selected</option>
                                         <?php foreach ($pallets as $key => $value): ?>
                                             <option <?php echo ($pallet_id != '' && $pallet_id == $key) ? 'selected' : '' ?> value="<?= $key; ?>"><?= $value; ?></option>
                                         <?php endforeach ?>

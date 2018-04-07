@@ -62,6 +62,22 @@ class Basic_model extends CI_Model
         if($this->db->affected_rows() >= 1)
             return true;
         return false;
+	}
+	
+	public function update_multiple($table, $data, $field) {
+        if ($this->db->update_batch($table, $data, $field)) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+	
+	public function unique_part()
+    {
+        $this->db->select('id,internal_part');
+        $this->db->where('is_delete', '0');
+        $products = $this->db->get('ink_products')->result_array();
+        return $products;
     }
     /*
      * Remove record from table based on condition
@@ -136,7 +152,8 @@ class Basic_model extends CI_Model
     public function get_single_data_by_criteria($table, $cond)
     {
         $this->db->where($cond);
-        return $this->db->get($table)->row_array();
+		return $this->db->get($table)->row_array();
+		// echo $this->db->last_query();die;
     }
     public function get_single_data_as_obj_by_criteria($table, $cond)
     {

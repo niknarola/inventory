@@ -1,5 +1,5 @@
 <div class="row">
-	<div class="">
+	<div class="col-md-12">
 		<form method="post" action="<?= $admin_prefix; ?>testing/tablet" id="tablet" enctype="multipart/form-data">
 			<div class="panel panel-flat">
 				<div class="panel-heading">
@@ -144,25 +144,25 @@
 										<div class="input-group">
 										<span class="input-group-addon">
 											<label class="radio-inline">
-												<input type="radio" value="A" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx">
+												<input type="radio" value="MN" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx">
 												MN
 											</label>
 										</span>
 										<span class="input-group-addon">
 											<label class="radio-inline">
-												<input type="radio" value="B" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx">
+												<input type="radio" value="TN" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx">
 												TN
 											</label>
 										</span>
 										<span class="input-group-addon">
 											<label class="radio-inline">
-												<input type="radio" value="C" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx">
+												<input type="radio" value="B" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx">
 												B
 											</label>
 										</span>
 										<span class="input-group-addon">
 											<label class="radio-inline">
-												<input type="radio" value="D" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx">
+												<input type="radio" value="C" name="cosmetic_grade" class="cosmetic_grade_boxes checkbx">
 												C
 											</label>
 										</span>
@@ -266,10 +266,10 @@
                                                 <div class="col-md-1"><i class="icon-plus-circle2 add_more_graphics"></i></div>
 											</div>
 											<div class="row scr-wrap">
-												<div class="col-md-2">Screen</div>
-												<div class="col-md-3"><input type="text" class="form-control screen" name="screen" value="" placeholder="Screen"></div>
-												<div class="col-md-3"><input type="text" class="form-control resolution" name="screen" value="" placeholder="Resolution"></div>
+											<div class="col-md-2">Display Type</div>
 												<div class="col-md-3"><input type="text" class="form-control size" name="size" value="" placeholder="Size"></div>
+												<div class="col-md-3"><input type="text" class="form-control resolution" name="resolution" value="" placeholder="Resolution"></div>
+												<div class="col-md-3"><input type="text" class="form-control screen" name="screen" value="" placeholder="Display Type"></div>
 											</div>
 											<div class="row">
 												<div class="col-md-2">OS</div>
@@ -731,6 +731,25 @@
                             $('#myModal').modal('hide');
                             $('#newModal').modal('show');
                         });
+					}else {
+						// need to add html
+						var html="";
+						var array_type = '';
+						if(response.product.accessory_name){
+							var temp_name = JSON.parse(response.product.accessory_name);
+							var temp_type = JSON.parse(response.product.accessory_type);
+							html= html + '';
+							if(temp_name!=null){
+								var str = "";
+								for(var i=0;i<temp_name.length;i++){
+									$('.accessories-div').show();
+									str = str + '<div class="input-group"><span class="input-group-addon"><input type="hidden" value="" name="access_type[]"><input type="checkbox" value="'+temp_name[i]+'" name="access_name[]" checked="true" class=" '+temp_name[i]+' checkbx"></span><label class="check_label">'+temp_name[i]+'</label></div>';
+									$(".title-div-text").html(str);
+								}
+							}
+						}
+
+
 					}
 					// if(response.product.tested_by == '' || response.product.tested_by == 0 || response.product.tested_by == null){
                     //     $('#myModal').modal('show');

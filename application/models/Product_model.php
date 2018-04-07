@@ -243,6 +243,7 @@ class Product_model extends CI_Model
                             loc1.id as locid, loc1.name as location_name,u.id as uid, u.name as username, 
                             pl.id as plid, pl.pallet_id as pallet');
         $this->db->where('ps.serial',$serial);
+        $this->db->or_where('ps.new_serial',$serial);
         $this->db->where('products.is_delete', 0);
         $this->db->where('ps.is_delete', 0);
         $this->db->join('product_serials ps','ps.product_id = products.id','left');
@@ -252,7 +253,8 @@ class Product_model extends CI_Model
         $this->db->join('pallets pl','pl.id = ps.pallet_id','left');
         $this->db->join('locations loc','pl.location_id = loc.id','left');
         $this->db->limit(1);
-        $query = $this->db->get('products');
+		$query = $this->db->get('products');
+		// pr($this->db->last_query());
         return $query->row_array();
     }
 
@@ -374,7 +376,13 @@ class Product_model extends CI_Model
 
     function get_product_serial_details($conditions)
     {
-        $this->db->select('ps.*, p.id as pid, p.part as part,p.tested as ptested, p.name as product_name, p.description as product_desc, p.release_date as release_date, p.category as category, pl.name as product_line,p.original_condition_id, oc.name as original_condition, p.status as product_status, p.added_as_temp, ci.id as cosmetic_issue_id, ci.name as cosmetic_issue_name,fo.id as fail_option_id, fo.name as fail_option_name, loc.name as location_name');
+		$this->db->select('ps.*, p.id as pid, p.part as part,p.tested as ptested, 
+						p.name as product_name, p.description as product_desc, p.release_date as release_date, 
+						p.category as category, pl.name as product_line,p.original_condition_id, 
+						oc.name as original_condition, p.status as product_status, p.added_as_temp, 
+						ci.id as cosmetic_issue_id, ci.name as cosmetic_issue_name,
+						fo.id as fail_option_id, fo.name as fail_option_name, 
+						loc.id as locid,loc.name as location_name, pal.id as plid, locpallet.name as location_pallet');
         $this->db->from('products p');
         $this->db->join('product_serials ps', 'ps.product_id = p.id', 'left');
         $this->db->join('cosmetic_issues ci', 'ci.id = ps.cosmetic_issue', 'left');
@@ -382,9 +390,11 @@ class Product_model extends CI_Model
         $this->db->join('product_line pl', 'pl.id = p.product_line_id', 'left');
         $this->db->join('original_condition oc', 'oc.id = ps.condition', 'left');
         $this->db->join('locations loc', 'loc.id = ps.location_id', 'left');
+        $this->db->join('pallets pal', 'pal.id = ps.pallet_id', 'left');
+        $this->db->join('locations locpallet', 'locpallet.id = pal.location_id', 'left');
         foreach ($conditions as $key => $value)
         {
-            $this->db->where($key, $value);
+            $this->db->or_where($key, $value);
         }
         $this->db->where('p.is_delete', 0);
         $this->db->limit(1);
@@ -541,6 +551,52 @@ class Product_model extends CI_Model
         $this->db->limit(1);
         $data = $this->db->get('product_serials ps')->row_array();
         return $data;
+	}
+	
+	public function get_serials_by_part($part){
+		$this->db->select('ps.id as sid,ps.serial,ps.is_delete as psdelete,p.id as pid,p.name as product_name,p.part,p.is_delete as pdelete');
+		$this->db->join('products p','p.id = ps.product_id','left');
+		$this->db->where('p.part',$part);
+		$this->db->where('p.is_delete',0);
+		$this->db->where('ps.is_delete',0);
+		$query = $this->db->get('product_serials ps')->result_array();
+		// echo "query".$this->db->last_query();
+		return $query;
+
+	}
+
+	public function get_accessory_by_part($part)
+	{
+		$this->db->select('ps.id as sid,ps.serial,ps.is_delete as psdelete,
+							ps.accessory_type,ps.accessory_name,
+							p.id as pid,p.name as product_name,p.part,p.is_delete as pdelete');
+		$this->db->join('products p','p.id = ps.product_id','left');
+		$this->db->where_in('p.part',$part);
+		$this->db->where('p.is_delete',0);
+		$this->db->where('ps.is_delete',0);
+		$query = $this->db->get('product_serials ps')->result_array();
+		// echo "query".$this->db->last_query();
+		return $query;
+    }
+    
+    public function get_ink($internal_part){
+        $this->db->select('i.*');
+        $this->db->where('i.internal_part',$internal_part);
+        $query = $this->db->get('ink_products i')->row_array();
+        return $query;
+    }
+    public function get_key_value_ink_products($table)
+    {
+        $this->db->select('id,internal_part');
+        $this->db->where('is_delete', 0);
+        $query = $this->db->get($table);
+        $data = $query->result_array();
+        $final_data = [];
+        foreach ($data as $value)
+        {
+            $final_data[$value['id']] = $value['internal_part'];
+        }
+        return $final_data;
     }
 
     
