@@ -72,7 +72,7 @@ class Utility extends CI_Controller
             $view['product'] = $product;
             //     $view['html_data'] = $this->load->view('testing/serial_product', $data, true);
             $view['status'] = 1;
-            $this->session->set_userdata(array('utility' => $product));
+			$this->session->set_userdata(array('utility' => $product));
         }
         echo json_encode($view);
         exit;

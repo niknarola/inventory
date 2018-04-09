@@ -8,78 +8,96 @@
     		/*transform: scale(.30);*/
 		}
 		/*.block { border: 1px solid #ddd; padding: 2px; }*/
-	/*.pallet_id{ font-size: 	25px !important; }*/
+		.pallet_id{ font-size: 	25px !important; }
 		/*.bol{ padding: 2px; background-color: grey; color: #fff !important; }*/
 </style>
-<div class="row hidden-print">
-	<a href="<?= $admin_prefix ?>receiving/print_labels" class="btn btn-success">Back</a>
-</div>
-<div class="row">
-	<div class="col-md-12">
-		<div class="hidden-print" style="margin-bottom: 5px;">
-			<div class="text-center">
-				<button type="button" class="btn btn-info print_all hidden-print">Print All</button>
-			</div>
-		</div>
-		<div class="printarea">
-		
-		
-		<?php
-			$size = (sizeof($print_labels['pallet_id']) > sizeof($print_labels['location'])) ? sizeof($print_labels['pallet_id']) : sizeof($print_labels['location']);
-			
-		 for ($i=0; $i < $size; $i++) { ?>
-			
-		
-			<div class="print-panel hidden-print">
-				<div class="row text-center barcode_labels">
-					<div class="col-md-6 col-md-offset-3 block">
-						<?php if($print_labels['pallet_id'][$i]){ ?>
-						<div class="row">
-							<span class="pallet_id"><b>Pallet ID</b></span>
-						</div>
-						<div class="row">
-							<img style="margin-bottom: 5px;" src="<?php echo ($this->uri->segment(1) == 'admin') ? 'admin/' : ''; ?><?php echo 'barcode?barcode='.rawurlencode($print_labels['pallet_id'][$i]).'&text='.rawurlencode($print_labels['pallet_id'][$i]).'&scale=4.5&thickness=30' ?>"/>
-						</div>
-						<?php } ?>
-						<?php if($print_labels['location'][$i]){ ?>
-						<div class="row">
-							<span class="location"><b>Location</b></span>
-						</div>
-						<div class="row">
-							<img style="margin-bottom: 5px;" src="<?php echo ($this->uri->segment(1) == 'admin') ? 'admin/' : ''; ?><?php echo 'barcode?barcode='.rawurlencode($print_labels['location'][$i]).'&text='.rawurlencode($print_labels['location'][$i]).'&scale=4.5&thickness=25' ?>"/>
-						</div>
-						<?php } ?>
-                        <?php if($print_labels['custom'][$i]){ ?>
-						<div class="row">
-							<span class="custom"><b><?= $print_labels['custom'][$i] ?></b></span>
-						</div>
-						<div class="row">
-							<img style="margin-bottom: 5px;" src="<?php echo ($this->uri->segment(1) == 'admin') ? 'admin/' : ''; ?><?php echo 'barcode?barcode='.rawurlencode($print_labels['custom'][$i]).'&text='.rawurlencode($print_labels['custom'][$i]).'&scale=4.5&thickness=30' ?>"/>
-						</div>
-						<?php } ?>
-						<div class="row"><button type="button" class="btn btn-info print_btn hidden-print">Print</button></div>
-					</div>
-					</div>
-				
-			</div>
-			<hr>
-		<?php } ?> 
-		
-		</div>
-	</div>
-</div>
+<div class="hidden_barcode_div" id="hidden_barcode_div" style="display:none"></div>
+<form id="pallet-labels" action="admin/barcode/print_labels_barcode" method="post">
+    <!-- <div class="row hidden-print">
+        <a href="<?= $admin_prefix ?>receiving/dock_receive" class="btn btn-success">Back To Pallet</a>
+    </div> -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="hidden-print" style="margin-bottom: 5px;">
+              <!--   <div class="text-center">
+                    <button type="button" class="btn btn-info print_all hidden-print">Print Preview All</button>
+                </div> -->
+            </div>
+            <div class="printarea">
+            
+            
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+    <div class="panel panel-flat">
+        <div class="panel-heading">
+            <h5 class="panel-title">Print Pallet Labels</h5>
+            <div class="heading-elements"></div> 
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="table-responsive">
+                    <div class="col-md-12">
+                        <div class="col-md-6 form-group">
+
+                            <!-- <select class="form-control barcode" name="barcode"> -->
+                                <!-- <option>All Barcodes</option> -->
+                                <?php //foreach ($print_labels as $key => $value):?>
+                                    <!-- <option value="<?php echo $value?>"><?php echo $value ?></option> -->
+                                <?php //endforeach; ?>
+                            <!-- </select> -->
+                        </div>
+                        <!-- <div class="col-md-6">
+                            <button class="btn bg-teal search_barcode" name="search_barcode">Search</button>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+            <?php if(isset($file_path)){ ?>
+                <div class="row">
+                    <div class="col-md-12">
+                        <embed src="<?php echo $file_path; ?>" type="application/pdf" width="100%" height="800px">;
+                    </div>
+                </div>
+            <?php } ?>
+        </div>
+</form>
+
+
 <script type="text/javascript">
 	jQuery(document).ready(function($) {
 		$('button.print_btn').click(function(){
 			$('div.printarea div.print-panel').removeClass('hidden-print').addClass('hidden-print');
 			$(this).parents('div.print-panel').removeClass('hidden-print');
 			$('hr').removeClass('hidden-print').addClass('hidden-print');
-			window.print();
+			// window.print();
 		});
-		$('button.print_all').click(function(){
-			$('div.printarea div.print-panel').removeClass('hidden-print'); 
-			$('hr').removeClass('hidden-print');
-			window.print();
+		$('button.search_barcode').click(function(){
+            var barcode = $('.barcode').val();
+            $.ajax({
+                type: 'POST',
+                url: 'admin/barcode/print_preview',
+                async: false,
+                dataType: 'JSON',
+                success: function (response) {
+                    console.log(response);
+                    // $('.hidden_barcode_div').html(data);
+                    // setTimeout(function(){
+                    //     //window.print();
+                    //     var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+                    //     // //mywindow.document.write('<h1>' + document.title  + '</h1>');
+                    //     mywindow.document.write(document.getElementById('test_div').innerHTML);
+                    //     mywindow.document.close();
+                    //     mywindow.focus();
+                    //     mywindow.print();
+                    //     mywindow.close();
+                    // },1000);
+                }
+            });
+		// 	$('div.printarea div.print-panel').removeClass('hidden-print'); 
+		// 	$('hr').removeClass('hidden-print');
+		// 	window.print();
 		});
 	});
 </script>

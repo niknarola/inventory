@@ -438,10 +438,11 @@
    				$('select.warranty').val('Active').trigger('change');
    				$('.other_category').css('display','none');
    			}else{
-
+				//    if()
                   var storage_array = JSON.parse(response.product.storage);
-                  $('textarea.storage').html(storage_array.join(','));
-
+				  if(storage_array != null){
+                  	$('textarea.storage').html(storage_array.join(','));
+				  }
                   var ssd_array = JSON.parse(response.product.ssd);
                   if(ssd_array!=null){
                       for(var i=0;i<ssd_array.length;i++){
@@ -454,7 +455,9 @@
                       
                   }
                   var graphics_array = JSON.parse(response.product.graphics);
+				  if(graphics_array!=null){
                   $('textarea.graphics').html(graphics_array.join(','));
+				  }
    
                   var dedicated_array = JSON.parse(response.product.dedicated);
                   if(dedicated_array!=null){
@@ -471,17 +474,19 @@
 				var graphics = $('.graphics').val();
 				var storage_array1 = storage.split(', ');
 				var graphics_array1 = graphics.split(', ');
-
+			
+			if(ssd_array!=null){
 				if(ssd_array[0] == 1 || ssd_array[1] == 1){
 					storage_array1[0] = storage_array1[0] + '(ssd) '
 				}
 				$('textarea.storage').html(storage_array1.join(', '));
-
+			}
+			if(dedicated_array!=null){
 				if(dedicated_array[0] == 1 || dedicated_array[1] == 1){
 					graphics_array1[0] = graphics_array1[0] + '(decicated) '
 				}	
 				$('textarea.graphics').html(graphics_array1.join(', '));
-
+			}
       		$('input.scan_loc').val(response.product.locationname);
    			$('input.scan_loc_id').val(response.product.locid);
    			$('input.product_id').val(response.product.pid);
@@ -555,7 +560,9 @@
    				$('.hard_drive_wiped').prop('checked', true);
    			}
                   var cpu_array = JSON.parse(response.product.cpu);
+				  if(cpu_array!=null){
                   $('textarea.cpu').html(cpu_array.join(','));
+				  }
 
 
 			   		

@@ -162,6 +162,7 @@ class Basic_model extends CI_Model
     }
     public function check_location_exists($loc_name)
     {
+		// echo"loc name";pr($loc_name);
         $this->db->select('locations.id');
         $this->db->where('locations.name',$loc_name);
         $this->db->limit(1);
@@ -176,7 +177,10 @@ class Basic_model extends CI_Model
                 'name' => $loc_name
             );
             $location_id = $this->db->insert('locations',$loc);
-            $insert_id = $this->db->insert_id();
+			$insert_id = $this->db->insert_id();
+			// echo"location";pr($location_id);
+			// echo"insert";pr($insert_id);
+			// echo"query";$this->db->last_query();die;
             return $insert_id;
         }
     }
@@ -202,5 +206,14 @@ class Basic_model extends CI_Model
             // pr($insert_id);die;
             return $insert_id;
         }
+	}
+
+	public function get_all_data_by_criteria1($table, $cond, $limit=null)
+    {
+		// pr($cond);die;
+        $this->db->where_in($cond);
+        if($limit!=null)
+            $this->db->limit($limit);
+        return $this->db->get($table)->result_array();
     }
 }

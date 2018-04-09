@@ -1,4 +1,4 @@
-<form method="post"  enctype="multipart/form-data">
+<form method="post"  enctype="multipart/form-data" id="utility" name="utility">
 <!-- action="admin/create_pallet/printed_contents" -->
 	<div class="panel panel-flat">
 		<div class="panel-heading">
@@ -49,8 +49,8 @@
 					<input type="text" value="" name="" class="form-control" placeholder="Custom input">
 				</div>
 				<div class="col-md-2 form-group">
-					<a href="<?php echo base_url().'admin/barcode/utility' ?>" class="btn bg-teal print_label_internal" name="print_label_internal" type="button">Print Label</a>
-					<!-- <button class="btn bg-teal" type="submit">Save</button> -->
+					<!-- <a href="<?php //echo base_url().'admin/barcode/utility' ?>" class="btn bg-teal print_label_internal" name="print_label_internal" type="button">Print Label</a> -->
+					<button class="btn bg-teal print_label_internal"  name="print_label_internal" type="submit">Print Label</button>
 				</div>
 				<div class="col-md-2">
 					<div class="text_amount_box text-left">
@@ -105,7 +105,9 @@
 	</div>
 </form>
 <script type="text/javascript">
-// $('.print_label_internal').click(function(){
+$('.print_label_internal').click(function(){
+	$('#utility').attr('action','admin/barcode/utility');
+});
 	function get_product_details(){
 		var internal_part = $('.internal_part').val();
 		var hp_part = $('.hp_part').val();

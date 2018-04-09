@@ -30,7 +30,7 @@
 							<div class="col-md-4">
 								<div class="form-group">
 									<label>New Serial #:</label>
-									<input type="text" name="new_serial" onchange="get_product_details();" value="" class="form-control new_serial">
+									<input type="text" name="new_serial" value="" class="form-control new_serial">
 								</div>
 							</div>
 						</div>
@@ -231,7 +231,7 @@
 											<div class="row cpu_row">
                                             <i class="icon-plus-circle2 add_more_cpu"></i>
 												<div class="col-md-2">CPU</div>
-												<div class="col-md-5"><input type="text" class="form-control cpu" name="cpu" value="" placeholder=""></div>
+												<div class="col-md-5"><input type="text" class="form-control cpu" name="cpu[]" value="" placeholder=""></div>
 											</div>
 											<div class="row">
 												<div class="col-md-2">Memory</div>
@@ -240,7 +240,7 @@
 											<div class="row storage_row">
                                             
 												<div class="col-md-2">Storage</div>
-												<div class="col-md-4"><input type="text" class="form-control storage" name="storage" value="" placeholder=""></div>
+												<div class="col-md-4"><input type="text" class="form-control storage" name="storage[]" value="" placeholder=""></div>
 												<div class="col-md-5">
 													<div class="input-group">
 														<span class="input-group-addon">
@@ -253,7 +253,7 @@
 											</div>
 											<div class="row graphics_row">
 												<div class="col-md-2">Graphics</div>
-												<div class="col-md-4"><input type="text" class="form-control graphics" name="graphics" value="" placeholder=""></div>
+												<div class="col-md-4"><input type="text" class="form-control graphics" name="graphics[]" value="" placeholder=""></div>
 												<div class="col-md-5">
 													<div class="input-group">
 														<span class="input-group-addon">
@@ -696,14 +696,14 @@
     function get_product_details(){
   		// var part = $('input.part').val();
     	var serial = $('input.serial').val();
-    	var new_serial = $('input.new_serial').val();
+    	// var new_serial = $('input.new_serial').val();
 		// if(part!='' && serial!=''){
 		if(serial!=''){
 			// var data = {part: part, serial: serial};
 			var data = {serial: serial};
-			if(new_serial!=''){
-				data.new_serial = new_serial;
-			}
+			// if(new_serial!=''){
+			// 	data.new_serial = new_serial;
+			// }
 			$.ajax({
 				url: '<?php echo $ajax_url; ?>',
 				type: 'POST',

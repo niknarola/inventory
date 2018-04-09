@@ -5,7 +5,7 @@
             <th>Serial #</th>
             <th>Part #</th>
             <th>Name</th>
-            <th>Location</th>
+            <!-- <th>Location</th> -->
         </tr>
     </thead>
     <tbody id="userData">
@@ -16,7 +16,7 @@
             <td><?php echo $serial['serial']; ?></td>
             <td><?php echo $serial['part']; ?></td>
             <td><?php echo $serial['name']; ?></td>
-            <td><?php echo $serial['location_name']; ?></td>
+            <!-- <td><?php //echo $serial['location_name']; ?></td> -->
         </tr>
             <?php   $i++; }  } else{ ?>
             <tr><td colspan="4">Serial(s) not found......</td></tr>

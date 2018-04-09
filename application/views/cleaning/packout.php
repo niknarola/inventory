@@ -13,11 +13,23 @@
 					</div>
 				</div>
 				<div class="panel-body">
-					<hr>
+				<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-6">
+								<div class="form-group">
+								<!-- <label>Serial #:</label> -->
+								<input type="text" value="" name="serial" class="form-control serial" onchange="get_product_details(this.value);" placeholder="Serial #"> 
+								</div>
+							</div>
+							<div class="col-md-2">
+								<button type="button" class="btn btn-primary category_btn" onclick="get_product_details()">Search</button>
+							</div>
+						</div>
+				</div>					
 						<div class="row">
 							<div class="col-md-4">
 								<div class="form-group">
-									<label>Serial #:</label>
+									<label> Original Serial #:</label>
 									<input type="text" name="serial" value="" onchange="get_product_details();" class="form-control serial">
 									<input type="hidden" name="serial_id" class="serial_id" value="">
 								</div>
@@ -273,10 +285,10 @@
                                     </div>
                                 </div> -->
                             <div class="col-md-12">
-                                <div class="col-md-3">
+                                <!-- <div class="col-md-3">
                                     <input type="text" name="current_pallet" value="" class="form-control current_pallet" placeholder="Current Pallet"/>
 									<input type="hidden" name="current_pallet_id" class="current_pallet_id" value="">
-                                </div>    
+                                </div>     -->
                                 <div class="col-md-2">
                                 <input type="text" name="scan_loc" value="" placeholder="Scan To Location" class="form-control scan_loc">
 									<input type="hidden" name="scan_loc_id" class="scan_loc_id" value="">
@@ -433,6 +445,7 @@
 				// $('input.current_pallet').val(response.product.location_name);
 				$('input.product_id').val(response.product.pid);
 				$('input.part').val(response.product.part);
+				$('input.serial').val(response.product.serial);
 				$('input.serial_id').val(response.product.id);
 				$('input.new_serial').val(response.product.new_serial);
 				$('input.name').val(response.product.product_name);

@@ -30,7 +30,7 @@
 							<div class="col-md-4">
 								<div class="form-group">
 									<label>New Serial #:</label>
-									<input type="text" name="new_serial" onchange="get_product_details();" value="" class="form-control new_serial">
+									<input type="text" name="new_serial"  value="" class="form-control new_serial">
 								</div>
 							</div>
 						</div>
@@ -700,13 +700,13 @@
     function get_product_details(){
   		//var part = $('input.part').val();
     	var serial = $('input.serial').val();
-    	var new_serial = $('input.new_serial').val();
+    	// var new_serial = $('input.new_serial').val();
 		//if(part!='' && serial!=''){
 		if(serial!=''){
 			var data = {serial: serial};
-			if(new_serial!=''){
-				data.new_serial = new_serial;
-			}
+			// if(new_serial!=''){
+			// 	data.new_serial = new_serial;
+			// }
 			$.ajax({
 				url: '<?php echo $ajax_url; ?>',
 				type: 'POST',
@@ -957,7 +957,7 @@
     $(".styled, .multiselect-container input").uniform({ radioClass: 'choice'});
 
     $('.add_more_cpu').on('click',function(){
-        $('.cpu').append($('.cpu1').html());
+        $('.cpu_row').append($('.cpu1').html());
         // $(".cpu").find('.receive_div').last().attr("data-row",$(".pallet_div").find('.receive_div').length);
     });
       $('.add_more_storage').on('click',function(){

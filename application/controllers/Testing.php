@@ -246,6 +246,7 @@ class Testing extends CI_Controller
                 'cs2' => $this->input->post('cs2'),
             ]);
             $fail_text = $this->input->post('fail_text');
+            
             $cpu = json_encode($this->input->post('cpu'));
 
             $storage_array = $this->input->post('storage');
@@ -264,11 +265,20 @@ class Testing extends CI_Controller
                 $s = ($this->input->post('dedicated' . $i)) ? 1 : 0;
                 $dedicated_array[] = $s;
             }
+			$product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['serial' => $this->input->post('serial')]);
+			$timestamp = [
+                'testing_date' => date('Y-m-d H:i:s'),
+                'last_scan' => date('Y-m-d H:i:s'),
+            ];
             $access_type_array = $this->input->post('access_type');
             $access_type = json_encode($access_type_array);
 
             $access_name_array = $this->input->post('access_name');
             $access_name = json_encode($access_name_array);
+
+            $loc_name = $this->input->post('scan_loc');
+            $location = $this->basic->check_location_exists($loc_name);
+
             $serial_data = [
                 'new_serial' => $this->input->post('new_serial'),
                 'recv_notes' => $this->input->post('recv_notes'),
@@ -325,9 +335,11 @@ class Testing extends CI_Controller
                 $timestamp['hard_drive_wiped_date'] = date('Y-m-d H:i:s');
             }
             $serial_data['tested_by'] = $this->session->userdata('id');
+            // pr($serial_data);die;
             $filesCount = count($_FILES['product_files']['name']);
             $product_id = $this->input->post('product_id');
             $serial_id = $this->input->post('serial_id');
+            $serial = trim($this->input->post('serial'));
             $root_path = $this->input->server('DOCUMENT_ROOT');
             $serial_files = [];
             $serial_files = ($this->input->post('files') != '') ? explode(',', $this->input->post('files')) : [];
@@ -759,7 +771,10 @@ class Testing extends CI_Controller
             for ($i = 0; $i < $graphics_cnt; $i++) {
                 $s = ($this->input->post('dedicated' . $i)) ? 1 : 0;
                 $dedicated_array[] = $s;
-            }
+			}
+			
+			$loc_name = $this->input->post('scan_loc');
+            $location = $this->basic->check_location_exists($loc_name);
 
             $access_type_array = $this->input->post('access_type');
             $access_type = json_encode($access_type_array);
@@ -958,10 +973,10 @@ class Testing extends CI_Controller
             $serial_data = [
                 'new_serial' => $this->input->post('new_serial'),
                 'recv_notes' => $this->input->post('recv_notes'),
-                'cpu' => $this->input->post('cpu'),
+                'cpu' => $cpu,
                 'memory' => $this->input->post('memory'),
-                'storage' => $this->input->post('storage'),
-                'graphics' => $this->input->post('graphics'),
+                'storage' => $storage,
+                'graphics' => $graphics,
                 'screen' => $this->input->post('screen'),
                 'size' => $this->input->post('size'),
                 'os' => $this->input->post('os'),
@@ -1014,7 +1029,8 @@ class Testing extends CI_Controller
             $filesCount = count($_FILES['product_files']['name']);
             $product_id = $this->input->post('product_id');
             $serial_id = $this->input->post('serial_id');
-            pr($serial_data);die;
+            $serial = trim($this->input->post('serial'));
+            // pr($serial_data);die;
             $root_path = $this->input->server('DOCUMENT_ROOT');
             $serial_files = [];
             $serial_files = ($this->input->post('files') != '') ? explode(',', $this->input->post('files')) : [];

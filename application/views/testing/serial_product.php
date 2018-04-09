@@ -93,8 +93,9 @@ foreach ($original_condition as $key => $value) {?>
                         <div class="form-group">
 						<label>Storage:</label>
 						<?php
-						
-                        $new_sto_ssd = ''; 
+						$new_sto_ssd = ''; 
+						if(isset($product['storage']) && isset($product['ssd']))
+						{
                         // if()
 							foreach (json_decode($product['storage']) as $key => $value) {
 								$ssd = json_decode($product['ssd']);
@@ -106,6 +107,7 @@ foreach ($original_condition as $key => $value) {?>
 							}
 							$length = strlen($new_sto_ssd) - 1;
 							$new_sto_ssd = substr($new_sto_ssd, 0, $length);
+						}
 							?>
                             <textarea class="form-control" type="text" name="storage"><?= $new_sto_ssd; ?></textarea>
                         </div>
@@ -116,7 +118,9 @@ foreach ($original_condition as $key => $value) {?>
 
 						<?php
 						
-						$new_gra_ded = ''; 
+						$new_gra_ded = '';
+						if(isset($product['storage']) && isset($product['ssd']))
+						{ 
 							foreach (json_decode($product['graphics']) as $key => $value) {
 								$dedicated = json_decode($product['dedicated']);
 								if ($dedicated[$key] == 0) {
@@ -127,6 +131,7 @@ foreach ($original_condition as $key => $value) {?>
 							}
 							$length = strlen($new_gra_ded) - 1;
 							$new_gra_ded = substr($new_gra_ded, 0, $length);
+						}
 							?>
                             <textarea class="form-control" type="text" name="graphics"><?= $new_gra_ded; ?></textarea>
                         </div>

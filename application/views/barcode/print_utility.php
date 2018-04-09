@@ -25,44 +25,51 @@
 		
 		
 		<?php
-			// $size = (sizeof($print_labels['pallet_id']) > sizeof($print_labels['location'])) ? sizeof($print_labels['pallet_id']) : sizeof($print_labels['location']);
-			
-		//  for ($i=0; $i < $size; $i++) { ?>
-			
-		
-			<div class="print-panel hidden-print">
-				<div class="row text-center barcode_labels">
-					<div class="col-md-6 col-md-offset-3 block">
-						<?php if($print_labels['pallet_id'][$i]){ ?>
-						<div class="row">
-							<span class="pallet_id"><b>Pallet ID</b></span>
-						</div>
-						<div class="row">
-							<img style="margin-bottom: 5px;" src="<?php echo ($this->uri->segment(1) == 'admin') ? 'admin/' : ''; ?><?php echo 'barcode?barcode='.rawurlencode($print_labels['pallet_id'][$i]).'&text='.rawurlencode($print_labels['pallet_id'][$i]).'&scale=4.5&thickness=30' ?>"/>
-						</div>
-						<?php } ?>
-						<?php if($print_labels['location'][$i]){ ?>
-						<div class="row">
-							<span class="location"><b>Location</b></span>
-						</div>
-						<div class="row">
-							<img style="margin-bottom: 5px;" src="<?php echo ($this->uri->segment(1) == 'admin') ? 'admin/' : ''; ?><?php echo 'barcode?barcode='.rawurlencode($print_labels['location'][$i]).'&text='.rawurlencode($print_labels['location'][$i]).'&scale=4.5&thickness=25' ?>"/>
-						</div>
-						<?php } ?>
-                        <?php if($print_labels['custom'][$i]){ ?>
-						<div class="row">
-							<span class="custom"><b><?= $print_labels['custom'][$i] ?></b></span>
-						</div>
-						<div class="row">
-							<img style="margin-bottom: 5px;" src="<?php echo ($this->uri->segment(1) == 'admin') ? 'admin/' : ''; ?><?php echo 'barcode?barcode='.rawurlencode($print_labels['custom'][$i]).'&text='.rawurlencode($print_labels['custom'][$i]).'&scale=4.5&thickness=30' ?>"/>
-						</div>
-						<?php } ?>
-						<div class="row"><button type="button" class="btn btn-info print_btn hidden-print">Print</button></div>
+		// pr($print_labels);
+		//foreach($print_labels as $key=>$value){  ?>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-6">
+						<?= $print_labels['ink'] ?>
+						<?= $print_labels['conditions'] ?>
 					</div>
+					<div class="col-md-6">
+						<?= $print_labels['type'] ?>
+						<?= $print_labels['color'] ?>
 					</div>
-				
-			</div>
-			<hr>
+				</div>
+    		</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-6">
+					<!-- barcode -->
+						<?= $print_labels['hp_part'] ?>
+						<!-- INK exact opposite side -->
+						<?= $print_labels['conditions'] ?>
+					</div>
+				</div>
+    		</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-6">
+					QTY: 200
+					</div>
+				</div>
+    		</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-6">
+					<?= $print_labels['name'] ?>
+					</div>
+				</div>
+    		</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-6">
+					<?= $print_labels['internal_part'] ?>
+					</div>
+				</div>
+    		</div>
 		<?php //} ?> 
 		
 		</div>

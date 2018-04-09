@@ -62,8 +62,8 @@ class Cleaning extends CI_Controller {
                 'packaging_condition'=>($this->input->post('packaging_condition')) ? $this->input->post('packaging_condition') : '',
                 'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : null
             ];
-			$pallet_name = $this->input->post('current_pallet');
-			$pallet = $this->basic->check_pallet_exists($pallet_name);
+			// $pallet_name = $this->input->post('current_pallet');
+			// $pallet = $this->basic->check_pallet_exists($pallet_name);
 
 			$loc_name = $this->input->post('scan_loc');
 			$location = $this->basic->check_location_exists($loc_name);
@@ -72,15 +72,15 @@ class Cleaning extends CI_Controller {
 				// $serial_data['pallet_id'] = $this->input->post('current_pallet_id');
 				// $serial_data['location_id'] = $this->input->post('scan_loc_id');
 			// }else 
-			if($this->input->post('add') && $this->input->post('current_pallet')){
-				$serial_data['pallet_id'] = $pallet['id'];
-			}
+			// if($this->input->post('add') && $this->input->post('current_pallet')){
+			// 	$serial_data['pallet_id'] = $pallet['id'];
+			// }
 			
             // if($this->input->post('close') && ($this->input->post('scan_loc') !='')){
 			// 	$serial_data['pallet_id'] = $this->input->post('current_pallet_id');
 			// 	$serial_data['location_id'] = $this->input->post('scan_loc_id');
 			// }else 
-			if($this->input->post('close') && $this->input->post('scan_loc')){
+			if($this->input->post('close') && $this->input->post('add') && $this->input->post('scan_loc')){
 				$serial_data['location_id'] = $location['id'];
 			}
 			

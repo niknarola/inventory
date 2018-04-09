@@ -69,6 +69,7 @@
                                         <div class="form-group">
                                             <label>Category</label>
                                             <select name="category1[]" class="category1 form-control" onchange="get_sub_categories(this.value, 'category2_1')">
+											<option value="0">No category selected</option>
                                                 <?php foreach ($categories as $key => $value) {?>
                                                     <option value="<?= $key ?>"><?= $value ?></option>
                                                 <?php } ?>
@@ -185,6 +186,7 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <select name="category1[]" class="category1 form-control">
+						<option value="0">No category selected</option>
                             <?php foreach ($categories as $key => $value) { ?>
                             <option value="<?= $key ?>"><?= $value ?></option>
                             <?php } ?>

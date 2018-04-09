@@ -31,7 +31,7 @@
 							<div class="col-md-4">
 								<div class="form-group">
 									<label>New Serial #:</label>
-									<input type="text" name="new_serial" onchange="get_product_details();" value="" class="form-control new_serial">
+									<input type="text" name="new_serial"  value="" class="form-control new_serial">
 								</div>
 							</div>
 						</div>

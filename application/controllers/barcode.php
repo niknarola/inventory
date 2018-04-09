@@ -220,42 +220,57 @@ class Barcode extends CI_Controller
         $data['title'] = 'Pallet Labels';
         $data['admin_prefix'] = $this->admin_prefix;
         $pdf_print = $this->load->view('barcode/print_preview', $data, true);
-        //echo $pdf_print; die;
         $file_path = 'assets/images/barcode/' . time() . '.pdf';
         $this->load->library('m_pdf');
         $this->m_pdf->pdf->WriteHTML($pdf_print);
         $this->m_pdf->pdf->Output($file_path, 'F');
         $data['file_path'] = $file_path;
         $this->template->load($this->layout, 'barcode/pallet_labels', $data);
-
-        //$this->template->load($this->layout, 'barcode/print_preview', $data);
-        //echo $pdf_print;
-        // echo json_encode($pdf_print);
-        // die;
 	}
 
 	public function print_pallet_labels_barcode()
-    {
-        $data['title'] = 'Print Labels';
-        $print_labels = [];
+	{
+		$print_labels = $this->session->userdata('pallets_new');
+        foreach ($print_labels as $k => $v) {
+            $this->dup_index(rawurlencode($v));
+        }
+		$data['print_labels'] = $print_labels['pallet_id'];
+		// pr($data['print_labels']);die;
+        $data['title'] = 'Print Pallet Labels';
         $data['admin_prefix'] = $this->admin_prefix;
+		$pdf_print = $this->load->view('barcode/create_pallet_barcode', $data, true);
+		// echo $pdf_print;die;
+        $file_path = 'assets/images/barcode/' . time() . '.pdf';
+        $this->load->library('m_pdf');
+        $this->m_pdf->pdf->WriteHTML($pdf_print);
+        $this->m_pdf->pdf->Output($file_path, 'F');
+        $data['file_path'] = $file_path;
+		$this->template->load($this->layout, 'barcode/print_labels_barcode', $data);
+	}
+	// public function utility(){
+	// 	$data['title'] = 'Print INK';
+	// 	$print_labels = [];
+	// 	$print_labels = $this->session->userdata('utility');
+	// 	$data['print_labels'] = $print_labels;
+	// 	// pr($print_labels);die;
+	// 	$this->template->load($this->layout, 'barcode/print_utility', $data);
+	// }
 
-        if ($this->input->post()) {
-            $print_labels = $this->input->post();
+	public function utility(){
+		$print_labels = $this->session->userdata('utility');
+		pr($print_labels);die;
+        foreach ($print_labels as $k => $v) {
+            $this->dup_index(rawurlencode($v['pallet_id']));
         }
         $data['print_labels'] = $print_labels;
-
-        $this->template->load($this->layout, 'barcode/print_labels_barcode', $data);
-	}
-	public function utility(){
-		$data['title'] = 'Print INK';
-		$print_labels = [];
-		pr($this->input->post());
-		if ($this->input->post()) {
-			$print_labels = $this->input->post();
-		}
-		$data['print_labels'] = $print_labels;
-		pr($print_labels);die;   
-		$this->template->load($this->layout, 'barcode/print_utility', $data);
+        $data['title'] = 'Print INK';
+        $data['admin_prefix'] = $this->admin_prefix;
+        $pdf_print = $this->load->view('barcode/print_ink_label', $data, true);
+        $file_path = 'assets/images/barcode/' . time() . '.pdf';
+        $this->load->library('m_pdf');
+        $this->m_pdf->pdf->WriteHTML($pdf_print);
+        $this->m_pdf->pdf->Output($file_path, 'F');
+        $data['file_path'] = $file_path;
+        $this->template->load($this->layout, 'barcode/print_utility', $data);
 	}
 }
