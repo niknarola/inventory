@@ -19,11 +19,14 @@
 		<div class="sidebar-category sidebar-category-visible">
 			<div class="category-content no-padding">
 				<ul class="navigation navigation-main navigation-accordion">
-					<?php $uri = $this->input->server('REQUEST_URI'); ?>
+					<?php 
+					$controller = $this->router->fetch_class();
+					$Method = $this->router->fetch_method();
+					$uri = $this->input->server('REQUEST_URI'); ?>
 					<li class="<?php echo (strpos($uri, 'dashboard') != false) ? 'active' : '' ?>"><a href="javascript:void();"><i class="icon-home2"></i> <span>Dashboard</span></a></li>
-					<li class="<?php echo (strpos($uri, 'products') != false) ? 'active' : '' ?>"><a href="admin/products"><i class="icon-barcode2"></i> <span>Products</span></a></li>
-					<li class="<?php echo (strpos($uri, 'upload_products') != false) ? 'active' : '' ?>"><a href="admin/products/upload_products"><i class="icon-upload"></i> <span>Upload Products</span></a></li>
-					<li class="<?php echo ($uri == 'barcode') ? 'active' : '' ?>"><a href="admin/barcode/generate_barcodes"><i class="icon-barcode2"></i> <span>Generate Barcodes</span></a></li>
+					<li class="<?php echo ($controller == 'products' && $Method == "index") ? 'active' : '' ?>"><a href="admin/products"><i class="icon-barcode2"></i> <span>Products</span></a></li>
+					<li class="<?php echo ($controller == 'products' && $Method == "upload_products") ? 'active' : '' ?>"><a href="admin/products/upload_products"><i class="icon-upload"></i> <span>Upload Products</span></a></li>
+					<li class="<?php echo ($controller == 'barcode' && $Method == "generate_barcodes") ? 'active' : '' ?>"><a href="admin/barcode/generate_barcodes"><i class="icon-barcode2"></i> <span>Generate Barcodes</span></a></li>
 					<li class="<?php echo ($uri == 'receiving') ? 'active' : '' ?>">
 						<a href="#"><i class="icon-stack2"></i> <span>Receiving</span></a>
 							<ul>
@@ -61,7 +64,7 @@
 								<li class="<?php echo (strpos($uri, 'picking') != false) ? 'active' : '' ?>"><a href="admin/inventory/picking"><i class="icon-menu"></i> <span>Picking</span></a></li>
 								<li class="<?php echo (strpos($uri, 'locations') != false) ? 'active' : '' ?>"><a href="admin/inventory/locations"><i class="icon-menu"></i> <span>Locations</span></a></li>
 								<li class="<?php echo (strpos($uri, 'master_sheet') != false) ? 'active' : '' ?>"><a href="admin/inventory/master_sheet"><i class="icon-menu"></i> <span>Master Sheet</span></a></li>
-								<li class="<?php echo (strpos($uri, 'reports') != false) ? 'active' : '' ?>"><a href="admin/inventory/reports"><i class="icon-menu"></i> <span>Reports</span></a></li>
+								<li class="<?php echo ($controller == 'reports' && $Method == 'index') ? 'active' : '' ?>"><a href="admin/inventory/reports"><i class="icon-menu"></i> <span>Reports</span></a></li>
 								<li class="<?php echo ($uri == 'create_pallet') ? 'active' : '' ?>"><a href="admin/inventory/create_pallet"><i class="icon-menu"></i> <span>Create Pallet</span></a></li>
 								<li class="<?php echo (strpos($uri, 'utility') != false) ? 'active' : '' ?>"><a href="admin/inventory/utility"><i class="icon-menu"></i> <span>Utility Module</span></a></li>
 							</ul>
@@ -75,7 +78,7 @@
 								<li class="<?php echo (strpos($uri, 'create_order') != false) ? 'active' : '' ?>"><a href="admin/sales/create_order"><i class="icon-menu"></i> <span>Create Order</span></a></li>
 								<li class="<?php echo (strpos($uri, 'rma') != false) ? 'active' : '' ?>"><a href="admin/sales/rma"><i class="icon-menu"></i> <span>RMA</span></a></li>
 								<li class="<?php echo (strpos($uri, 'new_product') != false) ? 'active' : '' ?>"><a href="admin/sales/new_product"><i class="icon-menu"></i> <span>New Product</span></a></li>
-								<li class="<?php echo (strpos($uri, 'reports') != false) ? 'active' : '' ?>"><a href="admin/sales/reports"><i class="icon-menu"></i> <span>Reports</span></a></li>
+								<li class="<?php echo (strpos($uri, 'reports') != false) ? '' : '' ?>"><a href="admin/sales/reports"><i class="icon-menu"></i> <span>Reports</span></a></li>
 							</ul>
 						</li>
 					<li class="<?php echo (strpos($uri, 'shipping') != false) ? 'active' : '' ?>"><a href="admin/shipping"><i class="icon-user"></i> <span>Shipping</span></a></li>
@@ -86,7 +89,7 @@
 								<li class="<?php echo (strpos($uri, 'integration') != false) ? 'active' : '' ?>"><a href="admin/integration"><i class="icon-menu"></i> <span>Integration</span></a></li>
 								<li class="<?php echo (strpos($uri, 'user') != false) ? 'active' : '' ?>"><a href="admin/user"><i class="icon-menu"></i> <span>Create User</span></a></li>
 								<li class="<?php echo (strpos($uri, 'roles') != false) ? 'active' : '' ?>"><a href="admin/roles"><i class="icon-menu"></i> <span>User Permissions</span></a></li>
-								<li class="<?php echo (strpos($uri, 'reports') != false) ? 'active' : '' ?>"><a href="admin/reports"><i class="icon-menu"></i> <span>Reports</span></a></li>
+								<li class="<?php echo (strpos($uri, 'reports') != false) ? '' : '' ?>"><a href="admin/reports"><i class="icon-menu"></i> <span>Reports</span></a></li>
 								<li class="<?php echo (strpos($uri, 'temporary_product_review') != false) ? 'active' : '' ?>"><a href="admin/temporary_product_review"><i class="icon-menu"></i> <span>Review</span></a></li>
 								<li class="<?php echo (strpos($uri, 'edit') != false) ? 'active' : '' ?>"><a href="admin/edit"><i class="icon-menu"></i> <span>Edit</span></a></li>
 								

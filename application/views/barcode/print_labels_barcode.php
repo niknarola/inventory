@@ -13,9 +13,9 @@
 </style>
 <div class="hidden_barcode_div" id="hidden_barcode_div" style="display:none"></div>
 <form id="pallet-labels" action="admin/barcode/print_labels_barcode" method="post">
-    <!-- <div class="row hidden-print">
-        <a href="<?= $admin_prefix ?>receiving/dock_receive" class="btn btn-success">Back To Pallet</a>
-    </div> -->
+    <div class="row hidden-print">
+        <a href="<?= $admin_prefix ?>inventory/create_pallet" class="btn btn-success">Back To Create Pallet</a>
+    </div>
     <div class="row">
         <div class="col-md-12">
             <div class="hidden-print" style="margin-bottom: 5px;">

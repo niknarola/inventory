@@ -32,7 +32,7 @@
                     <td><?php echo $post['product_name']; ?></td>
                     <td><?php echo $post['original_condition']; ?></td>
                     <td><?php echo $post['cosmetic_grade']; ?></td>
-                    <td><?php echo $post['location_name']; ?></td>
+                    <td><?php echo ($post['pallet'] != '') ? $post['pallet'] . ' / ' . $post['pallet_location_name'] : ''; ?></td>
                     <td><?php echo ($status != '') ? $status . '<br/>' . $post['modified'] : ''; ?></td>
                     <td>
                         <?php if($post['fail_text'] != '' || $post['recv_notes'] != '' || $post['packaging_notes'] != '' || $post['inspection_notes'] != '' || $post['cpu'] !=''){?>

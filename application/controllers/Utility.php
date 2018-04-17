@@ -12,6 +12,7 @@ class Utility extends CI_Controller
         $this->load->model('Basic_model', 'basic');
         $this->load->model('Locations_model', 'location');
         $this->load->model('Master_sheet_model', 'master');
+        $this->load->model('Receiving_model', 'receiving');
         if ($this->uri->segment(1) == 'admin' && !$this->session->userdata('admin_validated')) {
             redirect('admin/login');
         } else if ($this->uri->segment(1) != 'admin' && !$this->session->userdata('user_validated')) {
@@ -30,8 +31,13 @@ class Utility extends CI_Controller
         $data = array();
         $data['title'] = 'Utility Module';
         $data['ajax_url'] = $data['ajax_url'] = ($this->uri->segment(1) == 'admin') ? 'admin/inventory/utility/find_product' : 'inventory/utility/find_product';
-        $data['ink_products'] = $this->products->get_key_value_ink_products('ink_products');
+        $data['ajax_url_serial'] = $data['ajax_url_serial'] = ($this->uri->segment(1) == 'admin') ? 'admin/inventory/utility/generate_serial' : 'inventory/utility/generate_serial';
+		$data['ink_products'] = $this->products->get_key_value_ink_products('ink_products');
+		
+
         if ($this->input->post()) {
+			// pr($_POST);die;
+			
             ini_set('max_execution_time', 0);
             if ($this->input->post('upload_sheet')) {
                 $data['upload'] = $this->input->post('upload_sheet');
@@ -60,19 +66,41 @@ class Utility extends CI_Controller
         $this->template->load($this->layout, 'utility/index', $data);
     }
 
+    public function generate_serial($length = 10)
+    {
+        if ($this->input->post('amount') && $this->input->post('amount') != '') {
+            $data['serial_data']['amount'] = $this->input->post('amount');
+            $chars = "0123456789";
+            $password = substr(str_shuffle($chars), 0, $length);
+            $new_serial = [];
+
+            $new_serial[0] = (int) $password;
+
+            if ($data['serial_data']['amount'] > 1) {
+                for ($i = 1; $i < $data['serial_data']['amount']; $i++) {
+                    $password = ($password + 1);
+                    $new_serial[$i] = $password;
+                }
+            }
+            $this->session->set_userdata(array('serial_amount' => $data['serial_data']['amount']));
+            $this->session->set_userdata(array('new_serial' => $new_serial));
+            echo json_encode($new_serial);
+            exit;
+        }
+    }
     public function find_product()
     {
+        // pr($this->input->post());die;
+        $data['post_data'] = $this->input->post();
         $data['internal_part'] = $this->input->post('internal_part');
-        // echo "in function ";pr($data['internal_part']);die;
         $product = $this->products->get_ink($data['internal_part']);
         $view['status'] = 0;
         if (!empty($product)) {
-            // echo"in if";pr($product);die;
             $data['product'] = $product;
             $view['product'] = $product;
-            //     $view['html_data'] = $this->load->view('testing/serial_product', $data, true);
             $view['status'] = 1;
-			$this->session->set_userdata(array('utility' => $product));
+            $this->session->set_userdata(array('utility' => $product));
+            $this->session->set_userdata(array('post_data' => $data['post_data']));
         }
         echo json_encode($view);
         exit;
@@ -143,5 +171,26 @@ class Utility extends CI_Controller
         } else {
             $this->session->set_flashdata('msg', 'Something went wrong, Please try again');
         }
-    }
+	}
+	
+	public function scan_location(){
+
+		if($this->input->post()){
+			$get_todays_cnt = $this->receiving->get_todays_total_pallets();
+			$loc_name = $this->input->post('scan_loc');
+			$location = $this->basic->check_location_exists($loc_name);
+			$k = 0;
+			$j = $get_todays_cnt + 1;
+			$arr = [];
+			$arr['pallet_id'] = 'INK' . date('mdY') . '-' . $j;
+			$arr['location_id'] = $location['id'];
+			$arr['received_by'] = $this->session->userdata('id');
+			$insert_data = $arr;
+			$k++;
+			$j++;
+			$id = $this->basic->insert('pallets', $insert_data);
+			$url = ($this->session->userdata('admin_validated')) ? 'admin/' : '';
+            redirect($url . 'inventory/utility');
+		}
+	}
 }

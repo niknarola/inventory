@@ -1,90 +1,94 @@
-<?php //echo"product"; pr($product);?>
+<?php //echo "product"; pr($product); ?>
 <div class="row">
 	<div class="col-md-12">
-		<form method="post" name="edit_audit_record" action="<?php echo ($this->uri->segment(1)=='admin') ? 'admin/' : ''; ?>testing/edit_audit_record/<?php echo $product['id']; ?>" enctype="multipart/form-data">
+		<form method="post" class="edit_audit_record" name="edit_audit_record" action="<?php echo ($this->uri->segment(1) == 'admin') ? 'admin/' : ''; ?>testing/edit_audit_record/<?php echo $product['id']; ?>" enctype="multipart/form-data">
 			<div class="panel panel-flat">
 				<div class="panel-heading">
 					<div class="row">
 						<div class="col-md-8">
-							<h5 class="panel-title"><?= $title; ?></h5>
+							<h5 class="panel-title"><?=$title;?></h5>
 						</div>
 					</div>
 				</div>
 				<div class="panel-body">
-
+                    <!-- <input class="form-control" type="hidden" name="pallet_id" value="<?//=$product['pallet_id'];?>"> -->
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Serial Number:</label>
-                            <input disabled="true" class="form-control" type="text" name="serial" value="<?= $product['serial']; ?>">
+                            <input disabled="true" class="form-control" type="text" name="serial" value="<?=$product['serial'];?>">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>New Serial Number:</label>
-                            <input class="form-control" type="text" name="new_serial" value="<?= $product['new_serial'];?>">
+                            <input class="form-control" type="text" name="new_serial" value="<?=$product['new_serial'];?>">
                         </div>
                     </div>
-                    
+
                     <div class="col-md-4">
                         <div class="form-group">
                         <label>Part Number:</label>
-                            <input class="form-control" type="text" name="part" value="<?= $product['part']?>">
+                            <input class="form-control" type="text" name="part" value="<?=$product['part']?>">
                         </div>
                     </div>
-                
+
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Received Condition:</label>
                             <select name="condition" data-placeholder="Select Original Condition" class="form-control select original_condition">
                                 <?php foreach ($original_condition as $key => $value) {?>
-                                    <option <?php echo ($key == $product['condition']) ? 'selected' : '' ?> value="<?= $key; ?>"><?= $value; ?></option>
-                                <?php }  ?>
+                                    <option <?php echo ($key == $product['condition']) ? 'selected' : '' ?> value="<?=$key;?>"><?=$value;?></option>
+                                <?php }?>
                             </select>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Grade:</label>
-                            <input type="text" class="form-control" type="text" name="grade" value="<?= $product['cosmetic_grade'] ?>">
+                            <input type="text" class="form-control" type="text" name="grade" value="<?=$product['cosmetic_grade']?>">
                         </div>
                     </div>
-                    
+
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Final Condition:</label>
                             <select name="final_condition" data-placeholder="Select Final Condition" class="form-control select original_condition">
-                                <?php foreach ($original_condition as $key => $value) { ?>
-                                    
-                                    <option value="<?= $key; ?>"><?= $value; ?></option>
-                                <?php }  ?>
+                                <?php foreach ($original_condition as $key => $value) {?>
+
+                                    <option value="<?=$key;?>"><?=$value;?></option>
+                                <?php }?>
                             </select>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Item Location:</label>
-                            <input class="form-control" type="text" name="location" value="<?= $product['pallet']?>">
+                            <input class="form-control serial_location_name" type="text" name="serial_location_name" value="<?=$product['pallet']?>">
+                            <input class="form-control" type="hidden" id="serial_location_id" name="serial_location_id" value="<?=$product['plid']?>">
                         </div>
+						<span id="serial_location_error" class="not_found_error" style="color:red"></span>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Physical Location:</label>            
-                            <input class="form-control" type="text" name="physical_location" value="<?= $product['locationname']?>">
+                            <label>Physical Location:</label>
+                            <input class="form-control pallet_location_name" type="text" name="pallet_location_name" value="<?=$product['pallet_location_name']?>">
+                            <input class="form-control" type="hidden" id="pallet_location_id" name="pallet_location_id" value="<?=$product['pallet_location_id']?>">
                         </div>
+						<span id="pallet_location_error" class="not_found_error" style="color:red"></span>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
                             <label>Comment:</label>
-                            <?php if ($product['comments']!='' || $product['comments']!=null){?>            
-                            <textarea name="comment"class="form-control"><?= $product['comments']?></textarea>
-                            <?php }else{?>
+                            <?php if ($product['comments'] != '' || $product['comments'] != null) {?>
+                            <textarea name="comment"class="form-control"><?=$product['comments']?></textarea>
+                            <?php } else {?>
                                 <textarea name="comment"class="form-control"></textarea>
-                            <?php } ?>
+                            <?php }?>
                         </div>
                     </div>
                     <div class="col-md-12">
                         <button type="submit" name="save" value="save" class="btn bg-teal-400 add_btn">Save</button>
-                        <button  onclick="delete_serial(<?= $product['sid']?>, event)" name="delete" value="delete" class="btn bg-danger-400 close_btn">Remove Unit</button>
+                        <button  onclick="delete_serial(<?=$product['sid']?>, event)" name="delete" value="delete" class="btn bg-danger-400 close_btn">Remove Unit</button>
                     </div>
             </div>
 		</form>
@@ -140,7 +144,7 @@
     			data: {category_id: cat_id},
     		})
     		.done(function(response) {
-    			console.log("response",response);
+    			
     			if(response.result==1){
 	    			$('.'+elem).html(response.html_text);
 
@@ -195,7 +199,7 @@
         },
                 function (isConfirm) {
                     if (isConfirm) {
-                        var serial_id = '<?php echo $product['sid']?>';
+                        var serial_id = '<?php echo $product['sid'] ?>';
                         $.ajax({
                             method: "POST",
                             url: "<?php echo base_url(); ?>admin/testing/delete/" + serial_id,
@@ -222,4 +226,44 @@
                     }
                 });
     }
+
+
+	$('.add_btn').on('click', function(e){
+		e.preventDefault();
+		$('#pallet_location_error').text('');
+		$('#serial_location_error').text('');
+		var base_url='<?php echo base_url(); ?>';
+		$.ajax({
+    			url: base_url+'admin/testing/check_location',
+    			type: 'POST',
+    			dataType: 'json',
+    			data: {serial_location_name: $('.serial_location_name').val(),pallet_location_name:$('.pallet_location_name').val()},
+    		})
+    		.done(function(response) {
+				// console.log(response);
+				// return false;
+				if(response.serial_location.code==200){
+					$('#serial_location_id').val(response.serial_location.data.id);
+				}else if(response.serial_location.code==400){
+					$('#serial_location_error').html('Location Doesn\'t exists.');
+					return false;
+				}
+				if(response.pallet_location.code==200){
+					$('#pallet_location_id').val(response.pallet_location.data.id);
+
+				}else if(response.pallet_location.code==400){
+					$('#pallet_location_error').html('Location Doesn\'t exists.');
+					return false;
+				}
+				$('.edit_audit_record').submit();
+    		})
+    		.fail(function() {
+    			console.log("error");
+				return false;
+    		})
+    		.always(function() {
+    			// console.log("complete");
+    		});
+	})
+
 </script>

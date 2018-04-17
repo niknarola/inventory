@@ -242,6 +242,7 @@ class Products extends CI_Controller
                 $cell_collection = $objPHPExcel->getActiveSheet()->getCellCollection();
                 foreach ($cell_collection as $cell)
                 {
+					// echo"collection";	pr($cell_collection); echo"<br/>";
                     $column = $objPHPExcel->getActiveSheet()->getCell($cell)->getColumn();
                     $row = $objPHPExcel->getActiveSheet()->getCell($cell)->getRow();
                     $data_value = $objPHPExcel->getActiveSheet()->getCell($cell)->getValue();
@@ -257,7 +258,7 @@ class Products extends CI_Controller
                 //send the data in an array format
                 $data['header'] = $header;
                 $data['values'] = $arr_data;
-                // pr($data,1);
+                // pr($data);
                 $this->format_data($data['header'], $data['values'], $data['upload']);
             }
         }
@@ -266,17 +267,23 @@ class Products extends CI_Controller
 
     public function format_data($header, $values, $type)
     {
-        $finalres = [];
+		$finalres = [];
         $i = 0;
         $key_array = array();
         $data = [];
         if ($type == 'inventory')
         {
+			// echo"inventory";pr($values);
             foreach ($values as $val)
             {
+				// pr($val);die;
                 if (reset($val) != '')
                 {
-                    $x = array_combine($header[1], $val);
+					// echo"val1";pr($val);
+					$x = array_combine($header[1], $val);
+					// echo"header";pr($header);
+					// echo"val2";pr($val);
+					// pr($x);die;
                     if (!in_array(reset($val), $key_array))
                     {
                         if (!empty($data))
@@ -317,6 +324,8 @@ class Products extends CI_Controller
 
             foreach ($values as $val)
             {
+				// pr($header);
+				// pr($val);die;
                 if (reset($val) != '')
                 {
                     $arr = array_combine(reset($header), $val);
@@ -441,7 +450,8 @@ class Products extends CI_Controller
                         $condition = $this->basic->get_single_data_by_criteria('original_condition', array('name' => $serial['condition']));
                         $serial_data = [
                             'serial' => $serial['serial'],
-                            'condition' => $condition['id'],
+							'condition' => $condition['id'],
+							'comments'=>$serial['comments'],
                             'product_id' => $id
                         ];
                         $this->basic->insert('product_serials', $serial_data);

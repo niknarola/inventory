@@ -9,7 +9,15 @@ class Master_sheet_model extends CI_Model
     }
     function getRows($params = array()){
         // pr($params);die;
-        $this->db->select('ps.*, p.id as pid, p.part as part, p.name as product_name, p.description as product_desc, p.release_date as release_date, p.category as category, pl.name as product_line, oc.name as original_condition, p.added_as_temp, ci.id as cosmetic_issue_id, ci.name as cosmetic_issue_name,fo.id as fail_option_id, fo.name as fail_option_name, loc.name as location_name');
+		$this->db->select('ps.*, p.id as pid, pal.pallet_id as pallet,
+							p.part as part, p.name as product_name, p.description as product_desc, 
+							p.release_date as release_date, p.category as category, 
+							pl.name as product_line, oc.name as original_condition, 
+							p.added_as_temp,
+							ci.id as cosmetic_issue_id, ci.name as cosmetic_issue_name,
+							fo.id as fail_option_id, fo.name as fail_option_name, 
+							loc.name as location_name,
+							pl_loc.id as plid, pl_loc.name as pallet_location_name');
         $this->db->from('product_serials ps');
         $this->db->join('products p', 'p.id = ps.product_id', 'left');
         $this->db->join('cosmetic_issues ci', 'ci.id = ps.cosmetic_issue', 'left');
@@ -17,6 +25,8 @@ class Master_sheet_model extends CI_Model
         $this->db->join('product_line pl', 'pl.id = p.product_line_id', 'left');
         $this->db->join('original_condition oc', 'oc.id = ps.condition', 'left');
         $this->db->join('locations loc', 'loc.id = ps.location_id', 'left');
+		$this->db->join('pallets pal', 'pal.id = ps.pallet_id', 'left');
+		$this->db->join('locations pl_loc','pal.location_id = pl_loc.id','left');
         //filter data by searched keywords
         if(!empty($params['search']['keywords'])){
             if(!empty($params['search']['searchfor'])){
@@ -30,16 +40,20 @@ class Master_sheet_model extends CI_Model
                     $this->db->or_like('p.'.$params['search']['searchfor'],$params['search']['keywords']);
                 }
             }else{
+				$this->db->group_start();
                 $this->db->like('ps.serial', $params['search']['keywords']);
                 $this->db->or_like('ps.new_serial', $params['search']['keywords']);
                 $this->db->or_like('p.part',$params['search']['keywords']);
-                $this->db->or_like('p.name',$params['search']['keywords']);
+				$this->db->or_like('p.name',$params['search']['keywords']);
+				$this->db->group_end();
             }
         }
         #nik------------
         if(!empty($params['search']['category1']) && !empty($params['search']['category2'])){
-           $this->db->like($params['search']['category1']);
-           $this->db->like($params['search']['category2']);
+
+			
+           $this->db->like('category', $params['search']['category1']);
+           $this->db->like('category', $params['search']['category2']);
         }
         if(!empty($params['search']['grade']))
         {
@@ -50,6 +64,7 @@ class Master_sheet_model extends CI_Model
             $this->db->like('ps.condition',$params['search']['condition']);
         }
         else if(!empty($params['search']['grade']) && !empty($params['search']['condition'])){
+			// echo"in if grade";
             $this->db->like('ps.cosmetic_grade',$params['search']['grade']);
             $this->db->like('ps.condition',$params['search']['condition']);
         }

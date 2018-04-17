@@ -80,7 +80,7 @@ class Cleaning extends CI_Controller {
 			// 	$serial_data['pallet_id'] = $this->input->post('current_pallet_id');
 			// 	$serial_data['location_id'] = $this->input->post('scan_loc_id');
 			// }else 
-			if($this->input->post('close') && $this->input->post('add') && $this->input->post('scan_loc')){
+			if($this->input->post('add') && $this->input->post('scan_loc')){
 				$serial_data['location_id'] = $location['id'];
 			}
 			

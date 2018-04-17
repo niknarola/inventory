@@ -11,14 +11,28 @@ class Report_model extends CI_Model
 
     function get_hp_reports($params = array())
     {
-        $this->db->select('ps.*, p.id as pid, p.part as part, p.name as product_name, p.description as product_desc, p.release_date as release_date, p.category as category, pl.name as product_line, oc.name as original_condition, p.added_as_temp, ci.id as cosmetic_issue_id, ci.name as cosmetic_issue_name,fo.id as fail_option_id, fo.name as fail_option_name, loc.name as location_name, st.last_scan, st.received_date, inspection_date, st.testing_date, st.hard_drive_wiped_date, st.factory_reset_date, st.inventory_date, st.location_assigned_date, st.status_change_date');
+		$this->db->select('ps.*, p.id as pid, p.part as part, p.name as product_name, 
+							p.description as product_desc, p.release_date as release_date, 
+							p.category as category, pl.name as product_line, 
+							oc.name as original_condition, p.added_as_temp, 
+							ci.id as cosmetic_issue_id, ci.name as cosmetic_issue_name,
+							fo.id as fail_option_id, fo.name as fail_option_name, 
+							loc.name as location_name,
+							pal.pallet_id as pallet,
+							pl_loc.id as plid, pl_loc.name as pallet_location_name, 
+							st.last_scan, st.received_date, inspection_date, 
+							st.testing_date, st.hard_drive_wiped_date, 
+							st.factory_reset_date, st.inventory_date, 
+							st.location_assigned_date, st.status_change_date');
         $this->db->from('product_serials ps');
         $this->db->join('products p', 'p.id = ps.product_id', 'left');
         $this->db->join('cosmetic_issues ci', 'ci.id = ps.cosmetic_issue', 'left');
         $this->db->join('fail_options fo', 'fo.id = ps.fail_option', 'left');
         $this->db->join('product_line pl', 'pl.id = p.product_line_id', 'left');
         $this->db->join('original_condition oc', 'oc.id = ps.condition', 'left');
-        $this->db->join('locations loc', 'loc.id = ps.location_id', 'left');
+		$this->db->join('locations loc', 'loc.id = ps.location_id', 'left');
+		$this->db->join('pallets pal', 'pal.id = ps.pallet_id', 'left');
+		$this->db->join('locations pl_loc','pal.location_id = pl_loc.id','left');
         $this->db->join('serial_timestamps st', 'st.serial_id = ps.id', 'left');
         //filter data by searched keywords
         if (!empty($params['search']['keywords']))
@@ -40,16 +54,18 @@ class Report_model extends CI_Model
             }
             else
             {
+				$this->db->group_start();
                 $this->db->like('ps.serial', $params['search']['keywords']);
                 $this->db->or_like('ps.new_serial', $params['search']['keywords']);
                 $this->db->or_like('p.part',$params['search']['keywords']);
-                $this->db->or_like('p.name',$params['search']['keywords']);
+				$this->db->or_like('p.name',$params['search']['keywords']);
+				$this->db->group_end();
             }
         }
         if (!empty($params['search']['category1']) && !empty($params['search']['category2']))
         {
-            $this->db->like($params['search']['category1']);
-            $this->db->like($params['search']['category2']);
+            $this->db->like('category',$params['search']['category1']);
+            $this->db->like('category',$params['search']['category2']);
         }
         if (!empty($params['search']['grade']))
         {
@@ -127,6 +143,7 @@ class Report_model extends CI_Model
         }
         $this->db->where('u.id is NOT NULL');
         $this->db->where('u.role_id','3');
+        $this->db->or_where('u.role_id','1');
         $this->db->group_by('u.id');
 
         $this->db->order_by('complete', 'desc');

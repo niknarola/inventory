@@ -189,7 +189,7 @@ if ($get_date != '')
                             {
                                 ?>                        
                                 <div class="col-md-2">
-                                    <a href="javascript:;" class="btn bg-primary-300 tech_btn" data-id="<?= $tech['id'] ?>" data-name="<?= $tech['name']; ?>"> <?= $tech['name']; ?></a>
+                                    <a href="javascript:;" class="btn bg-primary-300 tech_btn" data-id="<?= $tech['uid'] ?>" data-name="<?= $tech['user_name']; ?>"> <?= $tech['user_name']; ?></a>
                                 </div>
                             <?php } ?>
                         </div>

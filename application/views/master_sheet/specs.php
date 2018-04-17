@@ -2,12 +2,15 @@
 <table class="table table-bordered">
     <tr>
         <td>CPU:</td>
-        <td><?= !empty($specs['cpu']) ? implode(',',json_decode($specs['cpu'], true)) : 'Not Available' ?></td>
+        
+        <td><?= (!empty($specs['cpu'])) ? implode(',',json_decode($specs['cpu'], true)) : 'Not Available' ?></td>
     </tr>
     <tr>
         <td>Storage:</td>
         <td>
-            <?php foreach(json_decode($specs['storage']) as $key => $value){ 
+            <?php 
+            if(!empty($specs['storage'])){
+                foreach(json_decode($specs['storage']) as $key => $value){ 
                     $ssd = json_decode($specs['ssd']);
                     if($ssd[$key] == 0){
                         echo $value.'<br>';
@@ -15,7 +18,11 @@
                     else{
                         echo $value.'(ssd)<br>';
                     }
-                }?>
+                }
+            }else{
+                echo"Not available";
+            }
+                ?>
         </td>
     </tr>
     <tr>
@@ -25,7 +32,9 @@
     <tr>
         <td>Graphics:</td>
         <td>
-            <?php foreach(json_decode($specs['graphics']) as $key => $value){ 
+            <?php 
+            if(!empty($specs['graphics'])){
+                foreach(json_decode($specs['graphics']) as $key => $value){ 
                     $dedicated = json_decode($specs['dedicated']);
                         if($dedicated[$key] == 0){
                             echo $value.'<br>';
@@ -33,14 +42,13 @@
                         else{
                             echo $value.'(dedicated)<br>';
                         }
-            }?>
+                }
+            }else{
+                echo"Not available";
+            }
+            ?>
         </td>
     </tr>
-    <tr>
-        <td>Dedicated:</td>
-        <td><?= !empty($specs['dedicated']) ? implode(',',json_decode($specs['dedicated'], true)) : 'Not Available' ?></td>
-    </tr>
-
     <tr>
         <td>Screen:</td>
         <td><?= !empty($specs['screen']) ? $specs['screen'] : 'Not Available' ?></td>
@@ -56,5 +64,9 @@
     <tr>
         <td>Size:</td>
         <td><?= !empty($specs['size']) ? $specs['size'] : 'Not Available' ?></td>
+    </tr>
+    <tr>
+        <td>Form Factor:</td>
+        <td><?= !empty($specs['form_factor']) ? $specs['form_factor'] : 'Not Available' ?></td>
     </tr>
 </table>

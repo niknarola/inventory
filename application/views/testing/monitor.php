@@ -16,14 +16,14 @@
 							<div class="col-md-4">
 								<div class="form-group">
 									<label>Serial #:</label>
-									<input type="text" name="serial" value="" onchange="get_product_details();" class="form-control serial">
+									<input type="text" name="serial" value=""  class="form-control serial">
 									<input type="hidden" name="serial_id" class="serial_id" value="">
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="form-group">
 									<label>Part #:</label>
-									<input type="text" name="part" value="" onchange="get_product_details();" class="form-control part" required>
+									<input type="text" name="part" value=""  class="form-control part" required>
 									<input type="hidden" name="product_id" class="product_id" value="">
 								</div>
 							</div>
@@ -32,6 +32,7 @@
 								<div class="form-group">
 									<label>New Serial #:</label>
 									<input type="text" name="new_serial"  value="" class="form-control new_serial">
+									<span id="serial_error" class="not_found_error" style="color:red"></span>
 								</div>
 							</div>
 						</div>
@@ -229,10 +230,10 @@
 									<div class="col-md-8">
 										<div class="form-group">
 										<label>Specifications:</label>
-                                        <div class="row">
+                                        <!-- <div class="row">
 												<div class="col-md-2">Curved</div>
 												<div class="col-md-5"><input type="text" class="form-control curved" name="curved" value="" placeholder=""></div>
-											</div>
+											</div> -->
 											
 											<div class="row scr-wrap">
 											<div class="col-md-2">Display Type</div>
@@ -267,6 +268,13 @@
 												<input type="checkbox" value="1" name="webcam" class="checkbx webcam">
 											</span>
 											<input type="text" readonly="true" value="No Webcam" class="form-control"> 
+										</div>
+
+										<div class="input-group">
+											<span class="input-group-addon">
+												<input type="checkbox" value="1" name="curved" class="checkbx curved">
+											</span>
+											<input type="text" readonly="true" value="Curved" class="form-control"> 
 										</div>
                                         
 									</div>
@@ -415,6 +423,7 @@
 						</div>
                         <div class="col-md-12">
                             <div class="col-md-2 col-md-offset-9">
+                            	<input type="checkbox" value="1" name="scan_loc_check" class="checkbx scan_loc_check">
                             <input type="text" name="scan_loc" value="" placeholder="Scan To Location" class="form-control scan_loc">
 									<input type="hidden" name="scan_loc_id" class="scan_loc_id" value="">
                             </div>
@@ -638,7 +647,33 @@
     function multiselect_selected($el, values) {
     	$el.val(values);
     }
-    function get_product_details(){
+	$('.new_serial').on('change', function(){
+		$('#serial_error').text('');
+		var base_url='<?php echo base_url(); ?>';
+		$.ajax({
+    			url: base_url+'admin/testing/check_serial',
+    			type: 'POST',
+    			dataType: 'json',
+    			data: {new_serial: $('.new_serial').val()}
+    		})
+    		.done(function(response) {
+				console.log(response);
+				if(response.new_serial.code==200){
+				}else if(response.new_serial.code==400){
+					$('#serial_error').html('Serial Already exists.');
+					return false;
+				}
+    		})
+    		.fail(function() {
+    			console.log("error");
+    		})
+    		.always(function() {
+    			console.log("complete");
+    		});
+	})
+    // function get_product_details(){
+		$(".serial").on('keyup', function (e) {
+			if(e.keyCode == 13){
   		//var part = $('input.part').val();
     	var serial = $('input.serial').val();
     	var new_serial = $('input.new_serial').val();
@@ -699,8 +734,8 @@
                     //         $('#newModal').modal('show');
                     //     });
                     // }
-					$('input.scan_loc').val(response.product.location_name);
-				$('input.scan_loc_id').val(response.product.location_id);
+					$('input.scan_loc').val(response.product.pallet_name);
+				$('input.scan_loc_id').val(response.product.pallet_id);
 				$('input.product_id').val(response.product.pid);
 				$('input.part').val(response.product.part);
 				$('input.serial_id').val(response.product.id);
@@ -727,6 +762,10 @@
 				$('.touchscreen').prop('checked', false);
 				if(response.product.touch_screen==1){
 					$('.touchscreen').prop('checked', true);
+				}
+				$('.curved').prop('checked', false);
+				if(response.product.curved==1){
+					$('.curved').prop('checked', true);
 				}
 				$('.cosmetic_grade_boxes').each(function(index, el) {
 					$(this).prop('checked', false);
@@ -874,7 +913,8 @@
 				console.log("complete");
 			});
 		}
-	}
+			}
+	});
     
     
         $('.multiselect').multiselect({

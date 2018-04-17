@@ -17,7 +17,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <!-- <label>Serial #:</label> -->
-                                    <input type="text" value="" name="serial" class="form-control serial" onchange="get_product_details(this.value);" placeholder="Serial #"> 
+                                    <input type="text" value="" name="serial" class="form-control serial"  placeholder="Serial #"> 
                                 </div>
                             </div>
 							<div class="col-md-2">
@@ -41,6 +41,7 @@
                     <div class="col-md-12">
                         <div class="row ">
                             <div class="col-md-4 ">
+							<input type="checkbox" value="1" name="scan_loc_check" class="checkbx scan_loc_check">
                                 <input type="text" name="scan_loc" value="" placeholder="Scan To Location" class="form-control scan_loc">
                                 <input type="hidden" name="scan_loc_id" class="scan_loc_id" value="">
                             </div>
@@ -60,7 +61,9 @@
 <script type="text/javascript" src="assets/js/picker.date.js"></script>
 <script type="text/javascript">
 	
-    function get_product_details(){
+    // function get_product_details(){
+		$(".serial").on('keyup', function (e) {
+			if(e.keyCode == 13){
     	var serial = $('input.serial').val();
 		if(serial!=''){
 			var data = {serial: serial};
@@ -76,8 +79,8 @@
 					$( "input" ).not( ".serial, .new_serial" ).val('');
 					$('textarea').html('');
 				}else{
-                    $('input.scan_loc').val(response.product.location_name);
-				    $('input.scan_loc_id').val(response.product.location_id);
+                    $('input.scan_loc').val(response.product.pallet);
+				    $('input.scan_loc_id').val(response.product.plid);
     				$('textarea.prev_notes').html(response.product.repair_notes);
 			    }
 			})
@@ -89,4 +92,5 @@
 			});
 		}
 	}
+		});
 </script>

@@ -294,8 +294,8 @@
 									<input type="hidden" name="scan_loc_id" class="scan_loc_id" value="">
                                 </div>
                                 <div class="col-md-4">
-                                    <button type="submit" name="add" value="add" class="btn bg-teal-400 add_btn">Add</button>
-                                    <button type="submit" name="close" value="close" class="btn bg-danger-400 close_btn">Close/New</button>
+                                    <button type="submit" name="add" value="add" class="btn bg-teal-400 add_btn">Save</button>
+                                    <!-- <button type="submit" name="close" value="close" class="btn bg-danger-400 close_btn">Close/New</button> -->
                                 </div>
                             </div>
 						<!-- <div class="text-right">
@@ -438,10 +438,10 @@
 					console.log('in if',response.product.cosmetic_grade);
 					$('#myModal').modal('show');
 				}
-				$('input.current_pallet_id').val(response.product.plid);
-				$('input.current_pallet').val(response.product.location_pallet);
-                $('input.scan_loc').val(response.product.location_name);
-				$('input.scan_loc_id').val(response.product.locid);
+				// $('input.current_pallet_id').val(response.product.plid);
+				// $('input.current_pallet').val(response.product.location_pallet);
+                $('input.scan_loc').val(response.product.pallet_name);
+				$('input.scan_loc_id').val(response.product.plid);
 				// $('input.current_pallet').val(response.product.location_name);
 				$('input.product_id').val(response.product.pid);
 				$('input.part').val(response.product.part);

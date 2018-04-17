@@ -535,37 +535,38 @@ class Receiving extends CI_Controller {
                 $category2 = array_filter($this->input->post('category2'));
                 $condition = array_filter($this->input->post('condition'));
                 $i=sizeof($products) + 1;
-                foreach ($serials as $key => $serial) {
-                    $condition_name = [];
-                    if(array_key_exists($key,$condition)){
-                        $condition_name = $this->basic->get_single_data_by_criteria('original_condition', array('id' => $condition[$key]));
-                    }
-                    $cat = [];
-                    $cat[] = $category1[$key];
-                    if(!empty($category2)){
-                            if(array_key_exists($key,$category2) && $category2[$key]!=''){
-                            $cat[] = $category2[$key];
+                if(isset($serials) && !empty($serials)){
+                    foreach ($serials as $key => $serial) {
+                        $condition_name = [];
+                        if(array_key_exists($key,$condition)){
+                            $condition_name = $this->basic->get_single_data_by_criteria('original_condition', array('id' => $condition[$key]));
                         }
+                        $cat = [];
+                        $cat[] = $category1[$key];
+                        if(!empty($category2)){
+                                if(array_key_exists($key,$category2) && $category2[$key]!=''){
+                                $cat[] = $category2[$key];
+                            }
+                        }
+                            
+                        $arr = [
+                            'id'=>$i,
+                            'serial'=>$serial,
+                            'part'=>$parts[$key],
+                            // 'part'=>implode(',',$parts),
+                            'location_id'=>$pallet_data['location_id'],
+                            // 'inspection_notes'=>$notes[$key],
+                            'description'=>(array_key_exists($key,$description)) ? $description[$key] : '',
+                            'category'=>json_encode($cat),
+                            'condition'=>(array_key_exists($key,$condition)) ? $condition[$key] : '',
+                            'condition_name'=>(!empty($condition_name)) ? $condition_name['name'] : '',
+                            'pallet_id' => $this->input->post('pallet_id'),
+                        ];
+                        $i++;
+                        $products[] = $arr;
+                        // echo"product";pr($products);die;
                     }
-                        
-                    $arr = [
-                        'id'=>$i,
-                        'serial'=>$serial,
-                        'part'=>$parts[$key],
-                        // 'part'=>implode(',',$parts),
-                        'location_id'=>$pallet_data['location_id'],
-                        // 'inspection_notes'=>$notes[$key],
-                        'description'=>(array_key_exists($key,$description)) ? $description[$key] : '',
-                        'category'=>json_encode($cat),
-                        'condition'=>(array_key_exists($key,$condition)) ? $condition[$key] : '',
-                        'condition_name'=>(!empty($condition_name)) ? $condition_name['name'] : '',
-                        'pallet_id' => $this->input->post('pallet_id'),
-                    ];
-                    $i++;
-                    $products[] = $arr;
-                    // echo"product";pr($products);die;
-                }
-                
+            }
                $this->session->set_userdata( 'products',$products );
                foreach ($products as $key => $product) {
                        $id_exists = $this->products->product_exists($product['part']);

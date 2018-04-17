@@ -3,11 +3,13 @@
 	.barcode_labels span {font-size: 11px; color: #000;}
 	span.condition, span.product_line, span.category {font-size: 13px; color: #000;}
 	.barcode_labels span.name {font-size: 15px;}
+	.print_btn{margin-top:25px !important;}
 	@page{ 	/*size: auto;*/   /* auto is the initial value */ 
     		margin: 1mm 0mm 0mm 0mm;  /* this affects the margin in the printer settings */ 
     		/*margin: 5mm 1mm 0mm 1mm;*/  /* this affects the margin in the printer settings */ 
     		/*transform: scale(.30);*/
 		}
+
 </style>
 <div class="row">
 	<div class="col-md-12">
@@ -85,7 +87,7 @@
 						<?php //} ?> 
 					</div>
 				</div>
-				<div class="row"><button type="button" class="btn btn-info print_btn hidden-print">Print</button></div>
+				<div class="row"><button type="button" class="btn btn-info print_btn hidden-print print">Print</button></div>
 			</div>
 			<hr>
 		<?php } ?>

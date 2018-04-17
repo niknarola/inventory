@@ -107,6 +107,8 @@ $route['admin/barcode/print_preview']='barcode/print_preview';
 $route['admin/barcode/dup_index']='barcode/dup_index';
 $route['admin/barcode/print_pallet_labels_barcode']='barcode/print_pallet_labels_barcode';
 $route['admin/barcode/utility']='barcode/utility';
+$route['admin/barcode/print_utility']='barcode/print_utility';
+$route['admin/barcode/print_serial']='barcode/print_serial';
 
 $route['admin/roles/edit/(:any)'] = 'admin/roles/add/$1';
 $route['admin/user/edit/(:any)']='admin/user/add/$1';
@@ -133,8 +135,10 @@ $route['admin/testing/other_item']='testing/other_item';
 $route['admin/testing/audit']='testing/audit';
 $route['admin/testing/quality']='testing/quality';
 $route['admin/testing/repair']='testing/repair';
-$route['admin/testing/find_product'] = 'testing/find_product';
 $route['admin/testing/view_notes/(:any)']='testing/view_notes/$1';
+$route['admin/testing/check_location'] = 'testing/check_location';
+$route['admin/testing/check_serial'] = 'testing/check_serial';
+$route['admin/testing/find_product'] = 'testing/find_product';
 $route['admin/testing/edit_audit_record/(:any)'] = 'testing/edit_audit_record/$1';
 $route['admin/testing/delete/(:any)'] = 'testing/delete/$1';
 
@@ -154,3 +158,5 @@ $route['admin/inventory/create_pallet/print_contents']='create_pallet/print_cont
 $route['admin/inventory/create_pallet/print_labels']='create_pallet/print_labels';
 $route['admin/inventory/utility']='utility';
 $route['admin/inventory/utility/find_product']='utility/find_product';
+$route['admin/inventory/utility/generate_serial']='utility/generate_serial';
+$route['admin/inventory/utility/scan_location']='utility/scan_location';

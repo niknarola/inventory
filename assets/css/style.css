@@ -134,3 +134,26 @@ label.check_label {border: 1px solid #EEE;  padding: 12px 0 10px 15px; }
 .content{padding: 0 10px 60px 10px;}
 .form-group .multi-select-full button.multiselect.btn, 
 .input-group .multi-select-full button.multiselect.btn{color:#333}
+
+.d-flex{ display:-webbox-flex; display:-moz-flex; display:-ms-block; display: flex;}
+.mar-l{margin-left:auto !important;}
+.mar-r{ margin-right:auto !important; }
+.print-sticker{ border:5px solid #000; padding:25px; max-width:600px; width:100%; margin:15px auto; background:#fff; }
+.sticker-head { margin:0 0 40px;}
+.sticker-head h2{ margin:0; padding:0;}
+.sticker-head h2 big{ font-size:120px; line-height:120px; display:block; font-weight:400;}
+.sticker-head h2 small{ color:#000; font-size:20px;  text-transform: uppercase; text-align: center; line-height: 100%;     display: block;}
+.sticker-head h6{ margin:0; padding:0;}
+.sticker-head h6 big{ font-size: 60px; text-transform: uppercase; color: #000; text-align: right; display: block; line-height: 100%; padding: 0 10px 0 0; font-weight: 500;}
+.sticker-head h6 small{ background: #000; color: #fff; font-size: 44px; padding: 8px 10px; line-height: 40px; display: block; text-align: center; text-transform: uppercase; width: 160px; text-align: right; margin-left: auto;} 
+.sticker-head h6 span{ display:block; text-align: right; padding: 3px 10px 0 0; font-size: 13px; line-height: 100%;}
+
+.barcode-img { align-items: center; margin:0 0 15px;}
+.barcode-img span{ width:65%; padding-right:20px;}
+.barcode-img span img{ width:100%;}
+.barcode-img  h6{ margin:-15px 0 0 auto; padding: 0; font-size: 90px; background: #000; color: #fff; padding: 0 20px;display: block;  line-height:112px; font-weight: 300; height:112px; align-items: center;}
+.sticker-qty{ margin:40px 0;}
+.sticker-qty h2{ margin:0 0 10px; padding:0; font-size:86px; display:block; font-weight:400; line-height:100%; text-align:center; color:#000;}
+.sticker-qty h6{ margin:0; padding: 0; font-size: 22px; display: block; text-align: center; line-height: normal; font-weight: 400; color:#000;}
+.edit .col-md-6 {margin-bottom: 5px;}
+.edit-spec .row {margin-bottom: 5px;}

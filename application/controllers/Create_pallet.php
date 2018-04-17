@@ -85,7 +85,7 @@ class Create_pallet extends CI_Controller
             $j = $get_todays_cnt + 1;
             $arr = [];
             $arr['pallet_id'] = $prefix . date('mdY') . '-' . $j;
-            $arr['location_id'] = $location;
+            $arr['location_id'] = $location['id'];
             $arr['received_by'] = $this->session->userdata('id');
             $insert_data = $arr;
             $k++;
@@ -109,9 +109,7 @@ class Create_pallet extends CI_Controller
 
     public function print_labels()
     {
-		
-		// pr($this->input->post());die;
-		$get_todays_cnt = $this->receiving->get_todays_total_pallets();
+        $get_todays_cnt = $this->receiving->get_todays_total_pallets();
         $pallet_type = '';
         $prefix = '';
         $action = '';
@@ -141,10 +139,18 @@ class Create_pallet extends CI_Controller
                 $pallet_type = 'inventory';
                 $prefix = 'IN';
             }
+            
+            
             $data['action'] = $action;
             $data['pallet_type'] = $pallet_type;
+            $data['serial_array'] = $_POST['serials'];
+            $data['serials'] = $this->master->get_data($data['serial_array']);
             $loc_name = $this->input->post('scan_loc');
-			$location = $this->basic->check_location_exists($loc_name);
+            $location = $this->basic->check_location_exists($loc_name);
+            // echo"in out if ";die;
+            // echo"query";$this->db->last_query();die;
+            // pr($loc_name);
+            // pr($location);die;
 			
             $k = 0;
             $j = $get_todays_cnt + 1;
@@ -156,20 +162,35 @@ class Create_pallet extends CI_Controller
 			}else{
 				$arr['pallet_id'] = $prefix . date('mdY') . '-' . $j;
 			}
-            $arr['location_id'] = $location;
+            $arr['location_id'] = $location['id'];
             $arr['received_by'] = $this->session->userdata('id');
             $insert_data = $arr;
             $k++;
 			$j++;
+            
+            $id = $this->basic->insert('pallets', $insert_data);
+            $serials = $this->master->get_data($data['serial_array']);
+            $update_arr = [];
+            foreach ($serials as $k => $v) {
+                $update_arr[] = [
+                    'id' => $v['sid'],
+                    'location_id' => $insert_data['location_id'],
+                    'pallet_id' => $id,
+                ];
+            }
+            $this->basic->update_multiple('product_serials', $update_arr, 'id');
 
-			$id = $this->basic->insert('pallets', $insert_data);
             $this->session->set_userdata(array('pallet_data_new' => $insert_data));
             $session_data = [];
 			$session_data['pallet_id'] = $insert_data['pallet_id'];
 			$session_data['pallet_type'] = $pallet_type;
 			$session_data['action'] = $action;
-			$location_name = $this->basic->get_data_by_id('locations',$insert_data['location_id']);
-            $session_data['location'] = $location_name['name'];
+			$session_data['location'] = [];
+			if($insert_data['location_id']!=''){
+				$location_name = $this->basic->get_data_by_id('locations',$insert_data['location_id']);
+				$session_data['location'] = $location_name['name'];
+			}
+            // pr($session_data);die;
 			$this->session->set_userdata(array('pallets_new' => $session_data));
 			echo json_encode($session_data);
 			die;

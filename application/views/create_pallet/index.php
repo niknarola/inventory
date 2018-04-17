@@ -1,4 +1,16 @@
+<style>
+    .pallet-btm {
+    display: inline-block;
+    width: 100%;
+}
+.p_selected{
 
+background: #fff !important;
+color: #26a69a !important;
+border: 2px solid #26a69a;
+box-shadow: none !important;
+}
+</style>
 <div class="row">
 	<div class="col-md-12">
 	<!-- action="admin/barcode/print_labels_barcode" -->
@@ -57,7 +69,7 @@
 				<div class="col-md-12">
 							<div class="row">
 								<div class="col-md-4 ">
-									<input type="text" name="scan_loc" value="" placeholder="Scan To Location" id="scan_loc" class="form-control scan_loc">
+									<input type="text" name="scan_loc" value="" placeholder="Scan To Location" id="scan_loc" class="form-control scan_loc" >
 									<input type="hidden" name="scan_loc_id" class="scan_loc_id" value="">
 								</div>
 								<!-- <button type="submit" name="save" value="save" class="btn bg-teal-400 add_btn">Save</button> -->
@@ -76,11 +88,11 @@
 </div>
 <div class="more" style="display:none;">
 <div class="pallet-btm" >
-    <div class="col-md-5 form-group inputs">
+    <div class="col-md-4 form-group inputs">
         <input type="text" value="" name="serial[]" id="serial" class="form-control serial serial-new" placeholder="Serial Number#" >
         <input type="hidden" name="serial_id[]" class="serial_id" value="">
     </div>
-    <div class="col-md-5 form-group">
+    <div class="col-md-4 form-group">
         <input type="text" value="" name="part[]" id="part" class="form-control part part-new" placeholder="Part Number#" >
         <input type="hidden" name="product_id[]" class="product_id" value="">
     </div>
@@ -115,12 +127,21 @@ jQuery(document).ready(function() {
 
     $('.pallet').click(function(){
         action = 'pallet';
+        $(this).addClass('p_selected');
+        $('.cart').removeClass('p_selected');
+        $('.other').removeClass('p_selected');
     });
     $('.cart').click(function(){
         action = 'cart';
+        $(this).addClass('p_selected');
+        $('.pallet').removeClass('p_selected');
+        $('.other').removeClass('p_selected');
     });
     $('.other').click(function(){
         action = 'other';
+        $(this).addClass('p_selected');
+        $('.cart').removeClass('p_selected');
+        $('.pallet').removeClass('p_selected');
     });
     $('.print_btn').on('click', function(){
         var serials = [];
@@ -154,16 +175,29 @@ jQuery(document).ready(function() {
 
     });
 	$('.print_labels').click(function(){
-		$('#createpallet').attr('action',"admin/barcode/print_pallet_labels_barcode");
 	
+		// var scan_loc = $('#scan_loc').val();
+		// var pallet_type = $('.pallet_type').val();
+        // // console.log('val',scan_loc);
+        // if(action){
+        //     var data = {action: action, pallet_type: pallet_type, scan_loc:scan_loc};
+        // }else {
+        //     var data = {pallet_type: pallet_type, scan_loc:scan_loc};
+        // }
+        var serials = [];
+        $('.pallet-btm-wrapper').find('.serial-new').each(function(){
+            serials.push($(this).val());
+        });
 		var scan_loc = $('#scan_loc').val();
-		var pallet_type = $('.pallet_type').val();
-        // console.log('val',scan_loc);
+        console.log('val',scan_loc);
+
+        var pallet_type = $('.pallet_type').val();
+
+		var data = {serials: serials, pallet_type: pallet_type, scan_loc: scan_loc};
         if(action){
-            var data = {action: action, pallet_type: pallet_type, scan_loc:scan_loc};
-        }else {
-            var data = {pallet_type: pallet_type, scan_loc:scan_loc};
+            data["action"] = action;
         }
+		console.log('data',data)
 		$.ajax({
                 type: 'POST',
                 url: 'admin/inventory/create_pallet/print_labels',
@@ -172,7 +206,9 @@ jQuery(document).ready(function() {
                 dataType: 'JSON',
                 data: data,
                 success: function (data) {
+		        $('#createpallet').attr('action',"admin/barcode/print_pallet_labels_barcode");
 					console.log(data);
+                    // return false;
                     // $('.hidden_content_div').html(data);
                     // var mywindow = window.open('', 'PRINT', 'height=400,width=600');
                     // mywindow.document.write(document.getElementById('hidden_content_div').innerHTML);

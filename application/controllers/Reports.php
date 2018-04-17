@@ -1,6 +1,6 @@
 <?php
 
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class Reports extends CI_Controller
 {
@@ -17,18 +17,17 @@ class Reports extends CI_Controller
         $this->load->model('Locations_model', 'location');
         $this->load->model('Master_sheet_model', 'master');
         $this->load->model('Report_model', 'report');
-        if ($this->uri->segment(1) == 'admin' && !$this->session->userdata('admin_validated'))
-        {
+        if ($this->uri->segment(1) == 'admin' && !$this->session->userdata('admin_validated')) {
             redirect('admin/login');
-        }
-        else if ($this->uri->segment(1) != 'admin' && !$this->session->userdata('user_validated'))
-        {
+        } else if ($this->uri->segment(1) != 'admin' && !$this->session->userdata('user_validated')) {
             redirect('login');
         }
-        if ($this->uri->segment(1) == 'admin')
+        if ($this->uri->segment(1) == 'admin') {
             $this->layout = 'admin/admin_layout';
-        else
+        } else {
             $this->layout = 'layout';
+        }
+
     }
 
     public function index()
@@ -36,7 +35,7 @@ class Reports extends CI_Controller
         $data['title'] = 'Reports';
         $totalRec = count($this->report->get_hp_reports());
 
-        $data['tech_name'] = $this->basic->get_all_data_by_criteria('users', ['role_id' => '3']);
+		$data['tech_name'] = $this->basic->get_user_by_role_id();
         $data['tech_reports'] = $this->report->get_tech_reports(['ps.is_delete' => '0']);
         $data['cat_url'] = ($this->uri->segment(1) == 'admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
         $category_names = $this->products->get_categories();
@@ -65,22 +64,19 @@ class Reports extends CI_Controller
         $this->template->load($this->layout, 'reports/index', $data);
     }
 
-    function sortFunction($a, $b)
+    public function sortFunction($a, $b)
     {
         return strtotime($a[0]) - strtotime($b[0]);
     }
 
-    function ajaxPaginationData()
+    public function ajaxPaginationData()
     {
         $conditions = array();
         //calc offset number
         $page = $this->input->post('page');
-        if (!$page)
-        {
+        if (!$page) {
             $offset = 0;
-        }
-        else
-        {
+        } else {
             $offset = $page;
         }
         //set conditions for search
@@ -93,45 +89,35 @@ class Reports extends CI_Controller
         $location = $this->input->post('location');
         $testing = $this->input->post('testing');
         $status = $this->input->post('status');
-        if (!empty($keywords))
-        {
+        if (!empty($keywords)) {
             $conditions['search']['keywords'] = $keywords;
         }
-        if (!empty($searchfor) && $searchfor != 'none')
-        {
+        if (!empty($searchfor) && $searchfor != 'none') {
             $conditions['search']['searchfor'] = $searchfor;
         }
-        if (!empty($category1) && $category1 != 'none')
-        {
+        if (!empty($category1) && $category1 != 'none') {
             $conditions['search']['category1'] = $category1;
         }
-        if (!empty($category2) && $category2 != 'none')
-        {
+        if (!empty($category2) && $category2 != 'none') {
             $conditions['search']['category2'] = $category2;
         }
-        if (!empty($condition))
-        {
+        if (!empty($condition)) {
             $conditions['search']['condition'] = $condition;
         }
-        if (!empty($grade))
-        {
+        if (!empty($grade)) {
             $conditions['search']['grade'] = $grade;
         }
-        if (!empty($condition) && !empty($grade))
-        {
+        if (!empty($condition) && !empty($grade)) {
             $conditions['search']['condition'] = $condition;
             $conditions['search']['grade'] = $grade;
         }
-        if (!empty($location))
-        {
+        if (!empty($location)) {
             $conditions['search']['location'] = $location;
         }
-        if (!empty($testing))
-        {
+        if (!empty($testing)) {
             $conditions['search']['testing'] = $testing;
         }
-        if (!empty($status))
-        {
+        if (!empty($status)) {
             $conditions['search']['status'] = $status;
         }
         //total rows count
@@ -156,7 +142,7 @@ class Reports extends CI_Controller
         //get reports data
         $data['posts'] = $this->report->get_hp_reports($conditions);
         //load the view
-        $this->load->view('reports/ajax-pagination-data', $data, FALSE);
+        $this->load->view('reports/ajax-pagination-data', $data, false);
     }
 
     public function ajax_list()
@@ -164,8 +150,7 @@ class Reports extends CI_Controller
         $list = $this->products->get_datatables();
         $data = array();
         $no = $_POST['start'];
-        foreach ($list as $products)
-        {
+        foreach ($list as $products) {
             $no++;
             $row = array();
             $row[] = $no;
@@ -203,78 +188,64 @@ class Reports extends CI_Controller
         $testing = $this->input->post('testing');
         $status = $this->input->post('status');
 
-
-
-        if (!empty($keywords))
-        {
+        if (!empty($keywords)) {
             $conditions['search']['keywords'] = $keywords;
         }
-        if (!empty($searchfor) && $searchfor != 'none')
-        {
+        if (!empty($searchfor) && $searchfor != 'none') {
             $conditions['search']['searchfor'] = $searchfor;
         }
-        if (!empty($category1) && $category1 != 'none')
-        {
+        if (!empty($category1) && $category1 != 'none') {
             $conditions['search']['category1'] = $category1;
         }
-        if (!empty($category2) && $category2 != 'none')
-        {
+        if (!empty($category2) && $category2 != 'none') {
             $conditions['search']['category2'] = $category2;
         }
-        if (!empty($condition))
-        {
+        if (!empty($condition)) {
             $conditions['search']['condition'] = $condition;
         }
-        if (!empty($grade))
-        {
+        if (!empty($grade)) {
             $conditions['search']['grade'] = $grade;
         }
-        if (!empty($condition) && !empty($grade))
-        {
+        if (!empty($condition) && !empty($grade)) {
             $conditions['search']['condition'] = $condition;
             $conditions['search']['grade'] = $grade;
         }
-        if (!empty($location))
-        {
+        if (!empty($location)) {
             $conditions['search']['location'] = $location;
         }
-        if (!empty($testing))
-        {
+        if (!empty($testing)) {
             $conditions['search']['testing'] = $testing;
         }
-        if (!empty($status))
-        {
+        if (!empty($status)) {
             $conditions['search']['status'] = $status;
         }
 
         //All Data
-        if ($this->input->post('select_data') == '0')
-        {
+        if ($this->input->post('select_data') == '0') {
             //============================================================HP Reports===============================================================
             $this->excel->createSheet();
             $this->excel->setActiveSheetIndex(0);
             $this->excel->getSheet(0)->setTitle("HP Reports");
             $this->data['hp'] = $this->report->get_hp_reports($conditions);
             $data = ["0" => ['part' => "Part Number",
-                    'serial' => "Serial Number",
-                    'date_received' => "Date Received",
-                    'condition' => 'Condition Received',
-                    'cosmetic_grade' => 'Cosmetic Grade',
-                    'test_result' => 'Testing Result',
-                    'fail_reason_notes' => 'Reason(if fail)',
-                    'location' => 'Current Location',
-                    'days_location' => 'Days in Location',
-                    'status' => 'Status'
+                'serial' => "Serial Number",
+                'date_received' => "Date Received",
+                'condition' => 'Condition Received',
+                'cosmetic_grade' => 'Cosmetic Grade',
+                'test_result' => 'Testing Result',
+                'fail_reason_notes' => 'Reason(if fail)',
+                'location' => 'Current Location',
+                'days_location' => 'Days in Location',
+                'status' => 'Status',
             ]];
-            foreach ($this->data['hp'] as $result)
-            {
+            foreach ($this->data['hp'] as $result) {
                 $start_date = date_create($result['location_assigned_date']);
                 $end_date = date_create($result['status_change_date']);
                 $date = date_diff($start_date, $end_date);
                 $days = $date->format("%d");
 //                $new_date = $date->format('%R%a days');
 
-                $data [] = ['part' => $result['part'],
+                $data[] = ['part' => $result['part'],
                     'serial' => $result['serial'],
                     'date_received' => $result['received_date'],
                     'condition' => $result['original_condition'],
@@ -283,7 +254,7 @@ class Reports extends CI_Controller
                     'fail_reason_notes' => $result['fail_reason_notes'],
                     'location' => $result['location_name'],
                     'days_location' => $days,
-                    'status' => $result['status']
+                    'status' => $result['status'],
                 ];
             }
 
@@ -295,17 +266,14 @@ class Reports extends CI_Controller
             $this->excel->getActiveSheet()->getStyle('A1:' . $highestColumm . '2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
             $this->excel->getActiveSheet()->getStyle('A1:' . $highestColumm . '2')->getFont()->setSize(16);
 
-            for ($column = 'A'; $column <= $highestColumm; $column++)
-            {
+            for ($column = 'A'; $column <= $highestColumm; $column++) {
                 $this->excel->getActiveSheet()->getStyle('A3:' . $highestColumm . '3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                 $this->excel->getActiveSheet()->getStyle('A3:' . $highestColumm . '3')->getFont()->setSize(15);
                 $this->excel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
             }
 
-            for ($row = '4'; $row <= $highestRow; $row++)
-            {
-                for ($column = 'A'; $column <= $highestColumm; $column++)
-                {
+            for ($row = '4'; $row <= $highestRow; $row++) {
+                for ($column = 'A'; $column <= $highestColumm; $column++) {
                     $this->excel->getActiveSheet()->getStyle('A' . $row . ':' . $highestColumm . $row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                     $this->excel->getActiveSheet()->getStyle('A' . $row . ':' . $highestColumm . $row)->getFont()->setSize(12);
                     $this->excel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
@@ -318,19 +286,18 @@ class Reports extends CI_Controller
             $this->excel->getSheet(1)->setTitle('Refurbished QC Reports');
             $this->data['refurbished'] = $this->report->get_hp_reports($conditions);
             $data = ["0" => ['part' => "Part Number",
-                    'serial' => "Serial Number",
-                    'date_tested' => "Date Tested",
-                    'condition' => 'Condition Received',
-                    'cosmetic_grade' => 'Cosmetic Grade',
-                    'test_result' => 'Testing Result',
-                    'fail_reason_notes' => 'Reason(if fail)',
-                    'harddirve' => 'Hard Drive Wiped',
-                    'factory_reset' => 'Factory Reset',
-                    'status' => 'Status'
+                'serial' => "Serial Number",
+                'date_tested' => "Date Tested",
+                'condition' => 'Condition Received',
+                'cosmetic_grade' => 'Cosmetic Grade',
+                'test_result' => 'Testing Result',
+                'fail_reason_notes' => 'Reason(if fail)',
+                'harddirve' => 'Hard Drive Wiped',
+                'factory_reset' => 'Factory Reset',
+                'status' => 'Status',
             ]];
-            foreach ($this->data['refurbished'] as $result)
-            {
-                $data [] = ['part' => $result['part'],
+            foreach ($this->data['refurbished'] as $result) {
+                $data[] = ['part' => $result['part'],
                     'serial' => $result['serial'],
                     'date_tested' => $result['testing_date'],
                     'condition' => $result['original_condition'],
@@ -339,7 +306,7 @@ class Reports extends CI_Controller
                     'fail_reason_notes' => $result['fail_reason_notes'],
                     'harddrive' => $result['hard_drive_wiped_date'],
                     'factory_reset' => $result['factory_reset_date'],
-                    'status' => $result['status']
+                    'status' => $result['status'],
                 ];
             }
             $this->excel->getActiveSheet()->fromArray($data, null, 'A3');
@@ -350,17 +317,14 @@ class Reports extends CI_Controller
             $this->excel->getActiveSheet()->getStyle('A1:' . $highestColumm . '2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
             $this->excel->getActiveSheet()->getStyle('A1:' . $highestColumm . '2')->getFont()->setSize(16);
 
-            for ($column = 'A'; $column <= $highestColumm; $column++)
-            {
+            for ($column = 'A'; $column <= $highestColumm; $column++) {
                 $this->excel->getActiveSheet()->getStyle('A3:' . $highestColumm . '3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                 $this->excel->getActiveSheet()->getStyle('A3:' . $highestColumm . '3')->getFont()->setSize(15);
                 $this->excel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
             }
 
-            for ($row = '4'; $row <= $highestRow; $row++)
-            {
-                for ($column = 'A'; $column <= $highestColumm; $column++)
-                {
+            for ($row = '4'; $row <= $highestRow; $row++) {
+                for ($column = 'A'; $column <= $highestColumm; $column++) {
                     $this->excel->getActiveSheet()->getStyle('A' . $row . ':' . $highestColumm . $row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                     $this->excel->getActiveSheet()->getStyle('A' . $row . ':' . $highestColumm . $row)->getFont()->setSize(12);
                     $this->excel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
@@ -373,24 +337,23 @@ class Reports extends CI_Controller
             $this->excel->getSheet(2)->setTitle('Aging Inventory Reports');
             $this->data['aging'] = $this->report->get_hp_reports($conditions);
             $data = ["0" => ['part' => "Part Number",
-                    'serial' => "Serial Number",
-                    'date_scanned' => "Date of Last Scan",
-                    'date_received' => "Date Received",
-                    'date_inspection' => "Inspection Date",
-                    'date_tested' => "Testing Date",
-                    'date_inventory' => "Inventory Date",
-                    'location' => 'Current Location',
-                    'days_location' => 'Days in Location',
-                    'status' => 'Status'
+                'serial' => "Serial Number",
+                'date_scanned' => "Date of Last Scan",
+                'date_received' => "Date Received",
+                'date_inspection' => "Inspection Date",
+                'date_tested' => "Testing Date",
+                'date_inventory' => "Inventory Date",
+                'location' => 'Current Location',
+                'days_location' => 'Days in Location',
+                'status' => 'Status',
             ]];
-            foreach ($this->data['aging'] as $result)
-            {
+            foreach ($this->data['aging'] as $result) {
                 $start_date = date_create($result['location_assigned_date']);
                 $end_date = date_create($result['status_change_date']);
                 $date = date_diff($start_date, $end_date);
                 $days = $date->format("%d");
 
-                $data [] = ['part' => $result['part'],
+                $data[] = ['part' => $result['part'],
                     'serial' => $result['serial'],
                     'date_scanned' => $result['last_scan'],
                     'date_received' => $result['received_date'],
@@ -399,37 +362,34 @@ class Reports extends CI_Controller
                     'date_inventory' => $result['inventory_date'],
                     'location' => $result['location_name'],
                     'days_location' => $days,
-                    'status' => $result['status']
+                    'status' => $result['status'],
                 ];
             }
             $this->excel->getActiveSheet()->fromArray($data, null, 'A3');
             $highestColumm = $this->excel->getActiveSheet()->getHighestColumn();
             $highestRow = $this->excel->getActiveSheet()->getHighestRow();
 //            $style['red_text'] = array(
-//                'name' => 'Arial',
-//                'color' => array(
-//                    'rgb' => 'FF0000'
-//                )
-//            );
+            //                'name' => 'Arial',
+            //                'color' => array(
+            //                    'rgb' => 'FF0000'
+            //                )
+            //            );
             $this->excel->getActiveSheet()->setCellValue('A1', 'Aging Inventory Reports');
             $this->excel->getActiveSheet()->mergeCells('A1:' . $highestColumm . '2');
             $this->excel->getActiveSheet()->getStyle('A1:' . $highestColumm . '2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
             $this->excel->getActiveSheet()->getStyle('A1:' . $highestColumm . '2')->getFont()->setSize(16);
             $this->excel->getActiveSheet()->setCellValue('A1', 'Aging Inventory Reports');
 //            $this->excel->getActiveSheet()->getStyleByColumnAndRow('A', '1')->getFont()->applyFromArray($style['red_text']);
-//            $this->excel->getActiveSheet()->getStyleByColumnAndRow('A', '1')->getFont();
+            //            $this->excel->getActiveSheet()->getStyleByColumnAndRow('A', '1')->getFont();
 
-            for ($column = 'A'; $column <= $highestColumm; $column++)
-            {
+            for ($column = 'A'; $column <= $highestColumm; $column++) {
                 $this->excel->getActiveSheet()->getStyle('A3:' . $highestColumm . '3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                 $this->excel->getActiveSheet()->getStyle('A3:' . $highestColumm . '3')->getFont()->setSize(15);
                 $this->excel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
             }
 
-            for ($row = '4'; $row <= $highestRow; $row++)
-            {
-                for ($column = 'A'; $column <= $highestColumm; $column++)
-                {
+            for ($row = '4'; $row <= $highestRow; $row++) {
+                for ($column = 'A'; $column <= $highestColumm; $column++) {
                     $this->excel->getActiveSheet()->getStyle('A' . $row . ':' . $highestColumm . $row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                     $this->excel->getActiveSheet()->getStyle('A' . $row . ':' . $highestColumm . $row)->getFont()->setSize(12);
                     $this->excel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
@@ -446,8 +406,7 @@ class Reports extends CI_Controller
             $category2 = $this->input->post('category2');
             $date_array = array();
             $date_string = '';
-            if ($date != '')
-            {
+            if ($date != '') {
                 $dates = explode('-', $date);
                 $start_date = $dates[0];
                 $end_date = $dates[1];
@@ -462,27 +421,22 @@ class Reports extends CI_Controller
             //-- Json data for chart
             $condition = array(
                 'tech_category1' => '"' . $category1 . '"',
-                'tech_category2' => '"' . $category2 . '"'
+                'tech_category2' => '"' . $category2 . '"',
             );
-            if (count($condition) > 0)
-            {
+            if (count($condition) > 0) {
                 $json_data = array(
                     'tech_reports' => $this->report->get_tech_reports(array_merge($date_array, array('ps.is_delete' => '0'))),
                 );
-            }
-            else
-            {
+            } else {
                 $json_data = array(
                     'tech_reports' => $this->report->get_tech_reports(array_merge($date_array, array('ps.is_delete' => '0')), $condition),
                 );
             }
             $new_json_data = array();
             $key_arrays = array();
-            foreach ($json_data as $key => $val)
-            {
+            foreach ($json_data as $key => $val) {
                 $new_array = array();
-                foreach ($val as $val1)
-                {
+                foreach ($val as $val1) {
                     $new_array[$val1['date']] = $val1['count'];
                     $key_arrays[] = array($val1['date'], date('d. M \'y', strtotime($val1['date'])));
                 }
@@ -493,15 +447,12 @@ class Reports extends CI_Controller
             usort($key_arrays, array($this, 'sortFunction'));
 
             $actions = [];
-            foreach ($new_json_data as $k => $data_value)
-            {
+            foreach ($new_json_data as $k => $data_value) {
                 $actions[$k] = array();
-                foreach ($key_arrays as $key => $value)
-                {
-                    if (isset($data_value[$value[0]]))
-                    {
+                foreach ($key_arrays as $key => $value) {
+                    if (isset($data_value[$value[0]])) {
                         $actions[$k][$value[0]] = array(
-                            $data_value[$value[0]], $value[1]
+                            $data_value[$value[0]], $value[1],
                         );
                     }
                 }
@@ -511,34 +462,30 @@ class Reports extends CI_Controller
             $this->data['json'] = json_encode($actions);
             $data['tech_name'] = $this->basic->get_all_data_by_criteria('users', ['role_id' => '3']);
 
-            if (count($condition) > 0)
-            {
+            if (count($condition) > 0) {
                 $data['tech_reports'] = $this->report->get_tech_reports(array_merge($date_array, array('ps.is_delete' => '0')));
-            }
-            else
-            {
+            } else {
                 $data['tech_reports'] = $this->report->get_tech_reports(array_merge($date_array, array('ps.is_delete' => '0')), $condition);
             }
 //            $this->data['tech_reports'] = $this->report->get_tech_reports();
             $data1 = ["0" => ['rank' => "Rank",
-                    'tech' => "Tech",
-                    'completed' => "Completed",
-                    'inprogress' => "In Progress",
-                    'notebooks' => "Notebooks",
-                    'desktops' => "Desktops",
-                    'thin_clients' => "Thin Clients",
-                    'all_in_ones' => 'All-In-Ones',
-                    'tablets' => 'Tablets',
-                    'monitors' => 'Monitors',
-                    'printers' => 'Printers',
-                    'pass' => 'Pass%',
-                    'accessories' => 'Accessories',
-                    'other' => 'Other',
+                'tech' => "Tech",
+                'completed' => "Completed",
+                'inprogress' => "In Progress",
+                'notebooks' => "Notebooks",
+                'desktops' => "Desktops",
+                'thin_clients' => "Thin Clients",
+                'all_in_ones' => 'All-In-Ones',
+                'tablets' => 'Tablets',
+                'monitors' => 'Monitors',
+                'printers' => 'Printers',
+                'pass' => 'Pass%',
+                'accessories' => 'Accessories',
+                'other' => 'Other',
             ]];
             $count = 1;
-            foreach ($data['tech_reports'] as $result)
-            {
-                $data1 [] = ['rank' => $count++,
+            foreach ($data['tech_reports'] as $result) {
+                $data1[] = ['rank' => $count++,
                     'tech' => $result['name'],
                     'completed' => $result['complete'],
                     'inprogress' => $result['inprogress'],
@@ -551,7 +498,7 @@ class Reports extends CI_Controller
                     'printers' => $result['printer_count'],
                     'pass' => ($result['count'] != 0) ? number_format(($result['complete'] / $result['count'] * 100), 2) . '%' : "N/A",
                     'accessories' => $result['accessory_count'],
-                    'other' => $result['other_count']
+                    'other' => $result['other_count'],
                 ];
             }
             $this->excel->getActiveSheet()->fromArray($data1, null, 'A3');
@@ -563,17 +510,14 @@ class Reports extends CI_Controller
             $this->excel->getActiveSheet()->getStyle('A1:' . $highestColumm . '2')->getFont()->setSize(16);
             $this->excel->getActiveSheet()->setCellValue('A1', 'Tech Reports');
 
-            for ($column = 'A'; $column <= $highestColumm; $column++)
-            {
+            for ($column = 'A'; $column <= $highestColumm; $column++) {
                 $this->excel->getActiveSheet()->getStyle('A3:' . $highestColumm . '3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                 $this->excel->getActiveSheet()->getStyle('A3:' . $highestColumm . '3')->getFont()->setSize(15);
                 $this->excel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
             }
 
-            for ($row = '4'; $row <= $highestRow; $row++)
-            {
-                for ($column = 'A'; $column <= $highestColumm; $column++)
-                {
+            for ($row = '4'; $row <= $highestRow; $row++) {
+                for ($column = 'A'; $column <= $highestColumm; $column++) {
                     $this->excel->getActiveSheet()->getStyle('A' . $row . ':' . $highestColumm . $row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                     $this->excel->getActiveSheet()->getStyle('A' . $row . ':' . $highestColumm . $row)->getFont()->setSize(12);
                     $this->excel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
@@ -581,35 +525,31 @@ class Reports extends CI_Controller
             }
             //============================================================Tech reports=============================================================
             $filename = 'all_reports.xls';
-        }
-        else
-        {
+        } else {
             $this->excel->setActiveSheetIndex(0);
             //HP Reports
-            if ($this->input->post('select_data') == '1')
-            {
+            if ($this->input->post('select_data') == '1') {
                 $this->data['hp'] = $this->report->get_hp_reports($conditions);
 
                 $data = ["0" => ['part' => "Part Number",
-                        'serial' => "Serial Number",
-                        'date_received' => "Date Received",
-                        'condition' => 'Condition Received',
-                        'cosmetic_grade' => 'Cosmetic Grade',
-                        'test_result' => 'Testing Result',
-                        'fail_reason_notes' => 'Reason(if fail)',
-                        'location' => 'Current Location',
-                        'days_location' => 'Days in Location',
-                        'status' => 'Status'
+                    'serial' => "Serial Number",
+                    'date_received' => "Date Received",
+                    'condition' => 'Condition Received',
+                    'cosmetic_grade' => 'Cosmetic Grade',
+                    'test_result' => 'Testing Result',
+                    'fail_reason_notes' => 'Reason(if fail)',
+                    'location' => 'Current Location',
+                    'days_location' => 'Days in Location',
+                    'status' => 'Status',
                 ]];
-                foreach ($this->data['hp'] as $result)
-                {
+                foreach ($this->data['hp'] as $result) {
                     $start_date = date_create($result['location_assigned_date']);
                     $end_date = date_create($result['status_change_date']);
                     $date = date_diff($start_date, $end_date);
                     $days = $date->format("%d");
 //                    $new_date = $date->format('%R%a days');
 
-                    $data [] = ['part' => $result['part'],
+                    $data[] = ['part' => $result['part'],
                         'serial' => $result['serial'],
                         'date_received' => $result['received_date'],
                         'condition' => $result['original_condition'],
@@ -618,7 +558,7 @@ class Reports extends CI_Controller
                         'fail_reason_notes' => $result['fail_reason_notes'],
                         'location' => $result['location_name'],
                         'days_location' => $days,
-                        'status' => $result['status']
+                        'status' => $result['status'],
                     ];
                 }
                 $this->excel->getActiveSheet()->fromArray($data, null, 'A3');
@@ -629,17 +569,14 @@ class Reports extends CI_Controller
                 $this->excel->getActiveSheet()->getStyle('A1:' . $highestColumm . '2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                 $this->excel->getActiveSheet()->getStyle('A1:' . $highestColumm . '2')->getFont()->setSize(15);
 
-                for ($column = 'A'; $column <= $highestColumm; $column++)
-                {
+                for ($column = 'A'; $column <= $highestColumm; $column++) {
                     $this->excel->getActiveSheet()->getStyle('A3:' . $highestColumm . '3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                     $this->excel->getActiveSheet()->getStyle('A3:' . $highestColumm . '3')->getFont()->setSize(14);
                     $this->excel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
                 }
 
-                for ($row = '4'; $row <= $highestRow; $row++)
-                {
-                    for ($column = 'A'; $column <= $highestColumm; $column++)
-                    {
+                for ($row = '4'; $row <= $highestRow; $row++) {
+                    for ($column = 'A'; $column <= $highestColumm; $column++) {
                         $this->excel->getActiveSheet()->getStyle('A' . $row . ':' . $highestColumm . $row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                         $this->excel->getActiveSheet()->getStyle('A' . $row . ':' . $highestColumm . $row)->getFont()->setSize(13);
                         $this->excel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
@@ -648,26 +585,23 @@ class Reports extends CI_Controller
                 $filename = 'hp_report.xls';
             }
 
-
             //Refurbished
-            elseif ($this->input->post('select_data') == '2')
-            {
+            elseif ($this->input->post('select_data') == '2') {
                 $this->data['refurbished'] = $this->report->get_hp_reports($conditions);
 
                 $data = ["0" => ['part' => "Part Number",
-                        'serial' => "Serial Number",
-                        'date_tested' => "Date Tested",
-                        'condition' => 'Condition Received',
-                        'cosmetic_grade' => 'Cosmetic Grade',
-                        'test_result' => 'Testing Result',
-                        'fail_reason_notes' => 'Reason(if fail)',
-                        'harddirve' => 'Hard Drive Wiped',
-                        'factory_reset' => 'Factory Reset',
-                        'status' => 'Status'
+                    'serial' => "Serial Number",
+                    'date_tested' => "Date Tested",
+                    'condition' => 'Condition Received',
+                    'cosmetic_grade' => 'Cosmetic Grade',
+                    'test_result' => 'Testing Result',
+                    'fail_reason_notes' => 'Reason(if fail)',
+                    'harddirve' => 'Hard Drive Wiped',
+                    'factory_reset' => 'Factory Reset',
+                    'status' => 'Status',
                 ]];
-                foreach ($this->data['refurbished'] as $result)
-                {
-                    $data [] = ['part' => $result['part'],
+                foreach ($this->data['refurbished'] as $result) {
+                    $data[] = ['part' => $result['part'],
                         'serial' => $result['serial'],
                         'date_tested' => $result['testing_date'],
                         'condition' => $result['original_condition'],
@@ -676,7 +610,7 @@ class Reports extends CI_Controller
                         'fail_reason_notes' => $result['fail_reason_notes'],
                         'harddrive' => $result['hard_drive_wiped_date'],
                         'factory_reset' => $result['factory_reset_date'],
-                        'status' => $result['status']
+                        'status' => $result['status'],
                     ];
                 }
                 $this->excel->getActiveSheet()->fromArray($data, null, 'A3');
@@ -687,17 +621,14 @@ class Reports extends CI_Controller
                 $this->excel->getActiveSheet()->getStyle('A1:' . $highestColumm . '2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                 $this->excel->getActiveSheet()->getStyle('A1:' . $highestColumm . '2')->getFont()->setSize(15);
 
-                for ($column = 'A'; $column <= $highestColumm; $column++)
-                {
+                for ($column = 'A'; $column <= $highestColumm; $column++) {
                     $this->excel->getActiveSheet()->getStyle('A3:' . $highestColumm . '3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                     $this->excel->getActiveSheet()->getStyle('A3:' . $highestColumm . '3')->getFont()->setSize(14);
                     $this->excel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
                 }
 
-                for ($row = '4'; $row <= $highestRow; $row++)
-                {
-                    for ($column = 'A'; $column <= $highestColumm; $column++)
-                    {
+                for ($row = '4'; $row <= $highestRow; $row++) {
+                    for ($column = 'A'; $column <= $highestColumm; $column++) {
                         $this->excel->getActiveSheet()->getStyle('A' . $row . ':' . $highestColumm . $row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                         $this->excel->getActiveSheet()->getStyle('A' . $row . ':' . $highestColumm . $row)->getFont()->setSize(13);
                         $this->excel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
@@ -706,25 +637,22 @@ class Reports extends CI_Controller
                 $filename = 'refurbished_report.xls';
             }
 
-
             //Aging Reports
-            elseif ($this->input->post('select_data') == '3')
-            {
+            elseif ($this->input->post('select_data') == '3') {
                 $this->data['aging'] = $this->report->get_hp_reports($conditions);
                 $data = ["0" => ['part' => "Part Number",
-                        'serial' => "Serial Number",
-                        'date_scanned' => "Date of Last Scan",
-                        'date_received' => "Date Received",
-                        'date_inspection' => "Inspection Date",
-                        'date_tested' => "Testing Date",
-                        'date_inventory' => "Inventory Date",
-                        'location' => 'Current Location',
+                    'serial' => "Serial Number",
+                    'date_scanned' => "Date of Last Scan",
+                    'date_received' => "Date Received",
+                    'date_inspection' => "Inspection Date",
+                    'date_tested' => "Testing Date",
+                    'date_inventory' => "Inventory Date",
+                    'location' => 'Current Location',
 //                    'days_location' => 'Days in Location',
-                        'status' => 'Status'
+                    'status' => 'Status',
                 ]];
-                foreach ($this->data['aging'] as $result)
-                {
-                    $data [] = ['part' => $result['part'],
+                foreach ($this->data['aging'] as $result) {
+                    $data[] = ['part' => $result['part'],
                         'serial' => $result['serial'],
                         'date_scanned' => $result['last_scan'],
                         'date_received' => $result['received_date'],
@@ -733,7 +661,7 @@ class Reports extends CI_Controller
                         'date_inventory' => $result['inventory_date'],
                         'location' => $result['location_name'],
 //                    'days_location' => $result['location'],
-                        'status' => $result['status']
+                        'status' => $result['status'],
                     ];
                 }
                 $this->excel->getActiveSheet()->fromArray($data, null, 'A3');
@@ -744,17 +672,14 @@ class Reports extends CI_Controller
                 $this->excel->getActiveSheet()->getStyle('A1:' . $highestColumm . '2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                 $this->excel->getActiveSheet()->getStyle('A1:' . $highestColumm . '2')->getFont()->setSize(15);
 
-                for ($column = 'A'; $column <= $highestColumm; $column++)
-                {
+                for ($column = 'A'; $column <= $highestColumm; $column++) {
                     $this->excel->getActiveSheet()->getStyle('A3:' . $highestColumm . '3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                     $this->excel->getActiveSheet()->getStyle('A3:' . $highestColumm . '3')->getFont()->setSize(14);
                     $this->excel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
                 }
 
-                for ($row = '4'; $row <= $highestRow; $row++)
-                {
-                    for ($column = 'A'; $column <= $highestColumm; $column++)
-                    {
+                for ($row = '4'; $row <= $highestRow; $row++) {
+                    for ($column = 'A'; $column <= $highestColumm; $column++) {
                         $this->excel->getActiveSheet()->getStyle('A' . $row . ':' . $highestColumm . $row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                         $this->excel->getActiveSheet()->getStyle('A' . $row . ':' . $highestColumm . $row)->getFont()->setSize(13);
                         $this->excel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
@@ -764,16 +689,14 @@ class Reports extends CI_Controller
             }
 
             //Tech Reports
-            elseif ($this->input->post('select_data') == '4')
-            {
+            elseif ($this->input->post('select_data') == '4') {
                 $data = array();
                 $date = $this->input->post('date');
                 $category1 = $this->input->post('category1');
                 $category2 = $this->input->post('category2');
                 $date_array = array();
                 $date_string = '';
-                if ($date != '')
-                {
+                if ($date != '') {
                     $dates = explode('-', $date);
                     $start_date = $dates[0];
                     $end_date = $dates[1];
@@ -788,27 +711,22 @@ class Reports extends CI_Controller
                 //-- Json data for chart
                 $condition = array(
                     'tech_category1' => '"' . $category1 . '"',
-                    'tech_category2' => '"' . $category2 . '"'
+                    'tech_category2' => '"' . $category2 . '"',
                 );
-                if (count($condition) > 0)
-                {
+                if (count($condition) > 0) {
                     $json_data = array(
                         'tech_reports' => $this->report->get_tech_reports(array_merge($date_array, array('ps.is_delete' => '0'))),
                     );
-                }
-                else
-                {
+                } else {
                     $json_data = array(
                         'tech_reports' => $this->report->get_tech_reports(array_merge($date_array, array('ps.is_delete' => '0')), $condition),
                     );
                 }
                 $new_json_data = array();
                 $key_arrays = array();
-                foreach ($json_data as $key => $val)
-                {
+                foreach ($json_data as $key => $val) {
                     $new_array = array();
-                    foreach ($val as $val1)
-                    {
+                    foreach ($val as $val1) {
                         $new_array[$val1['date']] = $val1['count'];
                         $key_arrays[] = array($val1['date'], date('d. M \'y', strtotime($val1['date'])));
                     }
@@ -819,15 +737,12 @@ class Reports extends CI_Controller
                 usort($key_arrays, array($this, 'sortFunction'));
 
                 $actions = [];
-                foreach ($new_json_data as $k => $data_value)
-                {
+                foreach ($new_json_data as $k => $data_value) {
                     $actions[$k] = array();
-                    foreach ($key_arrays as $key => $value)
-                    {
-                        if (isset($data_value[$value[0]]))
-                        {
+                    foreach ($key_arrays as $key => $value) {
+                        if (isset($data_value[$value[0]])) {
                             $actions[$k][$value[0]] = array(
-                                $data_value[$value[0]], $value[1]
+                                $data_value[$value[0]], $value[1],
                             );
                         }
                     }
@@ -837,33 +752,29 @@ class Reports extends CI_Controller
                 $this->data['json'] = json_encode($actions);
                 $data['tech_name'] = $this->basic->get_all_data_by_criteria('users', ['role_id' => '3']);
 
-                if (count($condition) > 0)
-                {
+                if (count($condition) > 0) {
                     $data['tech_reports'] = $this->report->get_tech_reports(array_merge($date_array, array('ps.is_delete' => '0')));
-                }
-                else
-                {
+                } else {
                     $data['tech_reports'] = $this->report->get_tech_reports(array_merge($date_array, array('ps.is_delete' => '0')), $condition);
                 }
                 $data1 = ["0" => ['rank' => "Rank",
-                        'tech' => "Tech",
-                        'completed' => "Completed",
-                        'inprogress' => "In Progress",
-                        'notebooks' => "Notebooks",
-                        'desktops' => "Desktops",
-                        'thin_clients' => "Thin Clients",
-                        'all_in_ones' => 'All-In-Ones',
-                        'tablets' => 'Tablets',
-                        'monitors' => 'Monitors',
-                        'printers' => 'Printers',
-                        'pass' => 'Pass%',
-                        'accessories' => 'Accessories',
-                        'other' => 'Other',
+                    'tech' => "Tech",
+                    'completed' => "Completed",
+                    'inprogress' => "In Progress",
+                    'notebooks' => "Notebooks",
+                    'desktops' => "Desktops",
+                    'thin_clients' => "Thin Clients",
+                    'all_in_ones' => 'All-In-Ones',
+                    'tablets' => 'Tablets',
+                    'monitors' => 'Monitors',
+                    'printers' => 'Printers',
+                    'pass' => 'Pass%',
+                    'accessories' => 'Accessories',
+                    'other' => 'Other',
                 ]];
                 $count = 1;
-                foreach ($data['tech_reports'] as $result)
-                {
-                    $data1 [] = ['rank' => $count++,
+                foreach ($data['tech_reports'] as $result) {
+                    $data1[] = ['rank' => $count++,
                         'tech' => $result['name'],
                         'completed' => $result['complete'],
                         'inprogress' => $result['inprogress'],
@@ -876,7 +787,7 @@ class Reports extends CI_Controller
                         'printers' => $result['printer_count'],
                         'pass' => ($result['count'] != 0) ? number_format(($result['complete'] / $result['count'] * 100), 2) . '%' : "N/A",
                         'accessories' => $result['accessory_count'],
-                        'other' => $result['other_count']
+                        'other' => $result['other_count'],
                     ];
                 }
 
@@ -888,17 +799,14 @@ class Reports extends CI_Controller
                 $this->excel->getActiveSheet()->getStyle('A1:' . $highestColumm . '2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                 $this->excel->getActiveSheet()->getStyle('A1:' . $highestColumm . '2')->getFont()->setSize(15);
 
-                for ($column = 'A'; $column <= $highestColumm; $column++)
-                {
+                for ($column = 'A'; $column <= $highestColumm; $column++) {
                     $this->excel->getActiveSheet()->getStyle('A3:' . $highestColumm . '3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                     $this->excel->getActiveSheet()->getStyle('A3:' . $highestColumm . '3')->getFont()->setSize(14);
                     $this->excel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
                 }
 
-                for ($row = '4'; $row <= $highestRow; $row++)
-                {
-                    for ($column = 'A'; $column <= $highestColumm; $column++)
-                    {
+                for ($row = '4'; $row <= $highestRow; $row++) {
+                    for ($column = 'A'; $column <= $highestColumm; $column++) {
                         $this->excel->getActiveSheet()->getStyle('A' . $row . ':' . $highestColumm . $row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                         $this->excel->getActiveSheet()->getStyle('A' . $row . ':' . $highestColumm . $row)->getFont()->setSize(13);
                         $this->excel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
@@ -929,8 +837,7 @@ class Reports extends CI_Controller
         $category2 = $this->input->post('category2');
         $date_array = array();
         $date_string = '';
-        if ($date != '')
-        {
+        if ($date != '') {
             $dates = explode('-', $date);
             $start_date = $dates[0];
             $end_date = $dates[1];
@@ -945,27 +852,22 @@ class Reports extends CI_Controller
         //-- Json data for chart
         $condition = array(
             'tech_category1' => '"' . $category1 . '"',
-            'tech_category2' => '"' . $category2 . '"'
+            'tech_category2' => '"' . $category2 . '"',
         );
-        if (count($condition) > 0)
-        {
+        if (count($condition) > 0) {
             $json_data = array(
                 'tech_reports' => $this->report->get_tech_reports(array_merge($date_array, array('ps.is_delete' => '0'))),
             );
-        }
-        else
-        {
+        } else {
             $json_data = array(
                 'tech_reports' => $this->report->get_tech_reports(array_merge($date_array, array('ps.is_delete' => '0')), $condition),
             );
         }
         $new_json_data = array();
         $key_arrays = array();
-        foreach ($json_data as $key => $val)
-        {
+        foreach ($json_data as $key => $val) {
             $new_array = array();
-            foreach ($val as $val1)
-            {
+            foreach ($val as $val1) {
                 $new_array[$val1['date']] = $val1['count'];
                 $key_arrays[] = array($val1['date'], date('d. M \'y', strtotime($val1['date'])));
             }
@@ -976,15 +878,12 @@ class Reports extends CI_Controller
         usort($key_arrays, array($this, 'sortFunction'));
 
         $actions = [];
-        foreach ($new_json_data as $k => $data_value)
-        {
+        foreach ($new_json_data as $k => $data_value) {
             $actions[$k] = array();
-            foreach ($key_arrays as $key => $value)
-            {
-                if (isset($data_value[$value[0]]))
-                {
+            foreach ($key_arrays as $key => $value) {
+                if (isset($data_value[$value[0]])) {
                     $actions[$k][$value[0]] = array(
-                        $data_value[$value[0]], $value[1]
+                        $data_value[$value[0]], $value[1],
                     );
                 }
             }
@@ -994,22 +893,16 @@ class Reports extends CI_Controller
         $this->data['json'] = json_encode($actions);
         $data['tech_name'] = $this->basic->get_all_data_by_criteria('users', ['role_id' => '3']);
 
-        if (count($condition) > 0)
-        {
+        if (count($condition) > 0) {
             $data['tech_reports'] = $this->report->get_tech_reports(array_merge($date_array, array('ps.is_delete' => '0')));
-        }
-        else
-        {
+        } else {
             $data['tech_reports'] = $this->report->get_tech_reports(array_merge($date_array, array('ps.is_delete' => '0')), $condition);
         }
-        if ($data['tech_reports'])
-        {
+        if ($data['tech_reports']) {
 //            pr($data['tech_reports'],1);
             $resp['status'] = 1;
-            $resp['data'] = $this->load->view('reports/tech_tbl', $data, TRUE);
-        }
-        else
-        {
+            $resp['data'] = $this->load->view('reports/tech_tbl', $data, true);
+        } else {
             $resp['status'] = 0;
         }
         echo json_encode($resp);
@@ -1017,7 +910,7 @@ class Reports extends CI_Controller
         //==============================================date and category filters for tech reports====================================================
     }
 
-    function reports_results()
+    public function reports_results()
     {
         //date wise records
         $data = array();
@@ -1028,8 +921,7 @@ class Reports extends CI_Controller
         $category2 = $this->input->post('category2');
         $date_array = array();
         $date_string = '';
-        if ($date != '')
-        {
+        if ($date != '') {
             $dates = explode('-', $date);
             $start_date = $dates[0];
             $end_date = $dates[1];
@@ -1044,45 +936,36 @@ class Reports extends CI_Controller
         //-- Json data for chart
         $whereArr = array(
             'ps.is_delete' => '0',
-            'u.id' => $id
+            'u.id' => $id,
         );
         $condition = array(
             'tech_category1' => '"' . $category1 . '"',
-            'tech_category2' => '"' . $category2 . '"'
+            'tech_category2' => '"' . $category2 . '"',
         );
-        if (count($condition) > 0)
-        {
+        if (count($condition) > 0) {
             $json_data = array(
                 'tech_reports_results' => $this->report->get_tech_reports_results(array_merge($date_array, $whereArr)),
             );
-        }
-        else
-        {
+        } else {
             $json_data = array(
                 'tech_reports_results' => $this->report->get_tech_reports_results(array_merge($date_array, $whereArr), $condition),
             );
         }
 //        pr($json_data);
-//        var_dump(!empty($json_data));
-//        die;
-        if (!empty($json_data))
-        {
+        //        var_dump(!empty($json_data));
+        //        die;
+        if (!empty($json_data)) {
             $new_json_data = array();
             $key_arrays = array();
-            foreach ($json_data as $key => $val)
-            {
-                if (!empty($val))
-                {
+            foreach ($json_data as $key => $val) {
+                if (!empty($val)) {
                     $new_array = array();
-                    foreach ($val as $val1)
-                    {
+                    foreach ($val as $val1) {
                         $new_array[$val1['date']] = $val1['count'];
                         $key_arrays[] = array($val1['date'], date('d. M \'y', strtotime($val1['date'])));
                     }
                     $new_json_data[$key] = $new_array;
-                }
-                else
-                {
+                } else {
 //                    echo "No data found";
                 }
             }
@@ -1091,15 +974,12 @@ class Reports extends CI_Controller
             usort($key_arrays, array($this, 'sortFunction'));
 
             $actions = [];
-            foreach ($new_json_data as $k => $data_value)
-            {
+            foreach ($new_json_data as $k => $data_value) {
                 $actions[$k] = array();
-                foreach ($key_arrays as $key => $value)
-                {
-                    if (isset($data_value[$value[0]]))
-                    {
+                foreach ($key_arrays as $key => $value) {
+                    if (isset($data_value[$value[0]])) {
                         $actions[$k][$value[0]] = array(
-                            $data_value[$value[0]], $value[1]
+                            $data_value[$value[0]], $value[1],
                         );
                     }
                 }
@@ -1109,24 +989,16 @@ class Reports extends CI_Controller
             $this->data['json'] = json_encode($actions);
         }
 
-
-
-        if (count($condition) > 0)
-        {
+        if (count($condition) > 0) {
             $data['report_results'] = $this->report->get_tech_reports_results(array_merge($date_array, $whereArr));
-        }
-        else
-        {
+        } else {
             $data['report_results'] = $this->report->get_tech_reports_results(array_merge($date_array, $whereArr), $condition);
         }
-        if ($data['report_results'])
-        {
+        if ($data['report_results']) {
             $data['tech_name'] = $data['report_results'][0]['tech_name'];
             $resp['status'] = 1;
-            $resp['data'] = $this->load->view('reports/rept_tbl', $data, TRUE);
-        }
-        else
-        {
+            $resp['data'] = $this->load->view('reports/rept_tbl', $data, true);
+        } else {
             $resp['status'] = 0;
 //             $resp['msg'] = "No data found";
         }
@@ -1140,43 +1012,39 @@ class Reports extends CI_Controller
 
         $this->load->library('excel');
 
-            $this->excel->createSheet();
-            $this->excel->setActiveSheetIndex(0);
-            $this->excel->getSheet(0)->setTitle("Part Numbers");
-            $this->data['part_numbers'] = $this->products->get_part_numbers();
-            // pr($this->data['part_numbers']);die;
-            $data = ["0" => ['part' => "Part Number"]];
-            foreach ($this->data['part_numbers'] as $result)
-            {
-                $data [] = ['part' => $result['part']];
-            }
+        $this->excel->createSheet();
+        $this->excel->setActiveSheetIndex(0);
+        $this->excel->getSheet(0)->setTitle("Part Numbers");
+        $this->data['part_numbers'] = $this->products->get_part_numbers();
+        // pr($this->data['part_numbers']);die;
+        $data = ["0" => ['part' => "Part Number"]];
+        foreach ($this->data['part_numbers'] as $result) {
+            $data[] = ['part' => $result['part']];
+        }
 
-            $this->excel->getActiveSheet()->fromArray($data, null, 'A3');
-            $highestColumm = $this->excel->getActiveSheet()->getHighestColumn();
-            $highestRow = $this->excel->getActiveSheet()->getHighestRow();
-            $this->excel->getActiveSheet()->setCellValue('A1', 'Part Numbers');
-            $this->excel->getActiveSheet()->mergeCells('A1:' . $highestColumm . '2');
-            $this->excel->getActiveSheet()->getStyle('A1:' . $highestColumm . '2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-            $this->excel->getActiveSheet()->getStyle('A1:' . $highestColumm . '2')->getFont()->setSize(16);
+        $this->excel->getActiveSheet()->fromArray($data, null, 'A3');
+        $highestColumm = $this->excel->getActiveSheet()->getHighestColumn();
+        $highestRow = $this->excel->getActiveSheet()->getHighestRow();
+        $this->excel->getActiveSheet()->setCellValue('A1', 'Part Numbers');
+        $this->excel->getActiveSheet()->mergeCells('A1:' . $highestColumm . '2');
+        $this->excel->getActiveSheet()->getStyle('A1:' . $highestColumm . '2')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+        $this->excel->getActiveSheet()->getStyle('A1:' . $highestColumm . '2')->getFont()->setSize(16);
 
-            for ($column = 'A'; $column <= $highestColumm; $column++)
-            {
-                $this->excel->getActiveSheet()->getStyle('A3:' . $highestColumm . '3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-                $this->excel->getActiveSheet()->getStyle('A3:' . $highestColumm . '3')->getFont()->setSize(15);
+        for ($column = 'A'; $column <= $highestColumm; $column++) {
+            $this->excel->getActiveSheet()->getStyle('A3:' . $highestColumm . '3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+            $this->excel->getActiveSheet()->getStyle('A3:' . $highestColumm . '3')->getFont()->setSize(15);
+            $this->excel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
+        }
+
+        for ($row = '4'; $row <= $highestRow; $row++) {
+            for ($column = 'A'; $column <= $highestColumm; $column++) {
+                $this->excel->getActiveSheet()->getStyle('A' . $row . ':' . $highestColumm . $row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                $this->excel->getActiveSheet()->getStyle('A' . $row . ':' . $highestColumm . $row)->getFont()->setSize(12);
                 $this->excel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
             }
+        }
+        $filename = 'all_reports.xls';
 
-            for ($row = '4'; $row <= $highestRow; $row++)
-            {
-                for ($column = 'A'; $column <= $highestColumm; $column++)
-                {
-                    $this->excel->getActiveSheet()->getStyle('A' . $row . ':' . $highestColumm . $row)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-                    $this->excel->getActiveSheet()->getStyle('A' . $row . ':' . $highestColumm . $row)->getFont()->setSize(12);
-                    $this->excel->getActiveSheet()->getColumnDimension($column)->setAutoSize(true);
-                }
-            }
-            $filename = 'all_reports.xls';
-            
 //        header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         header("Content-Type: application/force-download");
         header("Content-Type: application/octet-stream; charset=UTF-8LE");

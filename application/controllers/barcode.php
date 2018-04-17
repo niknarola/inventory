@@ -207,7 +207,7 @@ class Barcode extends CI_Controller
         }
         $data['print_labels'] = $print_labels;
 
-        $this->template->load($this->layout, 'barcode/print_labels_barcode', $data);
+        $this->template->load($this->layout, 'barcode/print_labels', $data);
     }
 
     public function print_preview()
@@ -226,51 +226,80 @@ class Barcode extends CI_Controller
         $this->m_pdf->pdf->Output($file_path, 'F');
         $data['file_path'] = $file_path;
         $this->template->load($this->layout, 'barcode/pallet_labels', $data);
-	}
+    }
 
-	public function print_pallet_labels_barcode()
-	{
-		$print_labels = $this->session->userdata('pallets_new');
-        foreach ($print_labels as $k => $v) {
-            $this->dup_index(rawurlencode($v));
-        }
-		$data['print_labels'] = $print_labels['pallet_id'];
-		// pr($data['print_labels']);die;
+    public function print_pallet_labels_barcode()
+    {
+        $print_labels = $this->session->userdata('pallets_new');
+        // pr($print_labels);die;
+        // foreach ($print_labels as $k => $v) {
+        //     $this->dup_index(rawurlencode($v));
+        // }
+        $this->dup_index(rawurlencode($print_labels['pallet_id']));
+        $data['print_labels'] = $print_labels['pallet_id'];
+        // pr($data['print_labels']);die;
         $data['title'] = 'Print Pallet Labels';
         $data['admin_prefix'] = $this->admin_prefix;
-		$pdf_print = $this->load->view('barcode/create_pallet_barcode', $data, true);
-		// echo $pdf_print;die;
+        $pdf_print = $this->load->view('barcode/create_pallet_barcode', $data, true);
+        // echo $pdf_print;die;
         $file_path = 'assets/images/barcode/' . time() . '.pdf';
         $this->load->library('m_pdf');
         $this->m_pdf->pdf->WriteHTML($pdf_print);
         $this->m_pdf->pdf->Output($file_path, 'F');
         $data['file_path'] = $file_path;
-		$this->template->load($this->layout, 'barcode/print_labels_barcode', $data);
-	}
-	// public function utility(){
-	// 	$data['title'] = 'Print INK';
-	// 	$print_labels = [];
-	// 	$print_labels = $this->session->userdata('utility');
-	// 	$data['print_labels'] = $print_labels;
-	// 	// pr($print_labels);die;
-	// 	$this->template->load($this->layout, 'barcode/print_utility', $data);
-	// }
-
-	public function utility(){
-		$print_labels = $this->session->userdata('utility');
-		pr($print_labels);die;
-        foreach ($print_labels as $k => $v) {
-            $this->dup_index(rawurlencode($v['pallet_id']));
-        }
+        $this->template->load($this->layout, 'barcode/print_labels_barcode', $data);
+    }
+    public function utility()
+    {
+        $data['title'] = 'Print INK';
+        $print_labels = [];
+        $print_labels = $this->session->userdata('utility');
         $data['print_labels'] = $print_labels;
+        // pr($print_labels);die;
+        $this->template->load($this->layout, 'barcode/print_utility', $data);
+    }
+
+    public function print_utility()
+    {
+        $qty = $this->session->userdata('post_data');
+        $print_labels = $this->session->userdata('utility');
+        $this->dup_index(rawurlencode($print_labels['hp_part']));
+        $this->dup_index(rawurlencode($print_labels['internal_part']));
+        $data['print_labels'] = $print_labels;
+        $data['qty'] = $qty;
         $data['title'] = 'Print INK';
         $data['admin_prefix'] = $this->admin_prefix;
         $pdf_print = $this->load->view('barcode/print_ink_label', $data, true);
+        // echo $pdf_print;die;
         $file_path = 'assets/images/barcode/' . time() . '.pdf';
         $this->load->library('m_pdf');
         $this->m_pdf->pdf->WriteHTML($pdf_print);
         $this->m_pdf->pdf->Output($file_path, 'F');
         $data['file_path'] = $file_path;
         $this->template->load($this->layout, 'barcode/print_utility', $data);
-	}
+    }
+
+    public function print_serial()
+    {
+        // pr($_SESSION);die;
+        $serial_amount = $this->session->userdata('serial_amount');
+        $new_serial = $this->session->userdata('new_serial');
+        if (isset($new_serial) && !empty($new_serial)) {
+            foreach ($new_serial as $k => $v) {
+                $this->dup_index(rawurlencode($v));
+            }
+        }
+        $data['serial_amount'] = $serial_amount;
+        $data['new_serial'] = $new_serial;
+        $data['title'] = 'Print Serials';
+        $data['admin_prefix'] = $this->admin_prefix;
+        $pdf_print = $this->load->view('barcode/print_new_serials', $data, true);
+        // echo $pdf_print;die;
+        $file_path = 'assets/images/barcode/' . time() . '.pdf';
+        $this->load->library('m_pdf');
+        $this->m_pdf->pdf->WriteHTML($pdf_print);
+        $this->m_pdf->pdf->Output($file_path, 'F');
+        $data['file_path'] = $file_path;
+        $this->template->load($this->layout, 'barcode/print_serial', $data);
+    }
 }
