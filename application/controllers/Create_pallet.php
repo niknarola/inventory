@@ -85,7 +85,7 @@ class Create_pallet extends CI_Controller
             $j = $get_todays_cnt + 1;
             $arr = [];
             $arr['pallet_id'] = $prefix . date('mdY') . '-' . $j;
-            $arr['location_id'] = $location['id'];
+            $arr['location_id'] = $location;
             $arr['received_by'] = $this->session->userdata('id');
             $insert_data = $arr;
             $k++;
@@ -147,10 +147,6 @@ class Create_pallet extends CI_Controller
             $data['serials'] = $this->master->get_data($data['serial_array']);
             $loc_name = $this->input->post('scan_loc');
             $location = $this->basic->check_location_exists($loc_name);
-            // echo"in out if ";die;
-            // echo"query";$this->db->last_query();die;
-            // pr($loc_name);
-            // pr($location);die;
 			
             $k = 0;
             $j = $get_todays_cnt + 1;
@@ -162,7 +158,7 @@ class Create_pallet extends CI_Controller
 			}else{
 				$arr['pallet_id'] = $prefix . date('mdY') . '-' . $j;
 			}
-            $arr['location_id'] = $location['id'];
+            $arr['location_id'] = $location;
             $arr['received_by'] = $this->session->userdata('id');
             $insert_data = $arr;
             $k++;
@@ -194,17 +190,6 @@ class Create_pallet extends CI_Controller
 			$this->session->set_userdata(array('pallets_new' => $session_data));
 			echo json_encode($session_data);
 			die;
-			// $this->template->load($this->layout, 'barcode/print_pallet_labels_barcode', $data);
-			// $url = ($this->session->userdata('admin_validated')) ? 'admin/' : '';
-			// echo $url . 'barcode/print_pallet_labels_barcode';die;
-			// redirect($url . 'barcode/print_pallet_labels_barcode');
-
-
-			// echo json_encode($session_data);
-            // $url = ($this->session->userdata('admin_validated')) ? 'admin/' : '';
-			// redirect($url . 'barcode/print_pallet_labels_barcode');
-			// die;
-			// $this->template->load($this->layout, 'create_pallet/print_labels_barcode', $data);
         }
     }
 }

@@ -131,7 +131,8 @@ class Locations extends CI_Controller {
         if($this->input->post()){
             if($this->input->post('complete')){
                 $pallet_id = $this->input->post('pallet_id');
-                $location = $this->basic->get_single_data_by_criteria('locations', array('name' => trim($this->input->post('location'))));
+				$location = $this->basic->get_single_data_by_criteria('locations', array('name' => trim($this->input->post('location'))));
+				
                 if(!empty($location)){
                     // echo"in if";die;
                     $location_id = $location['id'];

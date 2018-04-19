@@ -226,8 +226,9 @@
 		$('.lock_fields').multiselect({
 			onChange:function(element, checked){
 				var selected = $(element).val();
-				console.log('selected',selected);
+				console.log('selected :',selected);
 				if(selected == 'condition_select'){
+					console.log('in');
 					if($( ".info_block" ).first().find('.condition_select').val()=='Custom'){
 						var custom_input = $( ".info_block" ).first().find('input.custom_input').val();
 						$( ".info_block .condition_select").val($( ".info_block" ).first().find('.condition_select').val());

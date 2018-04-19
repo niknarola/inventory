@@ -114,6 +114,7 @@ $route['admin/roles/edit/(:any)'] = 'admin/roles/add/$1';
 $route['admin/user/edit/(:any)']='admin/user/add/$1';
 $route['admin/products/delete/(:any)']='products/delete/$1';
 $route['admin/inventory/locations']='locations';
+$route['admin/inventory/picking']='picking';
 $route['admin/inventory/locations/ajaxPaginationData/(:any)']='locations/ajaxPaginationData/$1';
 $route['admin/inventory/locations/create_location']='locations/create_location';
 $route['admin/inventory/locations/assign_location']='locations/assign_location';

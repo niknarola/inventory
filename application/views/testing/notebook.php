@@ -15,7 +15,7 @@
 							<div class="col-md-4">
 								<div class="form-group">
 									<label>Serial #:</label>
-									<input type="text" name="serial" value=""  class="form-control serial">
+									<input type="text" name="serial" value="" onchange="get_product_details();" class="form-control serial">
 									<input type="hidden" name="serial_id" class="serial_id" value="">
 								</div>
 							</div>
@@ -751,9 +751,12 @@
     			console.log("complete");
     		});
 	})
-    // function get_product_details(){
-		$(".serial").on('keyup', function (e) {
-			if(e.keyCode == 13){
+    function get_product_details(){
+		// $(".serial").on('keyup', function (e) {
+		// 	console.log("enter");
+		// 	if(e.keyCode == 13){
+				// e.preventDefault();
+				// console.log("here");
   		// var part = $('input.part').val();
     	var serial = $('input.serial').val();
     	// var new_serial = $('input.new_serial').val();
@@ -989,7 +992,8 @@
 			});
 		}
 	}
-		});
+	// }
+		// });
         $('.pass').change(function(){
             if(this.checked){
                 $("input[name='fail']").prop('disabled',true);

@@ -281,7 +281,6 @@ class Barcode extends CI_Controller
 
     public function print_serial()
     {
-        // pr($_SESSION);die;
         $serial_amount = $this->session->userdata('serial_amount');
         $new_serial = $this->session->userdata('new_serial');
         if (isset($new_serial) && !empty($new_serial)) {

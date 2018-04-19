@@ -32,12 +32,11 @@ class Utility extends CI_Controller
         $data['title'] = 'Utility Module';
         $data['ajax_url'] = $data['ajax_url'] = ($this->uri->segment(1) == 'admin') ? 'admin/inventory/utility/find_product' : 'inventory/utility/find_product';
         $data['ajax_url_serial'] = $data['ajax_url_serial'] = ($this->uri->segment(1) == 'admin') ? 'admin/inventory/utility/generate_serial' : 'inventory/utility/generate_serial';
-		$data['ink_products'] = $this->products->get_key_value_ink_products('ink_products');
-		
+        $data['ink_products'] = $this->products->get_key_value_ink_products('ink_products');
 
         if ($this->input->post()) {
-			// pr($_POST);die;
-			
+            // pr($_POST);die;
+
             ini_set('max_execution_time', 0);
             if ($this->input->post('upload_sheet')) {
                 $data['upload'] = $this->input->post('upload_sheet');
@@ -171,26 +170,39 @@ class Utility extends CI_Controller
         } else {
             $this->session->set_flashdata('msg', 'Something went wrong, Please try again');
         }
-	}
-	
-	public function scan_location(){
+    }
 
-		if($this->input->post()){
-			$get_todays_cnt = $this->receiving->get_todays_total_pallets();
-			$loc_name = $this->input->post('scan_loc');
-			$location = $this->basic->check_location_exists($loc_name);
-			$k = 0;
-			$j = $get_todays_cnt + 1;
-			$arr = [];
-			$arr['pallet_id'] = 'INK' . date('mdY') . '-' . $j;
-			$arr['location_id'] = $location['id'];
-			$arr['received_by'] = $this->session->userdata('id');
-			$insert_data = $arr;
-			$k++;
-			$j++;
-			$id = $this->basic->insert('pallets', $insert_data);
-			$url = ($this->session->userdata('admin_validated')) ? 'admin/' : '';
+    public function scan_location()
+    {
+
+        if ($this->input->post()) {
+			
+            $get_todays_cnt = $this->receiving->get_todays_total_pallets();
+
+            $loc_name = $this->input->post('scan_loc');
+            // pr($loc_name);
+            $location = $this->basic->check_location_exists($loc_name);
+            
+            $k = 0;
+            $j = $get_todays_cnt + 1;
+            $arr = [];
+            $arr['pallet_id'] = 'INK' . date('mdY') . '-' . $j;
+            $arr['location_id'] = $location;
+            $arr['received_by'] = $this->session->userdata('id');
+            $insert_data = $arr;
+            $k++;
+            $j++;
+            
+            $id = $this->basic->insert('pallets', $insert_data);
+            // die;
+            if ($id) {
+                $this->session->set_flashdata('msg', 'Pallet "' . $insert_data['pallet_id'] . '" Created with Location "' . $loc_name . '"');
+            } else {
+                $this->session->set_flashdata('msg', 'Pallet and Pallet Location cannot be created');
+            }
+
+            $url = ($this->session->userdata('admin_validated')) ? 'admin/' : '';
             redirect($url . 'inventory/utility');
-		}
-	}
+        }
+    }
 }

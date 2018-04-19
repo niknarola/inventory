@@ -442,7 +442,7 @@
                 $('.part').val($('.part').first().val());
             } else {
                 console.log('else');
-                $('.part:not(:first)').val('');
+                $('.part:not(:first)').val();
 
             }
     });

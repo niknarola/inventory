@@ -128,7 +128,7 @@
         var category2 = $('#category2').val();
         var flag = 1;
         if ((keywords == '' && searchfor != 'part')) {
-            console.log('in if flag0');
+            // console.log('in if flag0');
             flag = 0;
         }
         if (flag == 1) {

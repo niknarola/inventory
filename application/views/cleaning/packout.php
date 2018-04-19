@@ -290,6 +290,7 @@
 									<input type="hidden" name="current_pallet_id" class="current_pallet_id" value="">
                                 </div>     -->
                                 <div class="col-md-2">
+								<input type="checkbox" value="1" name="scan_loc_check" class="checkbx scan_loc_check">
                                 <input type="text" name="scan_loc" value="" placeholder="Scan To Location" class="form-control scan_loc">
 									<input type="hidden" name="scan_loc_id" class="scan_loc_id" value="">
                                 </div>

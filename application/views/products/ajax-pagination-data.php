@@ -1,4 +1,5 @@
 <table class="table" id="product_tbl">
+<div id='loader' style="display:none;"><img src='assets/images/2.gif'></div>  
     <thead>
         <tr>
             <th>#</th>

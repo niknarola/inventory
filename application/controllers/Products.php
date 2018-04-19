@@ -173,6 +173,7 @@ class Products extends CI_Controller
     {
         $data['title'] = 'View Product';
         $data['product'] = $this->products->get_product_by_id($id);
+        $data['product_images'] = $this->products->get_product_image_by_id($id);
         if (!empty($data['product']))
         {
             $serial_products = $this->products->get_serials_by_product_id($id);

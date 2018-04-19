@@ -57,7 +57,7 @@
 					<button class="btn bg-teal print_label_internal"  name="print_label_internal" type="submit">Print Label</button>
 				</div>
 				<div class="row">
-				<div class="col-md-5 form-group">
+				<div class="col-md-4 form-group">
 					<input type="text" value="" name="scan_loc" class="form-control scan_loc" placeholder="Scan to Location">
 				</div>
 				<div class="col-md-3 form-group">

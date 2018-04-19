@@ -601,7 +601,18 @@ class Product_model extends CI_Model
             $final_data[$value['id']] = $value['internal_part'];
         }
         return $final_data;
-    }
+	}
+	
+	public function get_product_image_by_id($id)
+	{
+		$this->db->select('products.id, products.name, pi.id as image_id,pi.image');
+		$this->db->join('product_images pi','products.id = pi.product_id');
+        $this->db->where('products.id', $id);
+        $this->db->where('products.is_delete', 0);
+        $this->db->limit(1);
+        $data = $this->db->get('products')->row_array();
+        return $data;
+	}
 
     
 }

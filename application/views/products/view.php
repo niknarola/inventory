@@ -27,9 +27,10 @@
 				
 					<div class="col-md-12">
 						<div class="row">
-						<div class="col-md-6">
+						<div class="col-md-9">
 						<table class="table">
 							<tbody>
+								<?php //pr($product);die;?>
 								<tr>
 									<td><b>Part # :</b></td>
 									<td><?= $product['part']; ?></td>
@@ -58,8 +59,15 @@
 							</tbody>
 						</table>
 					</div>
-					<div class="col-md-6">
-						<!-- <table class="table specifications">
+					<div class="col-md-3">
+					<?php
+                        if(isset($product_images) || $product_images!= '' || $product_images != null){
+                    ?>
+					<img src="<?= base_url().'/assets/uploads/'.$product_images['id'].'/'.$product_images['image']; ?>" alt="No image found" style="height:200px; width:200px !important">
+						<?php }else{?>
+					<img src="<?= base_url().'/assets/images/not-available.jpg'?>" height="200px" width="200px" alt="No image found">
+						<?php }?>
+						<!-- <table class="table specifications"> 
 							<tbody>
 								<tr>
 									<td><b>CPU :</b></td>
