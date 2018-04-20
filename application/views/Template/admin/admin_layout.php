@@ -9,6 +9,7 @@
 	<!-- Global stylesheets -->
 	<link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
 	<link href="<?=base_url()?>assets/css/icons/icomoon/styles.css" rel="stylesheet" type="text/css">
+	<!--<link href="<?=base_url()?>assets/css/jquery.dataTables.css" rel="stylesheet" type="text/css">-->
 	<link href="<?=base_url()?>assets/css/bootstrap.css" rel="stylesheet" type="text/css">
 	<link href="<?=base_url()?>assets/css/core.css" rel="stylesheet" type="text/css">
 	<link href="<?=base_url()?>assets/css/components.css" rel="stylesheet" type="text/css">

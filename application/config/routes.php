@@ -68,6 +68,7 @@ $route['admin/receiving/add_inspection_notes'] = 'receiving/add_inspection_notes
 $route['admin/receiving/quick_receive'] = 'receiving/quick_receive';
 $route['admin/receiving/quick_receive_barcodes'] = 'receiving/quick_receive_barcodes';
 $route['admin/receiving/print_labels'] = 'receiving/print_labels';
+$route['admin/receiving/clear_session_data'] = 'receiving/clear_session_data';
 
 $route['testing/add_notes'] = 'receiving/add_notes';
 $route['repair/notebook'] = 'testing/notebook';
@@ -115,6 +116,8 @@ $route['admin/user/edit/(:any)']='admin/user/add/$1';
 $route['admin/products/delete/(:any)']='products/delete/$1';
 $route['admin/inventory/locations']='locations';
 $route['admin/inventory/picking']='picking';
+$route['admin/inventory/picking/order_list']='picking/order_list';
+$route['admin/inventory/picking/part/(:any)']='picking/get_details_by_part/$1';
 $route['admin/inventory/locations/ajaxPaginationData/(:any)']='locations/ajaxPaginationData/$1';
 $route['admin/inventory/locations/create_location']='locations/create_location';
 $route['admin/inventory/locations/assign_location']='locations/assign_location';

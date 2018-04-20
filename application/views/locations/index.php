@@ -16,7 +16,7 @@
                     </div>
                     <div class="row text-center">
                         <button type="button" class="btn btn-sm btn-primary create_location">Create</button>    
-                        <button type="button" class="btn btn-sm btn-primary move_location">Move/Modify</button> 
+                        <!-- <button type="button" class="btn btn-sm btn-primary move_location">Move/Modify</button>  -->
                         <button type="button" class="btn btn-sm btn-primary assign_location">Assign</button>    
                         <button type="button" class="btn btn-sm btn-primary print_location">Print</button>  
                     </div>
@@ -88,7 +88,7 @@
                                         <td><?php echo $post['serial']; ?></td>
                                         <td><?php echo $post['part']; ?></td>
                                         <td><?php echo $post['product_name']; ?></td>
-                                        <td><?php echo ($post['location_name'] != '') ? $post['palletid'] . ' / ' . $post['location_name'] : ''; ?></td>
+                                        <td><?php echo $post['location_name'] . ' / ' . $post['palletid']; ?></td>
                                         <td><?php echo $post['original_condition']; ?></td>
                                         <td><?php echo $post['recv_notes']; ?></td>
                                         <td><button class="btn-link transfer_location" data-serial="<?php echo $post['serial']; ?>" data-location="<?php echo $post['location_name']; ?>" style="color:#26A69A;" type="button">Transfer Location</button></td>

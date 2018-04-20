@@ -15,7 +15,7 @@
 							<div class="col-md-4">
 								<div class="form-group">
 									<label>Serial #:</label>
-									<input type="text" name="serial" value="" onchange="get_product_details();" class="form-control serial">
+									<input type="text" name="serial" value=""  class="form-control serial">
 									<input type="hidden" name="serial_id" class="serial_id" value="">
 								</div>
 							</div>
@@ -615,6 +615,13 @@
 <script type="text/javascript" src="assets/js/picker.date.js"></script>
 <script type="text/javascript">
 	jQuery(document).ready(function($) {
+		$(window).keydown(function(event){
+		    if(event.keyCode == 13) {
+		      event.preventDefault();
+		      return false;
+		    }
+	  	});
+
 		$('.daterange-single').daterangepicker({ 
 	        singleDatePicker: true,
 	        locale: {
@@ -751,10 +758,10 @@
     			console.log("complete");
     		});
 	})
-    function get_product_details(){
-		// $(".serial").on('keyup', function (e) {
+    // function get_product_details(){
+		$(".serial").on('keyup', function (e) {
 		// 	console.log("enter");
-		// 	if(e.keyCode == 13){
+			if(e.keyCode == 13){
 				// e.preventDefault();
 				// console.log("here");
   		// var part = $('input.part').val();
@@ -991,9 +998,9 @@
 				console.log("complete");
 			});
 		}
-	}
 	// }
-		// });
+	}
+		});
         $('.pass').change(function(){
             if(this.checked){
                 $("input[name='fail']").prop('disabled',true);

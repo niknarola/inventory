@@ -41,7 +41,7 @@ class Report_model extends CI_Model
             {
                 if ($params['search']['searchfor'] == 'location')
                 {
-                    $this->db->like('loc.name', $params['search']['keywords']);
+                    $this->db->like('pl_loc.name', $params['search']['keywords']);
                 }if($params['search']['searchfor']=='serial'){
                     $this->db->or_like('ps.'.$params['search']['searchfor'],$params['search']['keywords']);
                 }else if($params['search']['searchfor']=='new_serial'){
@@ -82,7 +82,7 @@ class Report_model extends CI_Model
         }
         if (!empty($params['search']['location']))
         {
-            $this->db->like('loc.id', $params['search']['location']);
+            $this->db->like('pl_loc.id', $params['search']['location']);
         }
         if (!empty($params['search']['status']))
         {
@@ -91,12 +91,13 @@ class Report_model extends CI_Model
         if (isset($params['search']['testing']) && $params['search']['testing'] == 'pass')
         {
             $this->db->where('ps.pass', '1');
-            $this->db->where('ps.fail', '1');
+            // $this->db->where('ps.fail', '1');
         }
         else if (isset($params['search']['testing']) && $params['search']['testing'] == 'fail')
         {
-            $this->db->where('ps.pass', '0');
-            $this->db->where('ps.fail', '0');
+            // $this->db->where('ps.pass', '0');
+            // $this->db->where('ps.fail', '0');
+            $this->db->where('ps.fail', '1');
         }
         $this->db->where('ps.is_delete', 0);
 
@@ -111,7 +112,8 @@ class Report_model extends CI_Model
         }
 
         //get records
-        $query = $this->db->get();
+		$query = $this->db->get();
+		// echo $this->db->last_query();
         //return fetched data
         return ($query->num_rows() > 0) ? $query->result_array() : FALSE;
     }
@@ -153,7 +155,7 @@ class Report_model extends CI_Model
             $this->db->where($params);
         }
         //get records
-        $query = $this->db->get();
+		$query = $this->db->get();
         //return fetched data
         return ($query->num_rows() > 0) ? $query->result_array() : FALSE;
     }

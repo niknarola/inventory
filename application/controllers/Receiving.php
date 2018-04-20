@@ -284,7 +284,7 @@ class Receiving extends CI_Controller {
             }
                 $this->session->set_flashdata('msg', 'Product has been saved successfully');
             }else{
-                $this->session->set_flashdata('msg', 'Something went wrong');
+                $this->session->set_flashdata('err_msg', 'Something went wrong');
             }
             if($this->uri->segment(1)=='admin'){
                 redirect('admin/temporary_product_review');
@@ -379,7 +379,7 @@ class Receiving extends CI_Controller {
             }
                 $this->session->set_flashdata('msg', 'Product has been updated successfully');
             }else{
-                $this->session->set_flashdata('msg', 'Something went wrong');
+                $this->session->set_flashdata('err_msg', 'Something went wrong');
             }
             if($this->uri->segment(1)=='admin')
                 redirect('admin/temporary_product_review');
@@ -397,7 +397,7 @@ class Receiving extends CI_Controller {
         if($this->basic->insert('product_serials', $data)){
             $this->session->set_flashdata('msg', 'Product Serial has been added successfully');
         }else{
-            $this->session->set_flashdata('msg', 'Something went wrong');
+            $this->session->set_flashdata('err_msg', 'Something went wrong');
         }
         redirect('receiving/search');
     }
@@ -441,7 +441,7 @@ class Receiving extends CI_Controller {
 			'requested_for_clarification'=>2
     	];
     	if($this->basic->update('products', $data, ['id'=>$id])){
-    		$this->session->set_flashdata('msg', 'Successfully sumitted');
+    		$this->session->set_flashdata('msg', 'Successfully submitted');
     	}
     	redirect('receiving/temporary_product_flagged');
     }
@@ -501,7 +501,7 @@ class Receiving extends CI_Controller {
                 }
             }
         }else{
-            $this->session->set_flashdata('msg', 'No products were selected. Please try again');
+            $this->session->set_flashdata('err_msg', 'No products were selected. Please try again');
         }
         if($this->session->userdata('admin_validated')){
            redirect('admin/temporary_product_review');
@@ -779,7 +779,7 @@ class Receiving extends CI_Controller {
                     if($this->receiving->delete_pallets($check)){
                         $this->session->set_flashdata('msg', 'Pallets are deleted successfully');
                     }else{
-                        $this->session->set_flashdata('msg', 'Something went wrong! Please try again');
+                        $this->session->set_flashdata('err_msg', 'Something went wrong! Please try again');
                     }
                 }
                 redirect($url.'receiving/dock_receive');
@@ -840,7 +840,7 @@ class Receiving extends CI_Controller {
             if($this->basic->update('pallets', $data, ['id'=>$pallet_id])){
                 $this->session->set_flashdata('msg', 'Notes added');
             }else{
-                $this->session->set_flashdata('msg', 'Something went wrong! Please try again');
+                $this->session->set_flashdata('err_msg', 'Something went wrong! Please try again');
             }
         }
         $url = ($this->session->userdata('admin_validated')) ? 'admin/' : '';
@@ -850,5 +850,12 @@ class Receiving extends CI_Controller {
         $data['title'] = 'Print Labels';
          $data['admin_prefix'] = $this->admin_prefix;
         $this->template->load($this->layout, 'receiving/print_labels', $data);
-    }
+	}
+	
+	public function clear_session_data(){
+		$this->session->unset_userdata('pallets_search', false);
+		$this->session->unset_userdata('pallets_next');
+		$url = ($this->session->userdata('admin_validated')) ? 'admin/' : '';
+        redirect($url . 'receiving/dock_receive');
+	}
 }

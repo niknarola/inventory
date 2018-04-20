@@ -147,7 +147,7 @@ class Locations extends CI_Controller {
                 $ldata = [
                     'location_id'=>$location_id
                 ];
-                if($this->basic->update('product_serials', $ldata, ['pallet_id'=>$pallet_id])){
+                if($this->basic->update('pallets', $ldata, ['id'=>$pallet_id])){
                     $product_serial_data = $this->basic->get_all_data_by_criteria('product_serials', ['pallet_id'=>$pallet_id]);
                     $timestamp = [
                         'location_assigned_date'=>date('Y-m-d H:i:s'),
@@ -183,15 +183,16 @@ class Locations extends CI_Controller {
     	exit;
     }
     public function assign_location(){
-    	$location = trim($this->input->post('location'));
-    	$serial = trim($this->input->post('serial'));
-    	$location_id = $this->location->get_location_id($location);
+		$location = trim($this->input->post('location'));
+		$serial = trim($this->input->post('serial'));
+		$location_id = $this->location->get_location_id($location);
+		$pallet = $this->location->get_pallet_by_serial($serial);
     	$response = [];
-    	if($location_id != ''){
+    	if($location_id != NULL){
     		$data = [
             	'location_id'=>$location_id
             ];
-	        if($this->basic->update('product_serials', $data, ['serial'=>$serial])){
+	        if($this->basic->update('pallets', $data, ['id'=>$pallet['palid']])){
 	        	$response['status'] = 1;
                 $response['msg'] = 'Location assigned successfully';
                 $product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['serial'=>$serial]);

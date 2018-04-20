@@ -252,7 +252,7 @@ class Reports extends CI_Controller
                     'cosmetic_grade' => $result['cosmetic_grade'],
                     'test_result' => ($result['pass'] == '1' && $result['fail'] == '1') ? 'Pass' : '',
                     'fail_reason_notes' => $result['fail_reason_notes'],
-                    'location' => $result['location_name'],
+                    'location' => $result['pallet_location_name'],
                     'days_location' => $days,
                     'status' => $result['status'],
                 ];
@@ -360,7 +360,7 @@ class Reports extends CI_Controller
                     'date_inspection' => $result['inspection_date'],
                     'date_tested' => $result['testing_date'],
                     'date_inventory' => $result['inventory_date'],
-                    'location' => $result['location_name'],
+                    'location' => $result['pallet_location_name'],
                     'days_location' => $days,
                     'status' => $result['status'],
                 ];
@@ -556,7 +556,7 @@ class Reports extends CI_Controller
                         'cosmetic_grade' => $result['cosmetic_grade'],
                         'test_result' => ($result['pass'] == '1' && $result['fail'] == '1') ? 'Pass' : '',
                         'fail_reason_notes' => $result['fail_reason_notes'],
-                        'location' => $result['location_name'],
+                        'location' => $result['pallet_location_name'],
                         'days_location' => $days,
                         'status' => $result['status'],
                     ];
@@ -659,7 +659,7 @@ class Reports extends CI_Controller
                         'date_inspection' => $result['inspection_date'],
                         'date_tested' => $result['testing_date'],
                         'date_inventory' => $result['inventory_date'],
-                        'location' => $result['location_name'],
+                        'location' => $result['pallet_location_name'],
 //                    'days_location' => $result['location'],
                         'status' => $result['status'],
                     ];

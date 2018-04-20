@@ -12,6 +12,7 @@ class Picking extends CI_Controller {
         $this->perPage = 10;
         $this->load->model('Product_model', 'products');
         $this->load->model('Basic_model', 'basic');
+        $this->load->model('Picking_model', 'picking');
         $this->load->model('Locations_model', 'location');
         if ($this->uri->segment(1) == 'admin' && !$this->session->userdata('admin_validated')) {
             redirect('admin/login');
@@ -30,10 +31,137 @@ class Picking extends CI_Controller {
     public function index() {
         $data = array();
         $data['title'] = 'Picking';
+        $data['admin_prefix'] = $this->admin_prefix;
+        $data['ajax_url'] = ($this->session->userdata('admin_validated')) ? 'admin/inventory/picking/order_list' : 'picking/order_list';
+        $orders = array();
+        $items = array();
+        $items[] = array(
+            "orderItemId" => 235472086,
+            "lineItemKey" => 222737261203,
+            "sku" => "M9L75A-B",
+            "name" => "HP OfficeJet Pro 8720 All-in-One Printer (M9L75A) + Ink Bonus",
+            "imageUrl" => "https://i.ebayimg.com/00/s/MTUwMFgxNTAw/z/,rPAAAOSwl9RaHtWo/$57.JPG?set_id=8800005007",
+            "weight" => Array(
+                "value" => 0,
+                "units" => "ounces",
+                "WeightUnits" => 1,
+            ),
+            "quantity" => 1,
+            "unitPrice" => 134.99,
+            "taxAmount" => 0,
+            "shippingAmount" => "",
+            "warehouseLocation" => "",
+            "options" => Array(),
+            "productId" => 19833959,
+            "fulfillmentSku" => "",
+            "adjustment" => "",
+            "upc" => "",
+            "createDate" => "2017-12-06T10:22:18.487",
+            "modifyDate" => "2017-12-06T10:22:18.487",
+        );
+        $orders[0] = Array(
+            "orderId" => 175009899,
+            "orderNumber" => 65114,
+            "orderKey" => "222737261203-2004950678012",
+            "orderDate" => "2017-12-05T11:26:39.0000000",
+            "createDate" => "2017-12-06T10:22:17.8430000",
+            "modifyDate" => "2017-12-11T04:29:50.2430000",
+            "paymentDate" => "2017-12-05T11:26:39.0000000",
+            "shipByDate" => "",
+            "orderStatus" => "shipped",
+            "customerId" => 122735736,
+            "customerUsername" => "darren8262",
+            "customerEmail" => "dbrown@dbaprime.com",
+            "billTo" => Array(
+                "name" => "Darren Brown",
+                "company" => "",
+                "street1" => "",
+                "street2" => "",
+                "street3" => "",
+                "city" => "",
+                "state" => "",
+                "postalCode" => "",
+                "country" => "",
+                "phone" => "",
+                "residential" => "",
+                "addressVerified" => "",
+            ),
+            "shipTo" => Array(
+                "name" => "Darren Brown",
+                "company" => "",
+                "street1" => "15787 MENTON BAY CT",
+                "street2" => "",
+                "street3" => "",
+                "city" => "DELRAY BEACH",
+                "state" => "FL",
+                "postalCode" => "33446-9740",
+                "country" => "US",
+                "phone" => 4073359965,
+                "residential" => 1,
+                "addressVerified" => "Address validated successfully",
+            ),
+            "items" => $items,
+            "orderTotal" => 134.99,
+            "amountPaid" => 134.99,
+            "taxAmount" => 0,
+            "shippingAmount" => 0,
+            "customerNotes" => "",
+            "internalNotes" => "",
+            "gift" => "",
+            "giftMessage" => "",
+            "paymentMethod" => "PayPal",
+            "requestedShippingService" => "FedExHomeDelivery",
+            "carrierCode" => "fedex",
+            "serviceCode" => "fedex_home_delivery",
+            "packageCode" => "package",
+            "confirmation" => "none",
+            "shipDate" => "2017-12-05",
+            "holdUntilDate" => "",
+            "weight" => Array(
+                "value" => 0,
+                "units" => "ounces",
+                "WeightUnits" => 1,
+            ),
+            "dimensions" => "",
+            "insuranceOptions" => Array(
+                "provider" => "",
+                "insureShipment" => "",
+                "insuredValue" => 0,
+            ),
+            "internationalOptions" => Array(
+                "contents" => "",
+                "customsItems" => "",
+                "nonDelivery" => "",
+            ),
+            "advancedOptions" => Array(
+                "warehouseId" => "",
+                "nonMachinable" => "",
+                "saturdayDelivery" => "",
+                "containsAlcohol" => "",
+                "mergedOrSplit" => "",
+                "mergedIds" => Array(),
+                "parentId" => "",
+                "storeId" => 140519,
+                "customField1" => "",
+                "customField2" => "",
+                "customField3" => "",
+                "source" => "",
+                "billToParty" => "",
+                "billToAccount" => "",
+                "billToPostalCode" => "",
+                "billToCountryCode" => "",
+                "billToMyOtherAccount" => "",
+            ),
+            "tagIds" => "",
+            "userId" => "",
+            "externallyFulfilled" => "",
+            "externallyFulfilledBy" => "",
+            "labelMessages" => "",
+        );
         $shipstation_authorization_key = 'Basic YmI3MTc5OTE0ZmYyNDYyNzk4OTg2YWJmZWJhMmY0NjM6MWM0MzM1ZmU5NWRmNDQxNjllYmNlOWQyNmJjYjgxMTY=';
         $ch = curl_init();
 
-        curl_setopt($ch, CURLOPT_URL, "https://ssapi.shipstation.com/orders");
+        curl_setopt($ch, CURLOPT_URL, "https://ssapi.shipstation.com/orders?orderStatus=awaiting_shipment");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_HEADER, FALSE);
 
@@ -43,60 +171,47 @@ class Picking extends CI_Controller {
 
         $response = curl_exec($ch);
         curl_close($ch);
-        echo "<pre>";
-        pr($response);
-        exit;
-        $data['admin_prefix'] = $this->admin_prefix;
-        $data['ajax_url'] = ($this->session->userdata('admin_validated')) ? 'admin/inventory/picking_list' : 'picking_list';
+        $result = json_decode($response, true);
 
+        $orders = $result['orders'];
+        foreach ($orders as $key => $val) {
+            $order[$key] = $val;
+            $storeId = $val['advancedOptions']['storeId'];
+            if ($storeId == AMAZON) {
+                $store = "Amazon";
+            } elseif ($storeId == ExcessBuy) {
+                $store = 'ExcessBuy';
+            }
+            $order[$key]['store'] = $store;
+            $order[$key]['order_number'] = $val['orderNumber'];
+            $order[$key]['items'] = $val['items'];
+        }
+//        pr($order);
+//        exit;
+        $data['orders'] = $order;
         //load the view
         $this->template->load($this->layout, 'picking/index', $data);
     }
-    public function ajax_list(){
-        $list = $this->picking->get_datatables();
-        $data = array();
-        $no = $_POST['start'];
-        foreach ($list as $products) {
-            $no++;
-            $row = array();
-            $row[] = $no;
-            $row[] = '<input type="checkbox" name="check[]" class="check_product" value="'.$products->id.'">';
-            $row[] = $products->part;
-            $row[] = $products->name;
-            $row[] = $products->description;
-            $row[] = ($products->category!=null || $products->category != '') ? get_category_name($products->category) : '';
-            $row[] = $products->created;
-            $text = 'Pending'; $class = 'bg-orange-300';
-            if($products->status==1){
-                $text = 'Approved'; $class = 'success';
+
+    public function order_list() {
+//        pr($orders);
+//        exit;
+        $final = array();
+        if (!empty($orders)) {
+            $final['recordsTotal'] = count($orders);
+            $final['redraw'] = 1;
+            $final['recordsFiltered'] = $final['recordsTotal'];
+            $start = $this->input->get('start') + 1;
+
+            foreach ($orders as $key => $val) {
+                $order[$key] = $val;
+                $order[$key]['sr_no'] = $start++;
+                $order[$key]['store'] = $val['advancedOptions']['storeId'];
+                $order[$key]['order_number'] = $val['orderId'];
             }
-            $status = '<span style="margin-bottom: 5px;" class="label label-'.$class.'">'.$text.'</span>';
-                if($products->requested_for_clarification==1){ 
-                  if($this->session->userdata('admin_validated')){ 
-                        $status .= '<span class="label label-warning">Requested for Clarification</span>';
-                   }else{ 
-                        $status .= '<a href="products/view/'.$products->id.'"><span class="label label-warning">Clarification Needed</span></a>';
-                     } 
-                }elseif ($products->requested_for_clarification==2){ 
-                    $status .= '<span class="label label-success">Clarification Provided</span>';
-             }
-             $row[] = $status;
-            if($this->session->userdata('admin_validated')){ 
-                $row[] = '<td><a href="admin/temporary_products/view/'.$products->id.'" class="btn-xs btn-default"><i class="icon-eye"></i></a><a href="admin/temporary_products/edit/'.$products->id.'" class="btn-xs btn-default"><i class="icon-pencil"></i></a></td>';
-                 }else{ 
-                    $row[] = '<td><a href="products/view/'.$products->id.'" class="btn-xs btn-default"><i class="icon-eye"></i></a><a href="receiving/temporary_product_edit/'.$products->id.'" class="btn-xs btn-default"><i class="icon-pencil"></i></a></td>';
-                    }       
-            
-            $data[] = $row;
+            $final['data'] = $order;
         }
-        $output = array(
-                    "draw" => $_POST['draw'],
-                    "recordsTotal" => $this->receiving->count_all(),
-                    "recordsFiltered" => $this->receiving->count_filtered(),
-                    "data" => $data,
-                );
-        //output to json format
-        echo json_encode($output);
+        echo json_encode($final);
         exit;
     }
 
@@ -147,7 +262,6 @@ class Picking extends CI_Controller {
         //load the view
         $this->load->view('locations/ajax-pagination-data', $data, FALSE);
     }
-
 
     public function master() {
         $data['title'] = 'Locations Master';
@@ -290,6 +404,13 @@ class Picking extends CI_Controller {
 
         echo json_encode($response);
         exit;
+    }
+
+    public function get_details_by_part() {
+        $data['title'] = 'Part Locations';
+        $data['details'] = $this->picking->get_details_by_part('F9D31AA');
+        // pr($data['details']);
+        $this->template->load($this->layout, 'picking/part_locations', $data);
     }
 
 }

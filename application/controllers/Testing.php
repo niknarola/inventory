@@ -134,16 +134,8 @@ class Testing extends CI_Controller {
 
             // pr($serial_data,1);
 
-            if (isset($serial_data['location_id'])) {
-                if ($product_serial_data['location_id'] != $serial_data['location_id']) {
-                    $timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
-                }
-            }
-            if (isset($serial_data['status'])) {
-                if ($product_serial_data['status'] != $serial_data['status']) {
-                    $timestamp['status_change_date'] = date('Y-m-d H:i:s');
-                }
-            }
+            
+            
             $serial_data['cosmetic_grade'] = $this->input->post('cosmetic_grade');
             if ($serial_data['cosmetic_grade'] == 'MN' || $serial_data['cosmetic_grade'] == 'TN' || $serial_data['cosmetic_grade'] == 'B' || $serial_data['cosmetic_grade'] == 'C') {
                 $serial_data['status'] = 'Packout';
@@ -153,6 +145,11 @@ class Testing extends CI_Controller {
                 $serial_data['status'] = 'Failed';
             } else {
                 $serial_data['status'] = $this->input->post('status');
+			}
+			if (isset($serial_data['status'])) {
+                if ($product_serial_data['status'] != $serial_data['status']) {
+                    $timestamp['status_change_date'] = date('Y-m-d H:i:s');
+                }
             }
             $serial_data['ssd'] = (!is_null($ssd_array)) ? json_encode($ssd_array) : null;
             $serial_data['dedicated'] = (!is_null($dedicated_array)) ? json_encode($dedicated_array) : null;
@@ -232,8 +229,14 @@ class Testing extends CI_Controller {
                 if (!empty($pallet_location)) {
                     $pallet_location_update_data = ['location_id' => $pallet_location];
                     $this->basic->update('pallets', $pallet_location_update_data, ['id' => $product_serial_data['pallet_id']]);
-                }
-                $this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
+				}
+				if (isset($serial_data['location_id'])) {
+					if ($product_serial_data['location_id'] != $serial_data['location_id']) {
+						$timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
+					}
+				}
+				$this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
+				
                 $this->session->set_flashdata('msg', 'Details Saved');
             }
             $role_name = ($this->session->userdata('role_name') == 'Admin') ? 'testing' : $this->session->userdata('role_name');
@@ -271,7 +274,7 @@ class Testing extends CI_Controller {
                 $category[] = $this->input->post('category2');
             }
             if ($this->input->post('category3')) {
-                $category[] = $this->input->post('category3');
+                $category[] = $this->input->post('categor.y3');
             }
 
             $product_data['category'] = json_encode($category);
@@ -445,8 +448,8 @@ class Testing extends CI_Controller {
                 if (!empty($pallet_location)) {
                     $pallet_location_update_data = ['location_id' => $pallet_location];
                     $this->basic->update('pallets', $pallet_location_update_data, ['id' => $product_serial_data['pallet_id']]);
-                }
-                $this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
+				}
+				$this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
                 $this->session->set_flashdata('msg', 'Details Saved');
             }
             $role_name = ($this->session->userdata('role_name') == 'Admin') ? 'testing' : $this->session->userdata('role_name');
@@ -653,8 +656,8 @@ class Testing extends CI_Controller {
                 if (!empty($pallet_location)) {
                     $pallet_location_update_data = ['location_id' => $pallet_location];
                     $this->basic->update('pallets', $pallet_location_update_data, ['id' => $product_serial_data['pallet_id']]);
-                }
-                $this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
+				}
+				$this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
                 $this->session->set_flashdata('msg', 'Details Saved');
             }
             $role_name = ($this->session->userdata('role_name') == 'Admin') ? 'testing' : $this->session->userdata('role_name');
@@ -992,7 +995,7 @@ class Testing extends CI_Controller {
                     $this->basic->update('pallets', $pallet_location_update_data, ['id' => $product_serial_data['pallet_id']]);
                 }
                 if (isset($timestamp)) {
-                    $this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
+					$this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
                 }
                 $this->session->set_flashdata('msg', 'Details Saved');
             }
@@ -1202,8 +1205,8 @@ class Testing extends CI_Controller {
                 if (!empty($pallet_location)) {
                     $pallet_location_update_data = ['location_id' => $pallet_location];
                     $this->basic->update('pallets', $pallet_location_update_data, ['id' => $product_serial_data['pallet_id']]);
-                }
-                $this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
+				}
+				$this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
                 $this->session->set_flashdata('msg', 'Details Saved');
             }
             $role_name = ($this->session->userdata('role_name') == 'Admin') ? 'testing' : $this->session->userdata('role_name');
@@ -1379,8 +1382,8 @@ class Testing extends CI_Controller {
                 if (!empty($pallet_location)) {
                     $pallet_location_update_data = ['location_id' => $pallet_location];
                     $this->basic->update('pallets', $pallet_location_update_data, ['id' => $product_serial_data['pallet_id']]);
-                }
-                $this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
+				}
+				$this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
                 $this->session->set_flashdata('msg', 'Details Saved');
             }
             $role_name = ($this->session->userdata('role_name') == 'Admin') ? 'testing' : $this->session->userdata('role_name');
@@ -1572,8 +1575,8 @@ class Testing extends CI_Controller {
                 if (!empty($pallet_location)) {
                     $pallet_location_update_data = ['location_id' => $pallet_location];
                     $this->basic->update('pallets', $pallet_location_update_data, ['id' => $product_serial_data['pallet_id']]);
-                }
-                $this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
+				}
+				$this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
                 $this->session->set_flashdata('msg', 'Details Saved');
             }
             $role_name = ($this->session->userdata('role_name') == 'Admin') ? 'testing' : $this->session->userdata('role_name');
@@ -1776,8 +1779,8 @@ class Testing extends CI_Controller {
                 if (!empty($pallet_location)) {
                     $pallet_location_update_data = ['location_id' => $pallet_location];
                     $this->basic->update('pallets', $pallet_location_update_data, ['id' => $product_serial_data['pallet_id']]);
-                }
-                $this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
+				}
+				$this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
                 $this->session->set_flashdata('msg', 'Details Saved');
             }
             $role_name = ($this->session->userdata('role_name') == 'Admin') ? 'testing' : $this->session->userdata('role_name');
@@ -1969,8 +1972,8 @@ class Testing extends CI_Controller {
                 if (!empty($pallet_location)) {
                     $pallet_location_update_data = ['location_id' => $pallet_location];
                     $this->basic->update('pallets', $pallet_location_update_data, ['id' => $product_serial_data['pallet_id']]);
-                }
-                $this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
+				}
+				$this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
                 $this->session->set_flashdata('msg', 'Details Saved');
             }
             $role_name = ($this->session->userdata('role_name') == 'Admin') ? 'testing' : $this->session->userdata('role_name');
@@ -2048,7 +2051,7 @@ class Testing extends CI_Controller {
                 // echo"query pa	llet".$this->db->last_query();die;
                 $this->session->set_flashdata('msg', 'Product has been updated successfully');
             } else {
-                $this->session->set_flashdata('msg', 'Something went wrong');
+                $this->session->set_flashdata('err_msg', 'Something went wrong');
             }
             // die;
             if ($this->uri->segment(1) == 'admin') {

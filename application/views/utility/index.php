@@ -56,14 +56,14 @@
 					<!-- <a href="<?php //echo base_url().'admin/barcode/utility' ?>" class="btn bg-teal print_label_internal" name="print_label_internal" type="button">Print Label</a> -->
 					<button class="btn bg-teal print_label_internal"  name="print_label_internal" type="submit">Print Label</button>
 				</div>
-				<div class="row">
-				<div class="col-md-4 form-group">
-					<input type="text" value="" name="scan_loc" class="form-control scan_loc" placeholder="Scan to Location">
+				<div class="col-md-12" style="padding-left: 0px;">
+					<div class="col-md-4 form-group">
+						<input type="text" value="" name="scan_loc" class="form-control scan_loc" placeholder="Scan to Location">
+					</div>
+					<div class="col-md-3 form-group">
+						<button class="btn bg-teal scan_btn" type="submit">Scan</button>
+					</div>
 				</div>
-				<div class="col-md-3 form-group">
-					<button class="btn bg-teal scan_btn" type="submit">Scan</button>
-				</div>
-			</div>
 				<div class="col-md-4">
 				<label>Assign Serial:</label>
 					<div class="form-group">

@@ -39,8 +39,8 @@ class Locations_model extends CI_Model
         $this->db->join('fail_options fo', 'fo.id = ps.fail_option', 'left');
         $this->db->join('product_line pl', 'pl.id = p.product_line_id', 'left');
         $this->db->join('original_condition oc', 'oc.id = ps.condition', 'left');
-        $this->db->join('locations loc', 'loc.id = ps.location_id', 'left');
         $this->db->join('pallets pallet', 'pallet.id = ps.pallet_id', 'left');
+        $this->db->join('locations loc', 'loc.id = pallet.location_id', 'left');
         //filter data by searched keywords
         if(!empty($params['search']['keywords'])){
             if(!empty($params['search']['searchfor'])){
@@ -88,6 +88,16 @@ class Locations_model extends CI_Model
         $this->db->where('location_id', $location_id);
         $query = $this->db->get('product_serials');
         return $query->num_rows();
-    }
-
+	}
+	
+	public function get_pallet_by_serial($serial){
+		$this->db->select('ps.id as psid,ps.serial as serial,ps.pallet_id as serial_pallet,
+						   pal.id as palid, pal.pallet_id as pallet, loc.id as locid, loc.name as location');
+		$this->db->join('product_serials ps','ps.pallet_id = pal.id', 'LEFT');
+		$this->db->join('locations loc','pal.location_id = loc.id AND loc.is_delete = 0', 'LEFT');
+		$this->db->where('ps.is_delete',0);
+		$this->db->where('serial',$serial);
+		$query = $this->db->get('pallets pal')->row_array();
+		return $query;
+	}
 }

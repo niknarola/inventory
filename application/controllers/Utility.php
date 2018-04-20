@@ -168,7 +168,7 @@ class Utility extends CI_Controller
         if ($id) {
             $this->session->set_flashdata('msg', 'The data has been uploaded successfully');
         } else {
-            $this->session->set_flashdata('msg', 'Something went wrong, Please try again');
+            $this->session->set_flashdata('err_msg', 'Something went wrong, Please try again');
         }
     }
 
@@ -198,7 +198,7 @@ class Utility extends CI_Controller
             if ($id) {
                 $this->session->set_flashdata('msg', 'Pallet "' . $insert_data['pallet_id'] . '" Created with Location "' . $loc_name . '"');
             } else {
-                $this->session->set_flashdata('msg', 'Pallet and Pallet Location cannot be created');
+                $this->session->set_flashdata('err_msg', 'Pallet and Pallet Location cannot be created');
             }
 
             $url = ($this->session->userdata('admin_validated')) ? 'admin/' : '';

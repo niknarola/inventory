@@ -62,6 +62,7 @@
 							<a href="#"><i class="icon-stack2"></i> <span>Inventory</span></a>
 							<ul>
 								<li class="<?php echo ($controller == 'picking' && $Method == "index") ? 'active' : '' ?>"><a href="admin/inventory/picking"><i class="icon-menu"></i> <span>Picking</span></a></li>
+								<!--<li class="<?php echo ($controller == 'picking' && $Method == "index") ? 'active' : '' ?>"><a href="javascript:void(0);"><i class="icon-menu"></i> <span>Picking</span></a></li>-->
 								<li class="<?php echo ($controller == 'location' && $Method == "index") ? 'active' : '' ?>"><a href="admin/inventory/locations"><i class="icon-menu"></i> <span>Locations</span></a></li>
 								<li class="<?php echo ($controller == 'master_sheet' && $Method == "index") ? 'active' : '' ?>"><a href="admin/inventory/master_sheet"><i class="icon-menu"></i> <span>Master Sheet</span></a></li>
 								<li class="<?php echo ($controller == 'reports' && $Method == 'index') ? 'active' : '' ?>"><a href="admin/inventory/reports"><i class="icon-menu"></i> <span>Reports</span></a></li>

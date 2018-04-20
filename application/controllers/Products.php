@@ -313,7 +313,7 @@ class Products extends CI_Controller
             }
             else
             {
-                $this->session->set_flashdata('msg', 'Something went wrong, Please try again');
+                $this->session->set_flashdata('err_msg', 'Something went wrong, Please try again');
             }
         }
         else
