@@ -126,11 +126,8 @@ class Receiving extends CI_Controller {
             'new_serial' => $this->input->post('serial'),
         ];
         if($this->input->post('uri') == 'add_notes' || $this->input->post('uri') == 'barcode'){
-            // echo"in if";
             $find_product = $this->products->get_product_by_part($data['part']);
-            // pr($find_product);die;
         }else{
-            // echo"in else";die;
             $product = $this->products->product_search($data);
         }
         $data['units_in_house'] = $this->products->get_units_in_house($data['part']);
@@ -246,7 +243,8 @@ class Receiving extends CI_Controller {
             $product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['id'=>$serial_id]);
             $timestamp = [
                 'received_date'=>date('Y-m-d H:i:s'),
-                'last_scan'=>date('Y-m-d H:i:s')
+				'last_scan'=>date('Y-m-d H:i:s'),
+				'serial_id' => $product_serial_data['id']
             ];
             $this->basic->insert('serial_timestamps', $timestamp);
             }
@@ -511,8 +509,6 @@ class Receiving extends CI_Controller {
     }
 
     public function quick_receive(){
-		// $this->session->unset_userdata('products');
-		// pr($_SESSION);die;
         $data['title'] = 'Quick Receive';
         $data['pallets'] = $this->receiving->get_key_value_pallets();
         $data['ajax_url'] = ($this->uri->segment(1)=='admin') ? 'admin/products/find_product' : 'products/find_product';
@@ -522,7 +518,6 @@ class Receiving extends CI_Controller {
         $data['categories'] = $category_names;
         $url = ($this->session->userdata('admin_validated')) ? 'admin/' : '';
         if($this->input->post()){
-            // pr($this->input->post(),1);
             $pallet_data = $this->basic->get_data_by_id('pallets', $this->input->post('pallet_id'));
             $products = ($this->session->userdata('products')) ? $this->session->userdata('products') : [];
             if ($this->input->post('receive') || $this->input->post('print_labels')) {
@@ -541,11 +536,13 @@ class Receiving extends CI_Controller {
                         if(array_key_exists($key,$condition)){
                             $condition_name = $this->basic->get_single_data_by_criteria('original_condition', array('id' => $condition[$key]));
                         }
-                        $cat = [];
-                        $cat[] = $category1[$key];
+						$cat = [];
+						if(isset($category)){
+							$cat[] = $category1[$key];
+						}
                         if(!empty($category2)){
-                                if(array_key_exists($key,$category2) && $category2[$key]!=''){
-                                $cat[] = $category2[$key];
+							if(array_key_exists($key,$category2) && $category2[$key]!=''){
+							$cat[] = $category2[$key];
                             }
                         }
                             
@@ -564,7 +561,6 @@ class Receiving extends CI_Controller {
                         ];
                         $i++;
                         $products[] = $arr;
-                        // echo"product";pr($products);die;
                     }
             }
                $this->session->set_userdata( 'products',$products );
@@ -596,7 +592,6 @@ class Receiving extends CI_Controller {
 					];
 					
 					$data['access'] = $this->products->get_accessory_by_part(array_filter($this->input->post('part')));
-					// echo"access";pr($data['access']);
 					$access = [];
 					foreach($data['access'] as $key => $value){
 						if((!empty($value['accessory_type'])) || (!empty($value['accessory_name']))){
@@ -604,24 +599,23 @@ class Receiving extends CI_Controller {
 							$access[$key]['accessory_name'] = $value['accessory_name'];
 						}
 					}
-					// echo"access";pr($access);
 					foreach($access as $key =>$value){
 						$serial_data['accessory_type'] = $value['accessory_type'];
 						$serial_data['accessory_name'] = $value['accessory_name'];
 					}
-					// pr($serial_data);die;
 					$serial_id = $this->basic->insert('product_serials', $serial_data);
-					// echo"serial";pr($serial_data);die;
                     $product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['id'=>$serial_id]);
                     $timestamp = [
                         'received_date'=>date('Y-m-d H:i:s'),
                         'last_scan'=>date('Y-m-d H:i:s')
                     ];
-                    $this->basic->insert('serial_timestamps', $timestamp);
+					$this->basic->insert('serial_timestamps', $timestamp);
+					$this->session->set_flashdata('msg', 'Records added');
+					// $this->template->load($this->layout, 'receiving/quick_receive', $data);
+					// redirect($url.'receiving/quick_receive');
                 }
             }
             if($this->input->post('print_labels')){
-				// echo"in if";pr($this->input->post());die;
                 $barcode_name = $barcode_part = $barcode_serial = $barcode_condition = $barcode_categories = $barcode_product_line =  $barcode_description = $barcode_data =[];
                 foreach ($products as $key => $value) {
                     $pro_data = $this->basic->get_single_data_by_criteria('products',['part'=>$value['part']]);

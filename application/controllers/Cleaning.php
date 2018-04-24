@@ -9,7 +9,8 @@ class Cleaning extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('Product_model', 'products');
-        $this->load->model('Basic_model', 'basic');
+		$this->load->model('Basic_model', 'basic');
+		$this->load->model('Locations_model', 'locations');
         if ($this->uri->segment(1) == 'admin' && !$this->session->userdata('admin_validated')) {
             redirect('admin/login');
         } else if ($this->uri->segment(1) == 'cleaning' && !$this->session->userdata('user_validated')) {
@@ -132,15 +133,20 @@ class Cleaning extends CI_Controller {
                 $serial_data['files'] = implode(',', $serial_files);
             }
 
-            $product_serial = $this->basic->get_single_data_by_criteria('product_serials', ['serial' => $this->input->post('serial')]);
-
+			$product_serial = $this->basic->get_single_data_by_criteria('product_serials', ['serial' => $this->input->post('serial')]);
+			$pallet_data = $this->locations->get_pallet_by_serial($this->input->post('serial'));
             if ($this->basic->update('product_serials', $serial_data, ['serial' => $this->input->post('serial')])) {
                 $pallet_location_update_data = ['location_id' => $pallet_location];
                 $this->basic->update('pallets', $pallet_location_update_data, ['id' => $product_serial['pallet_id']]);
                 $timestamp = [
                     'last_scan' => date('Y-m-d H:i:s'),
                     'packout_date' => date('Y-m-d H:i:s')
-                ];
+				];
+				if (isset($pallet_data['locid'])) {
+                    if ($product_serial['pallet_id'] != $pallet_data['locid']) {
+                        $timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
+                    }
+                }
                 $this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial['id']]);
                 $this->session->set_flashdata('msg', 'Details Saved');
             }

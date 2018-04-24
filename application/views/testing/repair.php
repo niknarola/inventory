@@ -1,12 +1,12 @@
 <?php //echo"product"; pr($product);die;?>
 <div class="row">
 	<div class="col-md-12">
-		<form method="post" name="edit_audit_record" action="<?php echo ($this->uri->segment(1)=='admin') ? 'admin/' : ''; ?>testing/repair" enctype="multipart/form-data">
+		<form method="post" name="edit_audit_record" action="<?php echo ($this->uri->segment(1) == 'admin') ? 'admin/' : ''; ?>testing/repair" enctype="multipart/form-data">
 			<div class="panel panel-flat">
 				<div class="panel-heading">
 					<div class="row">
 						<div class="col-md-8">
-							<h5 class="panel-title"><?= $title; ?></h5>
+							<h5 class="panel-title"><?=$title;?></h5>
 						</div>
 					</div>
 				</div>
@@ -17,7 +17,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <!-- <label>Serial #:</label> -->
-                                    <input type="text" value="" name="serial" class="form-control serial"  placeholder="Serial #"> 
+                                    <input type="text" value="" name="serial" class="form-control serial" onchange="get_product_details();"  placeholder="Serial #">
                                 </div>
                             </div>
 							<div class="col-md-2">
@@ -46,7 +46,7 @@
                                 <input type="hidden" name="scan_loc_id" class="scan_loc_id" value="">
                             </div>
                             <button type="submit" name="save" value="save" class="btn bg-teal-400 add_btn">Save</button>
-                        </div>    
+                        </div>
                     </div>
             </div>
 		</form>
@@ -60,10 +60,8 @@
 <script type="text/javascript" src="assets/js/picker.js"></script>
 <script type="text/javascript" src="assets/js/picker.date.js"></script>
 <script type="text/javascript">
-	
-    // function get_product_details(){
-		$(".serial").on('keyup', function (e) {
-			if(e.keyCode == 13){
+
+    function get_product_details(){
     	var serial = $('input.serial').val();
 		if(serial!=''){
 			var data = {serial: serial};
@@ -92,5 +90,4 @@
 			});
 		}
 	}
-		});
 </script>

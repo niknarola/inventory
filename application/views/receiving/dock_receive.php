@@ -10,6 +10,7 @@
 							<div class="form-group">
 								<label>BOL / Tracking #:</label>
 								<input type="text" name="bol_or_tracking" value="<?php echo ($this->session->userdata('pallets_next')['bol_or_tracking']) ?  $this->session->userdata('pallets_next')['bol_or_tracking'] : ''; ?>" class="form-control bol_or_tracking">
+								<span id="bol_error" class="not_found_error" style="color:red"></span>
 							</div>
 						</div>
 						<div class="col-md-4">
@@ -46,7 +47,7 @@
 						</div>
 					</div>
 					<div class="pallet_div"></div>
-					<div class="pallet_actions" style="display: none;">
+					<div class="pallet_actions col-md-12" style="display: none;">
 						<button type="submit" name="print_labels" value="print_labels" class="btn btn-sm btn-primary print_labels">Receive and Print Labels</button>   
 		                <button type="submit" name="next" value="next" class="btn btn-sm btn-primary next">Next</button> 
 		                   
@@ -58,6 +59,10 @@
 				<div class="row">
 					<div class="table-responsive">
 						<div class="pallet-list" id="palletList">
+						<div class="alert alert-warning" style="display:none;">
+							<button type="button" class="close" data-dismiss="alert"><span>&times;</span><span class="sr-only">Close</span></button>
+							<span class="text-semibold"></span> 
+						</div>
 						<table class="table">
 							<thead>
 								<tr>
@@ -90,9 +95,12 @@
 								<?php } ?>
 							</tbody>
 						</table>
-                        <div id="pagination">
+						<?php if(!empty($pallets)){ ?>
+							<div id="pagination">
 						<?php echo $this->ajax_pagination->create_links(); ?>
                         </div>
+						<?php } else{ echo ""; }?>
+                        
 					</div>
 					</div>
 				</div>
@@ -125,13 +133,14 @@
 		<div class="col-md-4">
 			<div class="form-group">
 				<label>Weight:</label>
-				<input type="text" name="weight[]" value="" class="weight form-control" required>
+				<input type="number" autofocus name="weight[]" value="" class="weight form-control">
+				<span id="weight_error" class="not_found_error" style="color:red"></span>
 			</div>
 		</div>
 		<div class="col-md-4">
 			<div class="form-group">
 				<label>Item Count:</label>
-				<input type="text" name="item_count[]" value="" class="item_count form-control" >
+				<input type="number" name="item_count[]" value="" class="item_count form-control" >
 			</div>
 		</div>
 		<div class="col-md-4">
@@ -157,19 +166,61 @@
 	    });
 		$(document).on('click', '.delete', function(event) {
 			var check_len = $('.check_row:checked').length;
+			$('.text-semibold').text('');
 	        if(check_len==0){
-	            alert('please check atleast 1 Serial');
+				$('.alert-warning').css('display','block');
+				$('.text-semibold').html('Please check atleast 1 Serial');
+	            // alert('please check atleast 1 Serial');
 	            event.preventDefault();
 	        }
 	       return true;
 		});
 		$(document).on('click', '.search', function(event) {
-			// if($(".bol").val().length === 0 && $(".tracking").val().length === 0) {
+			$('#bol_error').text('');
 			if($(".bol_or_tracking").val().length === 0) {
-				alert('Please enter BOL / Tracking');
+				$('#bol_error').html('Please enter BOL / Tracking');
 				event.preventDefault();
 			}
 			 return true;
+		});
+		$(document).on('keyup','.bol_or_tracking', function() {
+			if($(".bol_or_tracking").val().length !== 0) {
+				$('#bol_error').text('');
+			}
+		});
+		$(document).on('click','.print_labels', function() {
+			if($(".weight").val().length === 0) {
+				$('#weight_error').html('Please Enter weight');
+				event.preventDefault();
+			}else{
+				$('#weight_error').html('');
+			}
+			return true;
+		});
+		$(document).on('keyup','.weight', function() {
+			if($(".weight").val().length !== 0) {
+				$('#weight_error').text('');
+			}
+		}); 
+
+		$(document).on('click','.next', function() {
+			if($(".weight").val().length === 0) {
+				$('#weight_error').html('Please Enter weight');
+				event.preventDefault();
+			}else{
+				$('#weight_error').html('');
+			}
+			return true;
+		});
+
+		$(document).on('click','.complete', function() {
+			if($(".weight").val().length === 0) {
+				$('#weight_error').html('Please Enter weight');
+				event.preventDefault();
+			}else{
+				$('#weight_error').html('');
+			}
+			return true;
 		});
 
 		$(document).on('click', '.add_note_btn', function(event) {

@@ -2,14 +2,17 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Testing extends CI_Controller {
+class Testing extends CI_Controller
+{
 
     public $layout = '';
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('Product_model', 'products');
         $this->load->model('Basic_model', 'basic');
+        $this->load->model('Locations_model', 'locations');
         $this->load->model('Master_sheet_model', 'master');
         if ($this->uri->segment(1) == 'admin' && !$this->session->userdata('admin_validated')) {
             redirect('admin/login');
@@ -25,7 +28,8 @@ class Testing extends CI_Controller {
         }
     }
 
-    public function notebook() {
+    public function notebook()
+    {
         if ($this->input->post()) {
             $product_data = [
                 'name' => $this->input->post('name'),
@@ -77,6 +81,7 @@ class Testing extends CI_Controller {
             }
 
             $product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['serial' => $this->input->post('serial')]);
+            $pallet_data = $this->locations->get_pallet_by_serial($this->input->post('serial'));
             $timestamp = [
                 'testing_date' => date('Y-m-d H:i:s'),
                 'last_scan' => date('Y-m-d H:i:s'),
@@ -98,10 +103,10 @@ class Testing extends CI_Controller {
             $pallet = $this->basic->check_pallet_exists($pallet_name);
 
             $serial_data = [
-                'new_serial' => ($this->input->post('new_serial') != "") ? $this->input->post('new_serial') : NULL,
-                'recv_notes' => ($this->input->post('recv_notes') != "") ? $this->input->post('recv_notes') . '-' . date('y-m-d H:i:s') : NULL,
+                'new_serial' => ($this->input->post('new_serial') != "") ? $this->input->post('new_serial') : null,
+                'recv_notes' => ($this->input->post('recv_notes') != "") ? $this->input->post('recv_notes') . '-' . date('y-m-d H:i:s') : null,
                 'cpu' => $cpu,
-                'memory' => ($this->input->post('memory') != "") ? $this->input->post('memory') : NULL,
+                'memory' => ($this->input->post('memory') != "") ? $this->input->post('memory') : null,
                 'storage' => $storage,
                 'graphics' => $graphics,
                 'screen' => $this->input->post('screen'),
@@ -120,9 +125,8 @@ class Testing extends CI_Controller {
                 'tech_notes' => $this->input->post('tech_notes'),
                 'cosmetic_issues_text' => $cosmetic_issues_text,
                 'fail_text' => $fail_text,
-                'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : NULL,
+                'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : null,
             ];
-
 
             if ($this->input->post('scan_loc_check')) {
                 $pallet_location_name = $this->input->post('scan_loc');
@@ -134,8 +138,6 @@ class Testing extends CI_Controller {
 
             // pr($serial_data,1);
 
-            
-            
             $serial_data['cosmetic_grade'] = $this->input->post('cosmetic_grade');
             if ($serial_data['cosmetic_grade'] == 'MN' || $serial_data['cosmetic_grade'] == 'TN' || $serial_data['cosmetic_grade'] == 'B' || $serial_data['cosmetic_grade'] == 'C') {
                 $serial_data['status'] = 'Packout';
@@ -145,8 +147,8 @@ class Testing extends CI_Controller {
                 $serial_data['status'] = 'Failed';
             } else {
                 $serial_data['status'] = $this->input->post('status');
-			}
-			if (isset($serial_data['status'])) {
+            }
+            if (isset($serial_data['status'])) {
                 if ($product_serial_data['status'] != $serial_data['status']) {
                     $timestamp['status_change_date'] = date('Y-m-d H:i:s');
                 }
@@ -222,21 +224,19 @@ class Testing extends CI_Controller {
                 $serial_data['files'] = implode(',', $serial_files);
             }
 
-
             if ($this->basic->update('product_serials', $serial_data, ['serial' => $this->input->post('serial')])) {
 
                 $this->basic->update_multiple('product_serials', $update_arr, 'id');
                 if (!empty($pallet_location)) {
                     $pallet_location_update_data = ['location_id' => $pallet_location];
                     $this->basic->update('pallets', $pallet_location_update_data, ['id' => $product_serial_data['pallet_id']]);
-				}
-				if (isset($serial_data['location_id'])) {
-					if ($product_serial_data['location_id'] != $serial_data['location_id']) {
-						$timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
-					}
-				}
-				$this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
-				
+                }
+                if (isset($pallet_data['locid'])) {
+                    if ($product_serial_data['pal_location_id'] != $pallet_data['locid']) {
+                        $timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
+                    }
+                }
+                $this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
                 $this->session->set_flashdata('msg', 'Details Saved');
             }
             $role_name = ($this->session->userdata('role_name') == 'Admin') ? 'testing' : $this->session->userdata('role_name');
@@ -260,7 +260,8 @@ class Testing extends CI_Controller {
         $this->template->load($this->layout, 'testing/notebook', $data);
     }
 
-    public function desktop() {
+    public function desktop()
+    {
         if ($this->input->post()) {
             $product_data = [
                 'name' => $this->input->post('name'),
@@ -315,6 +316,7 @@ class Testing extends CI_Controller {
             }
 
             $product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['serial' => $this->input->post('serial')]);
+            $pallet_data = $this->locations->get_pallet_by_serial($this->input->post('serial'));
             $timestamp = [
                 'testing_date' => date('Y-m-d H:i:s'),
                 'last_scan' => date('Y-m-d H:i:s'),
@@ -355,8 +357,6 @@ class Testing extends CI_Controller {
                 'cosmetic_issues_text' => $cosmetic_issues_text,
                 // 'cosmetic_issue' => $cosmetic_issue,
                 'fail_text' => $fail_text,
-                'cosmetic_grade' => $this->input->post('cosmetic_grade'),
-                'status' => $this->input->post('status'),
                 // 'location_id' => $location['id'],
                 'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : null,
             ];
@@ -367,14 +367,22 @@ class Testing extends CI_Controller {
 
                 $serial_data['pallet_id'] = $pallet;
             }
-            if ($product_serial_data['location_id'] != $serial_data['location_id']) {
-                $timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
+            $serial_data['cosmetic_grade'] = $this->input->post('cosmetic_grade');
+            if ($serial_data['cosmetic_grade'] == 'MN' || $serial_data['cosmetic_grade'] == 'TN' || $serial_data['cosmetic_grade'] == 'B' || $serial_data['cosmetic_grade'] == 'C') {
+                $serial_data['status'] = 'Packout';
+            } else if ($serial_data['cosmetic_grade'] == 'F') {
+                $serial_data['status'] = 'Awating Repair';
+            } else if ($serial_data['cosmetic_grade'] == 'X') {
+                $serial_data['status'] = 'Failed';
+            } else {
+                $serial_data['status'] = $this->input->post('status');
             }
             if (isset($serial_data['status'])) {
                 if ($product_serial_data['status'] != $serial_data['status']) {
                     $timestamp['status_change_date'] = date('Y-m-d H:i:s');
                 }
             }
+
             $serial_data['ssd'] = (!is_null($ssd_array)) ? json_encode($ssd_array) : null;
             $serial_data['dedicated'] = (!is_null($dedicated_array)) ? json_encode($dedicated_array) : null;
             $serial_data['desktop_other'] = ($this->input->post('desktop_other')) ? 1 : 0;
@@ -448,8 +456,13 @@ class Testing extends CI_Controller {
                 if (!empty($pallet_location)) {
                     $pallet_location_update_data = ['location_id' => $pallet_location];
                     $this->basic->update('pallets', $pallet_location_update_data, ['id' => $product_serial_data['pallet_id']]);
-				}
-				$this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
+                }
+                if (isset($pallet_data['locid'])) {
+                    if ($product_serial_data['pal_location_id'] != $pallet_data['locid']) {
+                        $timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
+                    }
+                }
+                $this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
                 $this->session->set_flashdata('msg', 'Details Saved');
             }
             $role_name = ($this->session->userdata('role_name') == 'Admin') ? 'testing' : $this->session->userdata('role_name');
@@ -473,7 +486,8 @@ class Testing extends CI_Controller {
         $this->template->load($this->layout, 'testing/desktop', $data);
     }
 
-    public function thin_client() {
+    public function thin_client()
+    {
         if ($this->input->post()) {
             $product_data = [
                 'name' => $this->input->post('name'),
@@ -527,6 +541,7 @@ class Testing extends CI_Controller {
             }
 
             $product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['serial' => $this->input->post('serial')]);
+            $pallet_data = $this->locations->get_pallet_by_serial($this->input->post('serial'));
             $timestamp = [
                 'testing_date' => date('Y-m-d H:i:s'),
                 'last_scan' => date('Y-m-d H:i:s'),
@@ -566,8 +581,6 @@ class Testing extends CI_Controller {
                 'cosmetic_issues_text' => $cosmetic_issues_text,
                 // 'cosmetic_issue' => $cosmetic_issue,
                 'fail_text' => $fail_text,
-                'cosmetic_grade' => $this->input->post('cosmetic_grade'),
-                'status' => $this->input->post('status'),
                 // 'location_id' => $location['id'],
                 'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : null,
             ];
@@ -578,8 +591,15 @@ class Testing extends CI_Controller {
 
                 $serial_data['pallet_id'] = $pallet;
             }
-            if ($product_serial_data['location_id'] != $serial_data['location_id']) {
-                $timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
+            $serial_data['cosmetic_grade'] = $this->input->post('cosmetic_grade');
+            if ($serial_data['cosmetic_grade'] == 'MN' || $serial_data['cosmetic_grade'] == 'TN' || $serial_data['cosmetic_grade'] == 'B' || $serial_data['cosmetic_grade'] == 'C') {
+                $serial_data['status'] = 'Packout';
+            } else if ($serial_data['cosmetic_grade'] == 'F') {
+                $serial_data['status'] = 'Awating Repair';
+            } else if ($serial_data['cosmetic_grade'] == 'X') {
+                $serial_data['status'] = 'Failed';
+            } else {
+                $serial_data['status'] = $this->input->post('status');
             }
             if (isset($serial_data['status'])) {
                 if ($product_serial_data['status'] != $serial_data['status']) {
@@ -656,8 +676,13 @@ class Testing extends CI_Controller {
                 if (!empty($pallet_location)) {
                     $pallet_location_update_data = ['location_id' => $pallet_location];
                     $this->basic->update('pallets', $pallet_location_update_data, ['id' => $product_serial_data['pallet_id']]);
-				}
-				$this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
+                }
+                if (isset($pallet_data['locid'])) {
+                    if ($product_serial_data['pal_location_id'] != $pallet_data['locid']) {
+                        $timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
+                    }
+                }
+                $this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
                 $this->session->set_flashdata('msg', 'Details Saved');
             }
             $role_name = ($this->session->userdata('role_name') == 'Admin') ? 'testing' : $this->session->userdata('role_name');
@@ -681,7 +706,8 @@ class Testing extends CI_Controller {
         $this->template->load($this->layout, 'testing/thin_client', $data);
     }
 
-    public function workstation() {
+    public function workstation()
+    {
         if ($this->input->post()) {
             $product_data = [
                 'name' => $this->input->post('name'),
@@ -811,7 +837,8 @@ class Testing extends CI_Controller {
         $this->template->load($this->layout, 'testing/workstation', $data);
     }
 
-    public function all_in_one() {
+    public function all_in_one()
+    {
         if ($this->input->post()) {
             $product_data = [
                 'name' => $this->input->post('name'),
@@ -900,8 +927,6 @@ class Testing extends CI_Controller {
                 'cosmetic_issues_text' => $cosmetic_issues_text,
                 // 'cosmetic_issue' => $cosmetic_issue,
                 'fail_text' => $fail_text,
-                'cosmetic_grade' => $this->input->post('cosmetic_grade'),
-                'status' => $this->input->post('status'),
                 // 'location_id' => $location['id'],
                 'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : null,
             ];
@@ -913,8 +938,16 @@ class Testing extends CI_Controller {
                 $serial_data['pallet_id'] = $pallet;
             }
             $product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['serial' => $this->input->post('serial')]);
-            if ($product_serial_data['location_id'] != $serial_data['location_id']) {
-                $timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
+            $pallet_data = $this->locations->get_pallet_by_serial($this->input->post('serial'));
+            $serial_data['cosmetic_grade'] = $this->input->post('cosmetic_grade');
+            if ($serial_data['cosmetic_grade'] == 'MN' || $serial_data['cosmetic_grade'] == 'TN' || $serial_data['cosmetic_grade'] == 'B' || $serial_data['cosmetic_grade'] == 'C') {
+                $serial_data['status'] = 'Packout';
+            } else if ($serial_data['cosmetic_grade'] == 'F') {
+                $serial_data['status'] = 'Awating Repair';
+            } else if ($serial_data['cosmetic_grade'] == 'X') {
+                $serial_data['status'] = 'Failed';
+            } else {
+                $serial_data['status'] = $this->input->post('status');
             }
             if (isset($serial_data['status'])) {
                 if ($product_serial_data['status'] != $serial_data['status']) {
@@ -995,7 +1028,12 @@ class Testing extends CI_Controller {
                     $this->basic->update('pallets', $pallet_location_update_data, ['id' => $product_serial_data['pallet_id']]);
                 }
                 if (isset($timestamp)) {
-					$this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
+                    if (isset($pallet_data['locid'])) {
+                        if ($product_serial_data['pal_location_id'] != $pallet_data['locid']) {
+                            $timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
+                        }
+                    }
+                    $this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
                 }
                 $this->session->set_flashdata('msg', 'Details Saved');
             }
@@ -1020,7 +1058,8 @@ class Testing extends CI_Controller {
         $this->template->load($this->layout, 'testing/all_in_one', $data);
     }
 
-    public function tablet() {
+    public function tablet()
+    {
         if ($this->input->post()) {
 
             $product_data = [
@@ -1073,6 +1112,7 @@ class Testing extends CI_Controller {
                 }
             }
             $product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['serial' => $this->input->post('serial')]);
+            $pallet_data = $this->locations->get_pallet_by_serial($this->input->post('serial'));
             $timestamp = [
                 'testing_date' => date('Y-m-d H:i:s'),
                 'last_scan' => date('Y-m-d H:i:s'),
@@ -1114,8 +1154,6 @@ class Testing extends CI_Controller {
                 'cosmetic_issues_text' => $cosmetic_issues_text,
                 // 'cosmetic_issue' => $cosmetic_issue,
                 'fail_text' => $fail_text,
-                'cosmetic_grade' => $this->input->post('cosmetic_grade'),
-                'status' => $this->input->post('status'),
                 // 'location_id' => $location['id'],
                 'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : null,
             ];
@@ -1126,8 +1164,15 @@ class Testing extends CI_Controller {
 
                 $serial_data['pallet_id'] = $pallet;
             }
-            if ($product_serial_data['location_id'] != $serial_data['location_id']) {
-                $timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
+            $serial_data['cosmetic_grade'] = $this->input->post('cosmetic_grade');
+            if ($serial_data['cosmetic_grade'] == 'MN' || $serial_data['cosmetic_grade'] == 'TN' || $serial_data['cosmetic_grade'] == 'B' || $serial_data['cosmetic_grade'] == 'C') {
+                $serial_data['status'] = 'Packout';
+            } else if ($serial_data['cosmetic_grade'] == 'F') {
+                $serial_data['status'] = 'Awating Repair';
+            } else if ($serial_data['cosmetic_grade'] == 'X') {
+                $serial_data['status'] = 'Failed';
+            } else {
+                $serial_data['status'] = $this->input->post('status');
             }
             if (isset($serial_data['status'])) {
                 if ($product_serial_data['status'] != $serial_data['status']) {
@@ -1205,8 +1250,13 @@ class Testing extends CI_Controller {
                 if (!empty($pallet_location)) {
                     $pallet_location_update_data = ['location_id' => $pallet_location];
                     $this->basic->update('pallets', $pallet_location_update_data, ['id' => $product_serial_data['pallet_id']]);
-				}
-				$this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
+                }
+                if (isset($pallet_data['locid'])) {
+                    if ($product_serial_data['pal_location_id'] != $pallet_data['locid']) {
+                        $timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
+                    }
+                }
+                $this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
                 $this->session->set_flashdata('msg', 'Details Saved');
             }
             $role_name = ($this->session->userdata('role_name') == 'Admin') ? 'testing' : $this->session->userdata('role_name');
@@ -1230,7 +1280,8 @@ class Testing extends CI_Controller {
         $this->template->load($this->layout, 'testing/tablet', $data);
     }
 
-    public function monitor() {
+    public function monitor()
+    {
         if ($this->input->post()) {
             // pr($this->input->post());die;
             $product_data = [
@@ -1265,6 +1316,7 @@ class Testing extends CI_Controller {
             $pallet = $this->basic->check_pallet_exists($pallet_name);
 
             $product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['serial' => $this->input->post('serial')]);
+            $pallet_data = $this->locations->get_pallet_by_serial($this->input->post('serial'));
             $timestamp = [
                 'testing_date' => date('Y-m-d H:i:s'),
                 'last_scan' => date('Y-m-d H:i:s'),
@@ -1299,8 +1351,6 @@ class Testing extends CI_Controller {
                 'cosmetic_issues_text' => $cosmetic_issues_text,
                 // 'cosmetic_issue' => $cosmetic_issue,
                 'fail_text' => $fail_text,
-                'cosmetic_grade' => $this->input->post('cosmetic_grade'),
-                'status' => $this->input->post('status'),
                 // 'location_id' => $location['id'],
                 'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : null,
             ];
@@ -1311,8 +1361,15 @@ class Testing extends CI_Controller {
 
                 $serial_data['pallet_id'] = $pallet;
             }
-            if ($product_serial_data['location_id'] != $serial_data['location_id']) {
-                $timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
+            $serial_data['cosmetic_grade'] = $this->input->post('cosmetic_grade');
+            if ($serial_data['cosmetic_grade'] == 'MN' || $serial_data['cosmetic_grade'] == 'TN' || $serial_data['cosmetic_grade'] == 'B' || $serial_data['cosmetic_grade'] == 'C') {
+                $serial_data['status'] = 'Packout';
+            } else if ($serial_data['cosmetic_grade'] == 'F') {
+                $serial_data['status'] = 'Awating Repair';
+            } else if ($serial_data['cosmetic_grade'] == 'X') {
+                $serial_data['status'] = 'Failed';
+            } else {
+                $serial_data['status'] = $this->input->post('status');
             }
             if (isset($serial_data['status'])) {
                 if ($product_serial_data['status'] != $serial_data['status']) {
@@ -1382,8 +1439,13 @@ class Testing extends CI_Controller {
                 if (!empty($pallet_location)) {
                     $pallet_location_update_data = ['location_id' => $pallet_location];
                     $this->basic->update('pallets', $pallet_location_update_data, ['id' => $product_serial_data['pallet_id']]);
-				}
-				$this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
+                }
+                if (isset($pallet_data['locid'])) {
+                    if ($product_serial_data['pal_location_id'] != $pallet_data['locid']) {
+                        $timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
+                    }
+                }
+                $this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
                 $this->session->set_flashdata('msg', 'Details Saved');
             }
             $role_name = ($this->session->userdata('role_name') == 'Admin') ? 'testing' : $this->session->userdata('role_name');
@@ -1407,7 +1469,8 @@ class Testing extends CI_Controller {
         $this->template->load($this->layout, 'testing/monitor', $data);
     }
 
-    public function accessory() {
+    public function accessory()
+    {
 
         if ($this->input->post()) {
             $product_data = [
@@ -1459,6 +1522,7 @@ class Testing extends CI_Controller {
             // $location = $this->basic->check_location_exists($loc_name);
             $pallet = $this->basic->check_pallet_exists($pallet_name);
             $product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['serial' => $this->input->post('serial')]);
+            $pallet_data = $this->locations->get_pallet_by_serial($this->input->post('serial'));
             $timestamp = [
                 'testing_date' => date('Y-m-d H:i:s'),
                 'last_scan' => date('Y-m-d H:i:s'),
@@ -1489,8 +1553,6 @@ class Testing extends CI_Controller {
                 'cosmetic_issues_text' => $cosmetic_issues_text,
                 // 'cosmetic_issue' => $cosmetic_issue,
                 'fail_text' => $fail_text,
-                'cosmetic_grade' => $this->input->post('cosmetic_grade'),
-                'status' => $this->input->post('status'),
                 // 'location_id' => $location['id'],
                 'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : null,
                 'accessory_fields' => json_encode($accessory_fields),
@@ -1503,8 +1565,15 @@ class Testing extends CI_Controller {
 
                 $serial_data['pallet_id'] = $pallet;
             }
-            if ($product_serial_data['location_id'] != $serial_data['location_id']) {
-                $timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
+            $serial_data['cosmetic_grade'] = $this->input->post('cosmetic_grade');
+            if ($serial_data['cosmetic_grade'] == 'MN' || $serial_data['cosmetic_grade'] == 'TN' || $serial_data['cosmetic_grade'] == 'B' || $serial_data['cosmetic_grade'] == 'C') {
+                $serial_data['status'] = 'Packout';
+            } else if ($serial_data['cosmetic_grade'] == 'F') {
+                $serial_data['status'] = 'Awating Repair';
+            } else if ($serial_data['cosmetic_grade'] == 'X') {
+                $serial_data['status'] = 'Failed';
+            } else {
+                $serial_data['status'] = $this->input->post('status');
             }
             if (isset($serial_data['status'])) {
                 if ($product_serial_data['status'] != $serial_data['status']) {
@@ -1575,8 +1644,13 @@ class Testing extends CI_Controller {
                 if (!empty($pallet_location)) {
                     $pallet_location_update_data = ['location_id' => $pallet_location];
                     $this->basic->update('pallets', $pallet_location_update_data, ['id' => $product_serial_data['pallet_id']]);
-				}
-				$this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
+                }
+                if (isset($pallet_data['locid'])) {
+                    if ($product_serial_data['pal_location_id'] != $pallet_data['locid']) {
+                        $timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
+                    }
+                }
+                $this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
                 $this->session->set_flashdata('msg', 'Details Saved');
             }
             $role_name = ($this->session->userdata('role_name') == 'Admin') ? 'testing' : $this->session->userdata('role_name');
@@ -1600,7 +1674,8 @@ class Testing extends CI_Controller {
         $this->template->load($this->layout, 'testing/accessory', $data);
     }
 
-    public function printer() {
+    public function printer()
+    {
         if ($this->input->post()) {
             $ink_level = array_filter($this->input->post('ink_level'));
             $product_data = [
@@ -1659,6 +1734,7 @@ class Testing extends CI_Controller {
                 $serial_data['pallet_id'] = $pallet['id'];
             }
             $product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['serial' => $this->input->post('serial')]);
+            $pallet_data = $this->locations->get_pallet_by_serial($this->input->post('serial'));
             $timestamp = [
                 'testing_date' => date('Y-m-d H:i:s'),
                 'last_scan' => date('Y-m-d H:i:s'),
@@ -1667,7 +1743,6 @@ class Testing extends CI_Controller {
             $pallet_name = $this->input->post('scan_loc');
             // $location = $this->basic->check_location_exists($loc_name);
             $pallet = $this->basic->check_pallet_exists($pallet_name);
-
 
             $access_type = null;
             if (!empty($this->input->post('access_type')[0])) {
@@ -1692,8 +1767,6 @@ class Testing extends CI_Controller {
                 'cosmetic_issues_text' => $cosmetic_issues_text,
                 // 'cosmetic_issue' => $cosmetic_issue,
                 'fail_text' => $fail_text,
-                'cosmetic_grade' => $this->input->post('cosmetic_grade'),
-                'status' => $this->input->post('status'),
                 // 'location_id' => $location['id'],
                 'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : null,
                 'physical_inspection_fields' => json_encode($physical_inspection),
@@ -1714,14 +1787,21 @@ class Testing extends CI_Controller {
             $serial_data['fail'] = ($this->input->post('fail')) ? 1 : 0;
             $serial_data['pass'] = ($this->input->post('pass')) ? 1 : 0;
             $serial_data['factory_reset'] = ($this->input->post('factory_reset')) ? 1 : 0;
-            // if ($product_serial_data['location_id'] != $serial_data['location_id']) {
-            //     $timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
-            // }
-            // if (isset($serial_data['status'])) {
-            //     if ($product_serial_data['status'] != $serial_data['status']) {
-            //         $timestamp['status_change_date'] = date('Y-m-d H:i:s');
-            //     }
-            // }
+            $serial_data['cosmetic_grade'] = $this->input->post('cosmetic_grade');
+            if ($serial_data['cosmetic_grade'] == 'MN' || $serial_data['cosmetic_grade'] == 'TN' || $serial_data['cosmetic_grade'] == 'B' || $serial_data['cosmetic_grade'] == 'C') {
+                $serial_data['status'] = 'Packout';
+            } else if ($serial_data['cosmetic_grade'] == 'F') {
+                $serial_data['status'] = 'Awating Repair';
+            } else if ($serial_data['cosmetic_grade'] == 'X') {
+                $serial_data['status'] = 'Failed';
+            } else {
+                $serial_data['status'] = $this->input->post('status');
+            }
+            if (isset($serial_data['status'])) {
+                if ($product_serial_data['status'] != $serial_data['status']) {
+                    $timestamp['status_change_date'] = date('Y-m-d H:i:s');
+                }
+            }
             if ($product_serial_data['factory_reset'] != $serial_data['factory_reset']) {
                 $timestamp['factory_reset_date'] = date('Y-m-d H:i:s');
             }
@@ -1779,8 +1859,13 @@ class Testing extends CI_Controller {
                 if (!empty($pallet_location)) {
                     $pallet_location_update_data = ['location_id' => $pallet_location];
                     $this->basic->update('pallets', $pallet_location_update_data, ['id' => $product_serial_data['pallet_id']]);
-				}
-				$this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
+                }
+                if (isset($pallet_data['locid'])) {
+                    if ($product_serial_data['pal_location_id'] != $pallet_data['locid']) {
+                        $timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
+                    }
+                }
+                $this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
                 $this->session->set_flashdata('msg', 'Details Saved');
             }
             $role_name = ($this->session->userdata('role_name') == 'Admin') ? 'testing' : $this->session->userdata('role_name');
@@ -1804,7 +1889,8 @@ class Testing extends CI_Controller {
         $this->template->load($this->layout, 'testing/printer', $data);
     }
 
-    public function other_item() {
+    public function other_item()
+    {
 
         if ($this->input->post()) {
             $product_data = [
@@ -1852,6 +1938,7 @@ class Testing extends CI_Controller {
                 'ot_ui9' => $this->input->post('ot_ui9'),
             ];
             $product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['serial' => $this->input->post('serial')]);
+            $pallet_data = $this->locations->get_pallet_by_serial($this->input->post('serial'));
             $timestamp = [
                 'testing_date' => date('Y-m-d H:i:s'),
                 'last_scan' => date('Y-m-d H:i:s'),
@@ -1884,8 +1971,6 @@ class Testing extends CI_Controller {
                 'cosmetic_issues_text' => $cosmetic_issues_text,
                 // 'cosmetic_issue' => $cosmetic_issue,
                 'fail_text' => $fail_text,
-                'cosmetic_grade' => $this->input->post('cosmetic_grade'),
-                'status' => $this->input->post('status'),
                 'location_id' => $location['id'],
                 'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : null,
                 'specifications_ui' => json_encode($specifications_ui),
@@ -1898,8 +1983,15 @@ class Testing extends CI_Controller {
 
                 $serial_data['pallet_id'] = $pallet;
             }
-            if ($product_serial_data['location_id'] != $serial_data['location_id']) {
-                $timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
+            $serial_data['cosmetic_grade'] = $this->input->post('cosmetic_grade');
+            if ($serial_data['cosmetic_grade'] == 'MN' || $serial_data['cosmetic_grade'] == 'TN' || $serial_data['cosmetic_grade'] == 'B' || $serial_data['cosmetic_grade'] == 'C') {
+                $serial_data['status'] = 'Packout';
+            } else if ($serial_data['cosmetic_grade'] == 'F') {
+                $serial_data['status'] = 'Awating Repair';
+            } else if ($serial_data['cosmetic_grade'] == 'X') {
+                $serial_data['status'] = 'Failed';
+            } else {
+                $serial_data['status'] = $this->input->post('status');
             }
             if (isset($serial_data['status'])) {
                 if ($product_serial_data['status'] != $serial_data['status']) {
@@ -1972,8 +2064,13 @@ class Testing extends CI_Controller {
                 if (!empty($pallet_location)) {
                     $pallet_location_update_data = ['location_id' => $pallet_location];
                     $this->basic->update('pallets', $pallet_location_update_data, ['id' => $product_serial_data['pallet_id']]);
-				}
-				$this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
+                }
+                if (isset($pallet_data['locid'])) {
+                    if ($product_serial_data['pal_location_id'] != $pallet_data['locid']) {
+                        $timestamp['location_assigned_date'] = date('Y-m-d H:i:s');
+                    }
+                }
+                $this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
                 $this->session->set_flashdata('msg', 'Details Saved');
             }
             $role_name = ($this->session->userdata('role_name') == 'Admin') ? 'testing' : $this->session->userdata('role_name');
@@ -1997,7 +2094,8 @@ class Testing extends CI_Controller {
         $this->template->load($this->layout, 'testing/other_item', $data);
     }
 
-    public function find_product() {
+    public function find_product()
+    {
         $data['serial'] = $this->input->post('serial');
         $product = $this->products->product_searching($data['serial']);
         // pr($product);die;
@@ -2014,7 +2112,8 @@ class Testing extends CI_Controller {
         exit;
     }
 
-    public function audit() {
+    public function audit()
+    {
         $data['title'] = 'Audit';
         $data['ajax_url'] = ($this->uri->segment(1) == 'admin') ? 'admin/testing/find_product' : 'receiving/find_product';
         $data['original_condition'] = $this->products->get_key_value_pair('original_condition');
@@ -2027,46 +2126,47 @@ class Testing extends CI_Controller {
         $this->template->load($this->layout, 'testing/audit', $data);
     }
 
-    public function edit_audit_record($serial_id) {
+    public function edit_audit_record($serial_id)
+    {
         $data['title'] = 'Edit Product';
         $data['cat_url'] = ($this->uri->segment(1) == 'admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
         $data['original_condition'] = $this->products->get_key_value_pair('original_condition');
         $data['product'] = $this->products->get_product_serial_by_id($serial_id);
-
         if ($this->input->post()) {
-            // part'=>trim($this->input->post('part')),
-            $data = [
-                // 'serial'=>$this->input->post('serial'),
+            $data1 = [
                 'new_serial' => $this->input->post('new_serial'),
                 'condition' => $this->input->post('final_condition'),
                 'cosmetic_grade' => $this->input->post('grade'),
                 'pallet_id' => $this->input->post('serial_location_id'),
                 'comments' => $this->input->post('comment'),
-                    // 'physical_location_id' => $this->input->post('pallet_location_id'),
             ];
-            // pr($_POST);
-            if ($this->basic->update('product_serials', $data, ['id' => $serial_id])) {
-                // echo"query serial".$this->db->last_query();
+
+            if ($this->basic->update('product_serials', $data1, ['id' => $serial_id])) {
+                $timestamp = [];
+                if ($timestamp) {
+                    if ($data['product']['pallet_location_id'] != $this->input->post('pallet_location_id')) {
+                        $timestamp = [
+                            'location_assigned_date' => date('Y-m-d H:i:s'),
+                        ];
+                    }
+                    $this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $serial_id]);
+                }
                 $this->basic->update('pallets', ['location_id' => $this->input->post('pallet_location_id')], ['id' => $this->input->post('serial_location_id')]);
-                // echo"query pa	llet".$this->db->last_query();die;
                 $this->session->set_flashdata('msg', 'Product has been updated successfully');
             } else {
                 $this->session->set_flashdata('err_msg', 'Something went wrong');
             }
-            // die;
             if ($this->uri->segment(1) == 'admin') {
-                // redirect('admin/testing/audit');
                 redirect('admin/testing/edit_audit_record/' . $serial_id);
             } else {
                 redirect('testing/edit_audit_record/' . $serial_id);
             }
-
-            // redirect('testing/audit');
         }
         $this->template->load($this->layout, 'testing/edit', $data);
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         if ($id) {
             $update_array = array(
                 'is_delete' => 1,
@@ -2079,7 +2179,8 @@ class Testing extends CI_Controller {
         }
     }
 
-    public function view_notes($id) {
+    public function view_notes($id)
+    {
         $data['notes'] = $this->master->get_notes_by_id($id);
         if ($data['notes']) {
             $resp['status'] = 1;
@@ -2090,7 +2191,8 @@ class Testing extends CI_Controller {
         echo json_encode($resp);
     }
 
-    public function quality() {
+    public function quality()
+    {
         $data['title'] = 'Quality Control';
         if ($this->input->post()) {
             $serial_data = [
@@ -2110,7 +2212,6 @@ class Testing extends CI_Controller {
             if ($this->input->post('scan_loc_check')) {
                 $pallet_location_name = $this->input->post('scan_loc');
                 $pallet_location = $this->basic->check_location_exists($pallet_location_name);
-                // pr($pallet_location);die;
             } else {
                 $serial_data['pallet_id'] = $pallet;
             }
@@ -2119,7 +2220,14 @@ class Testing extends CI_Controller {
                 if ($pallet_location) {
                     $pallet_location_update_data = ['location_id' => $pallet_location];
                     $this->basic->update('pallets', $pallet_location_update_data, ['id' => $product_serial_data['pallet_id']]);
-                }
+				}
+				$timestamp = [];
+				if ($product_serial_data['pallet_id'] != $pallet_location) {
+					$timestamp = [
+						'location_assigned_date' => date('Y-m-d H:i:s'),
+					];
+				}
+				$this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
             }
         }
         $data['serial'] = $this->input->post('serial');
@@ -2134,7 +2242,8 @@ class Testing extends CI_Controller {
         $this->template->load($this->layout, 'testing/quality', $data);
     }
 
-    public function repair() {
+    public function repair()
+    {
         // pr($_POST);
         $data['title'] = 'Repair';
         if ($this->input->post()) {
@@ -2154,8 +2263,16 @@ class Testing extends CI_Controller {
                 if ($pallet_location) {
                     $pallet_location_update_data = ['location_id' => $pallet_location];
                     $this->basic->update('pallets', $pallet_location_update_data, ['id' => $product_serial_data['pallet_id']]);
-                }
-            }
+				}
+				$timestamp = [];
+				if ($product_serial_data['pallet_id'] != $pallet_location) {
+					$timestamp = [
+						'location_assigned_date' => date('Y-m-d H:i:s'),
+					];
+				}
+				$this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
+			}
+			
         }
         $data['ajax_url'] = ($this->uri->segment(1) == 'admin') ? 'admin/testing/find_product' : 'testing/find_product';
         $data['original_condition'] = $this->products->get_key_value_pair('original_condition');
@@ -2167,12 +2284,14 @@ class Testing extends CI_Controller {
         $this->template->load($this->layout, 'testing/repair', $data);
     }
 
-    public function get_accessories() {
+    public function get_accessories()
+    {
         $data['access'] = json_decode($this->input->post('data'));
         $this->load->view('testing/accessories_page', $data);
     }
 
-    public function check_serial() {
+    public function check_serial()
+    {
         $serial = $this->basic->get_result('product_serials', ['new_serial' => $this->input->post('new_serial'), 'is_delete' => 0], 'id,new_serial', 1);
         if (!empty($serial)) {
             $return_array['new_serial'] = ['code' => 400];
@@ -2182,7 +2301,8 @@ class Testing extends CI_Controller {
         echo json_encode($return_array);
     }
 
-    public function check_location() {
+    public function check_location()
+    {
         if ($this->input->post()) {
             $serial_location = $this->basic->get_result('pallets', ['pallet_id' => $this->input->post('serial_location_name')], 'id,pallet_id', 1);
             $pallet_location = $this->basic->get_result('locations', ['name' => $this->input->post('pallet_location_name'), 'is_delete' => 0], 'id,name', 1);

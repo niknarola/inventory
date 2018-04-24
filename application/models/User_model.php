@@ -48,5 +48,41 @@ class User_model extends CI_Model
     	$this->db->where('u.name!=', 'Admin');
     	$query = $this->db->get('users u');
     	return $query->result_array();
+	}
+	
+	public function check_if_user_exist($data = array(), $is_total_rows = false, $is_single = false,$where_in = false) {
+    
+        $this->db->where($data);
+
+        if(!empty($where_in)){ $this->db->where_in('role_id',$where_in); }
+       
+        if ($is_total_rows == true) {
+            $res_data = $this->db->get('users')->num_rows();
+        } else {
+            if ($is_single == true) {
+                $res_data = $this->db->get('users')->row_array();
+            } else {
+                $res_data = $this->db->get('users')->result_array();
+            }
+		}
+        return $res_data;
+	}
+	
+	public function get_data($data,$is_single = false){
+        $this->db->where($data);        
+        if($is_single == true){            
+            return $this->db->get('users')->row_array();
+        }else{
+            return $this->db->get('users')->result_array();    
+        }
+	}
+	
+	public function update_user_data($id, $data) {
+        if (is_array($id)) {
+            $this->db->where($id);
+        } else {
+            $this->db->where(['id' => $id]);
+        }
+        return $this->db->update('users', $data);
     }
 }

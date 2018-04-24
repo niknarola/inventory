@@ -40,7 +40,7 @@
 		</div>
 
 		<div class="navbar-collapse collapse" id="navbar-mobile">
-			<ul class="nav navbar-nav navbar-right">				
+			<ul class="nav navbar-nav navbar-right">
 				<li>
 					<a href="mailto:admin@admin.com">
 						<i class="icon-user-tie"></i> <span class="visible-xs-inline-block position-right"> Contact admin</span>
@@ -63,10 +63,23 @@
 
 				<!-- Content area -->
 				<div class="content">
-
+				
 					<!-- Simple login form -->
 					<form action="<?=base_url()?>login/process" method="post">
 						<div class="panel panel-body login-form">
+						<div class="col-md-12">
+					<?php if ($this->session->flashdata('msg')) { ?>
+						<div class="alert alert-success hide-msg">
+							<button type="button" class="close" data-dismiss="alert"><span>&times;</span><span class="sr-only">Close</span></button>
+							<strong><?php echo $this->session->flashdata('msg') ?></strong>
+						</div>
+					<?php }  if ($this->session->flashdata('err_msg')) { ?>
+						<div class="alert alert-danger hide-msg">
+							<button type="button" class="close" data-dismiss="alert"><span>&times;</span><span class="sr-only">Close</span></button>
+							<strong><?php echo $this->session->flashdata('err_msg') ?></strong>
+						</div>
+            		<?php }?>
+       		 	</div>
 							<div class="text-center">
 								<div class="icon-object border-slate-300 text-slate-300"><i class="icon-reading"></i></div>
 								<h5 class="content-group">Login to your account <small class="display-block">Enter your credentials below</small></h5>
@@ -87,7 +100,7 @@
 								<button type="submit" class="btn btn-primary btn-block">Sign in <i class="icon-circle-right2 position-right"></i></button>
 							</div>
 							<div class="text-center">
-								<a href="#">Forgot password?</a>
+								<a href="<?php echo base_url('login/forgotpassword')?>">Forgot password?</a>
 							</div>
 						</div>
 					</form>
@@ -106,3 +119,8 @@
 
 </body>
 </html>
+<script>
+	$('document').ready(function () {
+		$('.hide-msg').fadeOut(6000);
+	});
+</script>

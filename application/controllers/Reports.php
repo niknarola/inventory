@@ -354,16 +354,16 @@ class Reports extends CI_Controller
                 $days = $date->format("%d");
 
                 $data[] = ['part' => $result['part'],
-                    'serial' => $result['serial'],
-                    'date_scanned' => $result['last_scan'],
-                    'date_received' => $result['received_date'],
-                    'date_inspection' => $result['inspection_date'],
-                    'date_tested' => $result['testing_date'],
-                    'date_inventory' => $result['inventory_date'],
-                    'location' => $result['pallet_location_name'],
-                    'days_location' => $days,
-                    'status' => $result['status'],
-                ];
+				'serial' => $result['serial'],
+				'date_scanned' => $result['last_scan'],
+				'date_received' => $result['received_date'],
+				'date_inspection' => $result['inspection_date'],
+				'date_tested' => $result['testing_date'],
+				'date_inventory' => $result['inventory_date'],
+				'location' => $result['pallet_location_name'],
+				'days_location' => $days,
+				'status' => $result['status'],
+			];
             }
             $this->excel->getActiveSheet()->fromArray($data, null, 'A3');
             $highestColumm = $this->excel->getActiveSheet()->getHighestColumn();
