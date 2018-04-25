@@ -1,4 +1,16 @@
-<div class="row">
+<div class="col-md-12">
+					<?php if ($this->session->flashdata('msg')) { ?>
+						<div class="alert alert-success hide-msg">
+							<button type="button" class="close" data-dismiss="alert"><span>&times;</span><span class="sr-only">Close</span></button>
+							<strong><?php echo $this->session->flashdata('msg') ?></strong>
+						</div>
+					<?php }  if ($this->session->flashdata('err_msg')) { ?>
+						<div class="alert alert-danger hide-msg">
+							<button type="button" class="close" data-dismiss="alert"><span>&times;</span><span class="sr-only">Close</span></button>
+							<strong><?php echo $this->session->flashdata('err_msg') ?></strong>
+						</div>
+            		<?php }?>
+       		 	</div><div class="row">
 	<div class="col-md-12">
 		<form method="post" action="<?= $admin_prefix; ?>testing/desktop" id="desktop" enctype="multipart/form-data">
 			<div class="panel panel-flat">
@@ -92,7 +104,7 @@
 								
 								<div class="col-md-6">
 									<div class="form-group">
-										<label>Recv_note:</label>
+										<label>Receive note:</label>
 										<textarea name="recv_notes" class="form-control recv_notes"></textarea>
 									</div>
 								</div>
@@ -798,7 +810,7 @@
 				$('input.form_factor').val(response.product.form_factor);
 				$('input.files').val(response.product.files);
 				$('input.fail_reason_notes').val(response.product.fail_reason_notes);
-
+				$('input.warranty_date').val(response.product.warranty_date);
 				//---------------
 				$('textarea.description').html(response.product.product_desc);
 				$('textarea.additional_info').html(response.product.additional_info);
@@ -806,6 +818,7 @@
 				$('textarea.additional_accessories').html(response.product.additional_accessories);
 				$('textarea.tech_notes').html(response.product.tech_notes);
 				$('textarea.recv_notes').html(response.product.recv_notes);
+				$('textarea.fail_text').html(response.product.fail_text);
 				//----------------
 				$('.touchscreen').prop('checked', false);
 				if(response.product.touch_screen==1){
@@ -840,6 +853,10 @@
 				$('.pass').prop('checked', false);
 				if(response.product.pass==1){
 					$('.pass').prop('checked', true);
+				}
+				$('.fail').prop('checked', false);
+				if(response.product.fail==1){
+					$('.fail').prop('checked', true);
 				}
 				$('.factory_reset').prop('checked', false);
 				if(response.product.factory_reset==1){
@@ -990,9 +1007,16 @@
     $('.pass').change(function(){
             if(this.checked){
                 $("input[name='fail']").prop('disabled',true);
+                $("input[name='fail']").prop('checked',false);
                 $('.f').prop('disabled', true);
                 $('.x').prop('disabled', true);
+                $('.f').prop('checked', false);
+                $('.x').prop('checked', false);
             }else{
+				$('.mn').prop('checked', false);
+                $('.tn').prop('checked', false);
+                $('.b').prop('checked', false);
+                $('.c').prop('checked', false);
                 $("input[name='fail']").prop('disabled',false);
                 $('.f').prop('disabled', false);
                 $('.x').prop('disabled', false);
@@ -1002,12 +1026,19 @@
         $('.fail').change(function(){
             if(this.checked){
                 $("input[name='pass']").prop('disabled',true);
+                $("input[name='pass']").prop('checked',false);
                 $('.mn').prop('disabled', true);
                 $('.tn').prop('disabled', true);
                 $('.b').prop('disabled', true);
                 $('.c').prop('disabled', true);
+                $('.mn').prop('checked', false);
+                $('.tn').prop('checked', false);
+                $('.b').prop('checked', false);
+                $('.c').prop('checked', false);
             }
             else{
+				$('.f').prop('checked', false);
+                $('.x').prop('checked', false);
                 $("input[name='pass']").prop('disabled',false);
                 $('.mn').prop('disabled', false);
                 $('.tn').prop('disabled', false);

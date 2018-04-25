@@ -39,7 +39,7 @@
  	<div class="row receive_div" data-row="1">
         	<div class="col-md-2">
                 <div class="form-group">
-                    <input type="text" class="form-control pallet_id" name="pallet_id[]" value="" placeholder="Pallet ID #">
+                    <input type="text" class="form-control pallet_id" required="true" name="pallet_id[]" value="" placeholder="Pallet ID #">
                 </div>
             </div>
             <div class="col-md-2">

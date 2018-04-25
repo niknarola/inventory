@@ -55,7 +55,8 @@ class Master_sheet extends CI_Controller {
     }
     
     function ajaxPaginationData(){
-        $conditions = array();
+		$conditions = array();
+		$config1 = [];
         //calc offset number
         $page = $this->input->post('page');
         if(!$page){
@@ -74,41 +75,51 @@ class Master_sheet extends CI_Controller {
         $grade = $this->input->post('grade');
        #nik------------
        if(!empty($keywords)){
-        $conditions['search']['keywords'] = $keywords;
+		$conditions['search']['keywords'] = $keywords;
+		$config1 =  'searchFilter';
     }
     if(!empty($searchfor) && $searchfor!='none'){
-        $conditions['search']['searchfor'] = $searchfor;
+		$conditions['search']['searchfor'] = $searchfor;
+		$config1 =  'searchFilter';
     }
     #nik------------
     if(!empty($category1) && $category1!='none'){
-        $conditions['search']['category1'] = $category1;
+		$conditions['search']['category1'] = $category1;
+		$config1 =  'searchFilter';
     }
     if(!empty($category2) && $category2!='none'){
-        $conditions['search']['category2'] = $category2;
+		$conditions['search']['category2'] = $category2;
+		$config1 =  'searchFilter';
     }
     if(!empty($condition) && $condition!='none')
     {
-        $conditions['search']['condition'] = $condition;
+		$conditions['search']['condition'] = $condition;
+		$config1 =  'searchFilter';
     }
     else if(!empty($grade) && $grade!='none')
     {
-        $conditions['search']['grade'] = $grade;
+		$conditions['search']['grade'] = $grade;
+		$config1 =  'searchFilter';
     }
     else if(!empty($condition) && $condition!='none' && !empty($grade) && $grade!='none'){
         $conditions['search']['condition'] = $condition;
-        $conditions['search']['grade'] = $grade;
+		$conditions['search']['grade'] = $grade;
+		$config1 =  'searchFilter';
     }
     if($this->input->post('ready'))
     {
-        $conditions['search']['ready'] = "Ready for sale";
+		$conditions['search']['ready'] = "Ready for sale";
+		$config1 =  'displayReady';
     }
     if($this->input->post('recent'))
     {
-        $conditions['search']['recent'] = $this->db->order_by('ps.created','desc');
+		$conditions['search']['recent'] = $this->db->order_by('ps.created','desc');
+		$config1 =  'displayRecent';
     }
     if($this->input->post('sold'))
     {
-        $conditions['search']['sold'] = "Sold";
+		$conditions['search']['sold'] = "Sold";
+		$config1 =  'displaySold';
     }
         #nik------------
         
@@ -123,7 +134,8 @@ class Master_sheet extends CI_Controller {
         $config['base_url']    = base_url().$url;
         $config['total_rows']  = $totalRec;
         $config['per_page']    = $this->perPage;
-        $config['link_func']   = 'searchFilter';
+        // $config['link_func']   = 'searchFilter';
+        $config['link_func']   = $config1;
         $config['uri_segment']   = 5;
         $this->ajax_pagination->initialize($config);
         
@@ -132,7 +144,7 @@ class Master_sheet extends CI_Controller {
         $conditions['limit'] = $this->perPage;
         
         //get posts data
-        $data['posts'] = $this->master->getRows($conditions);
+		$data['posts'] = $this->master->getRows($conditions);
         //load the view
         $this->load->view('master_sheet/ajax-pagination-data', $data, FALSE);
     }

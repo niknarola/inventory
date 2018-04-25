@@ -1,3 +1,16 @@
+<div class="col-md-12">
+					<?php if ($this->session->flashdata('msg')) { ?>
+						<div class="alert alert-success hide-msg">
+							<button type="button" class="close" data-dismiss="alert"><span>&times;</span><span class="sr-only">Close</span></button>
+							<strong><?php echo $this->session->flashdata('msg') ?></strong>
+						</div>
+					<?php }  if ($this->session->flashdata('err_msg')) { ?>
+						<div class="alert alert-danger hide-msg">
+							<button type="button" class="close" data-dismiss="alert"><span>&times;</span><span class="sr-only">Close</span></button>
+							<strong><?php echo $this->session->flashdata('err_msg') ?></strong>
+						</div>
+            		<?php }?>
+       		 	</div>
 <div class="row">
 <div class="col-md-12">
    <form method="post" action="<?=$admin_prefix;?>testing/quality" id="quality" enctype="multipart/form-data">
@@ -764,6 +777,12 @@
 <script type="text/javascript" src="assets/js/picker.date.js"></script>
 <script type="text/javascript">
    jQuery(document).ready(function($) {
+	$(window).keydown(function(event){
+		    if(event.keyCode == 13) {
+		      event.preventDefault();
+		      return false;
+		    }
+	  	});
 
    	$('.daterange-single').daterangepicker({
            singleDatePicker: true,
@@ -853,9 +872,9 @@
 			$el.val(values);
 		}
 
-      	function get_product_details(){
-			// $(".serial").on('keyup', function (e) {
-			// if(e.keyCode == 13){
+      	// function get_product_details(){
+			$(".serial").on('keyup', function (e) {
+			if(e.keyCode == 13){
       		var serial = $('input.serial').val();
    			if(serial!=''){
 			var data = {serial: serial};
@@ -1156,7 +1175,7 @@
 			});
 		}
 		}
-// });
+});
 
           $('.multiselect').multiselect({
               onChange: function() {

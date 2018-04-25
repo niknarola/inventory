@@ -30,7 +30,7 @@ class Testing extends CI_Controller
 
     public function notebook()
     {
-        if ($this->input->post()) {
+		if ($this->input->post()) {
             $product_data = [
                 'name' => $this->input->post('name'),
                 'description' => $this->input->post('description'),
@@ -118,16 +118,16 @@ class Testing extends CI_Controller
                 'additional_accessories' => $this->input->post('additional_accessories'),
                 'accessory_type' => $access_type,
                 'accessory_name' => $access_name,
-                'fail_option' => $this->input->post('fail_option'),
+                'fail_option' => ($this->input->post('fail_option'))? implode(',',$this->input->post('fail_option')) : null,
                 'fail_reason_notes' => ($this->input->post('fail_reason_notes')) ? $this->input->post('fail_reason_notes') : null,
                 'condition' => $this->input->post('final_condition'),
-                'warranty' => $this->input->post('warranty'),
+				'warranty' => $this->input->post('warranty'),
+				'warranty_date' => $this->input->post('warranty_date'),
                 'tech_notes' => $this->input->post('tech_notes'),
                 'cosmetic_issues_text' => $cosmetic_issues_text,
                 'fail_text' => $fail_text,
                 'other_status' => $this->input->post('other_status') ? $this->input->post('other_status') : null,
             ];
-
             if ($this->input->post('scan_loc_check')) {
                 $pallet_location_name = $this->input->post('scan_loc');
                 $pallet_location = $this->basic->check_location_exists($pallet_location_name);
@@ -171,7 +171,8 @@ class Testing extends CI_Controller
             if ($product_serial_data['hard_drive_wiped'] != $serial_data['hard_drive_wiped']) {
                 $timestamp['hard_drive_wiped_date'] = date('Y-m-d H:i:s');
             }
-            $serial_data['tested_by'] = $this->session->userdata('id');
+			$serial_data['tested_by'] = $this->session->userdata('id');
+			$serial_data['tgfg_capable'] = ($this->input->post('tgfg_capable')) ? 1 : 0;
             // pr($this->input->post());
             // pr($serial_data);die;
             $filesCount = count($_FILES['product_files']['name']);
@@ -225,7 +226,7 @@ class Testing extends CI_Controller
             }
 
             if ($this->basic->update('product_serials', $serial_data, ['serial' => $this->input->post('serial')])) {
-
+					// echo $this->db->last_query();die;
                 $this->basic->update_multiple('product_serials', $update_arr, 'id');
                 if (!empty($pallet_location)) {
                     $pallet_location_update_data = ['location_id' => $pallet_location];
@@ -352,7 +353,8 @@ class Testing extends CI_Controller
                 'fail_option' => $this->input->post('fail_option'),
                 'fail_reason_notes' => ($this->input->post('fail_reason_notes')) ? $this->input->post('fail_reason_notes') : null,
                 'condition' => $this->input->post('final_condition'),
-                'warranty' => $this->input->post('warranty'),
+				'warranty' => $this->input->post('warranty'),
+				'warranty_date' => $this->input->post('warranty_date'),
                 'tech_notes' => $this->input->post('tech_notes'),
                 'cosmetic_issues_text' => $cosmetic_issues_text,
                 // 'cosmetic_issue' => $cosmetic_issue,
@@ -576,7 +578,8 @@ class Testing extends CI_Controller
                 'fail_option' => $this->input->post('fail_option'),
                 'fail_reason_notes' => ($this->input->post('fail_reason_notes')) ? $this->input->post('fail_reason_notes') : null,
                 'condition' => $this->input->post('final_condition'),
-                'warranty' => $this->input->post('warranty'),
+				'warranty' => $this->input->post('warranty'),
+				'warranty_date' => $this->input->post('warranty_date'),
                 'tech_notes' => $this->input->post('tech_notes'),
                 'cosmetic_issues_text' => $cosmetic_issues_text,
                 // 'cosmetic_issue' => $cosmetic_issue,
@@ -753,7 +756,8 @@ class Testing extends CI_Controller
                 'fail_option' => $this->input->post('fail_option'),
                 'fail_reason_notes' => ($this->input->post('fail_reason_notes')) ? $this->input->post('fail_reason_notes') : null,
                 'condition' => $this->input->post('final_condition'),
-                'warranty' => $this->input->post('warranty'),
+				'warranty' => $this->input->post('warranty'),
+				'warranty_date' => $this->input->post('warranty_date'),
                 'tech_notes' => $this->input->post('tech_notes'),
                 'cosmetic_issues_text' => $cosmetic_issues_text,
                 // 'cosmetic_issue' => $cosmetic_issue,
@@ -922,7 +926,8 @@ class Testing extends CI_Controller
                 'fail_option' => $this->input->post('fail_option'),
                 'fail_reason_notes' => ($this->input->post('fail_reason_notes')) ? $this->input->post('fail_reason_notes') : null,
                 'condition' => $this->input->post('final_condition'),
-                'warranty' => $this->input->post('warranty'),
+				'warranty' => $this->input->post('warranty'),
+				'warranty_date' => $this->input->post('warranty_date'),
                 'tech_notes' => $this->input->post('tech_notes'),
                 'cosmetic_issues_text' => $cosmetic_issues_text,
                 // 'cosmetic_issue' => $cosmetic_issue,
@@ -1149,7 +1154,8 @@ class Testing extends CI_Controller
                 'fail_option' => $this->input->post('fail_option'),
                 'fail_reason_notes' => ($this->input->post('fail_reason_notes')) ? $this->input->post('fail_reason_notes') : null,
                 'condition' => $this->input->post('final_condition'),
-                'warranty' => $this->input->post('warranty'),
+				'warranty' => $this->input->post('warranty'),
+				'warranty_date' => $this->input->post('warranty_date'),
                 'tech_notes' => $this->input->post('tech_notes'),
                 'cosmetic_issues_text' => $cosmetic_issues_text,
                 // 'cosmetic_issue' => $cosmetic_issue,
@@ -1346,7 +1352,8 @@ class Testing extends CI_Controller
                 'fail_option' => $this->input->post('fail_option'),
                 'fail_reason_notes' => ($this->input->post('fail_reason_notes')) ? $this->input->post('fail_reason_notes') : null,
                 'condition' => $this->input->post('final_condition'),
-                'warranty' => $this->input->post('warranty'),
+				'warranty' => $this->input->post('warranty'),
+				'warranty_date' => $this->input->post('warranty_date'),
                 'tech_notes' => $this->input->post('tech_notes'),
                 'cosmetic_issues_text' => $cosmetic_issues_text,
                 // 'cosmetic_issue' => $cosmetic_issue,
@@ -1548,7 +1555,8 @@ class Testing extends CI_Controller
                 'fail_option' => $this->input->post('fail_option'),
                 'fail_reason_notes' => ($this->input->post('fail_reason_notes')) ? $this->input->post('fail_reason_notes') : null,
                 'condition' => $this->input->post('final_condition'),
-                'warranty' => $this->input->post('warranty'),
+				'warranty' => $this->input->post('warranty'),
+				'warranty_date' => $this->input->post('warranty_date'),
                 'tech_notes' => $this->input->post('tech_notes'),
                 'cosmetic_issues_text' => $cosmetic_issues_text,
                 // 'cosmetic_issue' => $cosmetic_issue,
@@ -1760,7 +1768,8 @@ class Testing extends CI_Controller
                 'fail_option' => $this->input->post('fail_option'),
                 'fail_reason_notes' => ($this->input->post('fail_reason_notes')) ? $this->input->post('fail_reason_notes') : null,
                 'condition' => $this->input->post('final_condition'),
-                'warranty' => $this->input->post('warranty'),
+				'warranty' => $this->input->post('warranty'),
+				'warranty_date' => $this->input->post('warranty_date'),
                 'accessory_type' => $access_type,
                 'accessory_name' => $access_name,
                 'tech_notes' => $this->input->post('tech_notes'),
@@ -1964,7 +1973,8 @@ class Testing extends CI_Controller
                 'fail_option' => $this->input->post('fail_option'),
                 'fail_reason_notes' => ($this->input->post('fail_reason_notes')) ? $this->input->post('fail_reason_notes') : null,
                 'condition' => $this->input->post('final_condition'),
-                'warranty' => $this->input->post('warranty'),
+				'warranty' => $this->input->post('warranty'),
+				'warranty_date' => $this->input->post('warranty_date'),
                 'accessory_type' => $access_type,
                 'accessory_name' => $access_name,
                 'tech_notes' => $this->input->post('tech_notes'),
@@ -2217,18 +2227,24 @@ class Testing extends CI_Controller
             }
             $product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['serial' => $this->input->post('serial')]);
             if ($this->basic->update('product_serials', $serial_data, ['serial' => $this->input->post('serial')])) {
-                if ($pallet_location) {
+                if (isset($pallet_location)) {
                     $pallet_location_update_data = ['location_id' => $pallet_location];
                     $this->basic->update('pallets', $pallet_location_update_data, ['id' => $product_serial_data['pallet_id']]);
 				}
 				$timestamp = [];
-				if ($product_serial_data['pallet_id'] != $pallet_location) {
-					$timestamp = [
-						'location_assigned_date' => date('Y-m-d H:i:s'),
-					];
+				if(isset($pallet_location)){
+					if ($product_serial_data['pallet_id'] != $pallet_location) {
+						$timestamp = [
+							'location_assigned_date' => date('Y-m-d H:i:s'),
+						];
+					}
+					$this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
 				}
-				$this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
-            }
+				$this->session->set_flashdata('err_msg','Details cannot Saved');
+			}
+			else{
+				$this->session->set_flashdata('err_msg','Details cannot Saved');
+			}
         }
         $data['serial'] = $this->input->post('serial');
         $data['product'] = $this->products->product_searching($this->input->post('serial'));
@@ -2248,10 +2264,12 @@ class Testing extends CI_Controller
         $data['title'] = 'Repair';
         if ($this->input->post()) {
             $pallet_name = $this->input->post('scan_loc');
-            $pallet = $this->basic->check_pallet_exists($pallet_name);
-            $serial_data = [
-                'repair_notes' => $this->input->post('rep_notes'),
-            ];
+			$pallet = $this->basic->check_pallet_exists($pallet_name);
+			if($this->input->post('rep_notes')){
+				$serial_data = [
+					'repair_notes' => $this->input->post('rep_notes'),
+				];
+			}
             if ($this->input->post('scan_loc_check')) {
                 $pallet_location_name = $this->input->post('scan_loc');
                 $pallet_location = $this->basic->check_location_exists($pallet_location_name);
@@ -2260,17 +2278,24 @@ class Testing extends CI_Controller
             }
             $product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['serial' => $this->input->post('serial')]);
             if ($this->basic->update('product_serials', $serial_data, ['serial' => $this->input->post('serial')])) {
-                if ($pallet_location) {
+                if (isset($pallet_location)) {
                     $pallet_location_update_data = ['location_id' => $pallet_location];
                     $this->basic->update('pallets', $pallet_location_update_data, ['id' => $product_serial_data['pallet_id']]);
 				}
 				$timestamp = [];
-				if ($product_serial_data['pallet_id'] != $pallet_location) {
-					$timestamp = [
-						'location_assigned_date' => date('Y-m-d H:i:s'),
-					];
+				if(isset($pallet_location)){
+					if ($product_serial_data['pallet_id'] != $pallet_location) {
+						$timestamp = [
+							'location_assigned_date' => date('Y-m-d H:i:s'),
+						];
+					}
+					$this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
 				}
-				$this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
+				else{
+				$this->session->set_flashdata('err_msg','Details cannot Saved');
+			}
+			}else{
+				$this->session->set_flashdata('err_msg','Details cannot Saved');
 			}
 			
         }

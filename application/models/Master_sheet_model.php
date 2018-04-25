@@ -50,8 +50,6 @@ class Master_sheet_model extends CI_Model
         }
         #nik------------
         if(!empty($params['search']['category1']) && !empty($params['search']['category2'])){
-
-			
            $this->db->like('category', $params['search']['category1']);
            $this->db->like('category', $params['search']['category2']);
         }
@@ -69,10 +67,10 @@ class Master_sheet_model extends CI_Model
             $this->db->like('ps.condition',$params['search']['condition']);
         }
         if(!empty($params['search']['ready'])){
-            $this->db->or_like('ps.status','Ready for sale');
+            $this->db->like('ps.status','Ready for Sale');
         }
         if(!empty($params['search']['ready']) && !empty($params['search']['keywords'])) {
-            $this->db->like('ps.status','Ready for sale');
+            $this->db->like('ps.status','Ready for Sale');
             $this->db->group_start()
                      ->like('ps.serial',$params['search']['keywords']) 
                      ->or_like('ps.new_serial',$params['search']['keywords']) 
@@ -113,8 +111,8 @@ class Master_sheet_model extends CI_Model
             $this->db->limit($params['limit']);
         }
         //get records
-        $query = $this->db->get();
-        // echo $this->db->last_query();
+		$query = $this->db->get();
+		// echo $this->db->last_query();
         //return fetched data
         return ($query->num_rows() > 0)?$query->result_array():FALSE;
     }

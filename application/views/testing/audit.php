@@ -14,7 +14,8 @@
 						<div class="col-md-12">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <input type="text" value="" name="serial" class="form-control serial" onchange="get_product_details(this.value);" placeholder="Serial #"> 
+								<!-- onchange="get_product_details(this.value);" -->
+                                    <input type="text" value="" name="serial" class="form-control serial"  placeholder="Serial #"> 
                                 </div>
                             </div>
 							<div class="col-md-2">
@@ -48,11 +49,19 @@
         </div>
 </div>
 <script type="text/javascript">
-	// jQuery(document).ready(function($) {
+	jQuery(document).ready(function($) {
 	// 	// $('input[name="part"]').focus();
-	// });
-	function get_product_details(){
+	$(window).keydown(function(event){
+		    if(event.keyCode == 13) {
+		      event.preventDefault();
+		      return false;
+		    }
+	  	});
+	});
+	// function get_product_details(){
         // var part = $('input.part').val();
+		$(".serial").on('keyup', function (e) {
+			if(e.keyCode == 13){
     	var serial = $('input.serial').val();
 		// if(part!='' || serial!=''){
 		if(serial!=''){
@@ -79,6 +88,7 @@
 			});
 		}
     }
+		});
     function view_notes(serial_id){
         $.ajax({
             url: 'admin/testing/view_notes/' + serial_id,

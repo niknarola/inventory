@@ -198,14 +198,18 @@ class Barcode extends CI_Controller
     }
     public function print_labels_barcode()
     {
+		
         $data['title'] = 'Print Labels';
         $print_labels = [];
         $data['admin_prefix'] = $this->admin_prefix;
 
         if ($this->input->post()) {
             $print_labels = $this->input->post();
-        }
-        $data['print_labels'] = $print_labels;
+        }else{
+			redirect('admin/receiving/print_labels');
+		}
+		$data['print_labels'] = $print_labels;
+		
 
         $this->template->load($this->layout, 'barcode/print_labels', $data);
     }
