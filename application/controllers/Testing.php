@@ -186,8 +186,10 @@ class Testing extends CI_Controller
             for ($i = 0; $i < $filesCount; $i++) {
                 $j = $i + 1;
                 $fn = explode('.', $_FILES['product_files']['name'][$i]);
-                $fn_extension = end($fn);
-                $cnt = $no_of_files + $j;
+				$fn_extension = end($fn);
+				
+				$cnt = $no_of_files + $j;
+				$img_array = array('png', 'jpeg', 'jpg', 'PNG', 'JPEG', 'JPG');
                 $_FILES['userFile']['name'] = $serial . '_' . $cnt . '.' . $fn_extension;
                 // $_FILES['userFile']['name'] = $_FILES['product_files']['name'][$i];
                 $_FILES['userFile']['type'] = $_FILES['product_files']['type'][$i];
@@ -200,7 +202,7 @@ class Testing extends CI_Controller
                     mkdir($uploadPath, 0777, true);
                 }
                 $config['upload_path'] = $uploadPath;
-                $config['allowed_types'] = '*';
+                $config['allowed_types'] = implode("|", $img_array);;
 
                 $this->load->library('upload', $config);
                 $this->upload->initialize($config);
@@ -208,7 +210,12 @@ class Testing extends CI_Controller
                 if ($this->upload->do_upload('userFile')) {
                     $fileData = $this->upload->data();
                     $serial_files[] = $fileData['file_name'];
-                }
+				}
+				// else{
+                //     $flag = 1;
+				// 	pr($this->upload->display_errors());
+				// 	exit;
+                // }
             }
             // pr($serial_data);die;
             $data['serials'] = $this->products->get_serials_by_part($this->input->post('part'));

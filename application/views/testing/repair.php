@@ -29,12 +29,14 @@
 						<div class="col-md-12">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <!-- <label>Serial #:</label> -->
-                                    <input type="text" value="" name="serial" class="form-control serial" onchange="get_product_details();"  placeholder="Serial #">
+									<!-- <label>Serial #:</label> -->
+									<!-- onchange="get_product_details();" -->
+                                    <input type="text" value="" name="serial" class="form-control serial"   placeholder="Serial #">
                                 </div>
                             </div>
 							<div class="col-md-2">
-                                    <button type="button" class="btn btn-primary category_btn" onclick="get_product_details()">Search</button>
+							<!-- onclick="get_product_details()" -->
+                                    <button type="button" class="btn btn-primary category_btn" >Search</button>
                             </div>
 						</div>
 					</div>
@@ -75,15 +77,16 @@
 <script type="text/javascript">
 jQuery(document).ready(function($) {
 	$(window).keydown(function(event){
-		    if(event.keyCode == 13) {
+		    if(event.keyCode == 13 || event.keyCode == 9) {
 		      event.preventDefault();
 		      return false;
 		    }
 	  	});
    });
     // function get_product_details(){
-		$(".serial").on('keyup', function (e) {
-			if(e.keyCode == 13){
+		$('.category_btn').on('click', function(){
+		// $(".serial").on('keyup', function (e) {
+		// 	if(e.keyCode == 13 || e.keyCode == 9){
     	var serial = $('input.serial').val();
 		if(serial!=''){
 			var data = {serial: serial};
@@ -111,7 +114,13 @@ jQuery(document).ready(function($) {
 				console.log("complete");
 			});
 		}
-			}
 		});
+		$(".serial").on('keyup', function (e) {
+				if(e.keyCode == 13 || e.keyCode == 9){
+					$('.category_btn').click()
+				}
+			  });
+		// 	}
+		// });
 	// }
 </script>

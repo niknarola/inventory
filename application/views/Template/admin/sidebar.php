@@ -89,7 +89,7 @@
 							</ul>
 						</li>
 					<!-- <li class="<?php echo (strpos($uri, 'shipping') != false) ? 'active' : '' ?>"><a href="admin/shipping"><i class="icon-user"></i> <span>Shipping</span></a></li> -->
-					<li class="<?php echo (strpos($uri, 'shipping') != false) ? 'active' : '' ?>"><a href="javascript:;"><i class="icon-user"></i> <span>Shipping</span></a></li>
+					<li class="<?php echo ($controller == 'shipping' && $Method == "index") ? 'active' : '' ?>"><a href="admin/shipping"><i class="icon-user"></i> <span>Shipping</span></a></li>
 					<li class="<?php echo (strpos($uri, 'administration') )? 'active' : '' ?>">
 							<a href="#"><i class="icon-stack2"></i> <span>Administration</span></a>
 							<ul>

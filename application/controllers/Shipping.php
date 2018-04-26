@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Picking extends CI_Controller {
+class Shipping extends CI_Controller {
 
     public $layout = '';
 
@@ -30,7 +30,7 @@ class Picking extends CI_Controller {
 
     public function index() {
         $data = array();
-        $data['title'] = 'Picking';
+        $data['title'] = 'Shipping';
         $data['admin_prefix'] = $this->admin_prefix;
         $data['ajax_url'] = ($this->session->userdata('admin_validated')) ? 'admin/inventory/picking/order_list' : 'picking/order_list';
         $orders = array();
@@ -355,7 +355,7 @@ class Picking extends CI_Controller {
 //        exit;
         $data['orders'] = $order;
         //load the view
-        $this->template->load($this->layout, 'picking/index', $data);
+        $this->template->load($this->layout, 'shipping/index', $data);
     }
 
     public function order_list() {

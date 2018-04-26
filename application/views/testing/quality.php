@@ -30,7 +30,7 @@
                         <div class="form-group">
 						   <!-- <label>Serial #:</label> -->
 						   <!-- onchange="get_product_details(this.value);" -->
-                           <input type="text" value="" name="serial" class="form-control serial" onchange="get_product_details(this.value);"  placeholder="Serial #">
+                           <input type="text" value="" name="serial" class="form-control serial"  placeholder="Serial #">
                         </div>
                      </div>
                      <div class="col-md-2">
@@ -778,7 +778,7 @@
 <script type="text/javascript">
    jQuery(document).ready(function($) {
 	$(window).keydown(function(event){
-		    if(event.keyCode == 13) {
+		    if(event.keyCode == 13 || event.keyCode == 9) {
 		      event.preventDefault();
 		      return false;
 		    }
@@ -873,8 +873,9 @@
 		}
 
       	// function get_product_details(){
-			$(".serial").on('keyup', function (e) {
-			if(e.keyCode == 13){
+			  $('.category_btn').on('click', function(){
+			// 	$(".serial").on('keyup', function (e) {
+			// if(e.keyCode == 13 || e.keyCode == 9){
       		var serial = $('input.serial').val();
    			if(serial!=''){
 			var data = {serial: serial};
@@ -1165,17 +1166,23 @@
 				}else{
 					// $('.category3').multiselect();
 				}
-			}
-			})
-			.fail(function() {
-				console.log("error");
-			})
-			.always(function() {
-				console.log("complete");
-			});
-		}
-		}
-});
+						}
+						})
+						.fail(function() {
+							console.log("error");
+						})
+						.always(function() {
+							console.log("complete");
+						});
+					}
+					// }
+			// });
+			  });
+			  $(".serial").on('keyup', function (e) {
+				if(e.keyCode == 13 || e.keyCode == 9){
+					$('.category_btn').click()
+				}
+			  });
 
           $('.multiselect').multiselect({
               onChange: function() {

@@ -1,6 +1,6 @@
 <?php
 
-class Picking_model extends CI_Model {
+class Shipping_model extends CI_Model {
 
     var $table = 'orders';
     var $column_order = array(null, 'site', 'part', 'product_name', 'created'); //set column field database for datatable orderable

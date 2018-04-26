@@ -627,9 +627,18 @@
 <script type="text/javascript" src="assets/js/picker.js"></script>
 <script type="text/javascript" src="assets/js/picker.date.js"></script>
 <script type="text/javascript">
+
+ 
+//  function PresTab(e)
+//  {
+// 	 var keycode = (window.event) ? event.keyCode : e.keyCode;
+// 	 if (keycode == 9)
+// 	 alert('tab key pressed');
+//  }
 	jQuery(document).ready(function($) {
+		// document.onkeyup = PresTab;
 		$(window).keydown(function(event){
-		    if(event.keyCode == 13) {
+		    if(event.keyCode == 13 || event.keyCode == 9) {
 		      event.preventDefault();
 		      return false;
 		    }
@@ -775,10 +784,13 @@
 	})
     // function get_product_details(){
 		$(".serial").on('keyup', function (e) {
+			// console.log(e.keyCode);
+			// console.log(e.which);
 		// 	console.log("enter");
 			if(e.keyCode == 13 || e.keyCode == 9){
+				// console.log('hello'+e.keyCode);
 				// e.preventDefault();
-				// console.log("here");
+				
   		// var part = $('input.part').val();
     	var serial = $('input.serial').val();
     	// var new_serial = $('input.new_serial').val();
@@ -978,6 +990,7 @@
 				$('select.original_condition').val(response.product.original_condition_id);
 				$('select.status').val(response.product.status).trigger('change');
 				// $('select.fail_option').val(response.product.fail_option).trigger('change');
+				console.log(response.product.fail_option);
 				$('select.fail_option').val(response.product.fail_option);
 				$('select.warranty').val(response.product.warranty).trigger('change');
 				var cs_issue = JSON.parse(response.product.cosmetic_issue);

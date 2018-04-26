@@ -594,7 +594,7 @@
 <script type="text/javascript">
 	jQuery(document).ready(function($) {
 		$(window).keydown(function(event){
-		    if(event.keyCode == 13) {
+		    if(event.keyCode == 13 || event.keyCode == 9) {
 		      event.preventDefault();
 		      return false;
 		    }
@@ -708,7 +708,7 @@
 	})
     // function get_product_details(){
 		$(".serial").on('keyup', function (e) {
-			if(e.keyCode == 13){
+			if(e.keyCode == 13 || e.keyCode == 9){
   		//var part = $('input.part').val();
     	var serial = $('input.serial').val();
     	// var new_serial = $('input.new_serial').val();

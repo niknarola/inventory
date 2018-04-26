@@ -27,33 +27,35 @@
     <?php } ?>
     <div class="panel panel-flat">
         <div class="panel-heading">
-            <h5 class="panel-title">Picking</h5>
+            <h5 class="panel-title">Shipping</h5>
         </div>
         <div class="table-responsive">
             <form action="" method="post">
                 <div class="col-md-12">
                     <div class="picking-actions">
                         <a href="javascript:void(0);" class="btn bg-teal-400" id="sync">Sync</a>
-                        <a data-store="ebay" href="javascript:void(0);" class="store btn bg-teal-400">eBay</a>
+                        <!-- <a data-store="ebay" href="javascript:void(0);" class="store btn bg-teal-400">eBay</a>
                         <a data-store="amazon" href="javascript:void(0);" class="store btn bg-teal-400">Amazon</a>
                         <a data-store="excessbuy" href="javascript:void(0);" class="store btn bg-teal-400">Website</a>
                         <a data-store="b2b" href="javascript:void(0);" class="store btn bg-teal-400">B2B</a>
-                        <a href="javascript:void(0);" class="btn bg-teal-400 delete-order">Delete Selected orders</a>
+                        <a href="javascript:void(0);" class="btn bg-teal-400 delete-order">Delete Selected orders</a> -->
                     </div>
                     <table class="table datatable-basic" id="orders_tbl">
                         <thead>
                             <tr>
                                 <th><input type="checkbox" name="check_all" class="check_all" id="check_all" value=""></th>
                                 <th>#</th>
-                                <th>Site</th>
+                                <th>Order Date</th>
                                 <th>Order #</th>
+                                <th>Site</th>
                                 <th>Part #</th>
                                 <th>Additional Info</th>
-                                <th>Quantity Ordered</th>
-                                <th>Name</th>
-                                <th>Serial Number</th>
-                                <th>Progress</th>
+                                <th>Serial #</th>
                                 <th>Status</th>
+                                <th>Actions</th>
+                                <th>On Time</th>
+                                <th>Order Notes</th>
+                                <th>Pick Notes</th>
                                 <th style="display: none;">hide</th>
                             </tr>
                         </thead>
@@ -99,71 +101,79 @@
                                         } else {
                                             $class = "success";
                                         }
-                                        ?>
+										?>
+										
                                         <tr class="<?php echo $class; ?>" id='order_<?php echo $item['orderItemId']; ?>'>
                                     <input class="order_item_id" type="hidden" name="order_item_id" value="<?php echo $item['orderItemId']; ?>">
-                                    <input class="order_id" type="hidden" name="order_id" value="<?php echo $order['order_id']; ?>">
+									<input class="order_id" type="hidden" name="order_id" value="<?php echo $order['order_id']; ?>">
+									
                                     <?php if ($itemcnt == 1) { ?>
                                         <td><input type="checkbox" name="check[]" class="check_order" value="<?php echo $order['order_id']; ?>"></td>
                                     <?php } else { ?>
                                         <td>&nbsp;</td>
                                     <?php } ?>
                                     <?php if ($itemcnt == 1) { ?>
-                                        <td><?php echo $i; ?></td>
-                                        <td class="store"><?php echo $order['store']; ?></td>
+										<td><?php echo $i; ?></td>
+										<td class="order_date">order_date<?php //echo $order['store']; ?></td>
                                         <td class="order_number"><?php echo $order['order_number']; ?></td>
+                                        <td class="store"><?php echo $order['store']; ?></td>
                                     <?php } else { ?>
-                                        <td>&nbsp;</td>
-                                        <td class="noselect store" style="color: #6772e500;"><?php echo $order['store']; ?></td>
+										<td>&nbsp;</td>
+										<td>&nbsp;</td>
                                         <td class="noselect order_number" style="color: #6772e500;"><?php echo $order['order_number']; ?></td>
+                                        <td class="noselect store" style="color: #6772e500;"><?php echo $order['store']; ?></td>
                                     <?php } ?>
                                     <td><a class="part" data-part="<?php echo $part; ?>" href="<?php echo base_url() . 'admin/inventory/picking/part/' . $part; ?>"><?php echo $part; ?></a></td>
                                     <td class="additional_part_info"><?php echo $additional_part_info; ?></td>
-                                    <td class="qty <?php echo ($qty > 1 ? 'highlight' : ''); ?>"><?php echo $qty; ?></td>
-                                    <td class="product_name"><?php echo $item['name']; ?></td>
-                                    <td><a href="javascript:void(0);" class="order-scan-link <?php echo $scan; ?>" data-part="<?php echo $part; ?>" data-order="<?php echo $item['orderItemId']; ?>">Scan</a></td>
+                                    <td class="serial <?php //echo ($qty > 1 ? 'highlight' : ''); ?>"><?php //echo $qty; ?></td>
+									<td class="status"><?php //echo $item['name']; ?></td>
+									<!-- <a href="javascript:void(0);" class="order-scan-link <?php //echo $scan; ?>" data-part="<?php //echo $part; ?>" data-order="<?php echo $item['orderItemId']; ?>">Scan</a> -->
+                                    <td>Actions</td>
                                     <td>
                                         <?php
-                                        $order_item_qty = $qty;
-                                        $qty_count = 1;
-                                        if (isset($order_item_details)) {
-                                            $k = 1;
-                                            foreach ($order_item_details as $order_item) {
-                                                if ($order_item['no_need_to_scan'] == 1) {
-                                                    $status = "No need to scan";
-                                                } elseif ($order_item['order_item_status'] == 0) {
-                                                    $status = "Awaiting Scan";
-                                                } elseif ($order_item['order_item_status'] == 1) {
-                                                    $status = "Accepted";
-                                                }
+                                        // $order_item_qty = $qty;
+                                        // $qty_count = 1;
+                                        // if (isset($order_item_details)) {
+                                        //     $k = 1;
+                                        //     foreach ($order_item_details as $order_item) {
+                                        //         if ($order_item['no_need_to_scan'] == 1) {
+                                        //             $status = "No need to scan";
+                                        //         } elseif ($order_item['order_item_status'] == 0) {
+                                        //             $status = "Awaiting Scan";
+                                        //         } elseif ($order_item['order_item_status'] == 1) {
+                                        //             $status = "Accepted";
+                                        //         }
                                                 ?>
-                                                <span><?php echo $k . '/' . $qty . ' '; ?></span><span class="item-accepted"><?php echo $order_item['serial'] . ' - ' . $status; ?></span><br>
+                                                <!-- <span><?php //echo $k . '/' . $qty . ' '; ?></span><span class="item-accepted"><?php //echo $order_item['serial'] . ' - ' . $status; ?></span><br> -->
                                                 <?php
-                                                $k++;
-                                                $qty_count++;
-                                                $order_item_qty--;
-                                            }
-                                        }
-                                        if ($order_item_qty > 0) {
+                                        //         $k++;
+                                        //         $qty_count++;
+                                        //         $order_item_qty--;
+                                        //     }
+                                        // }
+                                        // if ($order_item_qty > 0) {
                                             ?>
-                                            <?php for ($j = $qty_count; $j <= $qty; $j++) { ?>
-                                                <span><?php echo $j . '/' . $qty . ' - '; ?></span><span>Awaiting Scan</span><label class=".label-danger label-striped"><a href="javascript:void(0);" class="no-need-to-scan" data-order="<?php echo $item['orderItemId']; ?>">No need to scan</a></label><br>
-                                            <?php }
+                                            <?php //for ($j = $qty_count; $j <= $qty; $j++) { ?>
+                                                <!-- <span><?php //echo $j . '/' . $qty . ' - '; ?></span><span>Awaiting Scan</span><label class=".label-danger label-striped"><a href="javascript:void(0);" class="no-need-to-scan" data-order="<?php //echo $item['orderItemId']; ?>">No need to scan</a></label><br> -->
+                                            <?php //}
                                             ?>
-                                        <?php } ?>
+                                        <?php //} ?>
                                     </td>
-                                    <?php if ($itemcnt == 1) { ?>
+                                    <?php //if ($itemcnt == 1) { ?>
                                         <?php
-                                        if ($cnt_order_item_quantity == count($order_items)) {
-                                            $complete = '';
-                                        } else {
-                                            $complete = 'disabled';
-                                        }
-                                        ?>
-                                        <td><a href="javascript:void(0);" data-action="<?php echo base_url() . 'admin/inventory/picking/complete-order/' . base64_encode($order['order_number']); ?>" data-order="<?php echo $item['orderItemId']; ?>" class="order-complete-link <?php echo $complete; ?>">Complete</a></td>
-                                    <?php } else { ?>
-                                        <td>&nbsp;</td>
-                                    <?php } ?>
+                                        // if ($cnt_order_item_quantity == count($order_items)) {
+                                        //     $complete = '';
+                                        // } else {
+                                        //     $complete = 'disabled';
+                                        // }
+										?>
+										<!-- <a href="javascript:void(0);" data-action="<?php echo base_url() . 'admin/inventory/picking/complete-order/' . base64_encode($order['order_number']); ?>" data-order="<?php echo $item['orderItemId']; ?>" class="order-complete-link <?php echo $complete; ?>">Complete</a> -->
+                                        <td><a href="javascript:;" data-id="<?//= $post['id'];?>" class="btn-xs btn-default order_notes" onClick="view_notes(<?//= $post['id'];?>)"><i class="icon-comment"></i></a></td>
+                                        <!-- <td>Pick notes</td> -->
+                                    <?php //} else { ?>
+                                        <td><a href="javascript:;" data-id="<?//= $post['id'];?>" class="btn-xs btn-default pick_notes" onClick="view_notes(<?//= $post['id'];?>)"><i class="icon-comment"></i></a></td>
+                                        <!-- <td>&nbsp;</td> -->
+                                    <?php //} ?>
                                     <td style="display: none;"></td>
                                     </tr>
                                     <?php
@@ -183,7 +193,50 @@
                 </div>
             </form>
         </div>
+	</div>
+	<!-- Order Notes -->
+	<div id="orderModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Order Notes</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="order_details_container">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+	</div>
+	<!-- Order Notes -->
+
+	<!-- Pick Notes -->
+    <div id="pickModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Pick Notes</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="pick_details_container">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
+	<!-- Pick Notes -->
     <!-- scan form modal -->
     <div id="modal_form_scan" class="modal fade">
         <div class="modal-dialog">

@@ -15,11 +15,12 @@
                             <div class="col-md-6">
                                 <div class="form-group">
 								<!-- onchange="get_product_details(this.value);" -->
+								<!-- onclick="get_product_details()" -->
                                     <input type="text" value="" name="serial" class="form-control serial"  placeholder="Serial #"> 
                                 </div>
                             </div>
 							<div class="col-md-2">
-                                    <button type="button" class="btn btn-primary category_btn" onclick="get_product_details()">Search</button>
+                                    <button type="button" class="btn btn-primary category_btn" >Search</button>
                             </div>
 						</div>
 					</div>
@@ -52,7 +53,7 @@
 	jQuery(document).ready(function($) {
 	// 	// $('input[name="part"]').focus();
 	$(window).keydown(function(event){
-		    if(event.keyCode == 13) {
+		    if(event.keyCode == 13 || event.keyCode == 9) {
 		      event.preventDefault();
 		      return false;
 		    }
@@ -60,8 +61,9 @@
 	});
 	// function get_product_details(){
         // var part = $('input.part').val();
-		$(".serial").on('keyup', function (e) {
-			if(e.keyCode == 13){
+		// $(".serial").on('keyup', function (e) {
+		// 	if(e.keyCode == 13 || e.keyCode == 9){
+			$('.category_btn').on('click', function(){
     	var serial = $('input.serial').val();
 		// if(part!='' || serial!=''){
 		if(serial!=''){
@@ -87,8 +89,15 @@
 				console.log("complete");
 			});
 		}
-    }
-		});
+			});
+    // }
+	// 	});
+
+		$(".serial").on('keyup', function (e) {
+				if(e.keyCode == 13 || e.keyCode == 9){
+					$('.category_btn').click()
+				}
+			  });
     function view_notes(serial_id){
         $.ajax({
             url: 'admin/testing/view_notes/' + serial_id,

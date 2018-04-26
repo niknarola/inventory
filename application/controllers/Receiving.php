@@ -847,7 +847,7 @@ class Receiving extends CI_Controller {
 	}
 	
 	public function clear_session_data(){
-		$this->session->unset_userdata('pallets_search', false);
+		$this->session->unset_userdata('pallets_search');
 		$this->session->unset_userdata('pallets_next');
 		$url = ($this->session->userdata('admin_validated')) ? 'admin/' : '';
         redirect($url . 'receiving/dock_receive');

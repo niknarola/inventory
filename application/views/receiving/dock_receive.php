@@ -141,6 +141,7 @@
 			<div class="form-group">
 				<label>Item Count:</label>
 				<input type="number" name="item_count[]" value="" class="item_count form-control" >
+				<span id="item_count_error" class="not_found_error" style="color:red"></span>
 			</div>
 		</div>
 		<div class="col-md-4">
@@ -201,7 +202,22 @@
 			if($(".weight").val().length !== 0) {
 				$('#weight_error').text('');
 			}
+			if($.isNumeric( $('.weight').val())){
+				$('#weight_error').text('');
+			}
+			else{
+				$('#weight_error').html('Please Enter valid number');
+			}
 		}); 
+		
+		$(document).on('keyup','.item_count', function() {
+			if($.isNumeric( $('.item_count').val())){
+				$('#item_count_error').text('');
+			}
+			else{
+				$('#item_count_error').html('Please Enter valid number');
+			}
+		});
 
 		$(document).on('click','.next', function() {
 			if($(".weight").val().length === 0) {
