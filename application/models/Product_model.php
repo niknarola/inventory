@@ -380,18 +380,23 @@ class Product_model extends CI_Model
     {
 		$this->db->select('ps.*, p.id as pid, p.part as part,p.tested as ptested, 
 						p.name as product_name, p.description as product_desc, p.release_date as release_date, 
-						p.category as category, pl.name as product_line,p.original_condition_id, 
-						oc.name as original_condition, p.status as product_status, p.added_as_temp, 
+						p.category as category, pl.name as product_line,
+						p.original_condition_id, 
+						oc.id as ocid,oc.name as original_condition, 
+						poc.id as pocid,poc.name as product_original_condition,
+						p.status as product_status, p.added_as_temp, 
 						ci.id as cosmetic_issue_id, ci.name as cosmetic_issue_name,
 						fo.id as fail_option_id, fo.name as fail_option_name, 
 						loc.id as locid,loc.name as location_name, 
-                        pal.id as plid, pal.pallet_id as pallet_name, pal.location_id as pal_location_id, locpallet.name as location_pallet');
+						pal.id as plid, pal.pallet_id as pallet_name, pal.location_id as pal_location_id, 
+						locpallet.name as location_pallet');
         $this->db->from('products p');
         $this->db->join('product_serials ps', 'ps.product_id = p.id', 'left');
         $this->db->join('cosmetic_issues ci', 'ci.id = ps.cosmetic_issue', 'left');
         $this->db->join('fail_options fo', 'fo.id = ps.fail_option', 'left');
         $this->db->join('product_line pl', 'pl.id = p.product_line_id', 'left');
         $this->db->join('original_condition oc', 'oc.id = ps.condition', 'left');
+        $this->db->join('original_condition poc', 'poc.id = p.original_condition_id', 'left');
         $this->db->join('locations loc', 'loc.id = ps.location_id', 'left');
         $this->db->join('pallets pal', 'pal.id = ps.pallet_id', 'left');
         $this->db->join('locations locpallet', 'locpallet.id = pal.location_id', 'left');

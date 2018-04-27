@@ -205,7 +205,7 @@
                                  <div class="col-md-4">
                                  	<div class="form-group">
 									<label>Failure Explanation:</label>
-                                                                        <textarea name="fail_text" class="form-control" rows="5" cols="8"></textarea>
+                                        <textarea name="fail_text" class="form-control fail_text" rows="5" cols="8"></textarea>
 									<!--<input type="text" name="fail_1" value="" class="form-control fail_1">-->
 								</div>
                                  </div>
@@ -490,7 +490,7 @@
                         <span class="input-group-addon">
                             <input type="checkbox" value="1" name="ssd" class="ssd checkbx">
                         </span>
-                        <label class="check_label">SSD</label>
+                        <label class="check_label ssd-lbl">SSD</label>
                         <!-- <input type="text" class="form-control" value="SSD" readonly="true" /> -->
                     </div>
                 </div>
@@ -783,13 +783,9 @@
     		});
 	})
     // function get_product_details(){
+		
 		$(".serial").on('keyup', function (e) {
-			// console.log(e.keyCode);
-			// console.log(e.which);
-		// 	console.log("enter");
 			if(e.keyCode == 13 || e.keyCode == 9){
-				// console.log('hello'+e.keyCode);
-				// e.preventDefault();
 				
   		// var part = $('input.part').val();
     	var serial = $('input.serial').val();
@@ -827,14 +823,17 @@
                         });
 					} else {
 						// need to add html
+						$('.checkbx').attr('checked',false);
+						$('.accessories-div').hide();
+						$(".title-div-text").html('');
 						var html="";
 						var array_type = '';
+						var str = "";
 						if(response.product.accessory_name){
 							var temp_name = JSON.parse(response.product.accessory_name);
 							var temp_type = JSON.parse(response.product.accessory_type);
 							html= html + '';
 							if(temp_name!=null){
-								var str = "";
 								for(var i=0;i<temp_name.length;i++){
 									$('.accessories-div').show();
 									str = str +  '<div class="input-group"><span class="input-group-addon"><input type="hidden" value="" name="access_type[]"><input type="checkbox" value="'+temp_name[i]+'" name="access_name[]" checked="true" class=" '+temp_name[i]+' checkbx"></span><label class="check_label">'+temp_name[i]+'</label></div>';
@@ -852,6 +851,8 @@
                     //         $('#newModal').modal('show');
                     //     });
                     // }
+					// $("input").val("");
+				
     			$('input.scan_loc').val(response.product.pallet_name);
 				$('input.scan_loc_id').val(response.product.pallet_id);
 				$('input.product_id').val(response.product.pid);
@@ -872,6 +873,8 @@
 				$('input.fail_reason_notes').val(response.product.fail_reason_notes);
 				$('input.warranty_date').val(response.product.warranty_date);
 				//---------------
+				// $("textarea").val("");
+				
 				$('textarea.description').html(response.product.product_desc);
 				$('textarea.additional_info').html(response.product.additional_info);
 				$('textarea.additional_features').html(response.product.additional_features);
@@ -930,17 +933,28 @@
 				if(response.product.hard_drive_wiped==1){
 					$('.hard_drive_wiped').prop('checked', true);
 				}
+				$("input.cpu").val("");
                 var cpu_array = JSON.parse(response.product.cpu);
                 if(cpu_array!=null){
                     for(var i=0;i<cpu_array.length;i++){
                         if(i!=0){
                             $('.add_more_cpu').click();
-                            // console.log(cpu_array[i]);
-                            $('input.cpu:eq('+i+')').val(cpu_array[i]);
                         }
                         $('input.cpu:eq('+i+')').val(cpu_array[i]);
                     }
-                }
+
+					if(cpu_array.length > 1 && $('input.cpu').length != cpu_array.length){
+						for(var i = cpu_array.length; i < $('input.cpu').length;++i){
+							$('input.cpu:eq('+i+')').remove();
+						}
+					}
+                } else {
+					for(var i = 1; i < $('input.cpu').length;++i){
+						$('input.cpu:eq('+i+')').remove();
+					}
+				}
+
+				$("input.storage").val("");
                 var storage_array = JSON.parse(response.product.storage);
                 if(storage_array!=null){
                     for(var i=0;i<storage_array.length;i++){
@@ -950,19 +964,39 @@
                         }
                         $('input.storage:eq('+i+')').val(storage_array[i]);
                     }
-                }
 
+					if(storage_array.length > 1 && $('input.storage').length != storage_array.length){
+						for(var i = storage_array.length; i < $('input.storage').length;++i){
+							$('input.storage:eq('+i+')').remove();
+						}
+					}
+                } else {
+					for(var i = 1; i < $('input.storage').length;++i){
+						$('input.storage:eq('+i+')').remove();
+					}
+				}
+				$("input.ssd").attr('checked', false);
                 var ssd_array = JSON.parse(response.product.ssd);
                 if(ssd_array!=null){
                     for(var i=0;i<ssd_array.length;i++){
-                        $('[name="ssd'+i+'"]').prop('checked', false);
-                        // console.log(typeof ssd_array[i],ssd_array[i]);
+	                        $('[name="ssd'+i+'"]').prop('checked', false);
                         if(ssd_array[i]==1){
                             $('[name="ssd'+i+'"]').prop('checked', true);
+							$('[name="ssd'+i+'"]').prop('checked', true);
                         }
-                    }                    
+                    }
+					if(ssd_array.length > 1 && $('input.ssd').length != ssd_array.length){
+						for(var i = ssd_array.length; i < $('input.ssd').length;++i){
+							$('[name="ssd'+i+'"]').remove();
+						}
+					}                    
                     
-                }
+                }else {
+					for(var i = 1; i < $('input.ssd').length;++i){
+						$('[name="ssd'+i+'"]').remove();
+					}
+				}
+				$("input.graphics").val("");
                 var graphics_array = JSON.parse(response.product.graphics);
                 if(graphics_array!=null){
                     for(var i=0;i<graphics_array.length;i++){
@@ -973,7 +1007,7 @@
                         $('input.graphics:eq('+i+')').val(graphics_array[i]);
                     }
                 }
-
+				$("input.dedicated").attr('checked', false);
                 var dedicated_array = JSON.parse(response.product.dedicated);
                 if(dedicated_array!=null){
                     for(var i=0;i<dedicated_array.length;i++){
@@ -987,11 +1021,23 @@
 				
 				
 				//----------------
-				$('select.original_condition').val(response.product.original_condition_id);
+				// $("select").val("");
+				$('select.original_condition').val(response.product.pocid);
+				$('select.final_condition').val(response.product.ocid);
 				$('select.status').val(response.product.status).trigger('change');
-				// $('select.fail_option').val(response.product.fail_option).trigger('change');
 				console.log(response.product.fail_option);
-				$('select.fail_option').val(response.product.fail_option);
+				//Make an array
+
+				var dataarray=response.product.fail_option.split(",");
+
+				$('select.fail_option').val(dataarray);
+				i = 0, size = dataarray.length,
+    $options =$('select.fail_option option');
+
+for(i; i < size; i++){
+    $options.filter('[value="'+dataarray[i]+'"]').prop('checked', true);
+}
+				$('select.fail_option').multiselect("refresh");
 				$('select.warranty').val(response.product.warranty).trigger('change');
 				var cs_issue = JSON.parse(response.product.cosmetic_issue);
 				$('.cosmetic_boxes').each(function(index, el) {
@@ -1159,8 +1205,8 @@
 	    	}
 			//Other
 			else if(new_json.name == 'Other'){
+	    		new_json.value1 = $(this).find('.other_access_type').val();
 	    		new_json.value2 = $(this).find('.access-name-input').val();
-				new_json.value1 = $(this).find('.other_access_type').val();
 			}
 			//Other type
 			else if(new_json.name != 'AC Adapter'){

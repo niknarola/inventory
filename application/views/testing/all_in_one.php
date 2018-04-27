@@ -210,7 +210,7 @@
                                  <div class="col-md-4">
                                  	<div class="form-group">
 									<label>Failure Explanation:</label>
-                                                                        <textarea name="fail_text" class="form-control" rows="5" cols="8"></textarea>
+                                       <textarea name="fail_text" class="form-control fail_text" rows="5" cols="8"></textarea>
 									<!--<input type="text" name="fail_1" value="" class="form-control fail_1">-->
 								</div>
                                  </div>
@@ -773,6 +773,9 @@
                         });
 					}else {
 						// need to add html
+						$('.checkbx').attr('checked',false);
+						$('.accessories-div').hide();
+						$(".title-div-text").html('');
 						var html="";
 						var array_type = '';
 						if(response.product.accessory_name){
@@ -867,6 +870,7 @@
 				if(response.product.factory_reset==1){
 					$('.factory_reset').prop('checked', true);
 				}
+				$("input.cpu").val("");
 				var cpu_array = JSON.parse(response.product.cpu);
                 if(cpu_array!=null){
                 for(var i=0;i<cpu_array.length;i++){
@@ -878,6 +882,7 @@
                    $('input.cpu:eq('+i+')').val(cpu_array[i]);
                 }
                 }
+				$("input.storage").val("");
                 var storage_array = JSON.parse(response.product.storage);
                 if(storage_array!=null){
                 for(var i=0;i<storage_array.length;i++){
@@ -888,18 +893,18 @@
                     $('input.storage:eq('+i+')').val(storage_array[i]);
                 }
                 }
-
+				$("input.ssd").attr('checked', false);
                 var ssd_array = JSON.parse(response.product.ssd);
                 if(ssd_array!=null){
                     for(var i=0;i<ssd_array.length;i++){
                         $('[name="ssd'+i+'"]').prop('checked', false);
-                        console.log(typeof ssd_array[i],ssd_array[i]);
                         if(ssd_array[i]==1){
                             $('[name="ssd'+i+'"]').prop('checked', true);
                         }
                     }                    
                     
                 }
+				$("input.graphics").val("");
                 var graphics_array = JSON.parse(response.product.graphics);
                 if(graphics_array!=null){
                 for(var i=0;i<graphics_array.length;i++){
@@ -910,7 +915,7 @@
                     $('input.graphics:eq('+i+')').val(graphics_array[i]);
                 }
                 }
-
+				$("input.dedicated").attr('checked', false);
                 var dedicated_array = JSON.parse(response.product.dedicated);
                 if(dedicated_array!=null){
                     for(var i=0;i<dedicated_array.length;i++){
@@ -927,7 +932,8 @@
 					$('.mouse_keyboard').prop('checked', true);
 				}
 				//----------------
-				$('select.original_condition').val(response.product.original_condition_id);
+				$('select.original_condition').val(response.product.pocid);
+				$('select.final_condition').val(response.product.ocid);
 				$('select.status').val(response.product.status).trigger('change');
 				$('select.fail_option').val(response.product.fail_option).trigger('change');
 				$('select.warranty').val(response.product.warranty).trigger('change');
@@ -1071,7 +1077,7 @@
         }
     });
 
-$(document).on('change', '.status', function(event) {
+		$(document).on('change', '.status', function(event) {
 	     	if($(this).val() == 'Other'){
 	     		$('.other_status').css('display', 'block');
 	    	}else{
@@ -1129,8 +1135,8 @@ $(document).on('change', '.status', function(event) {
 	    	}
 			//Other
 			else if(new_json.name == 'Other'){
-	    		new_json.value1 = $(this).find('.access-name-input').val();
-				new_json.value2 = $(this).find('.other_access_type').val();
+				new_json.value1 = $(this).find('.other_access_type').val();
+	    		new_json.value2 = $(this).find('.access-name-input').val();
 			}
 			//Other type
 			else if(new_json.name != 'AC Adapter'){

@@ -34,6 +34,7 @@ class Testing extends CI_Controller
             $product_data = [
                 'name' => $this->input->post('name'),
                 'description' => $this->input->post('description'),
+                'original_condition_id' => $this->input->post('condition'),
             ];
             $category = [];
             if ($this->input->post('category1')) {
@@ -273,7 +274,8 @@ class Testing extends CI_Controller
         if ($this->input->post()) {
             $product_data = [
                 'name' => $this->input->post('name'),
-                'description' => $this->input->post('description'),
+				'description' => $this->input->post('description'),
+				'original_condition_id' => $this->input->post('condition'),
             ];
             $category = [];
             if ($this->input->post('category1')) {
@@ -500,7 +502,8 @@ class Testing extends CI_Controller
         if ($this->input->post()) {
             $product_data = [
                 'name' => $this->input->post('name'),
-                'description' => $this->input->post('description'),
+				'description' => $this->input->post('description'),
+				'original_condition_id' => $this->input->post('condition'),
             ];
             $category = [];
             if ($this->input->post('category1')) {
@@ -853,7 +856,8 @@ class Testing extends CI_Controller
         if ($this->input->post()) {
             $product_data = [
                 'name' => $this->input->post('name'),
-                'description' => $this->input->post('description'),
+				'description' => $this->input->post('description'),
+				'original_condition_id' => $this->input->post('condition'),
             ];
             $category = [];
             if ($this->input->post('category1')) {
@@ -1076,7 +1080,8 @@ class Testing extends CI_Controller
 
             $product_data = [
                 'name' => $this->input->post('name'),
-                'description' => $this->input->post('description'),
+				'description' => $this->input->post('description'),
+				'original_condition_id' => $this->input->post('condition'),
             ];
             $category = [];
             if ($this->input->post('category1')) {
@@ -1299,7 +1304,8 @@ class Testing extends CI_Controller
             // pr($this->input->post());die;
             $product_data = [
                 'name' => $this->input->post('name'),
-                'description' => $this->input->post('description'),
+				'description' => $this->input->post('description'),
+				'original_condition_id' => $this->input->post('condition'),
             ];
             $category = [];
             if ($this->input->post('category1')) {
@@ -1489,7 +1495,8 @@ class Testing extends CI_Controller
         if ($this->input->post()) {
             $product_data = [
                 'name' => $this->input->post('name'),
-                'description' => $this->input->post('description'),
+				'description' => $this->input->post('description'),
+				'original_condition_id' => $this->input->post('condition'),
             ];
             $category = [];
             if ($this->input->post('category1')) {
@@ -1695,7 +1702,8 @@ class Testing extends CI_Controller
             $ink_level = array_filter($this->input->post('ink_level'));
             $product_data = [
                 'name' => $this->input->post('name'),
-                'description' => $this->input->post('description'),
+				'description' => $this->input->post('description'),
+				'original_condition_id' => $this->input->post('condition'),
             ];
             $category = [];
             if ($this->input->post('category1')) {
@@ -1911,7 +1919,8 @@ class Testing extends CI_Controller
         if ($this->input->post()) {
             $product_data = [
                 'name' => $this->input->post('name'),
-                'description' => $this->input->post('description'),
+				'description' => $this->input->post('description'),
+				'original_condition_id' => $this->input->post('condition'),
             ];
             $category = [];
             if ($this->input->post('category1')) {

@@ -1,10 +1,10 @@
 <div class="col-md-12">
-					<?php if ($this->session->flashdata('msg')) { ?>
+					<?php if ($this->session->flashdata('msg')) {?>
 						<div class="alert alert-success hide-msg">
 							<button type="button" class="close" data-dismiss="alert"><span>&times;</span><span class="sr-only">Close</span></button>
 							<strong><?php echo $this->session->flashdata('msg') ?></strong>
 						</div>
-					<?php }  if ($this->session->flashdata('err_msg')) { ?>
+					<?php }if ($this->session->flashdata('err_msg')) {?>
 						<div class="alert alert-danger hide-msg">
 							<button type="button" class="close" data-dismiss="alert"><span>&times;</span><span class="sr-only">Close</span></button>
 							<strong><?php echo $this->session->flashdata('err_msg') ?></strong>
@@ -185,21 +185,21 @@
 							<?php //pr($product);die;?>
 								<label>Storage:</label>
 							<?php
-								$new_sto_ssd = '';
-								if (isset($product['storage']) && !empty($product['storage'])) {
-									foreach (json_decode($product['storage']) as $key => $value) {
-										$ssd = json_decode($product['ssd']);
-										if ($ssd[$key] == 0) {
-											$new_sto_ssd = $new_sto_ssd . $value . ', ';
-										} else {
-											$new_sto_ssd = $new_sto_ssd . $value . '(ssd), ';
-										}
-									}
-									$length = strlen($new_sto_ssd) - 1;
-									$new_sto_ssd = substr($new_sto_ssd, 0, $length);
-									// pr($new_sto_ssd);die;
-								}
-								?>
+$new_sto_ssd = '';
+if (isset($product['storage']) && !empty($product['storage'])) {
+    foreach (json_decode($product['storage']) as $key => $value) {
+        $ssd = json_decode($product['ssd']);
+        if ($ssd[$key] == 0) {
+            $new_sto_ssd = $new_sto_ssd . $value . ', ';
+        } else {
+            $new_sto_ssd = $new_sto_ssd . $value . '(ssd), ';
+        }
+    }
+    $length = strlen($new_sto_ssd) - 1;
+    $new_sto_ssd = substr($new_sto_ssd, 0, $length);
+    // pr($new_sto_ssd);die;
+}
+?>
 							<textarea disabled="true" name="storage" class="form-control storage"><?=$new_sto_ssd?></textarea>
 							</div>
 						</div>
@@ -207,22 +207,22 @@
 							<div class="form-group">
 							<label>Graphics:</label>
 							<?php
-								$new_gra_ded = '';
-								if (isset($product['graphics']) && !empty($product['graphics'])) {
-									foreach (json_decode($product['graphics']) as $key => $value) {
-										$dedicated = json_decode($product['dedicated']);
-										if ($dedicated[$key] == 0) {
-											$new_gra_ded = $new_gra_ded . $value . ', ';
-										} else {
-											$new_gra_ded = $new_gra_ded . $value . '(dedicated), ';
-										}
-									}
-									$length = strlen($new_gra_ded) - 1;
-									$new_gra_ded = substr($new_gra_ded, 0, $length);
-									// pr($new_gra_ded);die;
-								}
+$new_gra_ded = '';
+if (isset($product['graphics']) && !empty($product['graphics'])) {
+    foreach (json_decode($product['graphics']) as $key => $value) {
+        $dedicated = json_decode($product['dedicated']);
+        if ($dedicated[$key] == 0) {
+            $new_gra_ded = $new_gra_ded . $value . ', ';
+        } else {
+            $new_gra_ded = $new_gra_ded . $value . '(dedicated), ';
+        }
+    }
+    $length = strlen($new_gra_ded) - 1;
+    $new_gra_ded = substr($new_gra_ded, 0, $length);
+    // pr($new_gra_ded);die;
+}
 
-								?>
+?>
 							<textarea disabled="true" name="graphics" class="form-control graphics"> <?=$new_gra_ded?></textarea>
 							</div>
 						</div>
@@ -248,7 +248,7 @@
 											</div>
 										</div>
 										<div class="col-md-6"><input type="text" class="form-control missing_tray_ui" name="missing_tray_ui" disabled="true" value="" placeholder="User Input"></div>
-										
+
 									</div>
 									<div class="row">
 										<div class="col-md-6">
@@ -260,7 +260,7 @@
 											</div>
 										</div>
 										<div class="col-md-6"><input type="text" class="form-control missing_ink_toner_ui" name="missing_ink_toner_ui" disabled="true" value="" placeholder="User Input"></div>
-										
+
 									</div>
 									<div class="row">
 										<div class="col-md-6">
@@ -283,7 +283,7 @@
 											</div>
 										</div>
 										<div class="col-md-6"><input type="text" class="form-control physical_damage_ui" name="physical_damage_ui" value="" disabled="true" placeholder="User Input"></div>
-										
+
 									</div>
 									<div class="row">
 										<div class="col-md-12">
@@ -297,17 +297,17 @@
 									<div class="form-group">
 									<label>Testing:</label>
 									<?php
-										// $checked='';
-										// $test = '';
-										// if(isset($product['printer_testing_fields'])){
-										// 	$test = json_decode($product['printer_testing_fields']);
-										// 	if($test->no_power == 1 || $test->not_loading == 1 || $test->loud_noise == 1 || $test->paper_jam == 1 || $test->ink_system == 1){
-										// 		$checked = 'checked="checked"';
-										// 	}else{
-										// 		$checked = '';
-										// 	}
-										// }
-									?>
+// $checked='';
+// $test = '';
+// if(isset($product['printer_testing_fields'])){
+//     $test = json_decode($product['printer_testing_fields']);
+//     if($test->no_power == 1 || $test->not_loading == 1 || $test->loud_noise == 1 || $test->paper_jam == 1 || $test->ink_system == 1){
+//         $checked = 'checked="checked"';
+//     }else{
+//         $checked = '';
+//     }
+// }
+?>
 									<div class="row">
 											<div class="col-md-6">
 												<div class="input-group">
@@ -363,7 +363,7 @@
 											</div>
 											<div class="col-md-6"><input type="text" class="form-control ink_system_ui" name="ink_system_ui" value="" disabled="true" placeholder="User Input"></div>
 										</div>
-									
+
 
 								</div>
 								</div>
@@ -396,7 +396,7 @@
 											<textarea placeholder="User Input" class="form-control ot_ui9" disabled="true" rows="3" name="ot_ui9"></textarea>
 											</div>
 										</div>
-										
+
 									</div>
 								</div>
 								<div class="col-md-4 edit-spec">
@@ -432,12 +432,12 @@
 										<div class="input-group">
 											<span class="input-group-addon">
 												<?php
-													$checked = '';
-													if ($product['touch_screen'] == 0) {
-														$checked = '';
-													} else {
-														$checked = 'checked = "checked"';
-													}?>
+$checked = '';
+if ($product['touch_screen'] == 0) {
+    $checked = '';
+} else {
+    $checked = 'checked = "checked"';
+}?>
 												<input  type="checkbox" <?=$checked;?> value="1" disabled="true" name="touchscreen" class="checkbx touchscreen">
 											</span>
 											<label class="check_label">Touch Screen</label>
@@ -447,12 +447,12 @@
 											<div class="input-group" style="margin-bottom:5px;">
 											<span class="input-group-addon">
 											<?php
-												$checked = '';
-												if ($product['optical_drive'] == 0) {
-													$checked = '';
-												} else {
-													$checked = 'checked = "checked"';
-												}?>
+$checked = '';
+if ($product['optical_drive'] == 0) {
+    $checked = '';
+} else {
+    $checked = 'checked = "checked"';
+}?>
 											<input   type="checkbox" <?=$checked;?> value="1" disabled="true" name="optical_drive" class="checkbx optical_drive">
 											</span>
 											<label class="check_label">Optical Drive</label>
@@ -462,12 +462,12 @@
 										<div class="input-group">
 											<span class="input-group-addon">
 											<?php
-												$checked = '';
-												if ($product['webcam'] == 0) {
-													$checked = '';
-												} else {
-													$checked = 'checked = "checked"';
-												}?>
+$checked = '';
+if ($product['webcam'] == 0) {
+    $checked = '';
+} else {
+    $checked = 'checked = "checked"';
+}?>
 											<input <?=$checked;?> type="checkbox" value="1" disabled="true" name="webcam" class="checkbx webcam">
 											</span>
 											<label class="check_label">No Webcam</label>
@@ -477,12 +477,12 @@
 										<div class="input-group">
 											<span class="input-group-addon">
 											<?php
-												$checked = '';
-												if ($product['tgfg_capable'] == 0) {
-													$checked = '';
-												} else {
-													$checked = 'checked = "checked"';
-												}?>
+$checked = '';
+if ($product['tgfg_capable'] == 0) {
+    $checked = '';
+} else {
+    $checked = 'checked = "checked"';
+}?>
 											<input   <?=$checked;?> type="checkbox" value="1" disabled="true" name="tgfg_capable" class="checkbx tgfg_capable">
 											</span>
 											<label class="check_label">Sim Capable</label>
@@ -494,12 +494,12 @@
 											<div class="input-group" style="margin-bottom:5px;">
 											<span class="input-group-addon">
 											<?php
-												$checked = '';
-												if ($product['optical_drive'] == 0) {
-													$checked = '';
-												} else {
-													$checked = 'checked = "checked"';
-												}?>
+$checked = '';
+if ($product['optical_drive'] == 0) {
+    $checked = '';
+} else {
+    $checked = 'checked = "checked"';
+}?>
 											<input   type="checkbox" <?=$checked;?> value="1" disabled="true" name="optical_drive" class="checkbx optical_drive">
 											</span>
 											<label class="check_label">Optical Drive</label>
@@ -509,12 +509,12 @@
 										<div class="input-group">
 											<span class="input-group-addon">
 											<?php
-												$checked = '';
-												if ($product['desktop_other'] == 0) {
-													$checked = '';
-												} else {
-													$checked = 'checked = "checked"';
-												}?>
+$checked = '';
+if ($product['desktop_other'] == 0) {
+    $checked = '';
+} else {
+    $checked = 'checked = "checked"';
+}?>
 											<input <?=$checked;?> type="checkbox" value="1" disabled="true" name="desktop_other" class="checkbx desktop_other">
 											</span>
 											<label class="check_label">Other</label>
@@ -526,12 +526,12 @@
 											<div class="input-group" style="margin-bottom:5px;">
 											<span class="input-group-addon">
 											<?php
-											$checked = '';
-											if ($product['optical_drive'] == 0) {
-												$checked = '';
-											} else {
-												$checked = 'checked = "checked"';
-											}?>
+$checked = '';
+if ($product['optical_drive'] == 0) {
+    $checked = '';
+} else {
+    $checked = 'checked = "checked"';
+}?>
 											<input   type="checkbox" <?=$checked;?> value="1"  disabled="true" name="optical_drive" class="checkbx optical_drive">
 											</span>
 											<label class="check_label">Optical Drive</label>
@@ -541,12 +541,12 @@
 										<div class="input-group">
 											<span class="input-group-addon">
 											<?php
-												$checked = '';
-												if ($product['desktop_other'] == 0) {
-													$checked = '';
-												} else {
-													$checked = 'checked = "checked"';
-												}?>
+$checked = '';
+if ($product['desktop_other'] == 0) {
+    $checked = '';
+} else {
+    $checked = 'checked = "checked"';
+}?>
 											<input <?=$checked;?> type="checkbox" value="1" disabled="true" name="desktop_other" class="checkbx desktop_other">
 											</span>
 											<label class="check_label">Other</label>
@@ -558,12 +558,12 @@
 										<div class="input-group">
 											<span class="input-group-addon">
 												<?php
-													$checked = '';
-													if ($product['touch_screen'] == 0) {
-														$checked = '';
-													} else {
-														$checked = 'checked = "checked"';
-													}?>
+$checked = '';
+if ($product['touch_screen'] == 0) {
+    $checked = '';
+} else {
+    $checked = 'checked = "checked"';
+}?>
 												<input  type="checkbox" <?=$checked;?> value="1" disabled="true" name="touchscreen" class="checkbx touchscreen">
 											</span>
 											<label class="check_label">Touch Screen</label>
@@ -573,12 +573,12 @@
 											<div class="input-group" style="margin-bottom:5px;">
 											<span class="input-group-addon">
 											<?php
-												$checked = '';
-												if ($product['optical_drive'] == 0) {
-													$checked = '';
-												} else {
-													$checked = 'checked = "checked"';
-												}?>
+$checked = '';
+if ($product['optical_drive'] == 0) {
+    $checked = '';
+} else {
+    $checked = 'checked = "checked"';
+}?>
 											<input   type="checkbox" <?=$checked;?> value="1" disabled="true" name="optical_drive" class="checkbx optical_drive">
 											</span>
 											<label class="check_label">Optical Drive</label>
@@ -588,12 +588,12 @@
 										<div class="input-group">
 											<span class="input-group-addon">
 											<?php
-												$checked = '';
-												if ($product['webcam'] == 0) {
-													$checked = '';
-												} else {
-													$checked = 'checked = "checked"';
-												}?>
+$checked = '';
+if ($product['webcam'] == 0) {
+    $checked = '';
+} else {
+    $checked = 'checked = "checked"';
+}?>
 											<input <?=$checked;?> type="checkbox" value="1" disabled="true" name="webcam" class="checkbx webcam">
 											</span>
 											<label class="check_label">No Webcam</label>
@@ -605,12 +605,12 @@
 										<div class="input-group">
 											<span class="input-group-addon">
 											<?php
-												$checked = '';
-												if ($product['webcam'] == 0) {
-													$checked = '';
-												} else {
-													$checked = 'checked = "checked"';
-												}?>
+$checked = '';
+if ($product['webcam'] == 0) {
+    $checked = '';
+} else {
+    $checked = 'checked = "checked"';
+}?>
 											<input <?=$checked;?> type="checkbox" value="1" disabled="true" name="webcam" class="checkbx webcam">
 											</span>
 											<label class="check_label">No Webcam</label>
@@ -620,12 +620,12 @@
 										<div class="input-group">
 											<span class="input-group-addon">
 											<?php
-												$checked = '';
-												if ($product['tgfg_capable'] == 0) {
-													$checked = '';
-												} else {
-													$checked = 'checked = "checked"';
-												}?>
+$checked = '';
+if ($product['tgfg_capable'] == 0) {
+    $checked = '';
+} else {
+    $checked = 'checked = "checked"';
+}?>
 											<input <?=$checked;?> type="checkbox" value="1" disabled="true" name="tgfg_capable" class="checkbx tgfg_capable">
 											</span>
 											<label class="check_label">Sim Capable</label>
@@ -637,12 +637,12 @@
 										<div class="input-group">
 											<span class="input-group-addon">
 											<?php
-												$checked = '';
-												if ($product['touch_screen'] == 0) {
-													$checked = '';
-												} else {
-													$checked = 'checked = "checked"';
-												}?>
+$checked = '';
+if ($product['touch_screen'] == 0) {
+    $checked = '';
+} else {
+    $checked = 'checked = "checked"';
+}?>
 											<input <?=$checked;?> type="checkbox" value="1" disabled="true" name="touch_screen" class="checkbx touch_screen">
 											</span>
 											<label class="check_label">Touch Screen</label>
@@ -652,12 +652,12 @@
 										<div class="input-group">
 											<span class="input-group-addon">
 											<?php
-												$checked = '';
-												if ($product['curved'] == 0) {
-													$checked = '';
-												} else {
-													$checked = 'checked = "checked"';
-												}?>
+$checked = '';
+if ($product['curved'] == 0) {
+    $checked = '';
+} else {
+    $checked = 'checked = "checked"';
+}?>
 											<input <?=$checked;?> type="checkbox" value="1" disabled="true" name="curved" class="checkbx curved">
 											</span>
 											<label class="check_label">Curved</label>
@@ -667,12 +667,12 @@
 										<div class="input-group">
 											<span class="input-group-addon">
 											<?php
-											$checked = '';
-											if ($product['curved'] == 0) {
-												$checked = '';
-											} else {
-												$checked = 'checked = "checked"';
-											}?>
+$checked = '';
+if ($product['curved'] == 0) {
+    $checked = '';
+} else {
+    $checked = 'checked = "checked"';
+}?>
 											<input <?=$checked;?> type="checkbox" value="1" disabled="true" name="curved" class="checkbx curved">
 											</span>
 											<label class="check_label">No Webcam</label>
@@ -684,12 +684,12 @@
 											<div class="input-group">
 												<span class="input-group-addon">
 												<?php
-													$checked = '';
-													if ($product['tgfg_capable'] == 0) {
-														$checked = '';
-													} else {
-														$checked = 'checked = "checked"';
-													}?>
+$checked = '';
+if ($product['tgfg_capable'] == 0) {
+    $checked = '';
+} else {
+    $checked = 'checked = "checked"';
+}?>
 												<input <?=$checked;?> type="checkbox" value="1" disabled="true" name="tgfg_capable" class="checkbx tgfg_capable">
 												</span>
 												<label class="check_label">Sim Capable</label>
@@ -925,16 +925,16 @@
 							$('.cat-4').css('display','block');
 						}
 						if(element == 3){
-							$('.specs').css('display','block');	
+							$('.specs').css('display','block');
 							$('.other-features').css('display','block');
 							$('.os').css('display','block');
 							$('.memory').css('display','block');
-							$('.cpu-storage-graphics').css('display','block');	
-							$('.form-factor').css('display','block');	
+							$('.cpu-storage-graphics').css('display','block');
+							$('.form-factor').css('display','block');
 							$('.cat-3').css('display','block');
 						}
 						if(element == 2){
-							$('.specs').css('display','block');	
+							$('.specs').css('display','block');
 							$('.other-features').css('display','block');
 							$('.screen').css('display','block');
 							$('.os').css('display','block');
@@ -943,7 +943,7 @@
 							$('.cat-2').css('display','block');
 						}
 						if(element == 5){
-							$('.specs').css('display','block');	
+							$('.specs').css('display','block');
 							$('.screen').css('display','block');
 							$('.other-features').css('display','block');
 							$('.cat-5').css('display','block');
@@ -952,7 +952,7 @@
 							$('.cat-6').css('display','block');
 						}
 						if(element == 8){
-							$('.specs').css('display','block');	
+							$('.specs').css('display','block');
 							$('.other-features').css('display','block');
 							$('.screen').css('display','block');
 							$('.os').css('display','block');
@@ -961,12 +961,12 @@
 							$('.cat-8').css('display','block');
 						}
 						if(element == 9){
-							$('.specs').css('display','block');	
+							$('.specs').css('display','block');
 							$('.other-features').css('display','block');
 							$('.os').css('display','block');
 							$('.memory').css('display','block');
-							$('.cpu-storage-graphics').css('display','block');	
-							$('.form-factor').css('display','block');	
+							$('.cpu-storage-graphics').css('display','block');
+							$('.form-factor').css('display','block');
 							$('.cat-9').css('display','block');
 						}
 						if(element == 7 || element == 10){
@@ -996,52 +996,37 @@
 						if(element == 4 || element == 3 || element == 9 || element == 2 || element == 8){
 
 							var storage_array = JSON.parse(response.product.storage);
+							var storage_txt = '';
 							if(storage_array != null){
-								$('textarea.storage').html(storage_array.join(','));
+								$.each( storage_array, function( key, value ) {
+									var ssd_array = JSON.parse(response.product.ssd);
+										if(ssd_array[key] == 1){
+											storage_txt += value+'(ssd),';
+										}else{
+											storage_txt += value+',';
+											
+										}
+								});
+								var len = storage_txt.length - 1;
+								storage_txt = storage_txt.substr(0, len);
+								$('textarea.storage').html(storage_txt);
 							}
-							var ssd_array = JSON.parse(response.product.ssd);
-							if(ssd_array!=null){
-								for(var i=0;i<ssd_array.length;i++){
-									$('[name="ssd'+i+'"]').prop('checked', false);
-									// console.log(typeof ssd_array[i],ssd_array[i]);
-									if(ssd_array[i]==1){
-										$('[name="ssd'+i+'"]').prop('checked', true);
-									}
-								}
 
-							}
 							var graphics_array = JSON.parse(response.product.graphics);
-							if(graphics_array!=null){
-								$('textarea.graphics').html(graphics_array.join(','));
-							}
-
-							var dedicated_array = JSON.parse(response.product.dedicated);
-							if(dedicated_array!=null){
-								for(var i=0;i<dedicated_array.length;i++){
-									$('[name="dedicated'+i+'"]').prop('checked', false);
-									if(dedicated_array[i]==1){
-										$('[name="dedicated'+i+'"]').prop('checked', true);
-									}
-								}
-
-							}
-
-							var storage = $('.storage').val();
-							var graphics = $('.graphics').val();
-							var storage_array1 = storage.split(', ');
-							var graphics_array1 = graphics.split(', ');
-
-							if(ssd_array!=null){
-								if(ssd_array[0] == 1 || ssd_array[1] == 1){
-									storage_array1[0] = storage_array1[0] + '(ssd) '
-								}
-								$('textarea.storage').html(storage_array1.join(', '));
-							}
-							if(dedicated_array!=null){
-								if(dedicated_array[0] == 1 || dedicated_array[1] == 1){
-									graphics_array1[0] = graphics_array1[0] + '(decicated) '
-								}
-								$('textarea.graphics').html(graphics_array1.join(', '));
+							var graphics_txt = '';
+							if(graphics_array != null){
+								$.each(graphics_array, function( key, value ) {
+									var dedicated_array = JSON.parse(response.product.dedicated);
+										if(dedicated_array[key] == 1){
+											graphics_txt += value+'(dedicated),';
+										}else{
+											graphics_txt += value+',';
+											
+										}
+								});
+								var len = graphics_txt.length - 1;
+								graphics_txt = graphics_txt.substr(0, len);
+								$('textarea.graphics').html(graphics_txt);
 							}
 						}
 				});

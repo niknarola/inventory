@@ -210,7 +210,7 @@
                                  <div class="col-md-4">
                                  	<div class="form-group">
 									<label>Failure Explanation:</label>
-                                                                        <textarea name="fail_text" class="form-control" rows="5" cols="8"></textarea>
+                                        <textarea name="fail_text" class="form-control fail_text" rows="5" cols="8"></textarea>
 									<!--<input type="text" name="fail_1" value="" class="form-control fail_1">-->
 								</div>
                                  </div>
@@ -742,6 +742,9 @@
                         });
 					}else {
 						// need to add html
+						$('.checkbx').attr('checked',false);
+						$('.accessories-div').hide();
+						$(".title-div-text").html('');
 						var html="";
 						var array_type = '';
 						if(response.product.accessory_name){
@@ -835,7 +838,8 @@
 					$('.tgfg_capable').prop('checked', true);
 				}
 				//----------------
-				$('select.original_condition').val(response.product.original_condition_id);
+				$('select.original_condition').val(response.product.pocid);
+				$('select.final_condition').val(response.product.ocid);
 				$('select.status').val(response.product.status).trigger('change');
 				$('select.fail_option').val(response.product.fail_option).trigger('change');
 				$('select.warranty').val(response.product.warranty).trigger('change');
@@ -1036,8 +1040,8 @@
 	    	}
 			//Other
 			else if(new_json.name == 'Other'){
-	    		new_json.value1 = $(this).find('.access-name-input').val();
-				new_json.value2 = $(this).find('.other_access_type').val();
+	    		new_json.value1 = $(this).find('.other_access_type').val();
+	    		new_json.value2 = $(this).find('.access-name-input').val();
 			}
 			//Other type
 			else if(new_json.name != 'AC Adapter'){

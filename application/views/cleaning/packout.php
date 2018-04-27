@@ -309,20 +309,38 @@
 	</div>
 	<!-- <div class=""></div> -->
 	<div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content -->
-     <div class="modal-content">
-            <div class="modal-header">
-				Message
-            </div>
-            <div class="modal-body">
-				This product cannot be scanned  as its graded as F or X.
-			<!-- <input type="text" value="" name="custom_field" id="custom_field" class="form-control custom_field" placeholder="Custom Field">
-                <center><button type="button" class="btn btn-info btn-lg add_now">Add </button></center> -->
-            </div>
-        </div>
-    </div>
-</div>
+		<div class="modal-dialog">
+			<!-- Modal content -->
+		<div class="modal-content">
+				<div class="modal-header">
+					Message
+				</div>
+				<div class="modal-body">
+					This product cannot be scanned  as its graded as F or X.
+				</div>
+				<div class="modal-footer">
+					<button type="button" name="close" class="btn bg-teal-400 close_grade">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="myModaltest" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal content -->
+		<div class="modal-content">
+				<div class="modal-header">
+					Message
+				</div>
+				<div class="modal-body">
+					This product cannot be scanned  as its not being tested yet. You need to test it first from testing part.
+				</div>
+				<div class="modal-footer">
+				<button type="button" name="close" class="btn bg-teal-400 close_test">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 
@@ -354,6 +372,21 @@
 	    // $('.category3').multiselect();
 	});
 	
+$('.close_grade').on('click', function(){
+	$("input").val("");
+	$("textarea").val("");
+	$('.accessories').hide();
+	$(".title-div-text").html('');
+	$('#myModal').modal('hide');
+})
+$('.close_test').on('click', function(){
+	$("input").val("");
+	$("textarea").val("");
+	$('.accessories').hide();
+	$(".title-div-text").html('');
+	$('#myModaltest').modal('hide');
+
+})
 	function get_sub_categories(cat_id, elem, category=null){
 		if(cat_id!=''){
 			
@@ -436,8 +469,10 @@
 					$('.other_category').css('display','none');
 				}else{
 				if(response.product.cosmetic_grade == 'F' || response.product.cosmetic_grade == 'X'){
-					console.log('in if',response.product.cosmetic_grade);
 					$('#myModal').modal('show');
+				}
+				if(response.product.ptested == 0){
+					$('#myModaltest').modal('show');
 				}
 				// $('input.current_pallet_id').val(response.product.plid);
 				// $('input.current_pallet').val(response.product.location_pallet);
@@ -495,6 +530,9 @@
             if(response.product.accessory_name!=null && response.product.accessory_name!=''){
                 var accessory = JSON.parse(response.product.accessory_name);
 				console.log('accessory',accessory);
+				$('.checkbx').attr('checked',false);
+				$('.accessories').hide();
+				$(".title-div-text").html('');
                 var html ='';
 				if(accessory != 0 || accessory != null){
 					for(i=0;i<accessory.length;i++){
