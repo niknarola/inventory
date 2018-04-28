@@ -30,7 +30,8 @@
                         <div class="form-group">
 						   <!-- <label>Serial #:</label> -->
 						   <!-- onchange="get_product_details(this.value);" -->
-                           <input type="text" value="" name="serial" class="form-control serial"  placeholder="Serial #">
+						   <input type="text" value="" name="serial" class="form-control serial"  placeholder="Serial #">
+						   <span id="serial_error" class="not_found_error" style="color:red"></span>
                         </div>
                      </div>
                      <div class="col-md-2">
@@ -756,7 +757,7 @@ if ($product['tgfg_capable'] == 0) {
                                 <input type="hidden" name="scan_loc_id" class="scan_loc_id" value="">
                             </div>
                             <div class="col-md-1">
-                                <button type="submit" name="save" class="btn bg-pink-400">Save</button>
+                                <button type="submit" name="save" class="save-btn btn bg-pink-400">Save</button>
                             </div>
                         </div>
                      </div>
@@ -1176,6 +1177,36 @@ if ($product['tgfg_capable'] == 0) {
           // Styled checkboxes and radios
       	 });
       $(".styled, .multiselect-container input").uniform({ radioClass: 'choice'});
+	$(document).on('click','.category_btn, .save-btn', function() {
+		if($(".serial").val().length !== 0) {
+			$('#serial_error').text('');
+			var base_url='<?php echo base_url(); ?>';
+			$.ajax({
+					url: base_url+'admin/testing/serial_exists',
+					type: 'POST',
+					dataType: 'json',
+					data: {serial: $(".serial").val()}
+				})
+				.done(function(response) {
+					console.log(response);
+					if(response.serial.code==200){
+					}else if(response.serial.code==400){
+						$('#serial_error').html('Serial Does not exists.');
+						return false;
+					}
+				})
+				.fail(function() {
+					console.log("error");
+				})
+				.always(function() {
+					console.log("complete");
+				});
+		}
+		else{
+			$('#serial_error').html('Please Enter Serial');
+			return false;
+		}
+	});
 
 
 </script>

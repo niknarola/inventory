@@ -18,7 +18,8 @@
 					<i class="caret"></i>
 				</a>
 				<ul class="dropdown-menu dropdown-menu-right">
-					<!-- <li><a href="#"><i class="icon-user-plus"></i> My profile</a></li> -->
+					<li><a href="<?php echo base_url('admin/user/edit_profile')?>"><i class="icon-pencil5"></i> My profile</a></li>
+					<li><a href="<?php echo base_url('admin/user/change_password')?>"><i class="icon-lock2"></i> Change Password</a></li>
 					<li><a href="admin/logout"><i class="icon-switch2"></i> Logout</a></li>
 				</ul>
 			</li>

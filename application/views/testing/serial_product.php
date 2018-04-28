@@ -7,37 +7,37 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Serial Number:</label>
-                            <input  class="form-control" type="text" name="serial" value="<?= $product['serial'];?>">
+                            <input  class="form-control" type="text" disabled="true" name="serial" value="<?= $product['serial'];?>">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>New Serial Number:</label>
-                            <input class="form-control" type="text" name="new_serial" value="<?= $product['new_serial'];?>">
+                            <input class="form-control" type="text" disabled="true" name="new_serial" value="<?= $product['new_serial'];?>">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                         <label>Part Number:</label>
-                            <input class="form-control" type="text" name="part" value="<?= $product['part']?>">
+                            <input class="form-control" type="text" disabled="true" name="part" value="<?= $product['part']?>">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                         <label>Tech ID:</label>
-                            <input  class="form-control" type="text" name="tech" value="<?= $product['username']?>">
+                            <input  class="form-control" type="text" disabled="true" name="tech" value="<?= $product['username']?>">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                         <label>PO ID:</label>
-                            <input class="form-control" type="text" name="po" value="<?= $product['username']?>">
+                            <input class="form-control" type="text" disabled="true" name="po" value="<?= $product['username']?>">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Received Condition:</label>
-                            <select name="condition" data-placeholder="Select Original Condition" class="form-control select original_condition">
+                            <select name="condition" data-placeholder="Select Original Condition" disabled="true" class="form-control select original_condition">
                                 <?php
 							foreach ($original_condition as $key => $value) {?>
                                    <option <?php echo ($key == $product['original_condition_id']) ? 'selected' : '' ?> value="<?=$key;?>"><?=$value;?></option>
@@ -48,7 +48,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Grade:</label>
-                            <input type="text" class="form-control" type="text" name="cosmetic_grade" value="<?= $product['cosmetic_grade']?>">
+                            <input type="text" class="form-control" type="text" disabled="true" name="cosmetic_grade" value="<?= $product['cosmetic_grade']?>">
                             <!-- <select name="grade" data-placeholder="Select Grade" class="form-control select grade">
                                 <?php //foreach ($original_condition as $key => $value) { ?>
                                     <option value="MN">MN - Manufacturer New</option>
@@ -64,7 +64,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Final Condition:</label>
-                            <select name="final_condition" data-placeholder="Select Final Condition" class="form-control select original_condition">
+                            <select name="final_condition" disabled="true" data-placeholder="Select Final Condition" class="form-control select original_condition">
                                 <?php foreach ($original_condition as $key => $value) {?>
                                     <option value="<?=$key;?>"><?=$value;?></option>
                                 <?php }?>
@@ -78,7 +78,7 @@
 							<div class="col-md-4">
 								<div class="form-group">
 								<label>Memory:</label>
-									<input type="text" class="form-control" type="text" name="memory" value="<?= $product['memory']?>">
+									<input type="text" class="form-control" disabled="true" type="text" name="memory" value="<?= $product['memory']?>">
 								</div>
 							</div>
 						</div>
@@ -86,7 +86,7 @@
 							<div class="col-md-4">
 								<div class="form-group">
 								<label>CPU:</label>
-									<textarea  class="form-control" type="text" name="cpu"><?= (isset($product['cpu']) && $product['cpu'] != "null") ? implode(',', json_decode($product['cpu'], true)) : '';?></textarea>
+									<textarea  class="form-control" disabled="true" type="text" name="cpu"><?= (isset($product['cpu']) && $product['cpu'] != "null") ? implode(',', json_decode($product['cpu'], true)) : '';?></textarea>
 								</div>
 							</div>
 							<div class="col-md-4">
@@ -109,7 +109,7 @@
 									$new_sto_ssd = substr($new_sto_ssd, 0, $length);
 								}
 									?>
-									<textarea class="form-control" type="text" name="storage"><?= $new_sto_ssd; ?></textarea>
+									<textarea class="form-control" disabled="true" type="text" name="storage"><?= $new_sto_ssd; ?></textarea>
 								</div>
 							</div>
 							<div class="col-md-4">
@@ -133,7 +133,7 @@
 									$new_gra_ded = substr($new_gra_ded, 0, $length);
 								}
 									?>
-									<textarea class="form-control" type="text" name="graphics"><?= $new_gra_ded; ?></textarea>
+									<textarea class="form-control" type="text" disabled="true" name="graphics"><?= $new_gra_ded; ?></textarea>
 								</div>
 							</div>
 						</div>
@@ -141,7 +141,7 @@
 							<div class="col-md-4">
 								<div class="form-group">
 								<label>OS:</label>
-									<input type="text" class="form-control" type="text" name="os" value="<?= $product['os']?>">
+									<input type="text" class="form-control" disabled="true" type="text" name="os" value="<?= $product['os']?>">
 								</div>
 							</div>
 						</div>
@@ -152,7 +152,7 @@
 							<div class="col-md-4">
 								<div class="form-group">
 									<label>Screen:</label>
-									<input type="text" class="form-control" type="text" name="screen" value="<?= $product['screen'].'  '.$product['resolution'].'  '. $product['size'] ?>">
+									<input type="text" class="form-control" disabled="true" type="text" name="screen" value="<?= $product['screen'].'  '.$product['resolution'].'  '. $product['size'] ?>">
 								</div>
 							</div>
 						</div>
@@ -162,7 +162,7 @@
 							<di	v class="col-md-4">
 								<div class="form-group">
 									<label>Form Factor:</label>
-									<input type="text" class="form-control" type="text" name="form_factor" value="<?= $product['form_factor']?>">
+									<input type="text" class="form-control" disabled="true" type="text" name="form_factor" value="<?= $product['form_factor']?>">
 									</div>
 							</di>
 						</div>
@@ -171,19 +171,19 @@
 					<div class="col-md-4">
                         <div class="form-group">
                             <label>Item Location:</label>
-                            <input class="form-control" type="text" name="serial_location_name" value="<?= $product['pallet']?>">
+                            <input class="form-control" type="text" disabled="true" name="serial_location_name" value="<?= $product['pallet']?>">
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Physical Location:</label>            
-                            <input class="form-control" type="text" name="pallet_location_name" value="<?= $product['pallet_location_name']?>">
+                            <input class="form-control" type="text" disabled="true" name="pallet_location_name" value="<?= $product['pallet_location_name']?>">
                         </div>
                     </div>
 					<div class="col-md-4">
 						<div class="form-group">
                         	<label>Additional Info/Accessories:</label>
-                            <textarea  class="form-control" type="text" name="cpu"><?= $product['additional_info'];?></textarea>
+                            <textarea  class="form-control" type="text" disabled="true" name="cpu"><?= $product['additional_info'];?></textarea>
                         </div>
                     </div>
 		<!-- ===================================Locations============================== -->
@@ -209,52 +209,52 @@
 												
 											?>
 												<span class="input-group-addon">
-													<input type="checkbox" value="1" <?= $checked;?> name="missing_tray" class="missing_tray checkbx">
+													<input type="checkbox" disabled="true" value="1" <?= $checked;?> name="missing_tray" class="missing_tray checkbx">
 												</span>
 												<input type="text" class="form-control" value="Missing Tray" readonly="true">
 											</div>
 										</div>
-										<div class="col-md-6"><input type="text" class="form-control missing_tray_ui" name="missing_tray_ui" value="<?= $print->missing_tray_ui?>" placeholder="User Input"></div>
+										<div class="col-md-6"><input type="text" disabled="true" class="form-control missing_tray_ui" name="missing_tray_ui" value="<?= $print->missing_tray_ui?>" placeholder="User Input"></div>
 										
 									</div>
 									<div class="row">
 										<div class="col-md-6">
 											<div class="input-group">
 												<span class="input-group-addon">
-													<input type="checkbox" value="1" <?= $checked;?> name="missing_ink_toner" class="missing_ink_toner checkbx">
+													<input type="checkbox" disabled="true" value="1" <?= $checked;?> name="missing_ink_toner" class="missing_ink_toner checkbx">
 												</span>
 												<input type="text" class="form-control" value="Missing Ink/Toner" readonly="true">
 											</div>
 										</div>
-										<div class="col-md-6"><input type="text" class="form-control missing_ink_toner_ui" name="missing_ink_toner_ui" value="<?= $print->missing_ink_toner_ui?>" placeholder="User Input"></div>
+										<div class="col-md-6"><input type="text" disabled="true" class="form-control missing_ink_toner_ui" name="missing_ink_toner_ui" value="<?= $print->missing_ink_toner_ui?>" placeholder="User Input"></div>
 										
 									</div>
 									<div class="row">
 										<div class="col-md-6">
 											<div class="input-group">
 												<span class="input-group-addon">
-													<input type="checkbox" value="1" <?= $checked;?> name="broken_glass" class="broken_glass checkbx">
+													<input type="checkbox" disabled="true" value="1" <?= $checked;?> name="broken_glass" class="broken_glass checkbx">
 												</span>
 												<input type="text" class="form-control" value="Broken Glass" readonly="true">
 											</div>
 										</div>
-										<div class="col-md-6"><input type="text" class="form-control broken_glass_ui" name="broken_glass_ui" value="<?= $print->broken_glass_ui?>" placeholder="User Input"></div>
+										<div class="col-md-6"><input type="text" disabled="true" class="form-control broken_glass_ui" name="broken_glass_ui" value="<?= $print->broken_glass_ui?>" placeholder="User Input"></div>
 									</div>
 									<div class="row">
 										<div class="col-md-6">
 											<div class="input-group">
 												<span class="input-group-addon">
-													<input type="checkbox" value="1" <?= $checked;?> name="physical_damage" class="physical_damage checkbx">
+													<input type="checkbox" value="1" disabled="true" <?= $checked;?> name="physical_damage" class="physical_damage checkbx">
 												</span>
 												<input type="text" class="form-control" value="Physical Damage" readonly="true">
 											</div>
 										</div>
-										<div class="col-md-6"><input type="text" class="form-control physical_damage_ui" name="physical_damage_ui" value="<?= $print->physical_damage_ui?>" placeholder="User Input"></div>
+										<div class="col-md-6"><input type="text" disabled="true" class="form-control physical_damage_ui" name="physical_damage_ui" value="<?= $print->physical_damage_ui?>" placeholder="User Input"></div>
 										
 									</div>
 									<div class="row">
 										<div class="col-md-12">
-											<textarea placeholder="User Input" class="form-control pi_ui" rows="3" cols="3" name="pi_ui"><?= $print->physical_inspection_ui?></textarea>
+											<textarea placeholder="User Input" disabled="true" class="form-control pi_ui" rows="3" cols="3" name="pi_ui"><?= $print->physical_inspection_ui?></textarea>
 										</div>
 									</div>
 												<?php }?>
@@ -280,56 +280,56 @@
 											<div class="col-md-6">
 												<div class="input-group">
 													<span class="input-group-addon">
-														<input type="checkbox" value="1" <?= $checked;?> name="no_power" class="no_power checkbx">
+														<input type="checkbox" disabled="true" value="1" <?= $checked;?> name="no_power" class="no_power checkbx">
 													</span>
 													<input type="text" class="form-control" value="No Power" readonly="true">
 												</div>
 											</div>
-											<div class="col-md-6"><input type="text" class="form-control no_power_ui" name="no_power_ui" value="<?=$test->no_power_ui?>" placeholder="User Input"></div>
+											<div class="col-md-6"><input type="text" disabled="true" class="form-control no_power_ui" name="no_power_ui" value="<?=$test->no_power_ui?>" placeholder="User Input"></div>
 										</div>
 										<div class="row">
 											<div class="col-md-6">
 												<div class="input-group">
 													<span class="input-group-addon">
-														<input type="checkbox" value="1" <?= $checked;?> name="not_loading" class="not_loading checkbx">
+														<input type="checkbox" disabled="true" value="1" <?= $checked;?> name="not_loading" class="not_loading checkbx">
 													</span>
 													<input type="text" class="form-control" value="Not Loading" readonly="true">
 												</div>
 											</div>
-											<div class="col-md-6"><input type="text" class="form-control not_loading_ui" name="not_loading_ui" value="<?=$test->not_loading_ui?>" placeholder="User Input"></div>
+											<div class="col-md-6"><input type="text" disabled="true" class="form-control not_loading_ui" name="not_loading_ui" value="<?=$test->not_loading_ui?>" placeholder="User Input"></div>
 										</div>
 									<div class="row">
 											<div class="col-md-6">
 												<div class="input-group">
 													<span class="input-group-addon">
-														<input type="checkbox" value="1" <?= $checked;?> name="loud_noise" class="loud_noise checkbx">
+														<input type="checkbox" value="1" disabled="true" <?= $checked;?> name="loud_noise" class="loud_noise checkbx">
 													</span>
 													<input type="text" class="form-control" value="Loud Noise" readonly="true">
 												</div>
 											</div>
-											<div class="col-md-6"><input type="text" class="form-control loud_noise_ui" name="loud_noise_ui" value="<?=$test->loud_noise_ui?>" placeholder="User Input"></div>
+											<div class="col-md-6"><input type="text" disabled="true" class="form-control loud_noise_ui" name="loud_noise_ui" value="<?=$test->loud_noise_ui?>" placeholder="User Input"></div>
 										</div>
 									<div class="row">
 											<div class="col-md-6">
 												<div class="input-group">
 													<span class="input-group-addon">
-														<input type="checkbox" value="1" <?= $checked;?> name="paper_jam" class="paper_jam checkbx">
+														<input type="checkbox" value="1" disabled="true" <?= $checked;?> name="paper_jam" class="paper_jam checkbx">
 													</span>
 													<input type="text" class="form-control" value="Paper Jam" readonly="true">
 												</div>
 											</div>
-											<div class="col-md-6"><input type="text" class="form-control paper_jam_ui" name="paper_jam_ui" value="<?=$test->paper_jam_ui?>" placeholder="User Input"></div>
+											<div class="col-md-6"><input type="text" disabled="true" class="form-control paper_jam_ui" name="paper_jam_ui" value="<?=$test->paper_jam_ui?>" placeholder="User Input"></div>
 										</div>
 									<div class="row">
 											<div class="col-md-6">
 												<div class="input-group">
 													<span class="input-group-addon">
-														<input type="checkbox" value="1"  <?= $checked;?> name="ink_system" class="ink_system checkbx">
+														<input type="checkbox" value="1" disabled="true"  <?= $checked;?> name="ink_system" class="ink_system checkbx">
 													</span>
 													<input type="text" class="form-control" value="Ink System" readonly="true">
 												</div>
 											</div>
-											<div class="col-md-6"><input type="text" class="form-control ink_system_ui" name="ink_system_ui" value="<?=$test->ink_system_ui?>" placeholder="User Input"></div>
+											<div class="col-md-6"><input type="text" disabled="true" class="form-control ink_system_ui" name="ink_system_ui" value="<?=$test->ink_system_ui?>" placeholder="User Input"></div>
 										</div>
 										<?php } ?>
 
@@ -351,24 +351,24 @@
 									<div class="form-group">
 										<label>&nbsp;</label>
 										<div class="row">
-											<div class="col-md-6"><input type="text" class="form-control ot_ui1" name="ot_ui1" value="<?= $other->ot_ui1;?>" placeholder="User Input"></div>
-											<div class="col-md-6"><input type="text" class="form-control ot_ui2" name="ot_ui2" value="<?= $other->ot_ui2;?>" placeholder="User Input"></div>
+											<div class="col-md-6"><input type="text" disabled="true" class="form-control ot_ui1" name="ot_ui1" value="<?= $other->ot_ui1;?>" placeholder="User Input"></div>
+											<div class="col-md-6"><input type="text" disabled="true" class="form-control ot_ui2" name="ot_ui2" value="<?= $other->ot_ui2;?>" placeholder="User Input"></div>
 										</div>
 										<div class="row">
-											<div class="col-md-6"><input type="text" class="form-control ot_ui3" name="ot_ui3" value="<?= $other->ot_ui3;?>" placeholder="User Input"></div>
-											<div class="col-md-6"><input type="text" class="form-control ot_ui4" name="ot_ui4" value="<?= $other->ot_ui4;?>" placeholder="User Input"></div>
+											<div class="col-md-6"><input type="text" disabled="true" class="form-control ot_ui3" name="ot_ui3" value="<?= $other->ot_ui3;?>" placeholder="User Input"></div>
+											<div class="col-md-6"><input type="text" disabled="true" class="form-control ot_ui4" name="ot_ui4" value="<?= $other->ot_ui4;?>" placeholder="User Input"></div>
 										</div>
 										<div class="row">
-											<div class="col-md-6"><input type="text" class="form-control ot_ui5" name="ot_ui5" value="<?= $other->ot_ui5;?>" placeholder="User Input"></div>
-											<div class="col-md-6"><input type="text" class="form-control ot_ui6" name="ot_ui6" value="<?= $other->ot_ui6;?>" placeholder="User Input"></div>
+											<div class="col-md-6"><input type="text" disabled="true" class="form-control ot_ui5" name="ot_ui5" value="<?= $other->ot_ui5;?>" placeholder="User Input"></div>
+											<div class="col-md-6"><input type="text" disabled="true" class="form-control ot_ui6" name="ot_ui6" value="<?= $other->ot_ui6;?>" placeholder="User Input"></div>
 										</div>
 										<div class="row">
-											<div class="col-md-6"><input type="text" class="form-control ot_ui7" name="ot_ui7" value="<?= $other->ot_ui7;?>" placeholder="User Input"></div>
-											<div class="col-md-6"><input type="text" class="form-control ot_ui8" name="ot_ui8" value="<?= $other->ot_ui8;?>" placeholder="User Input"></div>
+											<div class="col-md-6"><input type="text" disabled="true" class="form-control ot_ui7" name="ot_ui7" value="<?= $other->ot_ui7;?>" placeholder="User Input"></div>
+											<div class="col-md-6"><input type="text" disabled="true" class="form-control ot_ui8" name="ot_ui8" value="<?= $other->ot_ui8;?>" placeholder="User Input"></div>
 										</div>
 										<div class="row">
 											<div class="col-md-12">
-											<textarea placeholder="User Input" class="form-control ot_ui9" rows="3" name="ot_ui9"><?= $other->ot_ui9;?></textarea>
+											<textarea placeholder="User Input" disabled="true" class="form-control ot_ui9" rows="3" name="ot_ui9"><?= $other->ot_ui9;?></textarea>
 											</div>
 										</div>
 										
@@ -384,22 +384,22 @@
 									<div class="form-group">
 										<label>Specifications:</label>
 										<div class="row">
-											<input type="text" class="form-control sp_ui1" name="sp_ui1" value="<?= $other_test->sp_ui1?>" placeholder="User Input">
+											<input type="text" disabled="true" class="form-control sp_ui1" name="sp_ui1" value="<?= $other_test->sp_ui1?>" placeholder="User Input">
 										</div>
 										<div class="row">
-											<input type="text" class="form-control sp_ui2" name="sp_ui2" value="<?= $other_test->sp_ui2?>" placeholder="User Input">
+											<input type="text" disabled="true" class="form-control sp_ui2" name="sp_ui2" value="<?= $other_test->sp_ui2?>" placeholder="User Input">
 										</div>
 										<div class="row">
-											<input type="text" class="form-control sp_ui3" name="sp_ui3" value="<?= $other_test->sp_ui3?>" placeholder="User Input">
+											<input type="text" disabled="true" class="form-control sp_ui3" name="sp_ui3" value="<?= $other_test->sp_ui3?>" placeholder="User Input">
 										</div>
 										<div class="row">
-											<input type="text" class="form-control sp_ui4" name="sp_ui4" value="<?= $other_test->sp_ui4?>" placeholder="User Input">
+											<input type="text" disabled="true" class="form-control sp_ui4" name="sp_ui4" value="<?= $other_test->sp_ui4?>" placeholder="User Input">
 										</div>
 										<div class="row">
-											<input type="text" class="form-control sp_ui5" name="sp_ui5" value="<?= $other_test->sp_ui5?>" placeholder="User Input">
+											<input type="text" disabled="true" class="form-control sp_ui5" name="sp_ui5" value="<?= $other_test->sp_ui5?>" placeholder="User Input">
 										</div>
 										<div class="row">
-											<input type="text" class="form-control sp_ui6" name="sp_ui6" value="<?= $other_test->sp_ui6?>" placeholder="User Input">
+											<input type="text" disabled="true" class="form-control sp_ui6" name="sp_ui6" value="<?= $other_test->sp_ui6?>" placeholder="User Input">
 										</div>
 									</div>
 								</div>
@@ -414,7 +414,7 @@
 						<div class="col-md-4">
 							<div class="form-group">
 								<label>Failure Explanation:</label>
-									<textarea  class="form-control" type="text" name="cpu"><?= $product['fail_text'];?></textarea>
+									<textarea  class="form-control" disabled="true" type="text" name="cpu"><?= $product['fail_text'];?></textarea>
 								</div>
                     	</div>
 					<?php }?>
@@ -434,7 +434,7 @@
 													} else {
 														$checked = 'checked = "checked"';
 													}?>
-												<input  type="checkbox" <?=$checked;?> value="1" name="touchscreen" class="checkbx touchscreen">
+												<input  type="checkbox" disabled="true" <?=$checked;?> value="1" name="touchscreen" class="checkbx touchscreen">
 											</span>
 											<label class="check_label">Touch Screen</label>
 										</div>
@@ -449,7 +449,7 @@
 												} else {
 													$checked = 'checked = "checked"';
 												}?>
-											<input   type="checkbox" <?=$checked;?> value="1" name="optical_drive" class="checkbx optical_drive">
+											<input   type="checkbox" disabled="true" <?=$checked;?> value="1" name="optical_drive" class="checkbx optical_drive">
 											</span>
 											<label class="check_label">Optical Drive</label>
 										</div>
@@ -464,7 +464,7 @@
 												} else {
 													$checked = 'checked = "checked"';
 												}?>
-											<input <?=$checked;?> type="checkbox" value="1" name="webcam" class="checkbx webcam">
+											<input <?=$checked;?>  disabled="true" type="checkbox" value="1" name="webcam" class="checkbx webcam">
 											</span>
 											<label class="check_label">No Webcam</label>
 										</div>
@@ -479,7 +479,7 @@
 												} else {
 													$checked = 'checked = "checked"';
 												}?>
-											<input   <?=$checked;?> type="checkbox" value="1" name="tgfg_capable" class="checkbx tgfg_capable">
+											<input   <?=$checked;?> type="checkbox" disabled="true" value="1" name="tgfg_capable" class="checkbx tgfg_capable">
 											</span>
 											<label class="check_label">Sim Capable</label>
 										</div>
@@ -498,7 +498,7 @@
 												} else {
 													$checked = 'checked = "checked"';
 												}?>
-											<input   type="checkbox" <?=$checked;?> value="1" name="optical_drive" class="checkbx optical_drive">
+											<input   type="checkbox" <?=$checked;?> disabled="true" value="1" name="optical_drive" class="checkbx optical_drive">
 											</span>
 											<label class="check_label">Optical Drive</label>
 										</div>
@@ -513,7 +513,7 @@
 												} else {
 													$checked = 'checked = "checked"';
 												}?>
-											<input <?=$checked;?> type="checkbox" value="1" name="desktop_other" class="checkbx desktop_other">
+											<input <?=$checked;?> type="checkbox" disabled="true" value="1" name="desktop_other" class="checkbx desktop_other">
 											</span>
 											<label class="check_label">Other</label>
 										</div>
@@ -532,7 +532,7 @@
 											} else {
 												$checked = 'checked = "checked"';
 											}?>
-											<input   type="checkbox" <?=$checked;?> value="1" name="optical_drive" class="checkbx optical_drive">
+											<input   type="checkbox" <?=$checked;?> value="1" disabled="true" name="optical_drive" class="checkbx optical_drive">
 											</span>
 											<label class="check_label">Optical Drive</label>
 										</div>
@@ -547,7 +547,7 @@
 												} else {
 													$checked = 'checked = "checked"';
 												}?>
-											<input <?=$checked;?> type="checkbox" value="1" name="desktop_other" class="checkbx desktop_other">
+											<input <?=$checked;?> type="checkbox" value="1" disabled="true" name="desktop_other" class="checkbx desktop_other">
 											</span>
 											<label class="check_label">Other</label>
 										</div>
@@ -566,7 +566,7 @@
 													} else {
 														$checked = 'checked = "checked"';
 													}?>
-												<input  type="checkbox" <?=$checked;?> value="1" name="touchscreen" class="checkbx touchscreen">
+												<input  type="checkbox" <?=$checked;?> value="1" disabled="true" name="touchscreen" class="checkbx touchscreen">
 											</span>
 											<label class="check_label">Touch Screen</label>
 										</div>
@@ -581,7 +581,7 @@
 												} else {
 													$checked = 'checked = "checked"';
 												}?>
-											<input   type="checkbox" <?=$checked;?> value="1" name="optical_drive" class="checkbx optical_drive">
+											<input   type="checkbox" <?=$checked;?> value="1" disabled="true" name="optical_drive" class="checkbx optical_drive">
 											</span>
 											<label class="check_label">Optical Drive</label>
 										</div>
@@ -596,7 +596,7 @@
 												} else {
 													$checked = 'checked = "checked"';
 												}?>
-											<input <?=$checked;?> type="checkbox" value="1" name="webcam" class="checkbx webcam">
+											<input <?=$checked;?> type="checkbox" disabled="true" value="1" name="webcam" class="checkbx webcam">
 											</span>
 											<label class="check_label">No Webcam</label>
 										</div>
@@ -615,7 +615,7 @@
 												} else {
 													$checked = 'checked = "checked"';
 												}?>
-											<input <?=$checked;?> type="checkbox" value="1" name="webcam" class="checkbx webcam">
+											<input <?=$checked;?> type="checkbox" disabled="true" value="1" name="webcam" class="checkbx webcam">
 											</span>
 											<label class="check_label">No Webcam</label>
 										</div>
@@ -630,7 +630,7 @@
 												} else {
 													$checked = 'checked = "checked"';
 												}?>
-											<input <?=$checked;?> type="checkbox" value="1" name="tgfg_capable" class="checkbx tgfg_capable">
+											<input <?=$checked;?> type="checkbox" disabled="true" value="1" name="tgfg_capable" class="checkbx tgfg_capable">
 											</span>
 											<label class="check_label">Sim Capable</label>
 										</div>
@@ -649,7 +649,7 @@
 												} else {
 													$checked = 'checked = "checked"';
 												}?>
-											<input <?=$checked;?> type="checkbox" value="1" name="touch_screen" class="checkbx touch_screen">
+											<input <?=$checked;?> type="checkbox" disabled="true" value="1" name="touch_screen" class="checkbx touch_screen">
 											</span>
 											<label class="check_label">Touch Screen</label>
 										</div>
@@ -664,7 +664,7 @@
 												} else {
 													$checked = 'checked = "checked"';
 												}?>
-											<input <?=$checked;?> type="checkbox" value="1" name="webcam" class="checkbx webcam">
+											<input <?=$checked;?> type="checkbox" disabled="true" value="1" name="webcam" class="checkbx webcam">
 											</span>
 											<label class="check_label">No Webcam</label>
 										</div>
@@ -679,7 +679,7 @@
 											} else {
 												$checked = 'checked = "checked"';
 											}?>
-											<input <?=$checked;?> type="checkbox" value="1" name="curved" class="checkbx curved">
+											<input <?=$checked;?> type="checkbox" disabled="true" value="1" name="curved" class="checkbx curved">
 											</span>
 											<label class="check_label">Curved</label>
 										</div>
@@ -698,7 +698,7 @@
 													} else {
 														$checked = 'checked = "checked"';
 													}?>
-												<input <?=$checked;?> type="checkbox" value="1" name="tgfg_capable" class="checkbx tgfg_capable">
+												<input <?=$checked;?> type="checkbox" disabled="true" value="1" name="tgfg_capable" class="checkbx tgfg_capable">
 												</span>
 												<label class="check_label">Sim Capable</label>
 											</div>

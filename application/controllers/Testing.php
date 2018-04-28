@@ -2178,15 +2178,27 @@ class Testing extends CI_Controller
                     $this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $serial_id]);
                 }
                 $this->basic->update('pallets', ['location_id' => $this->input->post('pallet_location_id')], ['id' => $this->input->post('serial_location_id')]);
-                $this->session->set_flashdata('msg', 'Product has been updated successfully');
+				if ($this->uri->segment(1) == 'admin') {
+					$this->session->set_flashdata('msg', 'Product has been updated successfully');
+					redirect('admin/testing/edit_audit_record/' . $serial_id);
+				} else {
+					$this->session->set_flashdata('msg', 'Product has been updated successfully');
+					redirect('testing/edit_audit_record/' . $serial_id);
+				}
             } else {
-                $this->session->set_flashdata('err_msg', 'Something went wrong');
+				if ($this->uri->segment(1) == 'admin') {
+					$this->session->set_flashdata('err_msg', 'Something went wrong');
+					redirect('admin/testing/edit_audit_record/' . $serial_id);
+				} else {
+					$this->session->set_flashdata('err_msg', 'Something went wrong');
+					redirect('testing/edit_audit_record/' . $serial_id);
+				}
             }
-            if ($this->uri->segment(1) == 'admin') {
-                redirect('admin/testing/edit_audit_record/' . $serial_id);
-            } else {
-                redirect('testing/edit_audit_record/' . $serial_id);
-            }
+            // if ($this->uri->segment(1) == 'admin') {
+            //     redirect('admin/testing/edit_audit_record/' . $serial_id);
+            // } else {
+            //     redirect('testing/edit_audit_record/' . $serial_id);
+            // }
         }
         $this->template->load($this->layout, 'testing/edit', $data);
     }
@@ -2224,8 +2236,8 @@ class Testing extends CI_Controller
             $serial_data = [
                 'qc_notes' => $this->input->post('qc_notes'),
             ];
-            $pallet_name = $this->input->post('scan_loc');
-            $pallet = $this->basic->check_pallet_exists($pallet_name);
+			$pallet_name = $this->input->post('scan_loc');
+			$pallet = $this->basic->check_pallet_exists($pallet_name);
             $serial_data['pack_access'] = ($this->input->post('yes')) ? 1 : 0;
             $serial_data['pack_access'] = ($this->input->post('no')) ? 0 : 1;
             $serial_data['pass_qc'] = ($this->input->post('qc')) ? 1 : 0;
@@ -2237,14 +2249,15 @@ class Testing extends CI_Controller
             $pallet_location = [];
             if ($this->input->post('scan_loc_check')) {
                 $pallet_location_name = $this->input->post('scan_loc');
-                $pallet_location = $this->basic->check_location_exists($pallet_location_name);
+				$pallet_location = $this->basic->check_location_exists($pallet_location_name);
             } else {
-                $serial_data['pallet_id'] = $pallet;
+				$serial_data['pallet_id'] = $pallet;
+				
             }
             $product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['serial' => $this->input->post('serial')]);
             if ($this->basic->update('product_serials', $serial_data, ['serial' => $this->input->post('serial')])) {
-                if (isset($pallet_location)) {
-                    $pallet_location_update_data = ['location_id' => $pallet_location];
+				if (!empty($pallet_location)) {
+					$pallet_location_update_data = ['location_id' => $pallet_location];
                     $this->basic->update('pallets', $pallet_location_update_data, ['id' => $product_serial_data['pallet_id']]);
 				}
 				$timestamp = [];
@@ -2256,7 +2269,7 @@ class Testing extends CI_Controller
 					}
 					$this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
 				}
-				$this->session->set_flashdata('err_msg','Details cannot Saved');
+				$this->session->set_flashdata('msg','Details Saved');
 			}
 			else{
 				$this->session->set_flashdata('err_msg','Details cannot Saved');
@@ -2308,7 +2321,7 @@ class Testing extends CI_Controller
 					$this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
 				}
 				else{
-				$this->session->set_flashdata('err_msg','Details cannot Saved');
+				$this->session->set_flashdata('msg','Details Saved');
 			}
 			}else{
 				$this->session->set_flashdata('err_msg','Details cannot Saved');
@@ -2359,6 +2372,15 @@ class Testing extends CI_Controller
             }
             echo json_encode($return_array);
         }
-    }
-
+	}
+	
+	public function serial_exists(){
+		$serial = $this->basic->is_serial_exists($this->input->post('serial'));
+		if(empty($serial)){
+			$return_array['serial'] = ['code' => 400];
+        } else {
+            $return_array['serial'] = ['code' => 200];
+		}
+		echo json_encode($return_array);
+	}
 }

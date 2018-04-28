@@ -256,7 +256,7 @@
 														<span class="input-group-addon">
 															<input type="checkbox" value="1" name="ssd0" class="ssd checkbx">
 														</span>
-														<label class="check_label">SSD</label>
+														<label class="check_label ssd-lbl">SSD</label>
 														<!-- <input type="text" class="form-control" value="SSD" readonly="true"> -->
 													</div>
 												</div>
@@ -1025,20 +1025,19 @@
 				$('select.original_condition').val(response.product.pocid);
 				$('select.final_condition').val(response.product.ocid);
 				$('select.status').val(response.product.status).trigger('change');
-				console.log(response.product.fail_option);
 				//Make an array
-
-				var dataarray=response.product.fail_option.split(",");
-
+				var fail_option = response.product.fail_option;
+				var dataarray= fail_option.split(",");
 				$('select.fail_option').val(dataarray);
-				i = 0, size = dataarray.length,
-    $options =$('select.fail_option option');
+				// i = 0, size = dataarray.length, options = $('select.fail_option option');
 
-for(i; i < size; i++){
-    $options.filter('[value="'+dataarray[i]+'"]').prop('checked', true);
-}
+				// for(i; i < size; i++){
+				// 	options.filter('[value="'+dataarray[i]+'"]').prop('checked', true);
+				// 	$('.multiselect-container ul li').find('span').addClass('checked');
+				// }
 				$('select.fail_option').multiselect("refresh");
 				$('select.warranty').val(response.product.warranty).trigger('change');
+
 				var cs_issue = JSON.parse(response.product.cosmetic_issue);
 				$('.cosmetic_boxes').each(function(index, el) {
 					if($.inArray($(this).val(), cs_issue)!=-1){

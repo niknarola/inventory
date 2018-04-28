@@ -58,6 +58,8 @@ $route['admin'] = 'admin/user';
 $route['admin/login'] = 'login';
 $route['admin/logout'] = 'login/logout';
 $route['logout'] = 'login/logout';
+$route['dashboard/edit_profile'] = 'dashboard/edit_profile';
+$route['dashboard/change_password'] = 'dashboard/change_password';
 
 $route['admin/receiving/temporary_product'] = 'receiving/temporary_product';
 $route['admin/receiving/find_product'] = 'receiving/find_product';
@@ -114,6 +116,8 @@ $route['admin/barcode/print_serial'] = 'barcode/print_serial';
 
 $route['admin/roles/edit/(:any)'] = 'admin/roles/add/$1';
 $route['admin/user/edit/(:any)'] = 'admin/user/add/$1';
+$route['admin/user/edit_profile'] = 'admin/user/edit_profile';
+$route['admin/user/change_password'] = 'admin/user/change_password';
 $route['admin/products/delete/(:any)'] = 'products/delete/$1';
 $route['admin/inventory/locations'] = 'locations';
 $route['admin/inventory/picking'] = 'picking';
@@ -147,6 +151,7 @@ $route['admin/testing/repair'] = 'testing/repair';
 $route['admin/testing/view_notes/(:any)'] = 'testing/view_notes/$1';
 $route['admin/testing/check_location'] = 'testing/check_location';
 $route['admin/testing/check_serial'] = 'testing/check_serial';
+$route['admin/testing/serial_exists'] = 'testing/serial_exists';
 $route['admin/testing/find_product'] = 'testing/find_product';
 $route['admin/testing/edit_audit_record/(:any)'] = 'testing/edit_audit_record/$1';
 $route['admin/testing/delete/(:any)'] = 'testing/delete/$1';
@@ -158,6 +163,10 @@ $route['admin/shipping/scan_serial'] = 'shipping/scan_serial';
 $route['admin/shipping/manage_order'] = 'shipping/manage_order';
 $route['admin/shipping/complete-order/(:any)'] = 'shipping/complete_order/$1';
 $route['admin/shipping/delete-order'] = 'shipping/delete_order';
+$route['admin/shipping/view_order_notes/(:any)'] = 'shipping/view_order_notes/$1';
+$route['admin/shipping/view_pick_notes/(:any)'] = 'shipping/view_pick_notes/$1';
+$route['admin/shipping/add_notes/(:any)'] = 'shipping/add_notes/$1';
+$route['admin/shipping/shipments'] = 'shipping/shipments';
 
 $route['admin/inventory/master_sheet'] = 'master_sheet';
 $route['admin/inventory/master_sheet/ajaxPaginationData/(:any)'] = 'master_sheet/ajaxPaginationData/$1';

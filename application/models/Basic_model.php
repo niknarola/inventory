@@ -1,12 +1,12 @@
 <?php
 
-class Basic_model extends CI_Model
-{
-    public function __construct()
-    {
+class Basic_model extends CI_Model {
+
+    public function __construct() {
         parent::__construct();
         $this->load->database();
     }
+
     /*
      * Insert data into any table
      * @param String $table Table name
@@ -15,14 +15,15 @@ class Basic_model extends CI_Model
      *      success : Newly added row id
      *      failure : 0
      */
-    public function insert($table, $data)
-    {
+
+    public function insert($table, $data) {
         if ($this->db->insert($table, $data)) {
             return $this->db->insert_id();
         }
 
         return 0;
     }
+
     /*
      * Insert multiple data into table
      * @param String $table table name
@@ -31,8 +32,8 @@ class Basic_model extends CI_Model
      *      success : true
      *      failure : false
      */
-    public function insert_batch($table, $data)
-    {
+
+    public function insert_batch($table, $data) {
         $this->db->insert_batch($table, $data);
         if ($this->db->affected_rows() >= 1) {
             return true;
@@ -40,6 +41,7 @@ class Basic_model extends CI_Model
 
         return false;
     }
+
     /*
      * Update table information
      * @param String $table Table name
@@ -49,8 +51,8 @@ class Basic_model extends CI_Model
      *      success : true
      *      failure : false
      */
-    public function update($table, $data, $cond)
-    {
+
+    public function update($table, $data, $cond) {
         $this->db->where($cond);
         return $this->db->update($table, $data);
     }
@@ -62,8 +64,7 @@ class Basic_model extends CI_Model
      * @param  [String] $keyword [Key to update the record]
      * @return [boolean]          [success: true, failure: false]
      */
-    public function update_batch($table, $data, $keyword)
-    {
+    public function update_batch($table, $data, $keyword) {
         $this->db->update_batch($table, $data, $keyword);
         if ($this->db->affected_rows() >= 1) {
             return true;
@@ -72,8 +73,7 @@ class Basic_model extends CI_Model
         return false;
     }
 
-    public function update_multiple($table, $data, $field)
-    {
+    public function update_multiple($table, $data, $field) {
         if ($this->db->update_batch($table, $data, $field)) {
             return 1;
         } else {
@@ -81,13 +81,13 @@ class Basic_model extends CI_Model
         }
     }
 
-    public function unique_part()
-    {
+    public function unique_part() {
         $this->db->select('id,internal_part');
         $this->db->where('is_delete', '0');
         $products = $this->db->get('ink_products')->result_array();
         return $products;
     }
+
     /*
      * Remove record from table based on condition
      * @param String $table table name
@@ -96,8 +96,8 @@ class Basic_model extends CI_Model
      *      success : true
      *      failure : false
      */
-    public function delete($table, $cond)
-    {
+
+    public function delete($table, $cond) {
         $this->db->where($cond);
         $this->db->delete($table);
         if ($this->db->affected_rows() == 1) {
@@ -106,6 +106,7 @@ class Basic_model extends CI_Model
 
         return false;
     }
+
     /*
      * Remove data into batch
      * @param String $table Table name
@@ -114,8 +115,8 @@ class Basic_model extends CI_Model
      *      success : true
      *      failure : false
      */
-    public function delete_batch($table, $cond)
-    {
+
+    public function delete_batch($table, $cond) {
         $this->db->where($cond);
         $this->db->delete($table);
         if ($this->db->affected_rows() > 1) {
@@ -131,10 +132,11 @@ class Basic_model extends CI_Model
      * @return
      *      success : Array of data
      */
-    public function get_all_data($table)
-    {
+
+    public function get_all_data($table) {
         return $this->db->get($table)->result_array();
     }
+
     /*
      * Get all data of given table by different criteria
      * @param String $table Table name
@@ -142,8 +144,8 @@ class Basic_model extends CI_Model
      * @return
      *      success : Array of data
      */
-    public function get_all_data_by_criteria($table, $cond, $limit = null)
-    {
+
+    public function get_all_data_by_criteria($table, $cond, $limit = null) {
         $this->db->where($cond);
         if ($limit != null) {
             $this->db->limit($limit);
@@ -151,6 +153,7 @@ class Basic_model extends CI_Model
 
         return $this->db->get($table)->result_array();
     }
+
     /*
      * Get table data by id
      * @param String $table table name
@@ -158,37 +161,36 @@ class Basic_model extends CI_Model
      * @return
      *      success : Object of data
      */
-    public function get_data_by_id($table, $id)
-    {
+
+    public function get_data_by_id($table, $id) {
         $this->db->where('id', $id);
         $this->db->limit(1);
         return $this->db->get($table)->row_array();
     }
-    public function get_single_data_by_criteria($table, $cond)
-    {
+
+    public function get_single_data_by_criteria($table, $cond) {
         $this->db->where($cond);
         return $this->db->get($table)->row_array();
         // echo $this->db->last_query();die;
     }
-    public function get_single_data_as_obj_by_criteria($table, $cond)
-    {
+
+    public function get_single_data_as_obj_by_criteria($table, $cond) {
         $this->db->where($cond);
         return $this->db->get($table)->row();
     }
-    public function check_location_exists($loc_name)
-    {
+
+    public function check_location_exists($loc_name) {
         // echo"loc name";pr($loc_name);
         $this->db->select('locations.id');
         $this->db->where('locations.name', $loc_name);
         $this->db->limit(1);
         $query = $this->db->get('locations')->row_array();
-		// pr($query);
-		
-		// exit;
+        // pr($query);
+        // exit;
         // echo"query".$this->db->last_query();
         // echo"model name";pr($loc_name);die;
         if (isset($query['id'])) {
-			$locid =  $query['id'];
+            $locid = $query['id'];
             return $locid;
         } else {
 
@@ -204,8 +206,7 @@ class Basic_model extends CI_Model
         }
     }
 
-    public function check_pallet_exists($pallet_name)
-    {
+    public function check_pallet_exists($pallet_name) {
         // echo"in function<br/>";
         $this->db->select('pallets.id');
         $this->db->where('pallets.pallet_id', $pallet_name);
@@ -214,7 +215,7 @@ class Basic_model extends CI_Model
         // echo"query".$this->db->last_query();
         // echo"model name";pr($pallet_name);echo"<br/>";
         if (isset($query['id'])) {
-			$palletId = $query['id'];
+            $palletId = $query['id'];
             return $palletId;
         } else {
             $pallet = array(
@@ -226,21 +227,28 @@ class Basic_model extends CI_Model
             // pr($insert_id);die;
             return $insert_id;
         }
-	}
-	
-	public function check_serial_exists($serial_name)
-    {
+    }
+
+    public function check_serial_exists($serial_name) {
         $this->db->select('ps.id');
         $this->db->where('ps.new_serial', $serial_name);
         $this->db->limit(1);
-		$query = $this->db->get('product_serials ps')->row_array();
+        $query = $this->db->get('product_serials ps')->row_array();
         // echo"query".$this->db->last_query();
-		return $query;
-	}
-	
+        return $query;
+    }
+    
+    /* @anp*/
+    public function is_serial_exists($serial_name) {
+        $this->db->select('ps.*');
+        $this->db->where('ps.serial', $serial_name);
+        $this->db->or_where('ps.new_serial', $serial_name);
+        $this->db->limit(1);
+        $query = $this->db->get('product_serials ps')->row_array();
+        return $query;
+    }
 
-    public function get_all_data_by_criteria1($table, $cond, $limit = null)
-    {
+    public function get_all_data_by_criteria1($table, $cond, $limit = null) {
         // pr($cond);die;
         $this->db->where_in($cond);
         if ($limit != null) {
@@ -250,8 +258,7 @@ class Basic_model extends CI_Model
         return $this->db->get($table)->result_array();
     }
 
-    public function get_user_by_role_id()
-    {
+    public function get_user_by_role_id() {
         $this->db->select('u.id as uid,u.name as user_name,u.email,u.role_id,r.id as rid, r.name as role_name');
         $this->db->where('role_id', '1');
         $this->db->or_where('role_id', '3');
@@ -260,8 +267,8 @@ class Basic_model extends CI_Model
         $query = $this->db->get('users u')->result_array();
         return $query;
     }
-    public function get_result($table, $condition = null, $fields = null, $single = null, $total = null, $order_by = null)
-    {
+
+    public function get_result($table, $condition = null, $fields = null, $single = null, $total = null, $order_by = null) {
         if (!empty($fields)) {
             $this->db->select($fields);
         } else {

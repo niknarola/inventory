@@ -54,7 +54,8 @@ box-shadow: none !important;
                     <div class="pallet-btm">
 
                         <div class="col-md-4 form-group inputs">
-                            <input type="text" value="" name="serial[]" id="serial" class="form-control serial  serial-new" placeholder="Serial Number#">
+							<input type="text" value="" name="serial[]" id="serial" class="form-control serial  serial-new" placeholder="Serial Number#">
+							<span id="serial_error" class="not_found_error" style="color:red"></span>
                             <input type="hidden" name="serial_id[]" class="serial_id" value="">
                         </div>
                         <div class="col-md-4 form-group">
@@ -89,7 +90,8 @@ box-shadow: none !important;
 <div class="more" style="display:none;">
 <div class="pallet-btm" >
     <div class="col-md-4 form-group inputs">
-        <input type="text" value="" name="serial[]" id="serial" class="form-control serial serial-new" placeholder="Serial Number#" >
+		<input type="text" value="" name="serial[]" id="serial" class="form-control serial serial-new" placeholder="Serial Number#" >
+		<span id="serial_error" class="not_found_error" style="color:red"></span>
         <input type="hidden" name="serial_id[]" class="serial_id" value="">
     </div>
     <div class="col-md-4 form-group">
@@ -219,9 +221,17 @@ jQuery(document).ready(function() {
                 }
             });
 	})
-    $(document).on('change','.pallet-btm .serial-new',function(){
-        get_product_details($(this).val(),$(this).parents('.pallet-btm'));
-    })
+    $(document).on('blur','.pallet-btm .serial-new',function(){
+		var val = $(".serial-new").val();
+		if(val.trim().length !== 0) {
+			$('#serial_error').text('');
+	        get_product_details($(this).val(),$(this).parents('.pallet-btm'));
+		}
+		else{
+			$('#serial_error').html('Please Enter Serial');
+			return false;
+		}
+    });
 
     function get_product_details(serial, parentObj){
         // console.log(parentObj);
