@@ -4,6 +4,7 @@
             <h5 class="panel-title">Search Results</h5>
 		</div>
         <div class="panel-body">
+		<?php //pr($product); die;?>
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Serial Number:</label>
@@ -40,7 +41,7 @@
                             <select name="condition" data-placeholder="Select Original Condition" disabled="true" class="form-control select original_condition">
                                 <?php
 							foreach ($original_condition as $key => $value) {?>
-                                   <option <?php echo ($key == $product['original_condition_id']) ? 'selected' : '' ?> value="<?=$key;?>"><?=$value;?></option>
+                                   <option <?php echo ($key == $product['pocid']) ? 'selected' : '' ?> value="<?=$key;?>"><?=$value;?></option>
                                 <?php }?>
                             </select>
                         </div>
@@ -66,7 +67,7 @@
                             <label>Final Condition:</label>
                             <select name="final_condition" disabled="true" data-placeholder="Select Final Condition" class="form-control select original_condition">
                                 <?php foreach ($original_condition as $key => $value) {?>
-                                    <option value="<?=$key;?>"><?=$value;?></option>
+                                    <option <?php echo ($key == $product['ocid']) ? 'selected' : '' ?> value="<?=$key;?>"><?=$value;?></option>
                                 <?php }?>
                             </select>
                         </div>

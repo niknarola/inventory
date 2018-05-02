@@ -167,6 +167,8 @@ $route['admin/shipping/view_order_notes/(:any)'] = 'shipping/view_order_notes/$1
 $route['admin/shipping/view_pick_notes/(:any)'] = 'shipping/view_pick_notes/$1';
 $route['admin/shipping/add_notes/(:any)'] = 'shipping/add_notes/$1';
 $route['admin/shipping/shipments'] = 'shipping/shipments';
+$route['admin/shipping/mark-as-shipped'] = 'shipping/mark_orders_shipped';
+$route['admin/shipping/view-order/(:any)'] = 'shipping/view_order/$1';
 
 $route['admin/inventory/master_sheet'] = 'master_sheet';
 $route['admin/inventory/master_sheet/ajaxPaginationData/(:any)'] = 'master_sheet/ajaxPaginationData/$1';
@@ -179,6 +181,7 @@ $route['admin/inventory/reports/hp_report/(:any)'] = 'reports/hp_report/$1';
 $route['admin/inventory/reports/reports_results'] = 'reports/reports_results';
 $route['admin/inventory/reports/tech_reports'] = 'reports/tech_reports';
 $route['admin/inventory/reports/download_part_numbers'] = 'reports/download_part_numbers';
+$route['admin/inventory/reports/download_part_name_serial'] = 'reports/download_part_name_serial';
 $route['admin/inventory/create_pallet'] = 'create_pallet';
 $route['admin/inventory/create_pallet/print_contents'] = 'create_pallet/print_contents';
 $route['admin/inventory/create_pallet/print_labels'] = 'create_pallet/print_labels';

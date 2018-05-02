@@ -332,6 +332,15 @@ if ($get_date != '')
                             </div>
                             <div class="col-md-6">
                                 <button class="btn btn-success"  type="submit" >Download Reports</button>
+                            </div>
+							<div class="col-md-12" style="margin-top: 10px;">
+                                <div class="col-md-3">
+								<a href="<?php echo base_url().'admin/inventory/reports/download_part_numbers'?>" class="btn btn-success btn-labeled "><b><i class="icon-mailbox"></i></b>Export Part numbers and Name</a>
+									</div>
+									<div class="col-md-4">
+									<a href="<?php echo base_url().'admin/inventory/reports/download_part_name_serial'?>" class="btn btn-success btn-labeled "><b><i class="icon-mailbox"></i></b>Export Part numbers, Name and Serial</a>
+								</div>
+
                             </div>                    
                         </div>
                     </div>

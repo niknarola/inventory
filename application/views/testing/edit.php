@@ -50,7 +50,7 @@
                             <label>Received Condition:</label>
                             <select name="condition" data-placeholder="Select Original Condition" class="form-control select original_condition">
                                 <?php foreach ($original_condition as $key => $value) {?>
-                                    <option <?php echo ($key == $product['condition']) ? 'selected' : '' ?> value="<?=$key;?>"><?=$value;?></option>
+                                    <option <?php echo ($key == $product['pocid']) ? 'selected' : '' ?> value="<?=$key;?>"><?=$value;?></option>
                                 <?php }?>
                             </select>
                         </div>
@@ -68,7 +68,7 @@
                             <select name="final_condition" data-placeholder="Select Final Condition" class="form-control select original_condition">
                                 <?php foreach ($original_condition as $key => $value) {?>
 
-                                    <option value="<?=$key;?>"><?=$value;?></option>
+                                    <option <?php echo ($key == $product['ocid']) ? 'selected' : '' ?> value="<?=$key;?>"><?=$value;?></option>
                                 <?php }?>
                             </select>
                         </div>

@@ -76,6 +76,8 @@ defined('FOPEN_READ_WRITE_CREATE_STRICT')       OR define('FOPEN_READ_WRITE_CREA
 
 defined('AMAZON')        OR define('AMAZON', 140520); // amazon store
 defined('ExcessBuy')        OR define('ExcessBuy', 140519); // excessbuy store
+defined('TRACK_FEDX')        OR define('TRACK_FEDX', 'https://www.fedex.com/apps/fedextrack/'); // excessbuy store
+defined('TRACK_USPS')        OR define('TRACK_USPS', 'https://tools.usps.com/go/TrackConfirmAction.action'); // excessbuy store
 
 defined('EXIT_SUCCESS')        OR define('EXIT_SUCCESS', 0); // no errors
 defined('EXIT_ERROR')          OR define('EXIT_ERROR', 1); // generic error

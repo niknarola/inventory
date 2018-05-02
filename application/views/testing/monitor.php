@@ -685,7 +685,7 @@
     		});
 	})
     // function get_product_details(){
-		$(".serial").on('keyup', function (e) {
+		$(".serial").on('keydown', function (e) {
 			if(e.keyCode == 13 || e.keyCode == 9){
   		//var part = $('input.part').val();
     	var serial = $('input.serial').val();
@@ -832,62 +832,113 @@
 					$('.dedicated').prop('checked', true);
 				}*/
 				$("input.cpu").val("");
-				var cpu_array = JSON.parse(response.product.cpu);
+                var cpu_array = JSON.parse(response.product.cpu);
                 if(cpu_array!=null){
-                for(var i=0;i<cpu_array.length;i++){
-                    if(i!=0){
-                        $('.add_more_cpu').click();
-                        console.log(cpu_array[i]);
-                   		$('input.cpu:eq('+i+')').val(cpu_array[i]);
+                    for(var i=0;i<cpu_array.length;i++){
+                        if(i!=0){
+                            $('.add_more_cpu').click();
+                        }
+                        $('input.cpu:eq('+i+')').val(cpu_array[i]);
                     }
-                   $('input.cpu:eq('+i+')').val(cpu_array[i]);
-                }
-                }
+
+					if(cpu_array.length > 1 && $('input.cpu').length != cpu_array.length){
+						for(var i = cpu_array.length; i < $('input.cpu').length;++i){
+							$('input.cpu:eq('+i+')').remove();
+						}
+					}
+                } else {
+					for(var i = 1; i < $('input.cpu').length;++i){
+						$('input.cpu:eq('+i+')').remove();
+					}
+				}
+
 				$("input.storage").val("");
                 var storage_array = JSON.parse(response.product.storage);
                 if(storage_array!=null){
-                for(var i=0;i<storage_array.length;i++){
-                    if(i!=0){
-                    	$('.add_more_storage').click();
-                    	$('input.storage:eq('+i+')').val(storage_array[i]);
+                    for(var i=0;i<storage_array.length;i++){
+                        if(i!=0){
+                            $('.add_more_storage').click();
+                            $('input.storage:eq('+i+')').val(storage_array[i]);
+                        }
+                        $('input.storage:eq('+i+')').val(storage_array[i]);
                     }
-                    $('input.storage:eq('+i+')').val(storage_array[i]);
-                }
-                }
+
+					if(storage_array.length > 1 && $('input.storage').length != storage_array.length){
+						for(var i = storage_array.length; i < $('input.storage').length;++i){
+							$('input.storage:eq('+i+')').remove();
+						}
+					}
+                } else {
+					for(var i = 1; i < $('input.storage').length;++i){
+						$('input.storage:eq('+i+')').remove();
+					}
+				}
 				$("input.ssd").attr('checked', false);
                 var ssd_array = JSON.parse(response.product.ssd);
                 if(ssd_array!=null){
                     for(var i=0;i<ssd_array.length;i++){
-                        $('[name="ssd'+i+'"]').prop('checked', false);
-                        console.log(typeof ssd_array[i],ssd_array[i]);
+	                        $('[name="ssd'+i+'"]').prop('checked', false);
                         if(ssd_array[i]==1){
                             $('[name="ssd'+i+'"]').prop('checked', true);
                         }
-                    }                    
+                    }
+					if(ssd_array.length > 1 && $('input.ssd').length != ssd_array.length){
+						for(var i = ssd_array.length; i < $('input.ssd').length;++i){
+							$('[name="ssd'+i+'"]').remove();
+							// $('.ssd-check').remove();
+						}
+					}                    
                     
-                }
+                }else {
+					for(var i = 1; i < $('input.ssd').length;++i){
+						$('[name="ssd'+i+'"]').remove();
+						// $('.ssd-check').remove();
+					}
+				}
+
 				$("input.graphics").val("");
                 var graphics_array = JSON.parse(response.product.graphics);
                 if(graphics_array!=null){
-                for(var i=0;i<graphics_array.length;i++){
-                    if(i!=0){
-                        $('.add_more_graphics').click();
-                    	$('input.graphics:eq('+i+')').val(graphics_array[i]);
+                    for(var i=0;i<graphics_array.length;i++){
+                        if(i!=0){
+                            $('.add_more_graphics').click();
+                            $('input.graphics:eq('+i+')').val(graphics_array[i]);
+                        }
+                        $('input.graphics:eq('+i+')').val(graphics_array[i]);
                     }
-                    $('input.graphics:eq('+i+')').val(graphics_array[i]);
-                }
-                }
+
+					if(graphics_array.length > 1 && $('input.stographicsage').length != graphics_array.length){
+						for(var i = graphics_array.length; i < $('input.graphics').length;++i){
+							$('input.graphics:eq('+i+')').remove();
+						}
+					}
+                } else {
+					for(var i = 1; i < $('input.graphics').length;++i){
+						$('input.graphics:eq('+i+')').remove();
+					}
+				}
 				$("input.dedicated").attr('checked', false);
                 var dedicated_array = JSON.parse(response.product.dedicated);
                 if(dedicated_array!=null){
                     for(var i=0;i<dedicated_array.length;i++){
-                         $('[name="dedicated'+i+'"]').prop('checked', false);
+	                        $('[name="dedicated'+i+'"]').prop('checked', false);
                         if(dedicated_array[i]==1){
                             $('[name="dedicated'+i+'"]').prop('checked', true);
                         }
-                    }                    
+                    }
+					if(dedicated_array.length > 1 && $('input.dedicated').length != dedicated_array.length){
+						for(var i = dedicated_array.length; i < $('input.dedicated').length;++i){
+							$('[name="dedicated'+i+'"]').remove();
+							// $('.ssd-check').remove();
+						}
+					}                    
                     
-                }
+                }else {
+					for(var i = 1; i < $('input.dedicated').length;++i){
+						$('[name="dedicated'+i+'"]').remove();
+						// $('.ssd-check').remove();
+					}
+				}
 				$('.mouse_keyboard').prop('checked', false);
 				if(response.product.mouse_keyboard==1){
 					$('.mouse_keyboard').prop('checked', true);

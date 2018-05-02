@@ -216,7 +216,7 @@ class Shipping_model extends CI_Model {
         $data = $this->db->get()->row_array();
         return $data;
     }
-    
+
     public function get_order_details($order_number) {
         $this->db->select('o.*');
         $this->db->from('orders o');
@@ -224,7 +224,7 @@ class Shipping_model extends CI_Model {
         $data = $this->db->get()->row_array();
         return $data;
     }
-    
+
     public function get_order_item_detail($order_item_id) {
 //        $order_item_id = 235472045;
         $this->db->select('oi.*');
@@ -234,11 +234,18 @@ class Shipping_model extends CI_Model {
         $data = $this->db->get()->result_array();
         return $data;
     }
-    
+
     public function serial_update($data, $serial) {
         $this->db->where('ps.serial', $serial);
         $this->db->or_where('ps.new_serial', $serial);
         return $this->db->update("product_serials as ps", $data);
+    }
+
+    public function get_notes_by_order($order_item_id) {
+        $this->db->select('o.*');
+        $this->db->where('o.order_item_id', $order_item_id);
+        $query = $this->db->get('order_item_notes o')->row_array();
+        return $query;
     }
 
 }

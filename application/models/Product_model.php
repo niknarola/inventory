@@ -238,8 +238,12 @@ class Product_model extends CI_Model
     }
     public function product_searching($serial)
     {
-        $this->db->select('products.*,products.id as pid,ps.id as sid, ps.location_id as pslocation, ps.status as serial_status, ps.serial, ps.*, 
-							oc.name as original_condition, 
+		$this->db->select('products.*,products.id as pid,ps.id as sid, 
+							ps.location_id as pslocation, ps.status as serial_status, 
+							ps.serial, ps.*, 
+							products.original_condition_id, 
+							oc.id as ocid,oc.name as original_condition, 
+							poc.id as pocid,poc.name as product_original_condition,
 							pl_loc.id as pallet_location_id, pl_loc.name as pallet_location_name, 
 							s_location.id as serial_location_id, s_location.name as serial_location_name,
 							u.id as uid, u.name as username, 
@@ -251,7 +255,8 @@ class Product_model extends CI_Model
         $this->db->join('product_serials ps','ps.product_id = products.id','left');
         $this->db->join('users u','ps.tested_by = u.id','left');
         $this->db->join('locations s_location','ps.location_id = s_location.id','left');
-        $this->db->join('original_condition oc','products.original_condition_id = oc.id','left');
+        $this->db->join('original_condition oc', 'oc.id = ps.condition', 'left');
+        $this->db->join('original_condition poc', 'poc.id = products.original_condition_id', 'left');
         $this->db->join('pallets pl','pl.id = ps.pallet_id','left');
         $this->db->join('locations pl_loc','pl.location_id = pl_loc.id','left');
         $this->db->limit(1);
@@ -526,8 +531,22 @@ class Product_model extends CI_Model
 
     public function get_part_numbers()
     {
-        $this->db->select('p.part');
-        // $this->db->where('p.is_delete',0);
+        $this->db->select('p.part,p.name');
+        $this->db->where('p.is_delete',0);
+        $query = $this->db->get('products p')->result_array();
+        // echo $this->db->last_query();
+        // pr($query);die;
+        return $query;
+    }
+
+	public function get_part_name_serial()
+    {
+        $this->db->select('p.part,p.name,ps.serial,ps.status');
+        $this->db->where('p.is_delete',0);
+        $this->db->where('ps.is_delete',0);
+        $this->db->like('ps.status','ready for sale');
+		$this->db->or_like('ps.status','inprogress');
+		$this->db->join('product_serials ps','p.id = ps.product_id');
         $query = $this->db->get('products p')->result_array();
         // echo $this->db->last_query();
         // pr($query);die;
@@ -545,13 +564,16 @@ class Product_model extends CI_Model
     public function get_product_serial_by_id($id)
     {
         $this->db->select('p.*,ps.id as sid, ps.location_id as pslocation, ps.status as serial_status, ps.serial, ps.*, 
-							oc.name as original_condition, 
+							p.original_condition_id, 
+							oc.id as ocid,oc.name as original_condition, 
+							poc.id as pocid,poc.name as product_original_condition,
 							pl_loc.id as pallet_location_id, pl_loc.name as pallet_location_name, 
 							s_location.id as serial_location_id, s_location.name as serial_location_name,
                             pl.id as plid, pl.pallet_id as pallet');
         $this->db->join('products p','p.id = ps.product_id','left');
         $this->db->join('locations s_location','ps.location_id = s_location.id','left');
-        $this->db->join('original_condition oc','p.original_condition_id = oc.id','left');
+        $this->db->join('original_condition oc', 'oc.id = ps.condition', 'left');
+        $this->db->join('original_condition poc', 'poc.id = p.original_condition_id', 'left');
         $this->db->join('pallets pl','pl.id = ps.pallet_id','left');
         $this->db->join('locations pl_loc','pl.location_id = pl_loc.id','left');
         $this->db->where('ps.id', $id);

@@ -27,21 +27,22 @@
     <?php } ?>
     <div class="panel panel-flat">
         <div class="panel-heading">
-            <h5 class="panel-title">Pending Shipments</h5>
+            <h5 class="panel-title">Shipments</h5>
         </div>
         <div class="table-responsive">
             <form action="" method="post">
                 <div class="col-md-12">
                     <div class="picking-actions">
-                        <a href="javascript:void(0);" class="btn bg-teal-400" id="sync">Refresh</a>
-                        <a href="javascript:void(0);" class="btn bg-teal-400" id="mark-as-shipped">Mark as Shipped</a>
+                        <a href="<?php echo base_url() . 'admin/shipping/shipments'; ?>" class="btn bg-teal-400" id="sync">Refresh</a>
+                        <a href="<?php echo base_url() . 'admin/shipping/shipments/today'; ?>" class="btn bg-teal-400 date_filter <?php echo ($filter == 'today') ? 'active' : ''; ?>" data-val="today">Today</a>
+                        <a href="<?php echo base_url() . 'admin/shipping/shipments/this-week'; ?>" class="btn bg-teal-400 date_filter <?php echo ($filter == 'this-week') ? 'active' : ''; ?>" data-val="week">This Week</a>
                     </div>
                     <table class="table datatable-basic" id="orders_tbl">
                         <thead>
                             <tr>
-                                <th><input type="checkbox" name="check_all" class="check_all" id="check_all" value=""></th>
                                 <th>#</th>
                                 <th>Order Date</th>
+                                <th>Ship Date</th>
                                 <th>Order #</th>
                                 <th>Site</th>
                                 <th>Part #</th>
@@ -49,56 +50,28 @@
                                 <th>Serial #</th>
                                 <th>Status</th>
                                 <th>Actions</th>
-                                <th>On time</th>
                                 <th>Order notes</th>
-                                <th>Pick notes</th>
+                                <th>Tracking</th>
                                 <th style="display: none;">hide</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                            if ($orders) {
+                            if ($shipments) {
                                 $i = 1;
                                 $cls = 0;
                                 $CI = & get_instance();
-                                foreach ($orders as $order) {
+                                foreach ($shipments as $shipment) {
+                                    $order = $shipment['order_details'];
                                     $today = date('m/d/Y');
-                                    $orderDate = $order['orderDate'];
-                                    $add_day = 0;
-                                    do {
-                                        $add_day++;
-                                        $new_date = date('Y-m-d', strtotime("$today +$add_day Days"));
-                                        $new_day_of_week = date('w', strtotime($new_date));
-                                    } while ($new_day_of_week == 6 || $new_day_of_week == 0);
-
-                                    $next_working_date = $new_date;
-                                    if ($today == $next_working_date) {
-                                        $on_time = "YES";
-                                        $order_cls = "";
-                                    } else {
-                                        $on_time = "NO";
-                                        $order_cls = "txt-danger";
-                                    }
-                                    $cnt_order_item_quantity = $order['qty_cnt'];
+                                    $orderDate = $order['created'];
                                     $order_items = $CI->get_all_data_by_criteria($order['order_number']);
                                     ?>
                                     <?php
                                     $itemcnt = 1;
                                     foreach ($order['items'] as $item) {
 
-                                        $order_item_details = $CI->get_order_item_detail($item['orderItemId']);
-                                        $n = 1;
-                                        $sku = $item['sku'];
-                                        $pieces = explode('-', $sku);
-                                        if (count($pieces) > 1) {
-                                            $part1 = implode('-', array_slice($pieces, 0, $n));
-                                            $part2 = $pieces[$n];
-                                        } else {
-                                            $part1 = $sku;
-                                            $part2 = '';
-                                        }
-                                        $part = $part1;
-                                        $additional_part_info = $part2;
+                                        $order_item_details = $CI->get_order_item_detail($item['order_item_id']);
                                         $qty = $item['quantity'];
                                         $scan = '';
                                         $complete = 'disabled';
@@ -116,24 +89,24 @@
                                             $class = "success";
                                         }
                                         ?>
-                                        <tr class="<?php echo $class; ?>" id='order_<?php echo $item['orderItemId']; ?>'>
-                                    <input class="order_item_id" type="hidden" name="order_item_id" value="<?php echo $item['orderItemId']; ?>">
+                                        <tr class="<?php echo $class; ?>" id='order_<?php echo $item['order_item_id']; ?>'>
+                                    <input class="order_item_id" type="hidden" name="order_item_id" value="<?php echo $item['order_item_id']; ?>">
                                     <input class="order_id" type="hidden" name="order_id" value="<?php echo $order['order_id']; ?>">
                                     <?php if ($itemcnt == 1) { ?>
-                                        <td><input type="checkbox" name="check[]" class="check_order" value="<?php echo $order['order_id']; ?>"></td>
                                         <td><?php echo $i; ?></td>
-                                        <td class="order_date <?php echo $order_cls; ?>"><?php echo $order['orderDate']; ?></td>
+                                        <td class="order_date"><?php echo $order['created']; ?></td>
+                                        <td class="ship_date"><?php echo $shipment['shipDate']; ?></td>
                                         <td class="order_number"><?php echo $order['order_number']; ?></td>
-                                        <td class="store"><?php echo $order['store']; ?></td>
+                                        <td class="store"><?php echo $order['site']; ?></td>
                                     <?php } else { ?>
                                         <td>&nbsp;</td>
-                                        <td>&nbsp;</td>
-                                        <td class="noselect store" style="color: #6772e500;"><?php echo $order['orderDate']; ?></td>
+                                        <td class="noselect store" style="color: #6772e500;"><?php echo $order['created']; ?></td>
+                                        <td class=""><?php echo $shipment['shipDate']; ?></td>
                                         <td class="noselect order_number" style="color: #6772e500;"><?php echo $order['order_number']; ?></td>
-                                        <td class="noselect store" style="color: #6772e500;"><?php echo $order['store']; ?></td>
+                                        <td class="noselect store" style="color: #6772e500;"><?php echo $order['site']; ?></td>
                                     <?php } ?>
-                                        <td><a class="part" data-part="<?php echo $part; ?>" target="_BLANK" href="<?php echo base_url() . 'admin/inventory/picking/part/' . $part; ?>"><?php echo $part; ?></a></td>
-                                    <td class="additional_part_info"><?php echo $additional_part_info; ?></td>
+                                    <td><?php echo $item['part']; ?></td>
+                                    <td class="additional_part_info"><?php echo $item['additional_part_info']; ?></td>
                                     <td>
                                         <?php
                                         $order_item_qty = $qty;
@@ -165,16 +138,23 @@
                                         <?php } ?>
                                     </td>
                                     <td>
-                                        <?php echo ($order['order_status'] == 1 ? 'Ready to ship' : 'Picking'); ?>
+                                        <?php echo ($order['order_status'] == 2 ? 'Shipped' : '-'); ?>
                                     </td>
-                                    <td><a href="javascript:void(0);" class="order-ship-link" data-order="<?php echo $order['order_number']; ?>">Ship Order</a>
-                                    </td>
-                                    <td class="<?php echo $order_cls; ?>">
-                                        <?php echo $on_time;
+                                    <?php
+                                        $carriercode = $shipment['carrierCode'];
+                                        if ($carriercode == 'fedex') {
+                                            $track_url = TRACK_FEDX . '?action=track&language=english&tracknumbers=' . $shipment['trackingNumber'];
+                                        } elseif ($carriercode == 'stamps_com') {
+                                            $track_url = TRACK_USPS . '?tLabels=' . $shipment['trackingNumber'];
+                                        }
                                         ?>
+                                    <td><a href="<?php echo base_url() . 'admin/shipping/view-order/' . base64_encode($order['order_id']); ?>" data-id="<?php echo $order['order_number']; ?>" class="">View Order</a>
+                                        <br><a target="_BLANK" href="<?php echo $track_url; ?>" data-id="<?php echo $order['order_number']; ?>" class="">Track</a></td>
+                                    <td><a href="javascript:;" data-id="<?php echo $order['order_number']; ?>" class="btn-xs btn-default order_notes" onClick="view_order_notes(<?php echo $item['order_item_id']; ?>)"><i class="icon-comment"></i></a></td>
+                                    <td>
+                                        <span><a target="_BLANK" href="<?php echo $track_url; ?>" ><?php echo $shipment['trackingNumber']; ?></a></span><br>
+                                        <span><?php echo $carriercode; ?></span>
                                     </td>
-                                    <td><a href="javascript:;" data-id="<?php echo $order['order_number']; ?>" class="btn-xs btn-default order_notes" onClick="view_order_notes(<?php echo $item['orderItemId']; ?>)"><i class="icon-comment"></i></a></td>
-                                    <td><a href="javascript:;" data-id="<?php echo $order['order_number']; ?>" class="btn-xs btn-default pick_notes" onClick="view_pick_notes(<?php echo $item['orderItemId']; ?>)"><i class="icon-comment"></i></a></td>
                                     <td style="display: none;"></td>
                                     </tr>
                                     <?php
@@ -213,7 +193,7 @@
                                         <div class="form-group">
                                             <label>Order Notes:</label>
                                             <input type="hidden" name="order_item_id" class="order_item_id" value="">
-                                            <textarea class="form-control" name="order_notes" id="order_notes"></textarea>
+                                            <textarea class="form-control" name="order_notes" id="order_notes" readonly=""></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -221,7 +201,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-success">Save</button>
+                        <!--<button type="submit" class="btn btn-success">Save</button>-->
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </form>
@@ -260,33 +240,6 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     </div>
                 </form>
-            </div>
-        </div>
-    </div>
-    <div id="orderCopiedModal" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-lg">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Ship Order</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="pick_details_container">
-                        <div class="row">
-                            <div class="table-responsive">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>Order Number is copied! Paste this order number to shipstation website:</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a href="javascript:void(0);" class="btn btn-success go-to-ship">OK</a>
-                </div>
             </div>
         </div>
     </div>
@@ -333,9 +286,9 @@
                             jQuery(document).ready(function ($) {
                                 // DataTable
                                 table = $('.datatable-basic').dataTable({
-                                    "aoColumnDefs": [{"bSortable": false, "aTargets": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]}],
+                                    "aoColumnDefs": [{"bSortable": false, "aTargets": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]}],
                                     "pageLength": 10,
-                                    "order": [10, "asc"],
+                                    "order": [12, "asc"],
                                     "scrollX": true,
                                     language: {
                                         search: '<span>Search:</span> _INPUT_',
@@ -348,23 +301,6 @@
                                     minimumResultsForSearch: Infinity,
                                     width: 'auto'
                                 });
-
-                                $(".order-ship-link").on("click", function () {
-                                    var order_number = $(this).data('order');
-
-                                    var $temp = $("<input>");
-                                    $("body").append($temp);
-                                    $temp.val(order_number).select();
-                                    document.execCommand("copy");
-                                    $temp.remove();
-                                    $('#orderCopiedModal').modal('show');
-                                });
-
-                                $(".go-to-ship").on("click", function () {
-                                    $('#orderCopiedModal').modal('hide');
-                                    window.open('https://ss7.shipstation.com/#/orders', '_blank');
-                                });
-
 
                                 $("#addOrderNote").submit(function (e) {
                                     var url = $(this).attr('action');
@@ -399,50 +335,6 @@
                                     });
 
                                     e.preventDefault(); // avoid to execute the actual submit of the form.
-                                });
-                                $('.check_all').click(function () {
-                                    if ($(this).is(':checked')) {
-                                        $('.check_order').prop('checked', true);
-                                        console.log($('.check_product:checked').length);
-                                    } else {
-                                        $('.check_order').prop('checked', false);
-                                        console.log($('.check_order:checked').length);
-                                    }
-                                });
-                                $('#mark-as-shipped').click(function () {
-
-                                    if (confirm("Are you sure you want to mark this as shipped?"))
-                                    {
-                                        var id = [];
-
-                                        $(':checkbox:checked').each(function (i) {
-                                            id[i] = $(this).val();
-                                        });
-
-                                        if (id.length === 0) //tell you if the array is empty
-                                        {
-                                            alert("Please Select atleast one order");
-                                        } else
-                                        {
-                                            $('#overlay').show();
-                                            $.ajax({
-                                                url: '<?php echo base_url() . 'admin/shipping/mark-as-shipped'; ?>',
-                                                method: 'POST',
-                                                data: {orders: id},
-                                                success: function ()
-                                                {
-//                                                    return false;
-                                                    window.location.href = '<?php echo base_url() . "admin/shipping"; ?>';
-                                                    $('#overlay').fadeOut();
-                                                }
-
-                                            });
-                                        }
-
-                                    } else
-                                    {
-                                        return false;
-                                    }
                                 });
                             });
     </script>

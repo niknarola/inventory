@@ -1109,7 +1109,8 @@ if ($product['tgfg_capable'] == 0) {
 					$('textarea.cpu').html(cpu_array.join(','));
 				}
 				//----------------
-				$('select.original_condition').val(response.product.original_condition_id);
+				$('select.original_condition').val(response.product.pocid);
+				$('select.final_condition').val(response.product.ocid);
 				$('select.grade').val(response.product.cosmetic_grade);
 				$('select.status').val(response.product.status).trigger('change');
 				$('select.fail_option').val(response.product.fail_option).trigger('change');

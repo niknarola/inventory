@@ -13,6 +13,7 @@ class Shipping extends CI_Controller {
         $this->load->model('Product_model', 'products');
         $this->load->model('Basic_model', 'basic');
         $this->load->model('Picking_model', 'picking');
+        $this->load->model('Shipping_model', 'shipping');
         $this->load->model('Locations_model', 'location');
         if ($this->uri->segment(1) == 'admin' && !$this->session->userdata('admin_validated')) {
             redirect('admin/login');
@@ -331,8 +332,10 @@ class Shipping extends CI_Controller {
             } else {
                 $order_status = 0;
             }
-            if ($order_status == 0) {
+            if ($order_status != 2) {
                 $order[$key] = $val;
+                $order_date = date_create($val['orderDate']);
+                $order[$key]['orderDate'] = date_format($order_date, "m/d/Y");
                 $storeId = $val['advancedOptions']['storeId'];
                 if ($storeId == AMAZON) {
                     $store = "Amazon";
@@ -349,6 +352,11 @@ class Shipping extends CI_Controller {
                     $order[$key]['qty_cnt'] = $order[$key]['qty_cnt'] + $it['quantity'];
                 }
                 $order[$key]['items'] = $val['items'];
+                if (!empty($order_details)) {
+                    $order[$key]['order_status'] = $order_details['order_status'];
+                } else {
+                    $order[$key]['order_status'] = 0;
+                }
             }
         }
 //        pr($order);
@@ -356,6 +364,58 @@ class Shipping extends CI_Controller {
         $data['orders'] = $order;
         //load the view
         $this->template->load($this->layout, 'shipping/index', $data);
+    }
+
+    public function view_order_notes($order_item_id) {
+        $item_notes = $this->shipping->get_notes_by_order($order_item_id);
+        if ($order_item_id) {
+            $resp['status'] = 1;
+            $resp['order_notes'] = $item_notes['order_notes'];
+        } else {
+            $resp['status'] = 0;
+        }
+        echo json_encode($resp);
+    }
+
+    public function view_pick_notes($order_item_id) {
+        $item_notes = $this->shipping->get_notes_by_order($order_item_id);
+        if ($order_item_id) {
+            $resp['status'] = 1;
+            $resp['pick_notes'] = $item_notes['pick_notes'];
+        } else {
+            $resp['status'] = 0;
+        }
+        echo json_encode($resp);
+    }
+
+    public function add_notes($note_type) {
+        $postdata = $this->input->post();
+        if (!empty($postdata['order_item_id'])) {
+            if ($note_type == "order") {
+                $notedata = array(
+                    "order_item_id" => $postdata['order_item_id'],
+                    "order_notes" => $postdata['order_notes'],
+                );
+            } elseif ($note_type == "pick") {
+                $notedata = array(
+                    "order_item_id" => $postdata['order_item_id'],
+                    "pick_notes" => $postdata['pick_notes'],
+                );
+            }
+            $isorderitemnotesexist = $this->basic->get_single_data_by_criteria("order_item_notes", ['order_item_id' => $postdata['order_item_id']]);
+            if ($isorderitemnotesexist) {
+                $update = $this->basic->update('order_item_notes', $notedata, ['order_item_id' => $postdata['order_item_id']]);
+            } else {
+                $insert = $this->basic->insert("order_item_notes", $notedata);
+            }
+            $this->session->set_flashdata('success', 'You have added ' . $note_type . ' note successfully!');
+            $data['success'] = 1;
+        } else {
+            $this->session->set_flashdata('error', 'Something went wrong! Please try again.');
+            $data['success'] = 0;
+        }
+        echo json_encode($data);
+        exit;
     }
 
     public function order_list() {
@@ -729,7 +789,7 @@ class Shipping extends CI_Controller {
                 $order_data = array(
                     'is_delete' => 1,
                 );
-                $isorderexist = $this->basic->get_single_data_by_criteria("orders", $order_data, ['order_id' => $order]);
+                $isorderexist = $this->basic->get_single_data_by_criteria("orders", ['order_id' => $order]);
                 if ($isorderexist) {
                     $update = $this->basic->update("orders", $order_data, ['order_id' => $order]);
                 }
@@ -744,6 +804,117 @@ class Shipping extends CI_Controller {
         }
         echo json_encode($data);
         exit;
+    }
+
+    public function shipments($filter = NULL) {
+        $data = array();
+        $data['title'] = 'Shipments';
+        $data["filter"] = '';
+        $shipstation_authorization_key = 'Basic YmI3MTc5OTE0ZmYyNDYyNzk4OTg2YWJmZWJhMmY0NjM6MWM0MzM1ZmU5NWRmNDQxNjllYmNlOWQyNmJjYjgxMTY=';
+        $ch = curl_init();
+
+        if (empty($filter)) {
+            curl_setopt($ch, CURLOPT_URL, "https://ssapi.shipstation.com/shipments");
+        } elseif (!empty($filter) && $filter == "today") {
+            $data["filter"] = 'today';
+            $today = date('Y-m-d');
+            curl_setopt($ch, CURLOPT_URL, "https://ssapi.shipstation.com/shipments?shipDateStart=" . $today . "&shipDateEnd=" . $today);
+        } elseif (!empty($filter) && $filter == "this-week") {
+            $data["filter"] = 'this-week';
+            $today = date('Y-m-d');
+            date_default_timezone_set(date_default_timezone_get());
+            $dt = strtotime($today);
+            $weekrange = array(
+                "start" => date('N', $dt) == 1 ? date('Y-m-d', $dt) : date('Y-m-d', strtotime('last monday', $dt)),
+                "end" => date('N', $dt) == 7 ? date('Y-m-d', $dt) : date('Y-m-d', strtotime('next sunday', $dt))
+            );
+            curl_setopt($ch, CURLOPT_URL, "https://ssapi.shipstation.com/shipments?shipDateStart=" . $weekrange['start'] . "&shipDateEnd=" . $weekrange['end']);
+        }
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            "Authorization: " . $shipstation_authorization_key
+        ));
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+        $result = json_decode($response, true);
+
+        $shipments = $result['shipments'];
+        $shipment = array();
+        foreach ($shipments as $key => $val) {
+            $order_details = $this->picking->get_order_details($val['orderNumber']);
+//            $order_details = $this->picking->get_order_details(65145);
+            $order_item_data = $this->basic->get_all_data_by_criteria('order_items', ['order_number' => $val['orderNumber']]);
+            if (!empty($order_item_data)) {
+                $shipment[$key] = $val;
+                $shipment[$key]['order_details'] = $order_details;
+                $shipment[$key]['order_details']['items'] = $order_item_data;
+            }
+        }
+//        pr($shipment);
+//        exit;
+        $data['shipments'] = $shipment;
+        //load the view
+        $this->template->load($this->layout, 'shipping/shipments', $data);
+    }
+
+    public function mark_orders_shipped() {
+        $postdata = $this->input->post();
+        $orders = $postdata;
+        foreach ($orders['orders'] as $order) {
+            if (!empty($order) && $order > 0) {
+                $order_data = array(
+                    'order_status' => 2,
+                );
+                $isorderexist = $this->basic->get_single_data_by_criteria("orders", ['order_id' => $order]);
+                if ($isorderexist) {
+                    $update = $this->basic->update("orders", $order_data, ['order_id' => $order]);
+                }
+                $this->session->set_flashdata('success', 'You have successfully marked selected orders as shipped.');
+                $data['success'] = 1;
+            }
+        }
+        echo json_encode($data);
+        exit;
+    }
+
+    public function view_order($order_id) {
+        $order_id = base64_decode($order_id);
+        $shipstation_authorization_key = 'Basic YmI3MTc5OTE0ZmYyNDYyNzk4OTg2YWJmZWJhMmY0NjM6MWM0MzM1ZmU5NWRmNDQxNjllYmNlOWQyNmJjYjgxMTY=';
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, "https://ssapi.shipstation.com/orders/".$order_id);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            "Authorization: " . $shipstation_authorization_key
+        ));
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+        $result = json_decode($response, true);
+        echo $order_id;
+        pr($result);
+        exit;
+        $data['order'] = $result;
+        $storeId = $data['order']['advancedOptions']['storeId'];
+        if ($storeId == AMAZON) {
+            $store = "Amazon";
+        } elseif ($storeId == ExcessBuy) {
+            $store = 'ExcessBuy';
+        }
+        $data['store'] = $store;
+        $order_date = date_create($data['order']['orderDate']);
+        $payment_date = date_create($data['order']['paymentDate']);
+        $data['orderDate'] = date_format($order_date, "m/d/Y");
+        $data['paymentDate'] = date_format($payment_date, "m/d/Y");
+//        pr($result);
+//        exit;
+        $data['title'] = 'Order Details';
+        $this->template->load($this->layout, 'shipping/view_order', $data);
     }
 
 }

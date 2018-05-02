@@ -790,7 +790,7 @@
     	$el.val(values);
     }
     // function get_product_details(){
-		$(".serial").on('keyup', function (e) {
+		$(".serial").on('keydown', function (e) {
 			if(e.keyCode == 13 || e.keyCode == 9){
   		//var part = $('input.part').val();
     	var serial = $('input.serial').val();
