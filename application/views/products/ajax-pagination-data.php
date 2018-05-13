@@ -14,8 +14,8 @@
     <tbody id="userData">
         <?php if (!empty($products)): foreach ($products as $product): ?>
                 <tr>
-                    <td>#<?php echo $product['pid']; ?></td>
-                    <td><?php echo $product['part']; ?></td>
+                    <td><?php echo $product['pid']; ?></td>
+                    <td><?php echo ($product['is_flagged'] == 1) ? $product['part'].' <i class="icon-flag3"></i>' : $product['part']; ?></td>
                     <td><?php echo $product['name']; ?></td>
                     <!-- <td><?php //echo $product['description']; ?></td> -->
                     <td><?php echo ($product['category'] != null || $product['category'] != '') ? get_category_name($product['category']) : ''; ?></td>

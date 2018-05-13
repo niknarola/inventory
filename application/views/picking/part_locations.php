@@ -1,9 +1,24 @@
 <div class="col-md-12">
+    <?php
+    if ($this->session->flashdata('success')) {
+        ?>
+        <div class="alert alert-success hide-msg">
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span><span class="sr-only">Close</span></button>
+            <strong><?php echo $this->session->flashdata('success') ?></strong>
+        </div>
+    <?php } ?>
+    <?php if ($this->session->flashdata('error')) {
+        ?>
+        <div class="alert alert-danger hide-msg">
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span><span class="sr-only">Close</span></button>                    
+            <strong><?php echo $this->session->flashdata('error') ?></strong>
+        </div>
+    <?php } ?>
     <div class="panel panel-flat">
         <div class="panel-heading">
             <h3 class="panel-title">Part Information</h3>
-            <h6 class="panel-title"><b>Part #</b> : F9D31AA</h6>
-            <h6 class="panel-title"><b>Part Name</b> : HP ElitePad Power/Ethernet Adapter</h6>
+            <h6 class="panel-title"><b>Part #</b> : <?php echo $part; ?></h6>
+            <h6 class="panel-title"><b>Part Name</b> : <?php echo $part_details['name']; ?></h6>
         </div>
         <div class="table-responsive">
             <form action="" method="post">
@@ -22,24 +37,24 @@
                         </thead>
                         <tbody>
                             <?php
-                            if ($details) { 
+                            if ($details) {
                                 $i = 1;
                                 foreach ($details as $detail) {
                                     ?>
                                     <tr>
                                         <td><?php echo $i; ?></td>
                                         <td><?php echo $detail['serial'] ?></td>
-                                        <!-- <td><?php //echo $detail['product_name']; ?></td> -->
-                                        <td><?php echo $detail['location'].'/'.$detail['pallet']; ?></td>
+                                        <!-- <td><?php //echo $detail['product_name'];  ?></td> -->
+                                        <td><?php echo $detail['location'] . '/' . $detail['pallet']; ?></td>
                                         <td><?php echo $detail['original_condition']; ?></td>
-                                        <!-- <td><?php //echo $detail['notes']; ?></td> -->
+                                        <!-- <td><?php //echo $detail['notes'];  ?></td> -->
                                         <td><?php echo $detail['psstatus']; ?></td>
                                     </tr>
                                     <?php
                                     $i++;
                                 }
                             } else {
-                                echo "<td colspan='9'><center>No orders found</center></td>";
+                                echo "<td colspan='9'><center>No details found</center></td>";
                             }
                             ?>
                         </tbody>
@@ -48,7 +63,7 @@
             </form>
         </div>
     </div>
-	<script type="text/javascript" src="assets/js/datatables.min.js"></script>
+    <script type="text/javascript" src="assets/js/datatables.min.js"></script>
     <script type="text/javascript">
         jQuery(document).ready(function ($) {
             // DataTable

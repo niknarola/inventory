@@ -307,22 +307,22 @@ class Shipping extends CI_Controller {
             "externallyFulfilledBy" => "",
             "labelMessages" => "",
         );
-//        $shipstation_authorization_key = 'Basic YmI3MTc5OTE0ZmYyNDYyNzk4OTg2YWJmZWJhMmY0NjM6MWM0MzM1ZmU5NWRmNDQxNjllYmNlOWQyNmJjYjgxMTY=';
-//        $ch = curl_init();
-//
-//        curl_setopt($ch, CURLOPT_URL, "https://ssapi.shipstation.com/orders?orderStatus=awaiting_shipment");
-//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-//        curl_setopt($ch, CURLOPT_HEADER, FALSE);
-//
-//        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-//            "Authorization: " . $shipstation_authorization_key
-//        ));
-//
-//        $response = curl_exec($ch);
-//        curl_close($ch);
-//        $result = json_decode($response, true);
-//        
-//        $orders = $result['orders'];
+        $shipstation_authorization_key = 'Basic YmI3MTc5OTE0ZmYyNDYyNzk4OTg2YWJmZWJhMmY0NjM6MWM0MzM1ZmU5NWRmNDQxNjllYmNlOWQyNmJjYjgxMTY=';
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, "https://ssapi.shipstation.com/orders?orderStatus=awaiting_shipment");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            "Authorization: " . $shipstation_authorization_key
+        ));
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+        $result = json_decode($response, true);
+        
+        $orders = $result['orders'];
 //        pr($orders);
 //        exit;
         foreach ($orders as $key => $val) {
@@ -488,120 +488,9 @@ class Shipping extends CI_Controller {
         $this->load->view('locations/ajax-pagination-data', $data, FALSE);
     }
 
-    public function master() {
-        $data['title'] = 'Locations Master';
-        $this->load->model('Receiving_model', 'receiving');
-        $data['pallets'] = $this->receiving->get_key_value_pallets();
-        $data['locations'] = $this->basic->get_all_data('locations');
-        $data['admin_prefix'] = $this->admin_prefix;
-        $data['print_url'] = ($this->uri->segment(1) == 'admin') ? 'admin/barcode/location_print' : 'barcode/location_print';
-        if ($this->input->post()) {
-            if ($this->input->post('complete')) {
-                $pallet_id = $this->input->post('pallet_id');
-                $location = $this->basic->get_single_data_by_criteria('locations', array('name' => trim($this->input->post('location'))));
-                if (!empty($location)) {
-                    // echo"in if";die;
-                    $location_id = $location['id'];
-                } else {
-                    // echo"in else";die;
-                    $insert_data = [
-                        'name' => trim($this->input->post('location'))
-                    ];
-                    // pr($insert_data);die;
-                    $location_id = $this->basic->insert('locations', $insert_data);
-                }
-                $ldata = [
-                    'location_id' => $location_id
-                ];
-                if ($this->basic->update('product_serials', $ldata, ['pallet_id' => $pallet_id])) {
-                    $product_serial_data = $this->basic->get_all_data_by_criteria('product_serials', ['pallet_id' => $pallet_id]);
-                    $timestamp = [
-                        'location_assigned_date' => date('Y-m-d H:i:s'),
-                        'last_scan' => date('Y-m-d H:i:s')
-                    ];
-                    foreach ($product_serial_data as $key => $serial_data) {
-                        $this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $serial_data['id']]);
-                    }
-                    $this->session->set_flashdata('msg', 'Locations assigned successfully');
-                }
-            }
-        }
-        $this->template->load($this->layout, 'locations/locations_master', $data);
-    }
 
-    public function create_location() {
-        $location = trim($this->input->post('location'));
-        $response = [];
-        if ($this->location->check_location_exists($location) > 0) {
-            $response['status'] = 0;
-            $response['msg'] = 'Location Name already exists';
-        } else {
-            $data = [
-                'name' => $location
-            ];
-            if ($this->basic->insert('locations', $data)) {
-                $response['sql'] = $this->db->last_query();
-                $response['status'] = 1;
-                $response['msg'] = 'Location added successfully';
-            }
-        }
-        echo json_encode($response);
-        exit;
-    }
 
-    public function assign_location() {
-        $location = trim($this->input->post('location'));
-        $serial = trim($this->input->post('serial'));
-        $location_id = $this->location->get_location_id($location);
-        $response = [];
-        if ($location_id != '') {
-            $data = [
-                'location_id' => $location_id
-            ];
-            if ($this->basic->update('product_serials', $data, ['serial' => $serial])) {
-                $response['status'] = 1;
-                $response['msg'] = 'Location assigned successfully';
-                $product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['serial' => $serial]);
-                $timestamp = [
-                    'location_assigned_date' => date('Y-m-d H:i:s'),
-                    'last_scan' => date('Y-m-d H:i:s')
-                ];
-                $this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
-            }
-        } else {
-            $response['status'] = 0;
-            $response['msg'] = 'Location does not exists';
-        }
-        echo json_encode($response);
-        exit;
-    }
 
-    public function move_location() {
-        $location = trim($this->input->post('location'));
-        $serial = trim($this->input->post('serial'));
-        $location_id = $this->location->get_location_id($location);
-        $response = [];
-        if ($location_id != '') {
-            $data = [
-                'location_id' => $location_id
-            ];
-            if ($this->basic->update('product_serials', $data, ['serial' => $serial])) {
-                $response['status'] = 1;
-                $response['msg'] = 'Location moved successfully';
-                $product_serial_data = $this->basic->get_single_data_by_criteria('product_serials', ['serial' => $serial]);
-                $timestamp = [
-                    'location_assigned_date' => date('Y-m-d H:i:s'),
-                    'last_scan' => date('Y-m-d H:i:s')
-                ];
-                $this->basic->update('serial_timestamps', $timestamp, ['serial_id' => $product_serial_data['id']]);
-            }
-        } else {
-            $response['status'] = 0;
-            $response['msg'] = 'Location does not exists';
-        }
-        echo json_encode($response);
-        exit;
-    }
 
     public function get_serial_part_by_pallet() {
         $pallet_id = $this->input->post('pallet');
@@ -699,48 +588,38 @@ class Shipping extends CI_Controller {
 
     public function manage_order() {
         $postdata = $this->input->post();
-        $no_need_to_scan = $postdata['no_need_scan'];
-        if ($no_need_to_scan == 1) {
-            $order_data = array(
-                'site' => $postdata['scanned_store'],
-                'order_number' => $postdata['scanned_order'],
-                'name' => $postdata['scanned_product_name'],
-                'order_item_id' => $postdata['scanned_order_item_id'],
-                'part' => $postdata['scanned_part'],
-                'additional_part_info' => $postdata['scanned_additional_part_info'],
-                'quantity' => 1, // need to check for values.
-                'order_item_status' => 1,
-                'no_need_to_scan' => 1,
-            );
-        } else {
-            $order_data = array(
-                'site' => $postdata['scanned_store'],
-                'order_number' => $postdata['scanned_order'],
-                'name' => $postdata['scanned_product_name'],
-                'order_item_id' => $postdata['scanned_order_item_id'],
-                'serial' => $postdata['scanned_serial'],
-                'part' => $postdata['scanned_part'],
-                'additional_part_info' => $postdata['scanned_additional_part_info'],
-                'quantity' => 1, // need to check for values.
-                'order_item_status' => 1,
-            );
+        $scan_type = $postdata['scanType'];
+        $order_data = array(
+            'site' => $postdata['scanned_store'],
+            'order_number' => $postdata['scanned_order'],
+            'name' => $postdata['scanned_product_name'],
+            'order_item_id' => $postdata['scanned_order_item_id'],
+            'serial' => $postdata['scanned_serial'],
+            'part' => $postdata['scanned_part'],
+            'additional_part_info' => $postdata['scanned_additional_part_info'],
+            'quantity' => 1, // need to check for values.
+            'order_item_status' => 1,
+        );
 
-            $update_serial_arr = array(
-                'status' => "Sold",
-            );
+        $update_serial_arr = array(
+            'status' => "Sold",
+        );
+        $update_old_serial_arr = array(
+            'status' => "Ready for sale",
+        );
+        if ($scan_type == "add") {
+            $flag = $this->basic->insert("order_items", $order_data);
+        } elseif ($scan_type == "edit") {
+            $flag = $update = $this->basic->update('order_items', $order_data, ['serial' => $postdata['old_scan_serial']]);
         }
-        $insert = $this->basic->insert("order_items", $order_data);
-        if ($insert > 0) {
-            if ($no_need_to_scan == 1) {
-                $this->session->set_flashdata('success', 'Changes made successfully.');
-            } else {
-                $update_serial = $this->picking->serial_update($update_serial_arr, $postdata['scanned_serial']);
-                $this->session->set_flashdata('success', 'You have successfully accepted this item.');
-            }
+        if ($flag > 0) {
+            $update_serial = $this->picking->serial_update($update_serial_arr, $postdata['scanned_serial']);
+            $update_old_serial = $this->picking->serial_update($update_old_serial_arr, $postdata['old_scan_serial']);
+            $this->session->set_flashdata('success', 'You have successfully accepted this item.');
         } else {
             $this->session->set_flashdata('error', 'Something went wrong! Please try again.');
         }
-        redirect(site_url('admin/inventory/picking'), 'refresh');
+        redirect(site_url('admin/shipping/shipments'), 'refresh');
     }
 
     public function complete_order($order_number) {
@@ -814,11 +693,12 @@ class Shipping extends CI_Controller {
         $ch = curl_init();
 
         if (empty($filter)) {
-            curl_setopt($ch, CURLOPT_URL, "https://ssapi.shipstation.com/shipments");
+//            curl_setopt($ch, CURLOPT_URL, "https://ssapi.shipstation.com/shipments?includeShipmentItems=true");
+            curl_setopt($ch, CURLOPT_URL, "https://ssapi.shipstation.com/shipments?includeShipmentItems=true&sortBy=shipDate&sortDir=DESC");
         } elseif (!empty($filter) && $filter == "today") {
             $data["filter"] = 'today';
             $today = date('Y-m-d');
-            curl_setopt($ch, CURLOPT_URL, "https://ssapi.shipstation.com/shipments?shipDateStart=" . $today . "&shipDateEnd=" . $today);
+            curl_setopt($ch, CURLOPT_URL, "https://ssapi.shipstation.com/shipments?includeShipmentItems=true&shipDateStart=" . $today . "&shipDateEnd=" . $today);
         } elseif (!empty($filter) && $filter == "this-week") {
             $data["filter"] = 'this-week';
             $today = date('Y-m-d');
@@ -828,7 +708,7 @@ class Shipping extends CI_Controller {
                 "start" => date('N', $dt) == 1 ? date('Y-m-d', $dt) : date('Y-m-d', strtotime('last monday', $dt)),
                 "end" => date('N', $dt) == 7 ? date('Y-m-d', $dt) : date('Y-m-d', strtotime('next sunday', $dt))
             );
-            curl_setopt($ch, CURLOPT_URL, "https://ssapi.shipstation.com/shipments?shipDateStart=" . $weekrange['start'] . "&shipDateEnd=" . $weekrange['end']);
+            curl_setopt($ch, CURLOPT_URL, "https://ssapi.shipstation.com/shipments?includeShipmentItems=true&shipDateStart=" . $weekrange['start'] . "&shipDateEnd=" . $weekrange['end']);
         }
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_HEADER, FALSE);
@@ -838,20 +718,39 @@ class Shipping extends CI_Controller {
         ));
 
         $response = curl_exec($ch);
+        $err = curl_error($ch);
+        $errno = curl_errno($ch);
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
+//        echo '----'.$err;
+//        echo '----'.$errno;
+//        echo '----'.$httpcode;
+//        exit;
         $result = json_decode($response, true);
-
+//        pr($result);
+//        exit;
         $shipments = $result['shipments'];
+//        pr($shipments);
+//        exit;
         $shipment = array();
         foreach ($shipments as $key => $val) {
             $order_details = $this->picking->get_order_details($val['orderNumber']);
 //            $order_details = $this->picking->get_order_details(65145);
             $order_item_data = $this->basic->get_all_data_by_criteria('order_items', ['order_number' => $val['orderNumber']]);
-            if (!empty($order_item_data)) {
+
+//            if (!empty($order_item_data)) {
                 $shipment[$key] = $val;
+                $storeId = $val['advancedOptions']['storeId'];
+                if ($storeId == AMAZON) {
+                    $store = "Amazon";
+                } elseif ($storeId == ExcessBuy) {
+                    $store = 'ExcessBuy';
+                }
+
+                $shipment[$key]['site'] = $store;
                 $shipment[$key]['order_details'] = $order_details;
                 $shipment[$key]['order_details']['items'] = $order_item_data;
-            }
+//            }
         }
 //        pr($shipment);
 //        exit;
@@ -885,7 +784,7 @@ class Shipping extends CI_Controller {
         $shipstation_authorization_key = 'Basic YmI3MTc5OTE0ZmYyNDYyNzk4OTg2YWJmZWJhMmY0NjM6MWM0MzM1ZmU5NWRmNDQxNjllYmNlOWQyNmJjYjgxMTY=';
         $ch = curl_init();
 
-        curl_setopt($ch, CURLOPT_URL, "https://ssapi.shipstation.com/orders/".$order_id);
+        curl_setopt($ch, CURLOPT_URL, "https://ssapi.shipstation.com/orders/" . $order_id);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($ch, CURLOPT_HEADER, FALSE);
 
@@ -894,11 +793,21 @@ class Shipping extends CI_Controller {
         ));
 
         $response = curl_exec($ch);
+        $err = curl_error($ch);
+        $errno = curl_errno($ch);
+        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
         $result = json_decode($response, true);
-        echo $order_id;
-        pr($result);
-        exit;
+//        echo $order_id;
+//        echo '----'.$err;
+//        echo '----'.$errno;
+//        echo '----'.$httpcode;
+//        pr($result);
+//        exit;
+        if ($httpcode == 404) {
+            $this->session->set_flashdata('error', 'Sorry, Order you are looking for was not found!');
+            redirect(site_url('admin/shipping/shipments'), 'refresh');
+        }
         $data['order'] = $result;
         $storeId = $data['order']['advancedOptions']['storeId'];
         if ($storeId == AMAZON) {
@@ -915,6 +824,76 @@ class Shipping extends CI_Controller {
 //        exit;
         $data['title'] = 'Order Details';
         $this->template->load($this->layout, 'shipping/view_order', $data);
+    }
+
+    public function manage_serial_scan() {
+        $postdata = $this->input->post();
+        $serial = $postdata['serial'];
+        $part = $postdata['part'];
+        $order_number = $postdata['order_number'];
+        $order_id = $postdata['orderid'];
+        $response['partmatch'] = 0;
+        $isserialexist = $this->basic->is_serial_exists($serial);
+        if (empty($isserialexist)) {
+            $data['serial'] = $serial;
+            $data['isserialexist'] = 0;
+        } elseif ($isserialexist['status'] == "Sold" || $isserialexist['status'] == "sold") {
+            $data['serial'] = $serial;
+            $data['isserialexist'] = 1;
+            $data['serial_status'] = "sold";
+        } else {
+            $findpart = $this->picking->get_part_by_serial($serial);
+            $actual_part = $findpart['part'];
+//            $actual_part = "F9D31AA#ABA";
+            $n = 1;
+            $pieces = explode('#', $actual_part);
+            if (count($pieces) > 1) {
+                $part1 = implode('#', array_slice($pieces, 0, $n));
+                $part2 = $pieces[$n];
+            } else {
+                $part1 = $actual_part;
+                $part2 = '';
+            }
+            $actual_serial_part = $part1;
+            if ($part == $actual_serial_part) {
+                $data['partmatch'] = 1;
+                $data['part'] = $actual_serial_part;
+                $data['order_number'] = $order_number;
+                $data['orderId'] = $order_id;
+                $data['serial'] = $serial;
+                $data['isserialexist'] = 1;
+                $data['scanType'] = $postdata['scanType'];
+                $data['old_serial'] = $postdata['old_serial'];
+            } else {
+                $data['partmatch'] = 0;
+                $data['part'] = $part;
+                $data['order_number'] = $order_number;
+                $data['orderId'] = $order_id;
+                $data['serial'] = $serial;
+                $data['isserialexist'] = 1;
+                $data['scanType'] = $postdata['scanType'];
+                $data['old_serial'] = $postdata['old_serial'];
+            }
+        }
+        echo json_encode($data);
+        exit;
+    }
+
+    public function remove_serial() {
+        $postdata = $this->input->post();
+        $serialdata = array(
+            'serial' => '',
+        );
+        $update = $this->basic->update('order_items', $serialdata, ['order_item_id' => $postdata['order_item_id'], 'serial' => $postdata['serial']]);
+        if ($update) {
+            $this->session->set_flashdata('success', 'You have successfully remove serial.');
+            $data['success'] = 1;
+        } else {
+            $this->session->set_flashdata('error', 'Something went wrong, Please try again!');
+            $data['success'] = 0;
+        }
+        echo json_encode($data);
+        exit;
     }
 
 }

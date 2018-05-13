@@ -23,6 +23,7 @@
         <script type="text/javascript" src="assets/js/plugins/forms/styling/switchery.min.js"></script>
 	<script type="text/javascript" src="assets/js/plugins/forms/styling/switch.min.js"></script>
 	<script type="text/javascript" src="assets/js/plugins/forms/selects/select2.min.js"></script>
+	<script type="text/javascript" src="assets/js/fileinput.min.js"></script>
 
 	<!-- /core JS files -->
 	<!-- Theme JS files -->

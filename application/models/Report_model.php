@@ -13,7 +13,7 @@ class Report_model extends CI_Model
     {
 		$this->db->select('ps.*, p.id as pid, p.part as part, p.name as product_name, 
 							p.description as product_desc, p.release_date as release_date, 
-							p.category as category, pl.name as product_line, 
+							p.category as category,p.is_flagged as is_flagged, pl.name as product_line, 
 							oc.name as original_condition, p.added_as_temp, 
 							ci.id as cosmetic_issue_id, ci.name as cosmetic_issue_name,
 							fo.id as fail_option_id, fo.name as fail_option_name, 

@@ -645,7 +645,11 @@
 	    // $('.category3').multiselect();
 	});
 	$('input.warranty_date').attr('disabled',true);
+	$('input.warranty_date').val('');
 	function warranty_change(val){
+		if(val == "Unknown"){
+			$('input.warranty_date').val('');
+		}
 		if(val!='Active'){
 	    		$('input.warranty_date').attr('disabled',true);
 	    	}else{
@@ -993,7 +997,13 @@
 				$('select.original_condition').val(response.product.pocid);
 				$('select.final_condition').val(response.product.ocid);
 				$('select.status').val(response.product.status).trigger('change');
-				$('select.fail_option').val(response.product.fail_option).trigger('change');
+				var fail_option = response.product.fail_option;
+				if (fail_option != null) {
+					var dataarray = fail_option.split(",");
+				}
+				$('select.fail_option').val(dataarray);
+				$('select.fail_option').multiselect("refresh");
+				// $('select.fail_option').val(response.product.fail_option).trigger('change');
 				$('select.warranty').val(response.product.warranty).trigger('change');
 				var cs_issue = JSON.parse(response.product.cosmetic_issue);
 				$('.cosmetic_boxes').each(function(index, el) {

@@ -24,7 +24,8 @@
 						</div>
 						<div class="form-group">
 							<label class="text-semibold">Browse Products Sheet:</label>
-							<input type="file" class="form-control" name="excel" value="" placeholder="" required>
+							<input type="file" class="file-input-extensions" name="excel">
+                                <span class="help-block">Allow only <code>xlsx</code> extensions.</span>
 						</div>
 					</div>
 					<div class="text-left">
@@ -33,5 +34,24 @@
 				</div>
 			</div>
 		</form>
+</div>
+<script type="text/javascript">
+// Custom file extensions
+    $(".file-input-extensions").fileinput({
+        browseLabel: 'Browse',
+        browseClass: 'btn btn-primary',
+        uploadClass: 'btn btn-default',
+        browseIcon: '<i class="icon-file-plus"></i>',
+        uploadIcon: '<i class="icon-file-upload2"></i>',
+        removeIcon: '<i class="icon-cross3"></i>',
+        layoutTemplates: {
+            icon: '<i class="icon-file-check"></i>'
+        },
+        maxFilesNum: 10,
+        allowedFileExtensions: ["xlsx"]
+    });
+    $('.fileinput-upload-button').hide();
+
+</script>
 	</div>
 </div>

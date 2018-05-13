@@ -471,7 +471,7 @@ $('.close_test').on('click', function(){
 				if(response.product.cosmetic_grade == 'F' || response.product.cosmetic_grade == 'X'){
 					$('#myModal').modal('show');
 				}
-				if(response.product.ptested == 0 || response.product.tested_by == 0){
+				if(response.product.ptested == 0){
 					$('#myModaltest').modal('show');
 				}
 				// $('input.current_pallet_id').val(response.product.plid);

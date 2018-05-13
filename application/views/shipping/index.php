@@ -84,6 +84,7 @@
                                     ?>
                                     <?php
                                     $itemcnt = 1;
+//                                    pr($order['items']);
                                     foreach ($order['items'] as $item) {
 
                                         $order_item_details = $CI->get_order_item_detail($item['orderItemId']);

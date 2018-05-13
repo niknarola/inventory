@@ -34,7 +34,7 @@
                         <?php } ?>
                     <td><?php echo $post['serial']; ?></td>
                     <td><?php echo $post['new_serial']; ?></td>
-                    <td><?php echo $post['part']; ?></td>
+                    <td><?php echo ($post['is_flagged'] == 1) ? $post['part'].' <i class="icon-flag3"></i>' : $post['part']; ?></td>
                     <td><?php echo $post['product_name']; ?></td>
                     <td><?php echo $post['original_condition']; ?></td>
                     <td><?php echo $post['cosmetic_grade']; ?></td>

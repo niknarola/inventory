@@ -206,6 +206,17 @@ class Basic_model extends CI_Model {
         }
     }
 
+    /* @anp */
+
+    public function is_location_exists($loc_name) {
+//         echo"loc name";pr($loc_name);
+        $this->db->select('locations.id');
+        $this->db->where('locations.name', $loc_name);
+        $this->db->limit(1);
+        $query = $this->db->get('locations')->row_array();
+        return $query['id'];
+    }
+
     public function check_pallet_exists($pallet_name) {
         // echo"in function<br/>";
         $this->db->select('pallets.id');
@@ -229,6 +240,24 @@ class Basic_model extends CI_Model {
         }
     }
 
+//    @anp
+    public function is_pallet_exists($pallet_name) {
+        // echo"in function<br/>";
+        $this->db->select('pallets.id');
+        $this->db->where('pallets.pallet_id', $pallet_name);
+        $this->db->limit(1);
+        $query = $this->db->get('pallets')->row_array();
+        // echo"query".$this->db->last_query();
+        // echo"model name";pr($pallet_name);echo"<br/>";
+        if (isset($query['id'])) {
+            $palletId = $query['id'];
+            return $palletId;
+        } else {
+            $palletId = '';
+            return $palletId;
+        }
+    }
+
     public function check_serial_exists($serial_name) {
         $this->db->select('ps.id');
         $this->db->where('ps.new_serial', $serial_name);
@@ -237,14 +266,23 @@ class Basic_model extends CI_Model {
         // echo"query".$this->db->last_query();
         return $query;
     }
-    
-    /* @anp*/
+
+    /* @anp */
+
     public function is_serial_exists($serial_name) {
         $this->db->select('ps.*');
         $this->db->where('ps.serial', $serial_name);
         $this->db->or_where('ps.new_serial', $serial_name);
         $this->db->limit(1);
         $query = $this->db->get('product_serials ps')->row_array();
+        return $query;
+    }
+
+    public function is_part_exists($part) {
+        $this->db->select('p.part');
+        $this->db->where('p.part', $part);
+        $this->db->limit(1);
+        $query = $this->db->get('products p')->row_array();
         return $query;
     }
 

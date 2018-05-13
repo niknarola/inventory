@@ -108,7 +108,7 @@ a.print_location{color:#26A69A;}
 .form-control{ border: 1px solid #eee;  background:#f3f5f5;  padding: 12px 15px; height: 44px; line-height: 20px; color: #666;}
 button.btn{ padding:10px 25px; background: #26a69a; line-height: 20px; border: 2px solid #26a69a; text-transform: uppercase; font-weight: 500; font-size: 14px; color:#fff;}
 .btn:focus,
-.btn:hover{background:#fff; color: #26a69a !important; border: 2px solid #26a69a; box-shadow:none !important;}
+.btn:hover{background:#fff !important; color: #26a69a !important; border: 2px solid #26a69a !important; box-shadow:none !important;}
 .content {padding:0 30px 60px 30px;}
 .page-header-default {margin-bottom: 30px;}
 .panel,
@@ -183,3 +183,6 @@ label.check_label {border: 1px solid #EEE;  padding: 12px 0 10px 15px; }
 }
 .picking-actions .bg-teal-400 {border: 2px solid #26a69a;}
 .item-info{top: 25px;}
+/*@anp : 11-5-18*/
+.notesModal{z-index: 9999;}
+/*@anp : 11-5-18*/

@@ -938,7 +938,13 @@
 				$('select.original_condition').val(response.product.pocid);
 				$('select.final_condition').val(response.product.ocid);
 				$('select.status').val(response.product.status).trigger('change');
-				$('select.fail_option').val(response.product.fail_option).trigger('change');
+				var fail_option = response.product.fail_option;
+				if (fail_option != null) {
+					var dataarray = fail_option.split(",");
+				}
+				$('select.fail_option').val(dataarray);
+				$('select.fail_option').multiselect("refresh");
+				// $('select.fail_option').val(response.product.fail_option).trigger('change');
 				$('select.warranty').val(response.product.warranty).trigger('change');
 				$('.ink_condition').each(function(index, el) {
 					if($(this).val() == response.product.ink_condition){

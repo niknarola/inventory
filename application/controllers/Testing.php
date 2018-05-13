@@ -2157,8 +2157,13 @@ class Testing extends CI_Controller
         $data['title'] = 'Edit Product';
         $data['cat_url'] = ($this->uri->segment(1) == 'admin') ? 'admin/barcode/get_sub_category' : 'barcode/get_sub_category';
         $data['original_condition'] = $this->products->get_key_value_pair('original_condition');
-        $data['product'] = $this->products->get_product_serial_by_id($serial_id);
+		$data['product'] = $this->products->get_product_serial_by_id($serial_id);
+		// pr($data['product']);die;
         if ($this->input->post()) {
+			$product = [
+				'original_condition_id' => $this->input->post('condition')
+			];
+			$this->basic->update('products', $product, ['id' => $data['product']['pid']]);
             $data1 = [
                 'new_serial' => $this->input->post('new_serial'),
                 'condition' => $this->input->post('final_condition'),
@@ -2353,6 +2358,18 @@ class Testing extends CI_Controller
             $return_array['new_serial'] = ['code' => 200];
         }
         echo json_encode($return_array);
+	}
+	
+
+	public function check_part()
+    {
+		$part = $this->basic->is_part_exists($this->input->post('part'));
+		if(empty($part)){
+			$return_array['part'] = ['code' => 400];
+        } else {
+            $return_array['part'] = ['code' => 200];
+		}
+		echo json_encode($return_array);
     }
 
     public function check_location()

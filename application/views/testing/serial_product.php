@@ -711,7 +711,7 @@
 					
                     <div class="col-md-12">
                         <a href="javascript:;" class="btn bg-teal-400 add_btn" data-id="<?=$product['id'];?>" class="btn-xs btn-default product_notes" onClick="view_notes(<?=$product['id'];?>)">View Notes</a>
-                        <a href="<?php echo base_url() . 'admin/testing/edit_audit_record/' . $product['id'] ?>" class="btn bg-teal-400 add_btn" data-id="<?=$product['id'];?>" class="btn-xs btn-default product_specs"> Edit/Remove</a>
+                        <a href="<?php echo base_url() . 'admin/testing/edit_audit_record/' . $product['id'] ?>" class="btn bg-teal-400 add_btn edit-audit" data-id="<?=$product['id'];?>" class="btn-xs btn-default product_specs"> Edit/Remove</a>
                     </div>
         </div>
     </div>

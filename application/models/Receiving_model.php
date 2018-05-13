@@ -197,5 +197,14 @@ class Receiving_model extends CI_Model
         $query = $this->db->get('pallets');
         return $query->num_rows();
     }
+    
+    public function get_pallet_id_by_serial($serial) {
+        $this->db->select('ps.pallet_id');
+        $this->db->where('ps.serial', $serial);
+        $this->db->or_where('ps.new_serial', $serial);
+        $this->db->limit(1);
+        $query = $this->db->get('product_serials ps')->row_array();
+        return $query['pallet_id'];
+    }
 
 }

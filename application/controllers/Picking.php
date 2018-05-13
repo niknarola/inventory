@@ -32,7 +32,7 @@ class Picking extends CI_Controller {
         $data = array();
         $data['title'] = 'Picking';
         $data['admin_prefix'] = $this->admin_prefix;
-        $data['ajax_url'] = ($this->session->userdata('admin_validated')) ? 'admin/inventory/picking/order_list' : 'picking/order_list';
+        $data['ajax_url'] = ($this->session->userdata('admin_validated')) ? 'admin/shipping/picking/order_list' : 'picking/order_list';
         $orders = array();
         $items = array();
         $items1 = array();
@@ -407,9 +407,9 @@ class Picking extends CI_Controller {
 
         //pagination configuration
         $config['target'] = '#postList';
-        $url = ($this->session->userdata('admin_validated')) ? 'admin/inventory/locations/ajaxPaginationData' : 'locations/ajaxPaginationData';
+        $url = ($this->session->userdata('admin_validated')) ? 'admin/shipping/locations/ajaxPaginationData' : 'locations/ajaxPaginationData';
         $data['url'] = $url;
-        $data['ajax_url'] = ($this->session->userdata('admin_validated')) ? 'admin/inventory/locations' : 'locations';
+        $data['ajax_url'] = ($this->session->userdata('admin_validated')) ? 'admin/shipping/locations' : 'locations';
         $config['base_url'] = base_url() . $url;
         $config['total_rows'] = $totalRec;
         $config['per_page'] = $this->perPage;
@@ -571,10 +571,11 @@ class Picking extends CI_Controller {
         exit;
     }
 
-    public function get_details_by_part() {
+    public function get_details_by_part($part_number) {
         $data['title'] = 'Part Locations';
-        $data['details'] = $this->picking->get_details_by_part('F9D31AA');
-        // pr($data['details']);
+        $data['details'] = $this->picking->get_details_by_part($part_number);
+        $data['part'] = $part_number;
+        $data['part_details'] = $this->basic->get_single_data_by_criteria('products', ['part' => $part_number]);
         $this->template->load($this->layout, 'picking/part_locations', $data);
     }
 
@@ -594,7 +595,7 @@ class Picking extends CI_Controller {
         if (empty($isserialexist)) {
             $data['serial'] = $serial;
             $data['isserialexist'] = 0;
-        } elseif ($isserialexist['status'] == "Sold") {
+        } elseif ($isserialexist['status'] == "Sold" || $isserialexist['status'] == "sold") {
             $data['serial'] = $serial;
             $data['isserialexist'] = 1;
             $data['serial_status'] = "sold";
@@ -611,8 +612,9 @@ class Picking extends CI_Controller {
                 $part1 = $actual_part;
                 $part2 = '';
             }
+            
             $actual_serial_part = $part1;
-            if ($part == $actual_serial_part) {
+            if (rtrim($part) == rtrim($actual_serial_part)) {
                 $data['partmatch'] = 1;
                 $data['part'] = $actual_serial_part;
                 $data['order_number'] = $order_number;
@@ -651,6 +653,8 @@ class Picking extends CI_Controller {
                 'quantity' => 1, // need to check for values.
                 'order_item_status' => 1,
                 'no_need_to_scan' => 1,
+//                'order_notes' => '',
+//                'pick_notes' => '',
             );
         } else {
             $order_data = array(
@@ -663,6 +667,8 @@ class Picking extends CI_Controller {
                 'additional_part_info' => $postdata['scanned_additional_part_info'],
                 'quantity' => 1, // need to check for values.
                 'order_item_status' => 1,
+//                'order_notes' => '',
+//                'pick_notes' => '',
             );
 
             $update_serial_arr = array(
@@ -680,7 +686,7 @@ class Picking extends CI_Controller {
         } else {
             $this->session->set_flashdata('error', 'Something went wrong! Please try again.');
         }
-        redirect(site_url('admin/inventory/picking'), 'refresh');
+        redirect(site_url('admin/shipping/picking'), 'refresh');
     }
 
     public function complete_order($order_number) {
@@ -729,7 +735,7 @@ class Picking extends CI_Controller {
                 $order_data = array(
                     'is_delete' => 1,
                 );
-                $isorderexist = $this->basic->get_single_data_by_criteria("orders", $order_data, ['order_id' => $order]);
+                $isorderexist = $this->basic->get_single_data_by_criteria("orders", ['order_id' => $order]);
                 if ($isorderexist) {
                     $update = $this->basic->update("orders", $order_data, ['order_id' => $order]);
                 }

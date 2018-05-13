@@ -64,7 +64,7 @@
 					<tr>
 						<td><?= $i; ?></td>
 						<td><?= $serial_product['serial'] ?></td>
-						<td><?= $product['part'] ?></td>
+						<td><?php echo ($product['is_flagged'] == 1) ? $product['part'].' <i class="icon-flag3"></i>' : $product['part']; ?></td>
 						<td><?= $product['name'] ?></td>
 						<!-- <td><?//= $product['description'] ?></td> -->
 						<td><?= $serial_product['status'] ?></td>
@@ -132,7 +132,7 @@
 					<tr>
 						<td><?= $i; ?></td>
 						<td><?= $serial_product['serial'] ?></td>
-						<td><?= $serial_product['part'] ?></td>
+                                                <td><?php echo ($serial_product['is_flagged'] == 1) ? $serial_product['part'].' <i class="icon-flag3"></i>' : $serial_product['part']; ?></td>
 						<td><?= $serial_product['name'] ?></td>
 						<!-- <td><?//= $serial_product['description'] ?></td> -->
 						<td><?= $serial_product['serial_status'] ?></td>

@@ -289,7 +289,7 @@ class Product_model extends CI_Model
 
     public function get_serials_by_product_id($product_id)
     {
-        $this->db->select('ps.*, oc.name as original_condition');
+        $this->db->select('ps.*, oc.name as original_condition, p.is_flagged as is_flagged');
         $this->db->where('ps.product_id', $product_id);
         $this->db->where('ps.is_delete', 0);
         $this->db->join('products p','p.id = ps.product_id','left');
@@ -480,7 +480,7 @@ class Product_model extends CI_Model
 
     function getRows($params = array(), $actArr = array())
     {
-        $this->db->select('p.id as pid,p.part,p.name,p.description,p.is_cto,p.category, pl.name as product_line, oc.name as condition');
+        $this->db->select('p.id as pid,p.part,p.name,p.description,p.is_cto,p.category,p.is_flagged as is_flagged, pl.name as product_line, oc.name as condition');
         $this->db->from('products p');
         $this->db->join('product_line pl', 'pl.id = p.product_line_id', 'left');
         $this->db->join('original_condition oc', 'oc.id = p.original_condition_id', 'left');
@@ -531,8 +531,17 @@ class Product_model extends CI_Model
 
     public function get_part_numbers()
     {
+//        $this->db->select('p.part,p.name');
+//        $this->db->where('p.is_delete',0);
+//        $query = $this->db->get('products p')->result_array();
+        // echo $this->db->last_query();
+        // pr($query);die;
         $this->db->select('p.part,p.name');
         $this->db->where('p.is_delete',0);
+//        $this->db->where('ps.is_delete',0);
+//        $this->db->like('ps.status','ready for sale');
+//		$this->db->or_like('ps.status','inprogress');
+//		$this->db->join('product_serials ps','p.id = ps.product_id');
         $query = $this->db->get('products p')->result_array();
         // echo $this->db->last_query();
         // pr($query);die;
@@ -563,7 +572,7 @@ class Product_model extends CI_Model
 
     public function get_product_serial_by_id($id)
     {
-        $this->db->select('p.*,ps.id as sid, ps.location_id as pslocation, ps.status as serial_status, ps.serial, ps.*, 
+        $this->db->select('p.*,p.id as pid,ps.id as sid, ps.location_id as pslocation, ps.status as serial_status, ps.serial, ps.*, 
 							p.original_condition_id, 
 							oc.id as ocid,oc.name as original_condition, 
 							poc.id as pocid,poc.name as product_original_condition,

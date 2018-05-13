@@ -11,7 +11,7 @@ class Master_sheet_model extends CI_Model
         // pr($params);die;
 		$this->db->select('ps.*, p.id as pid, pal.pallet_id as pallet,
 							p.part as part, p.name as product_name, p.description as product_desc, 
-							p.release_date as release_date, p.category as category, 
+							p.release_date as release_date, p.category as category,p.is_flagged as is_flagged,
 							pl.name as product_line, oc.name as original_condition, 
 							p.added_as_temp,
 							ci.id as cosmetic_issue_id, ci.name as cosmetic_issue_name,

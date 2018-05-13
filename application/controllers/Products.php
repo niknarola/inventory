@@ -393,7 +393,7 @@ class Products extends CI_Controller
                         $insert_data['status'] = 0;
                     }
                     $id = $this->basic->insert('products', $insert_data);
-                    if ($image_data['image'] != '' || !empty($image_data['image']) || isset($image_data['image']))
+                    if ($image_data['image'] != '')
                     {
                         $folderPath = '/assets/uploads/' . $id;
                         $filename = time() . '.jpg';

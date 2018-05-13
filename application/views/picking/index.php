@@ -117,7 +117,7 @@
                                         <td class="noselect store" style="color: #6772e500;"><?php echo $order['store']; ?></td>
                                         <td class="noselect order_number" style="color: #6772e500;"><?php echo $order['order_number']; ?></td>
                                     <?php } ?>
-                                    <td><a class="part" data-part="<?php echo $part; ?>" href="<?php echo base_url() . 'admin/inventory/picking/part/' . $part; ?>"><?php echo $part; ?></a></td>
+                                    <td><a class="part" data-part="<?php echo $part; ?>" href="<?php echo base_url() . 'admin/shipping/picking/part/' . $part; ?>"><?php echo $part; ?></a></td>
                                     <td class="additional_part_info"><?php echo $additional_part_info; ?></td>
                                     <td class="qty <?php echo ($qty > 1 ? 'highlight' : ''); ?>"><?php echo $qty; ?></td>
                                     <td class="product_name"><?php echo $item['name']; ?></td>
@@ -160,7 +160,7 @@
                                             $complete = 'disabled';
                                         }
                                         ?>
-                                        <td><a href="javascript:void(0);" data-action="<?php echo base_url() . 'admin/inventory/picking/complete-order/' . base64_encode($order['order_number']); ?>" data-order="<?php echo $item['orderItemId']; ?>" class="order-complete-link <?php echo $complete; ?>">Complete</a></td>
+                                        <td><a href="javascript:void(0);" data-action="<?php echo base_url() . 'admin/shipping/picking/complete-order/' . base64_encode($order['order_number']); ?>" data-order="<?php echo $item['orderItemId']; ?>" class="order-complete-link <?php echo $complete; ?>">Complete</a></td>
                                     <?php } else { ?>
                                         <td>&nbsp;</td>
                                     <?php } ?>
@@ -192,7 +192,7 @@
                     <h5 class="modal-title">Scan for serial</h5>
                 </div>
 
-                <form action="<?php base_url(); ?>admin/inventory/picking/scan_serial" class="form-inline" name="scanSerialForm" method="post" id="scanSerialForm">
+                <form action="<?php base_url(); ?>admin/shipping/picking/scan_serial" class="form-inline" name="scanSerialForm" method="post" id="scanSerialForm">
                     <span class="serial-msg" style="color: red;"></span>
                     <div class="modal-body">
                         <div class="form-group has-feedback">
@@ -220,7 +220,7 @@
                     <h5 class="modal-title"></h5>
                 </div>
 
-                <form action="<?php base_url(); ?>admin/inventory/picking/manage_order" class="form-inline" name="manageOrderForm" method="post" id="manageOrderForm">
+                <form action="<?php base_url(); ?>admin/shipping/picking/manage_order" class="form-inline" name="manageOrderForm" method="post" id="manageOrderForm">
                     <div class="modal-body">
                         <div class="form-group has-feedback">
                             <h5 class="part_msg"></h5>
@@ -343,6 +343,7 @@
                                 $(".serial-msg").html('Serial # <b>' + data.serial + '</b> is SOLD!');
                             } else {
                                 var partmatch = data.partmatch;
+                                console.log(partmatch);
                                 var scanned_part = data.part;
                                 var order_item = data.orderId;
                                 var scanned_order = $('tr#order_' + order_item).find('td.order_number').text();
@@ -398,7 +399,7 @@
                         data: {scanned_order_total_qty: scanned_order_total_qty, scanned_order_id: scanned_order_id, scanned_order: scanned_order, scanned_store: scanned_store}, // serializes the form's elements.
                         success: function (data)
                         {
-                            window.location.href = '<?php echo base_url() . "admin/inventory/picking"; ?>';
+                            window.location.href = '<?php echo base_url() . "admin/shipping/picking"; ?>';
                             $('#overlay').fadeOut();
                         }
                     });
@@ -432,12 +433,12 @@
                     {
                         $('#overlay').show();
                         $.ajax({
-                            url: '<?php echo base_url() . 'admin/inventory/picking/delete-order'; ?>',
+                            url: '<?php echo base_url() . 'admin/shipping/picking/delete-order'; ?>',
                             method: 'POST',
                             data: {orders: id},
                             success: function ()
                             {
-                                window.location.href = '<?php echo base_url() . "admin/inventory/picking"; ?>';
+                                window.location.href = '<?php echo base_url() . "admin/shipping/picking"; ?>';
                                 $('#overlay').fadeOut();
                             }
 

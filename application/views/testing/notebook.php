@@ -696,7 +696,11 @@
                                             });
                                         });
                                         $('input.warranty_date').attr('disabled', true);
+										$('input.warranty_date').val('');
                                         function warranty_change(val) {
+											if(val == "Unknown"){
+												$('input.warranty_date').val('');
+											}
                                             if (val != 'Active') {
                                                 $('input.warranty_date').attr('disabled', true);
                                             } else {
