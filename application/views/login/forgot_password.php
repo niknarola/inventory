@@ -28,7 +28,27 @@
 </head>
 
 <body class="login-container">
+	<!-- Main navbar -->
+	<div class="navbar navbar-inverse">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="<?=base_url()?>login">Inventory</a>
 
+			<ul class="nav navbar-nav pull-right visible-xs-block">
+				<li><a data-toggle="collapse" data-target="#navbar-mobile"><i class="icon-tree5"></i></a></li>
+			</ul>
+		</div>
+
+		<div class="navbar-collapse collapse" id="navbar-mobile">
+			<ul class="nav navbar-nav navbar-right">
+				<li>
+					<!-- <a href="mailto:admin@admin.com">
+						<i class="icon-user-tie"></i> <span class="visible-xs-inline-block position-right"> Contact admin</span>
+					</a> -->
+				</li>
+			</ul>
+		</div>
+	</div>
+	<!-- /main navbar -->
         <!-- Page container -->
         <div class="page-container">
 
@@ -61,7 +81,8 @@
                                 </div>
 
                                 <div class="form-group has-feedback has-feedback-left">
-                                    <input type="text" required="true" name="email" class="form-control" placeholder="Email Id">
+                                    <input type="email" required="true" onblur="validateEmail(this);" name="email" class="form-control" placeholder="Email Id">
+									<span id="email-error" style="color:red;"></span>
                                     <div class="form-control-feedback">
                                         <i class="icon-lock2 text-muted"></i>
                                     </div>
@@ -93,3 +114,18 @@
 
     </body>
 </html>
+<script type="text/javascript">
+	function validateEmail(emailField){
+		$('#email-error').text('');
+        var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+
+        if (reg.test(emailField.value) == false) 
+        {
+            $('#email-error').html('Invalid Email Address');
+            return false;
+        }
+		// $('#email-error').text('');
+        return true;
+
+}
+</script>

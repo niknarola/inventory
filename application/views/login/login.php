@@ -42,9 +42,9 @@
 		<div class="navbar-collapse collapse" id="navbar-mobile">
 			<ul class="nav navbar-nav navbar-right">
 				<li>
-					<a href="mailto:admin@admin.com">
+					<!-- <a href="mailto:admin@admin.com">
 						<i class="icon-user-tie"></i> <span class="visible-xs-inline-block position-right"> Contact admin</span>
-					</a>
+					</a> -->
 				</li>
 			</ul>
 		</div>

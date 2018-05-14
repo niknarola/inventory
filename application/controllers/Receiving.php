@@ -638,7 +638,7 @@ class Receiving extends CI_Controller {
                             'last_scan' => date('Y-m-d H:i:s')
                         ];
                         $this->basic->insert('serial_timestamps', $timestamp);
-                        // $this->session->set_flasdata('msg','Records Added');
+                         $this->session->set_flasdata('msg','Records Added');
                     }
                 }
                 if ($this->input->post('print_labels')) {

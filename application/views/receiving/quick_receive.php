@@ -4,6 +4,19 @@
         <h5 class="panel-title">Quick Receive</h5>
     </div>
         <div class="panel-body">
+		<div class="col-md-12">
+					<?php if ($this->session->flashdata('msg')) { ?>
+						<div class="alert alert-success hide-msg">
+							<button type="button" class="close" data-dismiss="alert"><span>&times;</span><span class="sr-only">Close</span></button>
+							<strong><?php echo $this->session->flashdata('msg') ?></strong>
+						</div>
+					<?php }  if ($this->session->flashdata('err_msg')) { ?>
+						<div class="alert alert-danger hide-msg">
+							<button type="button" class="close" data-dismiss="alert"><span>&times;</span><span class="sr-only">Close</span></button>
+							<strong><?php echo $this->session->flashdata('err_msg') ?></strong>
+						</div>
+            		<?php }?>
+       		 	</div>
             <form method="post">
                 <div class="row">
                     <div class="col-md-12">

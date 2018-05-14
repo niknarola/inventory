@@ -49,7 +49,7 @@ class Master_sheet extends CI_Controller {
         $this->ajax_pagination->initialize($config);
         
         //get the posts data
-        $data['posts'] = $this->master->getRows(array('limit'=>$this->perPage));
+        // $data['posts'] = $this->master->getRows(array('limit'=>$this->perPage));
         //load the view
         $this->template->load($this->layout, 'master_sheet/index', $data);
     }
@@ -124,7 +124,7 @@ class Master_sheet extends CI_Controller {
         #nik------------
         
         //total rows count
-        $totalRec = count($this->master->getRows($conditions));
+        $totalRec = count($this->master->getRows($conditions, $searchfor));
         
         //pagination configuration
         $config['target']      = '#postList';
@@ -144,7 +144,7 @@ class Master_sheet extends CI_Controller {
         $conditions['limit'] = $this->perPage;
         
         //get posts data
-		$data['posts'] = $this->master->getRows($conditions);
+		$data['posts'] = $this->master->getRows($conditions, $searchfor);
         //load the view
         $this->load->view('master_sheet/ajax-pagination-data', $data, FALSE);
     }

@@ -73,34 +73,40 @@ class Login extends CI_Controller
 	}
 	
 	public function forgot_process(){
-		$user_data=$this->User_model->check_if_user_exist(['email' => $this->input->post('email')], false, true,['1','3']);
-		if($user_data){
-			$random_no = $this->random_string(8);
-			$this->db->set('activation_code', $random_no);
-			$this->db->where('id',$user_data['id']);
-			$this->db->update('users');
-			
-			$configs = mail_config();
-			$message = '<p>Your Forgot Password request has been accepted. Below is the link to reset your password</p>';
-			$message .= '<ul>';
-			$message .= '<li><a href="'.base_url().'login/set_password/'.$random_no.'"> Click Here </a></li>';
-			$message .='</ul>';
-			$message .='<p>Thank you.</p>';
-			$this->load->library('email');
-			
-			$this->email->initialize($configs);
-			$this->email->set_newline("\r\n");
-			$this->email->from('nv.narola@gmail.com');
-			$this->email->to($user_data['email']);
-			$this->email->subject('Inventory Management');
-			$this->email->message($message);
-			if($this->email->send()){
-				$this->session->set_flashdata('msg', 'Email has been sent to reset password');
-			}else{
-				show_error($this->email->print_debugger());
-			}
-			redirect('login');
-		}  
+		$this->form_validation->set_rules('email', 'email', 'required|valid_email');
+		if($this->form_validation->run() == FALSE){   
+            $this->load->view('admin/forgot_password');          
+        }else{
+			$user_data=$this->User_model->check_if_user_exist(['email' => $this->input->post('email')], false, true,['1','3']);
+			if($user_data){
+				$random_no = $this->random_string(8);
+				$this->db->set('activation_code', $random_no);
+				$this->db->where('id',$user_data['id']);
+				$this->db->update('users');
+				
+				$configs = mail_config();
+				$message = '<p>Your Forgot Password request has been accepted. Below is the link to reset your password</p>';
+				$message .= '<ul>';
+				$message .= '<li><a href="'.base_url().'login/set_password/'.$random_no.'"> Click Here </a></li>';
+				$message .='</ul>';
+				$message .='<p>Thank you.</p>';
+				$this->load->library('email');
+				
+				$this->email->initialize($configs);
+				$this->email->set_newline("\r\n");
+				$this->email->from('nv.narola@gmail.com');
+				$this->email->to($user_data['email']);
+				$this->email->subject('Inventory Management');
+				$this->email->message($message);
+				if($this->email->send()){
+					$this->session->set_flashdata('msg', 'Email has been sent to reset password');
+				}else{
+					show_error($this->email->print_debugger());
+				}
+				redirect('login');
+			} 
+		}
+		 
 	}
 
 	public function random_string( $length = 8 ) {
